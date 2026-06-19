@@ -1,0 +1,5 @@
+{
+  "_README": "Accounts the auto-poster may @mention. Each key is a brand/event/person NAME the AI can recognize in a photo (lowercase; add common variants as separate keys). Each value is the EXACT, verified Instagram handle including the @. The AI only tags something when it BOTH clearly sees it in the photo AND finds it here — anything else it just lists as a suggestion in the run summary for you to add. Keep these accurate: a wrong tag looks bad. Example format (replace with your real ones): \"salomon\": \"@salomon\", \"my athlete account\": \"@esteban...\", \"costa rica trail series\": \"@theirhandle\".",
+  "handles": {
+  }
+}

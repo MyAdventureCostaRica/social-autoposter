@@ -44,10 +44,26 @@ REPO = os.environ.get("GITHUB_REPOSITORY", "")
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 MODEL = CFG.get("caption_model", "openai/gpt-4o")
 
+# Accounts we may @mention. name (lowercase) -> exact handle. Filled in over time.
+TAGS = {}
+_tagfile = os.path.join(HERE, "tags.json")
+if os.path.exists(_tagfile):
+    try:
+        TAGS = json.load(open(_tagfile)).get("handles", {})
+    except Exception:
+        TAGS = {}
+
 BRAND_PROMPT = r"""You are the in-house social copywriter for My Adventure Costa Rica — a LUXURY ENDURANCE adventure travel brand (trail running, mountain biking, school programs, and bespoke private journeys). The brand operates FROM Costa Rica but speaks TO an international audience. Voice: luxury editorial — the register of Travel + Leisure — unhurried, evocative, confident; never a guidebook, never utility tourism, never hype or exclamation marks.
 
 == THE MISSION (why every post exists) ==
 The feed is building My Adventure Costa Rica into THE trusted source for adventure knowledge and all things Costa Rica. Authority and authenticity come first; bookings follow trust. So we POST WITH INTENT, never just to post. We do NOT hard sell. Roughly 80% of posts give value (teach, show, tell a true story); about 20% gently invite. A "sell" is at most a quiet line like "Trail running journeys in Costa Rica, designed slowly" or "Design yours." Never pressure, urgency, or discounts — restraint IS the brand, and it is also what converts a high-trust, high-price decision.
+
+== BRAND TRUTHS (true; never contradict) ==
+- Founder-led and personally tested — "every kilometre is one we have personally run." Esteban Umaña is the founder, expedition leader, AND a real endurance athlete (e.g. a sub-5-hour 50K, 4th overall). The FOUNDER pillar draws on his genuine racing/scouting. Mario is a programs collaborator on the school side only — never the face of the brand.
+- The signature feeling: small groups (6–8); routes designed from a blank page, tested in person, operated end to end (airport pickup to farewell dinner); real mountain families handing food at their kitchen doors; "people who start as strangers and end as the only ones who understand what just happened." Lodges chosen for character, not star count.
+- Disciplines we run: trail running, mountain biking, bespoke private journeys, school/educational programs. ADVENTURE RACING is its own distinct sport — if a photo shows it (teams, navigation, multi-discipline), never call it a triathlon, XTERRA, duathlon, or "stage race."
+- Real regions (name one ONLY if unmistakable or in KNOWN FACTS; never swap them): Cordillera de Talamanca / Dota Valley, the Cerro de la Muerte massif, Manuel Antonio, the Osa Peninsula & Drake Bay, and the Nicoya coast (Santa Teresa, Tamarindo). Mountains, cloud forest, and coast are NOT interchangeable.
+- We sell four things, with real details (see them only for EXPERIENCE/invite posts; never invent specs): the Trail Running Expedition (9 days, Talamanca→Osa, 6–8 athletes), the Mountain Biking Expedition (9 days, Nicoya), Bespoke Private Journeys (custom), and School Programs. Soft mentions only.
 
 == THE FOUR CONTENT PILLARS (pick the ONE that best fits the photo) ==
 1. KNOWLEDGE — teach something real about Costa Rica or endurance adventure (terrain, seasons, what makes a route special, training, what to expect). Lead with usefulness; the reader should learn something. Positions us as the authority.
@@ -69,6 +85,13 @@ Look closely at what is ACTUALLY in the photo, then return STRICT JSON (only the
 - "format": "single" or "carousel". Choose "carousel" when the post genuinely teaches or tells a story across steps — almost always for KNOWLEDGE, often for FOUNDER. Use "single" for a purely atmospheric image.
 - "slides": carousel ONLY — an array of 2–4 short text lines, each its own slide (the teaching points or story beats). Each ≤ ~18 words, editorial, self-contained, and in order. Slide 1 is always the photo, so these are the slides that follow it.
 - "cta": carousel ONLY, optional — one short, soft closing line for the final slide (e.g. "Trail running journeys in Costa Rica — design yours."). Gentle, never pushy. Omit or "" if not natural.
+- "tags": array of exact Instagram handles to @mention — ONLY handles from the TAGGABLE ACCOUNTS list given in the user message, and ONLY when you clearly see that brand/event/person in the photo. Empty array if none apply. Never invent a handle.
+- "tag_suggestions": array of brand/event/person NAMES you can see in the photo (sponsor logos, race/event names on bibs or banners) that are NOT in the taggable list — so the owner can add them later. Names only, no @.
+- "needs_note": boolean — true if the photo shows clear signs of a real event or achievement (a race bib/number, a podium, a finish line, a medal, a timing arch) but NO known facts were provided. These posts are far better with the true story.
+- "note_hint": short string — if needs_note is true, what to add (e.g. "Race bib visible — add the event name and your result").
+
+== READING THE TELL-TALES (sports/racing photos) ==
+Look for signal: a race BIB/number means a real event happened; a PODIUM, medal, or finish arch means a RESULT; visible SPONSOR/BRAND logos mean partners were present. Use these to enrich a FOUNDER/athlete story — but NEVER invent the event name, distance, time, or placing. State only what's given in KNOWN FACTS; otherwise imply the moment without specifics and set needs_note=true. Tag brands/events only via the taggable list. Tag selectively and tastefully — the event and real partners, not every logo; tag-stuffing is off-brand.
 
 == KNOWN FACTS (per-photo notes) ==
 If the user message includes KNOWN FACTS about the photo, treat them as TRUE and build the caption around them — this is the real story and takes priority over generic description. If the facts indicate the founder Esteban (e.g. "me", "my race"), write that caption in FIRST PERSON and lead with the genuine achievement/detail. If NO known facts are given, stay evocative and never invent specifics.
@@ -107,11 +130,15 @@ def http_json(url, headers, payload):
         return json.loads(r.read().decode())
 
 
-def caption_for(jpeg_bytes, note=""):
+def caption_for(jpeg_bytes, note="", tags_known=None):
     b64 = base64.b64encode(jpeg_bytes).decode()
     user_text = "Caption this photo as JSON."
     if note.strip():
         user_text += "\n\nKNOWN FACTS about this photo (true — build the caption around these): " + note.strip()
+    if tags_known:
+        user_text += ("\n\nTAGGABLE ACCOUNTS (only @mention these exact handles, and only "
+                      "if you clearly see that brand/event/person in the photo): "
+                      + json.dumps(tags_known))
     payload = {
         "model": MODEL,
         "temperature": 0.7,
@@ -295,7 +322,7 @@ def prepare():
             buf = io.BytesIO()
             pv = img.convert("RGB"); pv.thumbnail((1280, 1280))
             pv.save(buf, format="JPEG", quality=85)
-            meta = caption_for(buf.getvalue(), note)
+            meta = caption_for(buf.getvalue(), note, TAGS)
         except Exception as e:
             print("Caption error on", os.path.basename(src), "->", e)
             continue
@@ -335,8 +362,9 @@ def prepare():
     image_urls = [f"https://raw.githubusercontent.com/{REPO}/{sha}/"
                   f"{urllib.parse.quote(os.path.relpath(o, HERE).replace(os.sep, '/'))}" for o in outs]
 
-    tags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
-    caption = f"{meta['caption_en']}\n\n{meta['caption_es']}\n\n{tags}".strip()
+    hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
+    mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
+    caption = "\n\n".join(p for p in [meta["caption_en"], meta["caption_es"], mentions, hashtags] if p).strip()
     json.dump({"skip": False, "source": os.path.basename(src), "base": base,
                "image_urls": image_urls, "image_url": image_urls[0], "caption": caption},
               open(STATE, "w"))
@@ -348,11 +376,18 @@ def prepare():
            % remaining) if remaining <= 7 else ""
     previews = "\n".join(f"![slide {i+1}]({u})" for i, u in enumerate(image_urls))
     kind = f"carousel · {len(image_urls)} slides" if len(image_urls) > 1 else "single image"
+    notes_md = ""
+    if meta.get("needs_note"):
+        notes_md += ("\n\n> 💡 **Tip:** " + (meta.get("note_hint")
+                     or "this looks like a real event/result — next time add a note with the facts."))
+    if meta.get("tag_suggestions"):
+        notes_md += ("\n\n> 🔖 **Spotted, could tag** (add handles to `tags.json`): "
+                     + ", ".join(meta["tag_suggestions"]))
     summary(f"## Today's post — review before it goes live\n\n_{kind}_\n\n{previews}\n\n"
             f"**Caption:**\n\n{caption}\n\n"
             f"Approve the **publish** job to send it to Instagram"
             + (" and Facebook." if "fb" in CFG.get("targets", []) else ".")
-            + low)
+            + low + notes_md)
     print("Prepared:", base, f"({kind}) | photos remaining:", remaining)
 
 
