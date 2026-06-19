@@ -61,9 +61,9 @@ The feed is building My Adventure Costa Rica into THE trusted source for adventu
 == BRAND TRUTHS (true; never contradict) ==
 - Founder-led and personally tested — "every kilometre is one we have personally run." Esteban Umaña is the founder, expedition leader, AND a real endurance athlete (e.g. a sub-5-hour 50K, 4th overall). The FOUNDER pillar draws on his genuine racing/scouting. Mario is a programs collaborator on the school side only — never the face of the brand.
 - The signature feeling: small groups (6–8); routes designed from a blank page, tested in person, operated end to end (airport pickup to farewell dinner); real mountain families handing food at their kitchen doors; "people who start as strangers and end as the only ones who understand what just happened." Lodges chosen for character, not star count.
-- Disciplines we run: trail running, mountain biking, bespoke private journeys, school/educational programs. ADVENTURE RACING is its own distinct sport — if a photo shows it (teams, navigation, multi-discipline), never call it a triathlon, XTERRA, duathlon, or "stage race."
+- Disciplines we run (the FULL range — we are not only trail + MTB): RUNNING of all kinds (trail, road, ultra), CYCLING of all kinds (mountain, road, gravel, e-bike), WATER SPORTS (rafting, kayaking, surfing), MULTI-SPORT combinations of these, plus BESPOKE private journeys and SCHOOL/educational programs. Caption to whatever the photo actually shows — a surfer is surfing, a raft is rafting, a road cyclist is road cycling. ADVENTURE RACING is its own distinct sport — if a photo shows it (teams, navigation, multi-discipline), never call it a triathlon, XTERRA, duathlon, or "stage race."
 - Real regions (name one ONLY if unmistakable or in KNOWN FACTS; never swap them): Cordillera de Talamanca / Dota Valley, the Cerro de la Muerte massif, Manuel Antonio, the Osa Peninsula & Drake Bay, and the Nicoya coast (Santa Teresa, Tamarindo). Mountains, cloud forest, and coast are NOT interchangeable.
-- We sell four things, with real details (see them only for EXPERIENCE/invite posts; never invent specs): the Trail Running Expedition (9 days, Talamanca→Osa, 6–8 athletes), the Mountain Biking Expedition (9 days, Nicoya), Bespoke Private Journeys (custom), and School Programs. Soft mentions only.
+- What we sell (soft mentions only; never invent specs): two flagship published expeditions — the Trail Running Expedition (9 days, Talamanca→Osa, 6–8 athletes) and the Mountain Biking Expedition (9 days, Nicoya) — AND fully custom journeys built around any discipline above (running, cycling, water sports, multi-sport), plus School/educational programs. So we can credibly invite a viewer toward whatever the photo's activity is — never imply trail-running and MTB are the only things we do.
 
 == THE FOUR CONTENT PILLARS (pick the ONE that best fits the photo) ==
 1. KNOWLEDGE — teach something real about Costa Rica or endurance adventure (terrain, seasons, what makes a route special, training, what to expect). Lead with usefulness; the reader should learn something. Positions us as the authority.
@@ -75,8 +75,8 @@ Look closely at what is ACTUALLY in the photo, then return STRICT JSON (only the
 - "post_worthy": boolean. false if blurry, cluttered (power lines, signage, parked cars, trash, busy backgrounds), a screenshot, a duplicate-feeling snapshot, or below a luxury feed's bar.
 - "reason": one short sentence explaining the worthiness call.
 - "pillar": one of "KNOWLEDGE","FOUNDER","ROUTE","EXPERIENCE" — the intent of this post.
-- "category": one of "TRAIL RUNNING","MOUNTAIN BIKING","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA".
-- "eyebrow": the category + " · COSTA RICA" (e.g. "TRAIL RUNNING · COSTA RICA"). For a contemplative landscape/atmosphere shot you may use "COSTA RICA · SLOWLY".
+- "category": the broad discipline — one of "RUNNING","CYCLING","WATER SPORTS","MULTI-SPORT","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA".
+- "eyebrow": the most ACCURATE specific label for what's in the photo + " · COSTA RICA" — e.g. "TRAIL RUNNING · COSTA RICA", "ROAD CYCLING · COSTA RICA", "GRAVEL · COSTA RICA", "RAFTING · COSTA RICA", "SURFING · COSTA RICA", "SEA KAYAKING · COSTA RICA". For a contemplative landscape/atmosphere shot you may use "COSTA RICA · SLOWLY". Match the activity actually shown; do not default everything to trail running or mountain biking.
 - "headline": ONE short editorial line, ~4–7 words. Evocative, restrained.
 - "caption_en": 2–4 sentence English caption matching the chosen pillar. KNOWLEDGE posts must actually teach. FOUNDER posts tell the true story (first person if it's Esteban). End with a quiet positioning/invite line only when natural — not every post.
 - "caption_es": the Spanish caption. NOT a literal translation — write it natively and elegantly.
@@ -509,6 +509,18 @@ def publish():
                 print("Instagram Story OK:", sp.get("id"))
             except Exception as e:
                 print("Story skipped:", e)
+        # log the feed post so insights can be pulled later
+        try:
+            mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
+            pj = os.path.join(mdir, "posts.json")
+            posts = json.load(open(pj)) if os.path.exists(pj) else []
+            posts.append({"id": pub.get("id"), "date": time.strftime("%Y-%m-%d"),
+                          "base": st["base"],
+                          "format": "carousel" if len(image_urls) > 1 else "single",
+                          "caption": caption[:120]})
+            json.dump(posts, open(pj, "w"), indent=1)
+        except Exception as e:
+            print("metrics log skipped:", e)
     if "fb" in targets:
         try:
             res = meta_post(f"{CFG['page_id']}/photos",
