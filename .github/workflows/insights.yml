@@ -1,8 +1,8 @@
-name: Weekly insights
+name: Daily insights
 
 on:
   schedule:
-    - cron: "0 16 * * 0"
+    - cron: "0 16 * * *"      # every day 16:00 UTC (10am Costa Rica)
   workflow_dispatch:
 
 jobs:
@@ -24,5 +24,5 @@ jobs:
           git config user.name  "auto-poster"
           git config user.email "actions@github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "Weekly insights [skip ci]"
+          git diff --staged --quiet || git commit -m "Daily insights [skip ci]"
           git push
