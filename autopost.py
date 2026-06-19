@@ -32,6 +32,9 @@ with open(os.path.join(HERE, "config.json")) as f:
 
 BONE = (244, 239, 227)
 CLAY_SOFT = (176, 137, 72)
+SAND = (242, 235, 217)   # carousel text-slide background (site --sand)
+INK = (12, 16, 13)       # site --ink
+CLAY = (92, 69, 32)      # site --clay
 S = 1080
 
 GH_TOKEN = os.environ.get("GITHUB_TOKEN")
@@ -41,24 +44,40 @@ REPO = os.environ.get("GITHUB_REPOSITORY", "")
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 MODEL = CFG.get("caption_model", "openai/gpt-4o")
 
-BRAND_PROMPT = r"""You are the in-house social copywriter for My Adventure Costa Rica — a LUXURY ENDURANCE adventure travel brand (trail running, mountain biking, school programs, and bespoke private journeys). The brand operates FROM Costa Rica but speaks TO an international audience. The voice is luxury editorial — the register of Travel + Leisure — unhurried, evocative, confident, never a guidebook, never utility tourism, never hype or exclamation marks.
+BRAND_PROMPT = r"""You are the in-house social copywriter for My Adventure Costa Rica — a LUXURY ENDURANCE adventure travel brand (trail running, mountain biking, school programs, and bespoke private journeys). The brand operates FROM Costa Rica but speaks TO an international audience. Voice: luxury editorial — the register of Travel + Leisure — unhurried, evocative, confident; never a guidebook, never utility tourism, never hype or exclamation marks.
 
-You will be shown ONE photo. Look closely at what is ACTUALLY in it, then return STRICT JSON (only the object, no prose, no code fences) with:
-- "post_worthy": boolean. false if the photo is blurry, cluttered (power lines, signage, parked cars, trash, busy backgrounds), a screenshot, a duplicate-feeling snapshot, or simply below a luxury feed's bar.
+== THE MISSION (why every post exists) ==
+The feed is building My Adventure Costa Rica into THE trusted source for adventure knowledge and all things Costa Rica. Authority and authenticity come first; bookings follow trust. So we POST WITH INTENT, never just to post. We do NOT hard sell. Roughly 80% of posts give value (teach, show, tell a true story); about 20% gently invite. A "sell" is at most a quiet line like "Trail running journeys in Costa Rica, designed slowly" or "Design yours." Never pressure, urgency, or discounts — restraint IS the brand, and it is also what converts a high-trust, high-price decision.
+
+== THE FOUR CONTENT PILLARS (pick the ONE that best fits the photo) ==
+1. KNOWLEDGE — teach something real about Costa Rica or endurance adventure (terrain, seasons, what makes a route special, training, what to expect). Lead with usefulness; the reader should learn something. Positions us as the authority.
+2. FOUNDER/ATHLETE — an authentic, often first-person story (the founder Esteban's own racing, scouting, training, behind-the-scenes). Proof we live this. USE PROVIDED FACTS (see KNOWN FACTS); if the facts say it's Esteban, write in first person ("I").
+3. ROUTE/DESTINATION — aspirational storytelling about the place itself; make the reader want to stand there.
+4. EXPERIENCE/TOURS — what a journey with us is actually like (intimate groups, lodges, the feeling). The closest-to-sale pillar — keep it soft and editorial, never a brochure.
+
+Look closely at what is ACTUALLY in the photo, then return STRICT JSON (only the object, no prose, no code fences) with:
+- "post_worthy": boolean. false if blurry, cluttered (power lines, signage, parked cars, trash, busy backgrounds), a screenshot, a duplicate-feeling snapshot, or below a luxury feed's bar.
 - "reason": one short sentence explaining the worthiness call.
+- "pillar": one of "KNOWLEDGE","FOUNDER","ROUTE","EXPERIENCE" — the intent of this post.
 - "category": one of "TRAIL RUNNING","MOUNTAIN BIKING","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA".
-- "eyebrow": the category + " · COSTA RICA" (e.g. "TRAIL RUNNING · COSTA RICA"). For a contemplative landscape/atmosphere shot use "COSTA RICA · SLOWLY".
+- "eyebrow": the category + " · COSTA RICA" (e.g. "TRAIL RUNNING · COSTA RICA"). For a contemplative landscape/atmosphere shot you may use "COSTA RICA · SLOWLY".
 - "headline": ONE short editorial line, ~4–7 words. Evocative, restrained.
-- "caption_en": 2–3 sentence English caption in the brand voice. End with a quiet positioning line where natural (e.g. "Trail running journeys in Costa Rica, designed slowly.").
+- "caption_en": 2–4 sentence English caption matching the chosen pillar. KNOWLEDGE posts must actually teach. FOUNDER posts tell the true story (first person if it's Esteban). End with a quiet positioning/invite line only when natural — not every post.
 - "caption_es": the Spanish caption. NOT a literal translation — write it natively and elegantly.
 - "hashtags": array of 4–5 lowercase tags (no #), always include "myadventurecostarica" and "costarica".
 - "crop_bias": 0.0–1.0 vertical crop focus (0.3 if subject/horizon is upper, 0.6 to keep people/foreground at the bottom, 0.5 default).
+- "format": "single" or "carousel". Choose "carousel" when the post genuinely teaches or tells a story across steps — almost always for KNOWLEDGE, often for FOUNDER. Use "single" for a purely atmospheric image.
+- "slides": carousel ONLY — an array of 2–4 short text lines, each its own slide (the teaching points or story beats). Each ≤ ~18 words, editorial, self-contained, and in order. Slide 1 is always the photo, so these are the slides that follow it.
+- "cta": carousel ONLY, optional — one short, soft closing line for the final slide (e.g. "Trail running journeys in Costa Rica — design yours."). Gentle, never pushy. Omit or "" if not natural.
+
+== KNOWN FACTS (per-photo notes) ==
+If the user message includes KNOWN FACTS about the photo, treat them as TRUE and build the caption around them — this is the real story and takes priority over generic description. If the facts indicate the founder Esteban (e.g. "me", "my race"), write that caption in FIRST PERSON and lead with the genuine achievement/detail. If NO known facts are given, stay evocative and never invent specifics.
 
 == HARD RULES ==
 1. Write the brand name in FULL every time: "My Adventure Costa Rica". NEVER an acronym.
-2. GEOGRAPHIC PRECISION: never name a specific place, peak, volcano, river, lake, beach, park, town, or wildlife species UNLESS it is unmistakable in the photo. Mountains, cloud forests, beaches, and macaws are NOT interchangeable. When unsure, stay evocative with no location claim.
-3. Never invent operational facts (distances, elevation, difficulty, tides, dates, prices).
-4. Describe only what is in the frame. A bike photo is about riding; a runner is about running; a landscape is about stillness. Do not introduce subjects (animals, people, weather) that aren't visible.
+2. GEOGRAPHIC PRECISION: never name a specific place, peak, volcano, river, lake, beach, park, town, or wildlife species UNLESS it is unmistakable in the photo OR given in KNOWN FACTS. Mountains, cloud forests, beaches, and macaws are NOT interchangeable.
+3. Never invent operational facts (distances, elevation, difficulty, tides, dates, prices) unless provided in KNOWN FACTS.
+4. Describe only what is in the frame (plus any KNOWN FACTS). A bike photo is about riding; a runner about running; a landscape about stillness. Don't introduce subjects that aren't there.
 
 == SPANISH RULES (from the brand's Spanish Voice Guide) ==
 - Neutral Latin American Spanish. FORMAL USTED always (never tú/vos). A reader in Mexico City, Bogotá, Buenos Aires, or Madrid reads it without friction.
@@ -88,15 +107,18 @@ def http_json(url, headers, payload):
         return json.loads(r.read().decode())
 
 
-def caption_for(jpeg_bytes):
+def caption_for(jpeg_bytes, note=""):
     b64 = base64.b64encode(jpeg_bytes).decode()
+    user_text = "Caption this photo as JSON."
+    if note.strip():
+        user_text += "\n\nKNOWN FACTS about this photo (true — build the caption around these): " + note.strip()
     payload = {
         "model": MODEL,
         "temperature": 0.7,
         "messages": [
             {"role": "system", "content": BRAND_PROMPT},
             {"role": "user", "content": [
-                {"type": "text", "text": "Caption this photo as JSON."},
+                {"type": "text", "text": user_text},
                 {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{b64}"}},
             ]},
         ],
@@ -173,6 +195,40 @@ def render(pil_img, eyebrow, headline, out, bias=0.5):
     im.save(out, quality=92)
 
 
+def render_text_slide(body, idx, total, out, kicker=""):
+    """An editorial text slide for carousels: sand background, ink Fraunces text."""
+    im = Image.new("RGB", (S, S), SAND)
+    d = ImageDraw.Draw(im)
+    M = 100
+
+    def tracked(xy, text, font, fill, tracking=3):
+        x, y = xy
+        for ch in text:
+            d.text((x, y), ch, font=font, fill=fill)
+            x += d.textlength(ch, font=font) + tracking
+
+    tracked((M, 84), "MY ADVENTURE COSTA RICA", dm(24, 600), INK)
+    d.line([(M, 132), (M + 46, 132)], fill=CLAY, width=3)
+    if kicker:
+        tracked((M, 150), kicker.upper(), dm(22, 600), CLAY)
+
+    bf = fr(58, 420)
+    words, lines, cur = body.split(), [], ""
+    for wd in words:
+        t = (cur + " " + wd).strip()
+        if d.textlength(t, font=bf) <= S - 2 * M: cur = t
+        else: lines.append(cur); cur = wd
+    if cur: lines.append(cur)
+    lh = int(58 * 1.22)
+    y = (S - lh * len(lines)) // 2 + 30
+    for ln in lines:
+        d.text((M, y), ln, font=bf, fill=INK)
+        y += lh
+
+    tracked((M, S - 96), f"{idx} / {total}", dm(22, 600), CLAY)
+    im.save(out, quality=92)
+
+
 # ---------- meta posting ----------
 def meta_post(path, params):
     url = f"https://graph.facebook.com/{CFG.get('graph_version','v23.0')}/{path}"
@@ -226,12 +282,20 @@ def prepare():
 
     chosen = None
     for src in candidates[:6]:
+        note = ""
+        note_path = os.path.splitext(src)[0] + ".txt"   # optional companion note: IMG_123.txt
+        if os.path.exists(note_path):
+            try:
+                with open(note_path, encoding="utf-8") as nf:
+                    note = nf.read()
+            except Exception:
+                note = ""
         try:
             img = Image.open(src)
             buf = io.BytesIO()
             pv = img.convert("RGB"); pv.thumbnail((1280, 1280))
             pv.save(buf, format="JPEG", quality=85)
-            meta = caption_for(buf.getvalue())
+            meta = caption_for(buf.getvalue(), note)
         except Exception as e:
             print("Caption error on", os.path.basename(src), "->", e)
             continue
@@ -248,29 +312,48 @@ def prepare():
 
     src, img, meta = chosen
     base = os.path.splitext(os.path.basename(src))[0]
-    out = os.path.join(RENDERED, base + ".jpg")
-    render(img, meta["eyebrow"], meta["headline"], out, float(meta.get("crop_bias", 0.5)))
+    fmt = meta.get("format", "single")
+    slides = meta.get("slides") or []
+
+    outs = []                                   # slide 1 = the photo
+    out1 = os.path.join(RENDERED, f"{base}_1.jpg")
+    render(img, meta["eyebrow"], meta["headline"], out1, float(meta.get("crop_bias", 0.5)))
+    outs.append(out1)
+    if fmt == "carousel" and slides:
+        cta = (meta.get("cta") or "").strip()
+        total = 1 + len(slides[:4]) + (1 if cta else 0)
+        n = 2
+        for s in slides[:4]:
+            o = os.path.join(RENDERED, f"{base}_{n}.jpg")
+            render_text_slide(s, n, total, o); outs.append(o); n += 1
+        if cta:
+            o = os.path.join(RENDERED, f"{base}_{n}.jpg")
+            render_text_slide(cta, n, total, o, kicker="The journey"); outs.append(o)
+
     commit_push(f"Render {base} [skip ci]")
     sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=HERE).decode().strip()
-    rel = os.path.relpath(out, HERE).replace(os.sep, "/")
-    image_url = f"https://raw.githubusercontent.com/{REPO}/{sha}/{urllib.parse.quote(rel)}"
+    image_urls = [f"https://raw.githubusercontent.com/{REPO}/{sha}/"
+                  f"{urllib.parse.quote(os.path.relpath(o, HERE).replace(os.sep, '/'))}" for o in outs]
 
     tags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     caption = f"{meta['caption_en']}\n\n{meta['caption_es']}\n\n{tags}".strip()
     json.dump({"skip": False, "source": os.path.basename(src), "base": base,
-               "image_url": image_url, "caption": caption}, open(STATE, "w"))
+               "image_urls": image_urls, "image_url": image_urls[0], "caption": caption},
+              open(STATE, "w"))
     commit_push(f"Stage {base} for review [skip ci]")
 
     remaining = len([f for f in glob.glob(os.path.join(SRC, "*"))
                      if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif"))]) - 1
     low = ("\n\n> ⚠️ **Low on photos** — about %d left. Add more to `source-photos/`."
            % remaining) if remaining <= 7 else ""
-    summary(f"## Today's post — review before it goes live\n\n"
-            f"![preview]({image_url})\n\n**Caption:**\n\n{caption}\n\n"
+    previews = "\n".join(f"![slide {i+1}]({u})" for i, u in enumerate(image_urls))
+    kind = f"carousel · {len(image_urls)} slides" if len(image_urls) > 1 else "single image"
+    summary(f"## Today's post — review before it goes live\n\n_{kind}_\n\n{previews}\n\n"
+            f"**Caption:**\n\n{caption}\n\n"
             f"Approve the **publish** job to send it to Instagram"
             + (" and Facebook." if "fb" in CFG.get("targets", []) else ".")
             + low)
-    print("Prepared:", base, "| photos remaining:", remaining)
+    print("Prepared:", base, f"({kind}) | photos remaining:", remaining)
 
 
 def publish():
@@ -283,19 +366,35 @@ def publish():
     if not META_TOKEN:
         sys.exit("Missing META_ACCESS_TOKEN secret.")
     git_setup()
-    image_url, caption = st["image_url"], st["caption"]
+    caption = st["caption"]
+    image_urls = st.get("image_urls") or [st["image_url"]]
     targets = CFG.get("targets", ["ig", "fb"])
     if "ig" in targets:
-        cont = meta_post(f"{CFG['ig_user_id']}/media",
-                         {"image_url": image_url, "caption": caption, "access_token": META_TOKEN})
-        time.sleep(8)
-        pub = meta_post(f"{CFG['ig_user_id']}/media_publish",
-                        {"creation_id": cont["id"], "access_token": META_TOKEN})
-        print("Instagram OK:", pub.get("id"))
+        ig = CFG["ig_user_id"]
+        if len(image_urls) > 1:                      # carousel
+            child_ids = []
+            for u in image_urls[:10]:                # IG carousel max 10
+                c = meta_post(f"{ig}/media",
+                              {"image_url": u, "is_carousel_item": "true", "access_token": META_TOKEN})
+                child_ids.append(c["id"]); time.sleep(3)
+            car = meta_post(f"{ig}/media",
+                            {"media_type": "CAROUSEL", "children": ",".join(child_ids),
+                             "caption": caption, "access_token": META_TOKEN})
+            time.sleep(8)
+            pub = meta_post(f"{ig}/media_publish",
+                            {"creation_id": car["id"], "access_token": META_TOKEN})
+            print("Instagram carousel OK:", pub.get("id"))
+        else:                                        # single image
+            cont = meta_post(f"{ig}/media",
+                             {"image_url": image_urls[0], "caption": caption, "access_token": META_TOKEN})
+            time.sleep(8)
+            pub = meta_post(f"{ig}/media_publish",
+                            {"creation_id": cont["id"], "access_token": META_TOKEN})
+            print("Instagram OK:", pub.get("id"))
     if "fb" in targets:
         try:
             res = meta_post(f"{CFG['page_id']}/photos",
-                            {"url": image_url, "message": caption, "access_token": META_TOKEN})
+                            {"url": image_urls[0], "message": caption, "access_token": META_TOKEN})
             print("Facebook OK:", res.get("post_id") or res.get("id"))
         except Exception as e:
             print("Facebook skipped (needs pages_manage_posts):", e)
@@ -303,6 +402,9 @@ def publish():
     src = os.path.join(SRC, st["source"])
     if os.path.exists(src):
         os.replace(src, os.path.join(POSTED, st["source"]))
+    src_note = os.path.join(SRC, st["base"] + ".txt")   # remove the companion note if any
+    if os.path.exists(src_note):
+        os.remove(src_note)
     with open(os.path.join(POSTED, st["base"] + ".txt"), "w", encoding="utf-8") as f:
         f.write(caption)
     if os.path.exists(STATE):
