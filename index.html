@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Adventure Costa Rica — Social Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--sand:#F2EBD9;--bone:#F4EFE3;--ink:#0c100d;--clay:#5C4520;--clay-soft:#b08948;--forest:#169F48;--line:rgba(12,16,13,.12)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--sand);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-family:'Fraunces',serif;font-weight:500;font-size:34px;margin:0}
+  .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);font-weight:600}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px;flex-wrap:wrap}
+  button{font-family:inherit;font-size:13px;border:1px solid var(--line);background:var(--bone);color:var(--ink);padding:9px 16px;border-radius:999px;cursor:pointer}
+  button:hover{background:#fff}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:36px}
+  .stat{background:var(--bone);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .stat .n{font-family:'Fraunces',serif;font-size:38px;line-height:1}
+  .stat .l{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--clay);margin-top:8px;font-weight:600}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:36px 0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+  .card{background:var(--bone);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#ddd}
+  .card .meta{padding:10px 12px;font-size:12px;color:var(--clay)}
+  .card .meta b{color:var(--ink);font-weight:600}
+  table{width:100%;border-collapse:collapse;background:var(--bone);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px}
+  th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay)}
+  tr:last-child td{border-bottom:none}
+  .muted{color:var(--clay);font-size:14px}
+  .note{background:var(--bone);border:1px dashed var(--clay-soft);border-radius:12px;padding:16px;color:var(--clay);font-size:14px;margin-top:12px}
+  a{color:var(--forest)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="eyebrow">My Adventure Costa Rica</div>
+      <h1>Social Dashboard</h1>
+    </div>
+    <button onclick="load()">↻ Refresh</button>
+  </div>
+  <div class="stats" id="stats"></div>
+  <h2>Recent posts</h2>
+  <div class="grid" id="recent"><div class="muted">Loading…</div></div>
+  <h2>Top performers <span class="muted" style="font-size:13px">— by saves</span></h2>
+  <div id="perf"></div>
+  <p class="muted" id="updated" style="margin-top:40px"></p>
+</div>
+<script>
+const REPO='MyAdventureCostaRica/social-autoposter', BRANCH='main';
+const RAW=`https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
+const API=`https://api.github.com/repos/${REPO}/contents`;
+async function j(u){try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
+function imgExt(n){return /\.(jpe?g|png)$/i.test(n);}
+function photoExt(n){return /\.(jpe?g|png|heic|heif)$/i.test(n);}
+
+async function load(){
+  const [src,posted,rendered,insights,posts]=await Promise.all([
+    j(`${API}/source-photos`), j(`${API}/posted`), j(`${API}/rendered`),
+    j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`)
+  ]);
+  const queue=Array.isArray(src)?src.filter(f=>photoExt(f.name)).length:0;
+  const postedCount=Array.isArray(posted)?posted.filter(f=>imgExt(f.name)).length:0;
+  const ins=Array.isArray(insights)?insights:[];
+  const withReach=ins.filter(x=>typeof x.reach==='number');
+  const avgReach=withReach.length?Math.round(withReach.reduce((a,b)=>a+b.reach,0)/withReach.length):null;
+  const totalSaves=ins.reduce((a,b)=>a+(b.saved||0),0);
+
+  document.getElementById('stats').innerHTML=[
+    ['Photos queued',queue],
+    ['Posts published',postedCount],
+    ['Avg reach', avgReach!=null?avgReach.toLocaleString():'—'],
+    ['Total saves', totalSaves||'—'],
+  ].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+
+  // recent rendered (cover images: *_1.jpg), newest first
+  let recent=Array.isArray(rendered)?rendered.filter(f=>/_1\.jpg$/i.test(f.name)):[];
+  recent=recent.slice(-12).reverse();
+  const insByBase={}; ins.forEach(x=>{if(x.base)insByBase[x.base]=x;});
+  document.getElementById('recent').innerHTML = recent.length? recent.map(f=>{
+    const base=f.name.replace(/_1\.jpg$/i,'');
+    const m=insByBase[base];
+    const stat=m?`<b>${(m.reach||0).toLocaleString()}</b> reach · <b>${m.saved||0}</b> saves`:'awaiting insights';
+    return `<div class="card"><img src="${RAW}/rendered/${encodeURIComponent(f.name)}" loading="lazy"><div class="meta">${stat}</div></div>`;
+  }).join('') : '<div class="muted">No posts yet — they\'ll appear here after the next run.</div>';
+
+  // performance table
+  const ranked=ins.filter(x=>typeof x.saved==='number'||typeof x.reach==='number')
+                  .sort((a,b)=>(b.saved||0)-(a.saved||0)).slice(0,8);
+  const perf=document.getElementById('perf');
+  if(ranked.length){
+    perf.innerHTML=`<table><tr><th>Date</th><th>Post</th><th>Reach</th><th>Saves</th><th>Shares</th><th>Comments</th></tr>`+
+      ranked.map(x=>`<tr><td>${x.date||''}</td><td>${x.base||''}</td><td>${(x.reach||0).toLocaleString()}</td><td>${x.saved||0}</td><td>${x.shares||0}</td><td>${x.comments||0}</td></tr>`).join('')+`</table>`;
+  } else {
+    perf.innerHTML='<div class="note">No performance numbers yet. Insights start flowing once the access token includes the <b>instagram_manage_insights</b> permission and the weekly job runs (Sundays). Until then, posts still show above.</div>';
+  }
+  document.getElementById('updated').textContent='Updated '+new Date().toLocaleString();
+}
+load();
+</script>
+</body>
+</html>
