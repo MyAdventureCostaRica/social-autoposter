@@ -138,8 +138,13 @@ def http_json(url, headers, payload):
         return json.loads(r.read().decode())
 
 
-def caption_for(jpeg_bytes, note="", tags_known=None):
+def caption_for(jpeg_bytes, note="", tags_known=None, learn=""):
     b64 = base64.b64encode(jpeg_bytes).decode()
+    system = BRAND_PROMPT
+    if learn and learn.strip():
+        system += ("\n\n--- WHAT'S RESONATING ON OUR OWN ACCOUNT, BY TODAY'S STANDARDS "
+                   "(real but small analytics — a gentle steer, never a formula) ---\n"
+                   + learn.strip())
     user_text = "Caption this photo as JSON."
     if note.strip():
         user_text += "\n\nKNOWN FACTS about this photo (true — build the caption around these): " + note.strip()
@@ -151,7 +156,7 @@ def caption_for(jpeg_bytes, note="", tags_known=None):
         "model": MODEL,
         "temperature": 0.7,
         "messages": [
-            {"role": "system", "content": BRAND_PROMPT},
+            {"role": "system", "content": system},
             {"role": "user", "content": [
                 {"type": "text", "text": user_text},
                 {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{b64}"}},
@@ -352,10 +357,109 @@ def summary(md):
             f.write(md + "\n")
 
 
+# ---------- the learner: read our own analytics, steer the next post ----------
+INSIGHTS = os.path.join(HERE, "metrics", "insights.json")
+POSTS_LOG = os.path.join(HERE, "metrics", "posts.json")
+REACH_FLOOR = 50            # below this, an engagement "rate" is statistical noise
+HALFLIFE_DAYS = 180        # recent performance is weighted ~2x each 6 months
+SAVES_DEAD = 0.05          # if saves are <5% of interactions, stop chasing them
+STOP = frozenset("""
+the and for with this that your you our are was has have from into out off over
+then than back give gives gave take takes when what where here there will would
+could should about after before they them their were been being only also some
+more most very just like even your yours ours into onto upon while which whose
+una unos unas los las del que con por para como más muy sin son est esta este
+esto esos esas pero más y de en el la lo un a o se su sus al es ya tu te me mi
+costa rica adventure myadventurecostarica www http https com
+""".split())
+
+
+def _load_json(p, default):
+    try:
+        return json.load(open(p))
+    except Exception:
+        return default
+
+
+def performance_brief():
+    """Read our own Instagram analytics and return a short, honest 'what's
+    resonating now' note for the captioner. Era-aware on purpose: it judges a
+    post by engagement rate ONLY above a reach floor (so a 2020 post that reached
+    2 people can't masquerade as a hit), weights recent performance far more
+    heavily (today's algorithm, today's audience), and refuses to optimize for a
+    metric the account doesn't actually earn — e.g. saves, which for this account
+    are ~zero. Returns "" when there's too little real data to claim anything."""
+    import datetime, collections, re as _re
+    rows = _load_json(INSIGHTS, [])
+    posts = {p.get("id"): p for p in _load_json(POSTS_LOG, []) if p.get("id")}
+    today = datetime.date.today()
+
+    def age(r):
+        try:
+            return (today - datetime.date.fromisoformat(r["date"])).days
+        except Exception:
+            return None
+
+    elig = [r for r in rows
+            if isinstance(r.get("reach"), int) and r["reach"] >= REACH_FLOOR
+            and isinstance(r.get("eng_rate"), (int, float)) and age(r) is not None]
+    if len(elig) < 4:
+        return ""                          # not enough signal to steer honestly
+
+    def wt(r):
+        return 0.5 ** (age(r) / HALFLIFE_DAYS)
+
+    tot = lambda k: sum((r.get(k) or 0) for r in elig)
+    inter = max(1, tot("interactions"))
+    saves_share = tot("saved") / inter
+    currency = "reach and shares" if saves_share < SAVES_DEAD else "saves, reach and shares"
+
+    byf = collections.defaultdict(lambda: [0.0, 0.0])      # format -> [Σw·rate, Σw]
+    for r in elig:
+        b = byf[r.get("format") or "single"]
+        b[0] += wt(r) * r["eng_rate"]; b[1] += wt(r)
+    fmt_rank = sorted(((f, s / n) for f, (s, n) in byf.items() if n), key=lambda x: -x[1])
+
+    elig.sort(key=lambda r: -(wt(r) * r["eng_rate"]))      # recency-weighted winners
+    top = elig[:max(5, len(elig) // 4)]
+    words = collections.Counter()
+    for r in top:
+        cap = (posts.get(r.get("id"), {}).get("caption") or "")
+        for tok in _re.findall(r"#?[a-záéíóúñ']{4,}", cap.lower()):
+            t = tok.lstrip("#")
+            if t not in STOP:
+                words[t] += 1
+    themes = [w for w, _ in words.most_common(6)]
+    recent12 = sum(1 for r in elig if age(r) <= 365)
+
+    lines = [
+        "Judged by TODAY'S standards: recent posts are weighted far above old ones, "
+        "because the algorithm and the audience that matter are the current ones.",
+        f"Signal pool: {len(elig)} posts with real reach ({recent12} in the last "
+        "year). Small — treat as a directional nudge, not a rulebook.",
+        (f"This account earns {currency}. Saves are ~zero, so never write "
+         "'save this' bait — write lines worth SHARING."
+         if saves_share < SAVES_DEAD else
+         f"This account earns {currency} — keep earning them."),
+    ]
+    if fmt_rank:
+        lines.append("Formats by engagement (recency-weighted): "
+                     + ", ".join(f"{f} {rate*100:.1f}%" for f, rate in fmt_rank[:4]) + ".")
+    if themes:
+        lines.append("Angles that have travelled recently: " + ", ".join(themes) + ".")
+    lines.append("So: aim for a share-worthy, reach-friendly caption — one line a "
+                 "reader wants to send a friend. Apply the above only where it fits "
+                 "the actual photo; never force a formula.")
+    return "\n".join(lines)
+
+
 def prepare():
     """Pick a photo, caption it, render it, push it, and stage state.json.
     Does NOT post — that's publish()."""
     git_setup()
+    learn = performance_brief()          # what our own analytics say is working now
+    if learn:
+        print("Performance brief:\n" + learn)
     candidates = sorted(
         f for f in glob.glob(os.path.join(SRC, "*"))
         if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif"))
@@ -381,7 +485,7 @@ def prepare():
             buf = io.BytesIO()
             pv = img.convert("RGB"); pv.thumbnail((1280, 1280))
             pv.save(buf, format="JPEG", quality=85)
-            meta = caption_for(buf.getvalue(), note, TAGS)
+            meta = caption_for(buf.getvalue(), note, TAGS, learn)
         except Exception as e:
             print("Caption error on", os.path.basename(src), "->", e)
             continue
@@ -435,7 +539,9 @@ def prepare():
     caption = "\n\n".join(p for p in [meta["caption_en"], meta["caption_es"], mentions, hashtags] if p).strip()
     json.dump({"skip": False, "source": os.path.basename(src), "base": base,
                "image_urls": image_urls, "image_url": image_urls[0],
-               "story_url": story_url, "caption": caption},
+               "story_url": story_url, "caption": caption,
+               "format": fmt, "category": meta.get("category"),
+               "pillar": meta.get("pillar")},
               open(STATE, "w"))
     commit_push(f"Stage {base} for review [skip ci]")
 
@@ -455,11 +561,13 @@ def prepare():
     if meta.get("tag_suggestions"):
         notes_md += ("\n\n> 🔖 **Spotted, could tag** (add handles to `tags.json`): "
                      + ", ".join(meta["tag_suggestions"]))
+    learn_md = ("\n\n**What your data says (today's standards):**\n\n> "
+                + learn.replace("\n", "\n> ")) if learn else ""
     summary(f"## Today's post — review before it goes live\n\n_{kind}_\n\n{previews}\n\n"
             f"**Caption:**\n\n{caption}\n\n"
             f"Approve the **publish** job to send it to Instagram"
             + (" and Facebook." if "fb" in CFG.get("targets", []) else ".")
-            + low + notes_md)
+            + low + notes_md + learn_md)
     print("Prepared:", base, f"({kind}) | photos remaining:", remaining)
 
 
@@ -516,7 +624,8 @@ def publish():
             posts = json.load(open(pj)) if os.path.exists(pj) else []
             posts.append({"id": pub.get("id"), "date": time.strftime("%Y-%m-%d"),
                           "base": st["base"],
-                          "format": "carousel" if len(image_urls) > 1 else "single",
+                          "format": st.get("format") or ("carousel" if len(image_urls) > 1 else "single"),
+                          "category": st.get("category"), "pillar": st.get("pillar"),
                           "caption": caption[:120]})
             json.dump(posts, open(pj, "w"), indent=1)
         except Exception as e:
