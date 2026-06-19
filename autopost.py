@@ -96,6 +96,14 @@ Look for signal: a race BIB/number means a real event happened; a PODIUM, medal,
 == KNOWN FACTS (per-photo notes) ==
 If the user message includes KNOWN FACTS about the photo, treat them as TRUE and build the caption around them — this is the real story and takes priority over generic description. If the facts indicate the founder Esteban (e.g. "me", "my race"), write that caption in FIRST PERSON and lead with the genuine achievement/detail. If NO known facts are given, stay evocative and never invent specifics.
 
+== ENGAGEMENT & DISCOVERY (2026 algorithm) ==
+- HOOK FIRST: the FIRST sentence of caption_en (and caption_es) must be a genuine hook — the most arresting line — because only ~125 characters show before "More". Make someone want to expand it. Editorial, never clickbait.
+- KEYWORD SEO: Instagram now ranks on keywords, not hashtags. Work the natural primary keyword into the first one or two sentences — e.g. "trail running in Costa Rica", "mountain biking the Nicoya coast", "luxury adventure in Costa Rica" — however it fits the photo. Do this gracefully, never keyword-stuff.
+- OPTIMISE FOR SAVES, SHARES, COMMENTS (these now outrank likes):
+  • On KNOWLEDGE / carousel posts, end with a quiet save/keep nudge ("Worth saving for your next trip.") — soft, on-brand.
+  • On roughly one post in four, end with ONE genuine, elegant question that invites a real comment (e.g. "Which would you run first?"). Not every post, never desperate.
+- Keep hashtags to 4–5 highly relevant ones (already specified). Quality over quantity.
+
 == HARD RULES ==
 1. Write the brand name in FULL every time: "My Adventure Costa Rica". NEVER an acronym.
 2. GEOGRAPHIC PRECISION: never name a specific place, peak, volcano, river, lake, beach, park, town, or wildlife species UNLESS it is unmistakable in the photo OR given in KNOWN FACTS. Mountains, cloud forests, beaches, and macaws are NOT interchangeable.
@@ -256,6 +264,57 @@ def render_text_slide(body, idx, total, out, kicker=""):
     im.save(out, quality=92)
 
 
+def render_story(pil_img, eyebrow, headline, out):
+    """A branded 9:16 (1080x1920) Story version — photo + wordmark + headline + a feed nudge."""
+    W, H = 1080, 1920
+    im = pil_img.convert("RGB")
+    w, h = im.size
+    tr = W / H
+    if w / h > tr:                                   # too wide -> crop width
+        nw = int(h * tr); left = (w - nw) // 2; im = im.crop((left, 0, left + nw, h))
+    else:                                            # too tall -> crop height (bias up to keep subject)
+        nh = int(w / tr); top = int((h - nh) * 0.35); im = im.crop((0, top, w, top + nh))
+    im = im.resize((W, H), Image.LANCZOS)
+    grad = Image.new("L", (1, H), 0)
+    for y in range(H):
+        fy = y / H
+        bottom = max(0, (fy - 0.45) / 0.55)
+        a = int(225 * (bottom ** 1.3))
+        topv = max(0, (0.16 - fy) / 0.16) * 120
+        grad.putpixel((0, y), min(255, int(a + topv)))
+    im = Image.composite(Image.new("RGB", (W, H), (0, 0, 0)), im, grad.resize((W, H)))
+    d = ImageDraw.Draw(im)
+    M = 96
+
+    def tracked(xy, text, font, fill, tracking=3):
+        x, y = xy
+        for ch in text:
+            for sx, sy in [(0, 2), (2, 1)]:
+                d.text((x + sx, y + sy), ch, font=font, fill=(0, 0, 0))
+            d.text((x, y), ch, font=font, fill=fill)
+            x += d.textlength(ch, font=font) + tracking
+
+    tracked((M, 150), "MY ADVENTURE COSTA RICA", dm(26, 600), BONE)   # below top safe zone
+    hf = fr(82, 440)
+    words, lines, cur = headline.split(), [], ""
+    for wd in words:
+        t = (cur + " " + wd).strip()
+        if d.textlength(t, font=hf) <= W - 2 * M: cur = t
+        else: lines.append(cur); cur = wd
+    if cur: lines.append(cur)
+    lh = int(82 * 1.15)
+    y = 1430 - lh * len(lines)                       # headline block, above bottom safe zone
+    d.line([(M, y - 78), (M + 50, y - 78)], fill=CLAY_SOFT, width=3)
+    tracked((M, y - 58), eyebrow, dm(26, 600), CLAY_SOFT)
+    for ln in lines:
+        for off in [(2, 3), (3, 2)]:
+            d.text((M + off[0], y + off[1]), ln, font=hf, fill=(0, 0, 0))
+        d.text((M, y), ln, font=hf, fill=BONE)
+        y += lh
+    tracked((M, 1470), "NEW ON THE FEED  →", dm(26, 600), CLAY_SOFT)  # drives to the feed post
+    im.save(out, quality=92)
+
+
 # ---------- meta posting ----------
 def meta_post(path, params):
     url = f"https://graph.facebook.com/{CFG.get('graph_version','v23.0')}/{path}"
@@ -357,16 +416,26 @@ def prepare():
             o = os.path.join(RENDERED, f"{base}_{n}.jpg")
             render_text_slide(cta, n, total, o, kicker="The journey"); outs.append(o)
 
+    story_out = None
+    if CFG.get("also_story"):
+        story_out = os.path.join(RENDERED, f"{base}_story.jpg")
+        render_story(img, meta["eyebrow"], meta["headline"], story_out)
+
     commit_push(f"Render {base} [skip ci]")
     sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=HERE).decode().strip()
-    image_urls = [f"https://raw.githubusercontent.com/{REPO}/{sha}/"
-                  f"{urllib.parse.quote(os.path.relpath(o, HERE).replace(os.sep, '/'))}" for o in outs]
+
+    def raw(p):
+        return (f"https://raw.githubusercontent.com/{REPO}/{sha}/"
+                f"{urllib.parse.quote(os.path.relpath(p, HERE).replace(os.sep, '/'))}")
+    image_urls = [raw(o) for o in outs]
+    story_url = raw(story_out) if story_out else None
 
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in [meta["caption_en"], meta["caption_es"], mentions, hashtags] if p).strip()
     json.dump({"skip": False, "source": os.path.basename(src), "base": base,
-               "image_urls": image_urls, "image_url": image_urls[0], "caption": caption},
+               "image_urls": image_urls, "image_url": image_urls[0],
+               "story_url": story_url, "caption": caption},
               open(STATE, "w"))
     commit_push(f"Stage {base} for review [skip ci]")
 
@@ -375,7 +444,10 @@ def prepare():
     low = ("\n\n> ⚠️ **Low on photos** — about %d left. Add more to `source-photos/`."
            % remaining) if remaining <= 7 else ""
     previews = "\n".join(f"![slide {i+1}]({u})" for i, u in enumerate(image_urls))
+    if story_url:
+        previews += f"\n\n**Story (9:16):**\n![story]({story_url})"
     kind = f"carousel · {len(image_urls)} slides" if len(image_urls) > 1 else "single image"
+    kind += " + story" if story_url else ""
     notes_md = ""
     if meta.get("needs_note"):
         notes_md += ("\n\n> 💡 **Tip:** " + (meta.get("note_hint")
@@ -426,6 +498,17 @@ def publish():
             pub = meta_post(f"{ig}/media_publish",
                             {"creation_id": cont["id"], "access_token": META_TOKEN})
             print("Instagram OK:", pub.get("id"))
+        if st.get("story_url"):                      # branded vertical Story (drives feed reach)
+            try:
+                sc = meta_post(f"{ig}/media",
+                               {"image_url": st["story_url"], "media_type": "STORIES",
+                                "access_token": META_TOKEN})
+                time.sleep(6)
+                sp = meta_post(f"{ig}/media_publish",
+                               {"creation_id": sc["id"], "access_token": META_TOKEN})
+                print("Instagram Story OK:", sp.get("id"))
+            except Exception as e:
+                print("Story skipped:", e)
     if "fb" in targets:
         try:
             res = meta_post(f"{CFG['page_id']}/photos",
