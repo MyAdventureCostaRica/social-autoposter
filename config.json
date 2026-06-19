@@ -1,0 +1,7 @@
+{
+  "graph_version": "v23.0",
+  "ig_user_id": "17841403481255550",
+  "page_id": "1495946694015283",
+  "targets": ["ig", "fb"],
+  "caption_model": "openai/gpt-4o"
+}
