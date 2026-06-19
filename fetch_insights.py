@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 """
-Pull Instagram insights for recent posts -> metrics/insights.json.
-Runs weekly in GitHub Actions. Needs META_ACCESS_TOKEN to include the
-`instagram_manage_insights` permission (refresh the token to add it).
+Pull Instagram insights for the WHOLE account -> metrics/insights.json.
 
-Reach, saves, shares, comments, likes, total interactions per post. The monthly
-strategy review reads this file to learn what's actually working.
+Two phases:
+  1) discover_media(): enumerate EVERY post on the IG account (paginated) and
+     merge into metrics/posts.json. This backfills the entire history and keeps
+     finding posts made by hand, outside the auto-poster.
+  2) fetch insights for each post, resilient to Instagram's ever-changing metric
+     set (impressions->views, plays deprecated, likes hidden, etc.). We try a
+     broad metric set and fall back progressively so a single deprecated metric
+     never blanks a post.
+
+Older posts barely change once matured, so we refresh only the most recent posts
+each run and cache the rest — every post still ends up in insights.json for the
+learner to read. Needs META_ACCESS_TOKEN to carry instagram_manage_insights.
 """
 import json, os, time, urllib.parse, urllib.request, urllib.error
 
@@ -13,13 +21,27 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CFG = json.load(open(os.path.join(HERE, "config.json")))
 TOKEN = os.environ.get("META_ACCESS_TOKEN")
 V = CFG.get("graph_version", "v23.0")
+IG = CFG["ig_user_id"]
 MET = os.path.join(HERE, "metrics")
 POSTS = os.path.join(MET, "posts.json")
 OUT = os.path.join(MET, "insights.json")
 
+# Refresh insights for this many most-recent posts each run; older ones are
+# pulled once and cached (their numbers have settled).
+REFRESH_RECENT = 60
 
-def get(path, params):
-    url = f"https://graph.facebook.com/{V}/{path}?" + urllib.parse.urlencode(params)
+# Tried in order. The first set the API accepts for a given post wins, so a
+# metric Instagram has deprecated for that media type just drops to the next set.
+METRIC_SETS = [
+    "reach,saved,shares,comments,likes,total_interactions,views",
+    "reach,saved,shares,comments,likes,total_interactions",
+    "reach,saved,likes,comments",
+    "reach,likes,comments",
+    "reach",
+]
+
+
+def _get(url):
     try:
         with urllib.request.urlopen(url, timeout=60) as r:
             return json.loads(r.read().decode())
@@ -28,51 +50,126 @@ def get(path, params):
             return {"error": json.loads(e.read().decode()).get("error", {})}
         except Exception:
             return {"error": {"message": f"HTTP {e.code}"}}
+    except Exception as e:
+        return {"error": {"message": str(e)}}
 
 
-def main():
-    if not TOKEN:
-        raise SystemExit("Missing META_ACCESS_TOKEN.")
-    posts = json.load(open(POSTS)) if os.path.exists(POSTS) else []
-    if not posts:
-        print("No posts logged yet (metrics/posts.json empty). Nothing to pull.")
-        os.makedirs(MET, exist_ok=True)
-        json.dump([], open(OUT, "w"))
-        return
+def _api(path, params):
+    return _get(f"https://graph.facebook.com/{V}/{path}?" + urllib.parse.urlencode(params))
 
-    full = "reach,saved,shares,comments,likes,total_interactions"
-    out = []
-    for p in posts[-60:]:                      # last ~60 posts
-        mid = p.get("id")
-        if not mid:
-            continue
-        row = {"id": mid, "date": p.get("date"), "base": p.get("base"),
-               "format": p.get("format")}
-        r = get(f"{mid}/insights", {"metric": full, "access_token": TOKEN})
-        if r.get("error"):                     # some metrics aren't valid for some media types
-            r = get(f"{mid}/insights", {"metric": "reach,likes,comments", "access_token": TOKEN})
+
+def load_list(p):
+    try:
+        return json.load(open(p))
+    except Exception:
+        return []
+
+
+def discover_media():
+    """Walk the whole feed and merge every post into posts.json (dedupe by id)."""
+    existing = load_list(POSTS)
+    by_id = {p["id"]: p for p in existing if p.get("id")}
+    url = f"https://graph.facebook.com/{V}/{IG}/media?" + urllib.parse.urlencode({
+        "fields": "id,timestamp,media_type,media_product_type,caption",
+        "limit": "50", "access_token": TOKEN})
+    pages, found = 0, 0
+    while url and pages < 60:                      # up to ~3000 posts
+        r = _get(url)
+        if r.get("error"):
+            print("discover error:", r["error"].get("message")); break
+        for m in r.get("data", []):
+            mid = m.get("id")
+            if not mid:
+                continue
+            mt, pt = m.get("media_type"), m.get("media_product_type")
+            fmt = ("reel" if pt == "REELS" else
+                   "carousel" if mt == "CAROUSEL_ALBUM" else
+                   "video" if mt == "VIDEO" else "single")
+            row = {"id": mid, "date": (m.get("timestamp") or "")[:10],
+                   "base": "ig-" + mid[-6:], "format": fmt,
+                   "caption": (m.get("caption") or "")[:140]}
+            if mid in by_id:
+                # keep any auto-poster fields (base/category/pillar); refresh meta
+                by_id[mid].update({k: v for k, v in row.items()
+                                   if k in ("date", "caption") or not by_id[mid].get(k)})
+            else:
+                by_id[mid] = row; found += 1
+        url = (r.get("paging") or {}).get("next")
+        pages += 1
+    out = sorted(by_id.values(), key=lambda p: p.get("date", ""))
+    os.makedirs(MET, exist_ok=True)
+    json.dump(out, open(POSTS, "w"), indent=1)
+    print(f"Discovered {found} new post(s); {len(out)} total in posts.json")
+    return out
+
+
+def pull_one(p):
+    """Insights for one media id, trying metric sets until one sticks."""
+    mid = p["id"]
+    row = {"id": mid, "date": p.get("date"), "base": p.get("base"),
+           "format": p.get("format"), "category": p.get("category"),
+           "pillar": p.get("pillar")}
+    last_err = None
+    for mset in METRIC_SETS:
+        r = _api(f"{mid}/insights", {"metric": mset, "access_token": TOKEN})
+        if r.get("error"):
+            last_err = r["error"].get("message"); continue
         for m in (r.get("data") or []):
             try:
                 row[m["name"]] = m["values"][0]["value"]
             except Exception:
                 pass
-        if r.get("error"):
-            row["error"] = r["error"].get("message")
-        out.append(row)
-        time.sleep(1)
+        last_err = None
+        break
+    if last_err:
+        row["error"] = last_err
+    # One comparable signal: interactions per reach (resilient to which metrics
+    # exist), so posts from different eras can be ranked fairly.
+    reach = row.get("reach") or 0
+    inter = row.get("total_interactions")
+    if inter is None:
+        inter = (row.get("likes") or 0) + (row.get("comments") or 0) + \
+                (row.get("saved") or 0) + (row.get("shares") or 0)
+    row["interactions"] = inter
+    row["eng_rate"] = round(inter / reach, 4) if reach else None
+    return row
 
-    os.makedirs(MET, exist_ok=True)
-    json.dump(out, open(OUT, "w"), indent=1)
-    print(f"Pulled insights for {len(out)} posts -> metrics/insights.json")
-    ranked = sorted([x for x in out if isinstance(x.get("saved"), int)],
-                    key=lambda x: -x["saved"])[:5]
+
+def main():
+    if not TOKEN:
+        raise SystemExit("Missing META_ACCESS_TOKEN.")
+    posts = discover_media()
+    if not posts:
+        print("No posts found."); json.dump([], open(OUT, "w")); return
+
+    cached = {x["id"]: x for x in load_list(OUT) if x.get("id")}
+    recent_ids = {p["id"] for p in posts[-REFRESH_RECENT:]}
+    out, fetched = {}, 0
+    for p in posts:
+        mid = p["id"]
+        if mid in cached and mid not in recent_ids and not cached[mid].get("error"):
+            row = cached[mid]
+            row.update({k: p.get(k) for k in ("date", "base", "format",
+                                              "category", "pillar") if p.get(k)})
+            out[mid] = row
+            continue
+        out[mid] = pull_one(p); fetched += 1
+        time.sleep(0.5)
+
+    rows = sorted(out.values(), key=lambda x: x.get("date") or "")
+    json.dump(rows, open(OUT, "w"), indent=1)
+    print(f"Insights: {len(rows)} posts ({fetched} freshly pulled) -> insights.json")
+
+    ranked = sorted([x for x in rows if isinstance(x.get("eng_rate"), float)],
+                    key=lambda x: -x["eng_rate"])[:5]
     if ranked:
-        print("Top by saves:")
+        print("Top by engagement rate:")
         for t in ranked:
-            print(f"  saves={t.get('saved')} reach={t.get('reach')} {t.get('base')}")
-    elif out and out[0].get("error"):
-        print("Insights returned an error — likely the token lacks "
-              "instagram_manage_insights. Refresh the token with that permission.")
+            print(f"  rate={t['eng_rate']}  reach={t.get('reach')}  "
+                  f"saves={t.get('saved')}  {t.get('format')}  {t.get('date')}")
+    elif rows and rows[-1].get("error"):
+        print("Insights errored — token may lack instagram_manage_insights:",
+              rows[-1]["error"])
 
 
 if __name__ == "__main__":
