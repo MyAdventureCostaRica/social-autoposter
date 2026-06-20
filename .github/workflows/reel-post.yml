@@ -1,0 +1,26 @@
+name: Post a reel
+
+on:
+  workflow_dispatch:            # run manually any time
+  schedule:
+    - cron: "0 18 * * 2,5"      # Tue & Fri 18:00 UTC (noon Costa Rica) — reels twice a week
+
+jobs:
+  reel:
+    runs-on: ubuntu-latest      # ffmpeg is preinstalled on this runner
+    permissions:
+      contents: write
+      models: read              # free GitHub Models captioning (same as the photo poster)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install --quiet pillow pillow-heif cloudinary
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
+        run: python reel.py
