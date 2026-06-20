@@ -8545,15 +8545,15 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 23,
+  "reach": 29,
   "saved": 0,
   "shares": 0,
   "comments": 0,
   "likes": 4,
   "total_interactions": 4,
-  "views": 44,
+  "views": 50,
   "interactions": 4,
-  "eng_rate": 0.1739
+  "eng_rate": 0.1379
  },
  {
   "id": "18086708858429365",
@@ -8562,15 +8562,15 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 59,
+  "reach": 65,
   "saved": 0,
   "shares": 0,
   "comments": 0,
-  "likes": 11,
-  "total_interactions": 11,
-  "views": 143,
-  "interactions": 11,
-  "eng_rate": 0.1864
+  "likes": 12,
+  "total_interactions": 12,
+  "views": 156,
+  "interactions": 12,
+  "eng_rate": 0.1846
  },
  {
   "id": "18339135430221614",
@@ -8579,14 +8579,14 @@
   "format": "reel",
   "category": "WATER SPORTS",
   "pillar": "ROUTE",
-  "reach": 17,
+  "reach": 34,
   "saved": 0,
   "shares": 0,
   "comments": 0,
   "likes": 4,
   "total_interactions": 4,
-  "views": 27,
+  "views": 52,
   "interactions": 4,
-  "eng_rate": 0.2353
+  "eng_rate": 0.1176
  }
 ]
