@@ -72,6 +72,16 @@
   .mc-in{width:100%;max-width:420px;display:block;margin:6px 0;padding:8px 10px;border:1px solid var(--clay-soft);border-radius:8px;font-size:14px}
   .ic-edit{width:100%;box-sizing:border-box;margin:8px 0 4px;padding:9px 11px;border:1px solid var(--clay-soft);border-radius:9px;font:inherit;font-size:14px;line-height:1.5;background:#fff;resize:vertical}
   .ic-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .ic-post{display:flex;gap:11px;align-items:center;margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid rgba(176,137,72,.28)}
+  .ic-thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;flex:none;display:block}
+  .ic-post .badge{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(12,16,13,.08);color:var(--clay);font-size:11px;font-weight:700;flex:none}
+  .ic-pcap{font-size:13px;line-height:1.4;max-height:2.9em;overflow:hidden;margin-top:2px}
+  .modal-ov{position:fixed;inset:0;background:rgba(12,16,13,.45);display:flex;align-items:center;justify-content:center;z-index:9999}
+  .modal{background:var(--bone);border:1px solid var(--clay-soft);border-radius:14px;padding:22px 24px;max-width:380px;box-shadow:0 14px 44px rgba(0,0,0,.28)}
+  .modal p{margin:0 0 16px;line-height:1.5}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end}
+  #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(18px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:10000;max-width:80%}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -169,12 +179,35 @@ async function testConnect(){
   setCfg('ctrlKey',(document.getElementById('cKey').value||'').trim());
   const r=await ctrl('ping',{}); s.textContent=(r&&r.ok)?'Connected ✓':('Failed: '+((r&&r.error)||'?'));
 }
+function uiToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t);}
+  t.textContent=msg; t.className='show';
+  clearTimeout(t._h); t._h=setTimeout(()=>{t.className='';},2600);
+}
+function uiConfirm(msg,okLabel){
+  return new Promise(res=>{
+    const ov=document.createElement('div'); ov.className='modal-ov';
+    ov.innerHTML=`<div class="modal"><p>${esc(msg)}</p><div class="modal-btns">`
+      +`<button class="mc-btn ghost" data-no>Cancel</button>`
+      +`<button class="mc-btn send" data-yes>${esc(okLabel||'Confirm')}</button></div></div>`;
+    document.body.appendChild(ov);
+    const done=v=>{ov.remove();res(v);};
+    ov.querySelector('[data-yes]').onclick=()=>done(true);
+    ov.querySelector('[data-no]').onclick=()=>done(false);
+    ov.addEventListener('click',e=>{if(e.target===ov)done(false);});
+  });
+}
 function trigger(workflow,label,btn){
-  if(!confirm('Run '+label+' now?')) return;
-  const o=btn.textContent; btn.disabled=true; btn.textContent='Starting…';
-  ctrl('dispatch',{workflow}).then(r=>{
-    btn.textContent=(r&&r.ok)?'Started ✓':('Failed'+((r&&r.error)?': '+r.error:''));
-    setTimeout(()=>{btn.textContent=o; btn.disabled=false;},2800);
+  uiConfirm('Run '+label+' now?','Run it').then(ok=>{
+    if(!ok) return;
+    const o=btn.textContent; btn.disabled=true; btn.textContent='Starting…';
+    ctrl('dispatch',{workflow}).then(r=>{
+      const good=r&&r.ok;
+      btn.textContent=good?'Started ✓':'Failed';
+      uiToast(good?(label.replace(/^(the|a) /,'')+' started'):('Could not start: '+((r&&r.error)||'error')));
+      setTimeout(()=>{btn.textContent=o; btn.disabled=false;},2800);
+    });
   });
 }
 function renderControls(){
@@ -200,24 +233,28 @@ function inboxAction(btn,act){
   const card=btn.closest('.inbox-card');
   const id=card.dataset.id, type=card.dataset.type, recipient=card.dataset.recipient||'';
   const ta=card.querySelector('.ic-edit'); const text=ta?ta.value.trim():'';
-  if(act==='reply' && !text){ alert('Write a reply first.'); return; }
-  if(act==='reject' && !confirm('Reject and dismiss this one?')) return;
-  const stat=card.querySelector('.ic-stat'); stat.textContent=act==='reply'?'Sending…':'Dismissing…';
-  card.querySelectorAll('button').forEach(b=>b.disabled=true);
-  ctrl(act, act==='reply'?{id,type,text,recipient}:{id}).then(r=>{
-    if(r&&r.ok){
-      card.style.opacity=.45; stat.textContent=act==='reply'?'Sent ✓':'Dismissed ✓';
-      card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
-      setTimeout(()=>{card.remove();
-        if(!document.querySelectorAll('.inbox-card').length){
-          const el=document.getElementById('inbox'); if(el) el.innerHTML='<p class="muted" style="margin-top:8px">Inbox clear — nothing waiting.</p>';}
-      },900);
-    }else{ stat.textContent='Error: '+((r&&r.error)||'failed'); card.querySelectorAll('button').forEach(b=>b.disabled=false); }
-  });
+  if(act==='reply' && !text){ uiToast('Write a reply first.'); if(ta)ta.focus(); return; }
+  const go=()=>{
+    const stat=card.querySelector('.ic-stat'); stat.textContent=act==='reply'?'Sending…':'Dismissing…';
+    card.querySelectorAll('button').forEach(b=>b.disabled=true);
+    ctrl(act, act==='reply'?{id,type,text,recipient}:{id}).then(r=>{
+      if(r&&r.ok){
+        card.style.opacity=.45; stat.textContent=act==='reply'?'Sent ✓':'Dismissed ✓';
+        card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
+        uiToast(act==='reply'?'Reply sent on Instagram':'Dismissed');
+        setTimeout(()=>{card.remove();
+          if(!document.querySelectorAll('.inbox-card').length){
+            const el=document.getElementById('inbox'); if(el) el.innerHTML='<p class="muted" style="margin-top:8px">Inbox clear — nothing waiting.</p>';}
+        },900);
+      }else{ stat.textContent='Error: '+((r&&r.error)||'failed'); uiToast('Failed: '+((r&&r.error)||'error')); card.querySelectorAll('button').forEach(b=>b.disabled=false); }
+    });
+  };
+  if(act==='reject') uiConfirm('Reject and dismiss this one? Nothing will be sent.','Reject').then(ok=>{ if(ok) go(); });
+  else go();
 }
-function renderInbox(items,resolved){
+function renderInbox(items,resolved,postsById){
   const el=document.getElementById('inbox'); if(!el) return;
-  resolved=resolved||{};
+  resolved=resolved||{}; postsById=postsById||{};
   const list=Array.isArray(items)?items.filter(x=>x&&x.status==='pending'&&!resolved[x.id]):[];
   if(!list.length){ el.innerHTML=''; return; }
   let seen=0; try{seen=+localStorage.getItem('lastSeenInbox')||0;}catch(e){}
@@ -228,7 +265,18 @@ function renderInbox(items,resolved){
   html+=`<div id="inbox-full" style="scroll-margin-top:16px">`;
   for(const p of list){
     const link=p.type==='comment'?(p.permalink||''):'https://www.instagram.com/direct/inbox/';
-    html+=`<div class="inbox-card" data-id="${escA(p.id)}" data-type="${escA(p.type||'comment')}" data-recipient="${escA(p.recipient||'')}"><div class="ic-head">`
+    const pj=(p.type!=='dm'&&p.media_id&&postsById[p.media_id])?postsById[p.media_id]:null;
+    let postRow;
+    if(p.type==='dm'){
+      postRow=`<div class="ic-post"><div class="badge">DM</div><div><span class="muted" style="font-size:12px">Direct message</span></div></div>`;
+    } else if(pj){
+      const cap=esc((pj.caption||'').replace(/\s+/g,' ').trim().slice(0,90));
+      const cover=pj.thumb?`<a href="${escA(p.permalink||link)}" target="_blank" rel="noopener"><img class="ic-thumb" src="${escA(pj.thumb)}" onerror="imgFail(this,'POST')"></a>`:`<div class="badge">POST</div>`;
+      postRow=`<div class="ic-post">${cover}<div><span class="muted" style="font-size:12px">Replying to your post${pj.date?(' · '+esc(pj.date)):''}</span><div class="ic-pcap">${cap||'(no caption)'}</div></div></div>`;
+    } else {
+      postRow=`<div class="ic-post"><div class="badge">POST</div><div><span class="muted" style="font-size:12px">Replying to a post — <a href="${escA(p.permalink||link)}" target="_blank" rel="noopener">open on Instagram ↗</a></span></div></div>`;
+    }
+    html+=`<div class="inbox-card" data-id="${escA(p.id)}" data-type="${escA(p.type||'comment')}" data-recipient="${escA(p.recipient||'')}">`+postRow+`<div class="ic-head">`
       +`<b>@${esc(p.user||'someone')}</b> <span class="chip">${esc(p.intent||'')}</span>`
       +`<span class="chip ${p.type}">${p.type==='dm'?'DM':'comment'}</span>`
       +(link?`<a href="${escA(link)}" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">On Instagram ↗</a>`:``)
@@ -254,7 +302,8 @@ async function load(){
   ]);
   renderControls();
   renderReview(review);
-  renderInbox(inbox, resolved||{});
+  const postsById={}; if(Array.isArray(posts)) for(const pp of posts){ if(pp&&pp.id) postsById[pp.id]=pp; }
+  renderInbox(inbox, resolved||{}, postsById);
   const queue=Array.isArray(src)?src.filter(f=>photoExt(f.name)).length:0;
   const postedCount=Array.isArray(posted)?posted.filter(f=>imgExt(f.name)).length:0;
   const ins=Array.isArray(insights)?insights:[];
