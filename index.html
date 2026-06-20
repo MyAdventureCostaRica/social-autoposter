@@ -47,7 +47,7 @@
   <div class="stats" id="stats"></div>
   <h2>Recent posts</h2>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
-  <h2>Top performers <span class="muted" style="font-size:13px">— by saves</span></h2>
+  <h2>Top performers <span class="muted" style="font-size:13px">— by reach + shares</span></h2>
   <div id="perf"></div>
   <p class="muted" id="updated" style="margin-top:40px"></p>
 </div>
@@ -69,13 +69,13 @@ async function load(){
   const ins=Array.isArray(insights)?insights:[];
   const withReach=ins.filter(x=>typeof x.reach==='number');
   const avgReach=withReach.length?Math.round(withReach.reduce((a,b)=>a+b.reach,0)/withReach.length):null;
-  const totalSaves=ins.reduce((a,b)=>a+(b.saved||0),0);
+  const totalShares=ins.reduce((a,b)=>a+(b.shares||0),0);
 
   document.getElementById('stats').innerHTML=[
     ['Photos queued',queue],
     ['Posts published',postedCount],
     ['Avg reach', avgReach!=null?avgReach.toLocaleString():'—'],
-    ['Total saves', totalSaves||'—'],
+    ['Total shares', totalShares||'—'],
   ].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
 
   // recent rendered (cover images: *_1.jpg), newest first
@@ -85,19 +85,19 @@ async function load(){
   document.getElementById('recent').innerHTML = recent.length? recent.map(f=>{
     const base=f.name.replace(/_1\.jpg$/i,'');
     const m=insByBase[base];
-    const stat=m?`<b>${(m.reach||0).toLocaleString()}</b> reach · <b>${m.saved||0}</b> saves`:'awaiting insights';
+    const stat=m?`<b>${(m.reach||0).toLocaleString()}</b> reach · <b>${m.shares||0}</b> shares`:'awaiting insights';
     return `<div class="card"><img src="${RAW}/rendered/${encodeURIComponent(f.name)}" loading="lazy"><div class="meta">${stat}</div></div>`;
   }).join('') : '<div class="muted">No posts yet — they\'ll appear here after the next run.</div>';
 
-  // performance table
-  const ranked=ins.filter(x=>typeof x.saved==='number'||typeof x.reach==='number')
-                  .sort((a,b)=>(b.saved||0)-(a.saved||0)).slice(0,8);
+  // performance table — ranked by REACH (this account earns reach + shares, not saves)
+  const ranked=ins.filter(x=>typeof x.reach==='number')
+                  .sort((a,b)=>(b.reach||0)-(a.reach||0)).slice(0,8);
   const perf=document.getElementById('perf');
   if(ranked.length){
-    perf.innerHTML=`<table><tr><th>Date</th><th>Post</th><th>Reach</th><th>Saves</th><th>Shares</th><th>Comments</th></tr>`+
-      ranked.map(x=>`<tr><td>${x.date||''}</td><td>${x.base||''}</td><td>${(x.reach||0).toLocaleString()}</td><td>${x.saved||0}</td><td>${x.shares||0}</td><td>${x.comments||0}</td></tr>`).join('')+`</table>`;
+    perf.innerHTML=`<table><tr><th>Date</th><th>Post</th><th>Reach</th><th>Shares</th><th>Eng%</th><th>Comments</th><th>Saves</th></tr>`+
+      ranked.map(x=>`<tr><td>${x.date||''}</td><td>${x.base||''}</td><td>${(x.reach||0).toLocaleString()}</td><td>${x.shares||0}</td><td>${typeof x.eng_rate==='number'?(x.eng_rate*100).toFixed(1)+'%':'—'}</td><td>${x.comments||0}</td><td>${x.saved||0}</td></tr>`).join('')+`</table>`;
   } else {
-    perf.innerHTML='<div class="note">No performance numbers yet. Insights start flowing once the access token includes the <b>instagram_manage_insights</b> permission and the weekly job runs (Sundays). Until then, posts still show above.</div>';
+    perf.innerHTML='<div class="note">No performance numbers yet — the daily insights job fills these in. Ranked by reach + shares, the signals this account actually earns (saves are ~zero).</div>';
   }
   document.getElementById('updated').textContent='Updated '+new Date().toLocaleString();
 }
