@@ -54,13 +54,20 @@ def config_cloudinary():
 
 
 def next_clip():
-    """Oldest Cloudinary video not yet tagged 'posted'."""
-    import cloudinary, cloudinary.api
-    res = cloudinary.api.resources(resource_type="video", type="upload",
-                                   max_results=100, tags=True, context=True)
-    vids = [r for r in res.get("resources", []) if "posted" not in (r.get("tags") or [])]
-    vids.sort(key=lambda r: r.get("created_at", ""))
-    return vids[0] if vids else None
+    """Oldest video in the Cloudinary 'reels' folder not yet tagged 'posted'.
+    Scoped to a folder ON PURPOSE so Cloudinary's stock SAMPLE videos (which live
+    outside it) can never be posted. Upload your own clips into a folder named
+    'reels' in the Cloudinary Media Library."""
+    import cloudinary, cloudinary.search
+    try:
+        r = (cloudinary.search.Search()
+             .expression("resource_type:video AND folder:reels AND -tags:posted")
+             .sort_by("created_at", "asc").max_results(50).execute())
+        vids = r.get("resources", [])
+        return vids[0] if vids else None
+    except Exception as e:
+        print("Cloudinary search error (no reel posted):", e)
+        return None
 
 
 def thumb_bytes(public_id):
