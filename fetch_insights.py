@@ -147,7 +147,12 @@ def main():
     out, fetched = {}, 0
     for p in posts:
         mid = p["id"]
-        if mid in cached and mid not in recent_ids and not cached[mid].get("error"):
+        # Use the cached value for any post that isn't in the recent window — even
+        # if it errored. Old posts (pre-business-account) never gain insights, so
+        # re-pulling all ~670 of them every run is what made this take ~40 min.
+        # We only re-fetch the most recent posts (numbers still maturing) + anything
+        # we've never seen before.
+        if mid in cached and mid not in recent_ids:
             row = cached[mid]
             row.update({k: p.get(k) for k in ("date", "base", "format",
                                               "category", "pillar") if p.get(k)})

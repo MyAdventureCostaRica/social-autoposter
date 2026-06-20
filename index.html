@@ -58,6 +58,8 @@
   <div class="stats" id="stats"></div>
   <h2>Recent posts</h2>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
+  <h2>By post type <span class="muted" style="font-size:13px">— how each format performs</span></h2>
+  <div id="bytype"></div>
   <h2>Top performers <span class="muted" style="font-size:13px">— by reach + shares</span></h2>
   <div id="perf"></div>
   <div id="review-full" style="scroll-margin-top:16px;margin-top:44px"></div>
@@ -135,6 +137,18 @@ async function load(){
     const stat=m?`<b>${(m.reach||0).toLocaleString()}</b> reach · <b>${m.shares||0}</b> shares`:'awaiting insights';
     return `<div class="card"><img src="${RAW}/rendered/${encodeURIComponent(f.name)}" loading="lazy"><div class="meta">${stat}</div></div>`;
   }).join('') : '<div class="muted">No posts yet — they\'ll appear here after the next run.</div>';
+
+  // performance by post type (every format with its own stats)
+  const byType={};
+  ins.forEach(x=>{ if(typeof x.reach==='number'){ const f=x.format||'single'; (byType[f]=byType[f]||[]).push(x); } });
+  const tkeys=Object.keys(byType).sort((a,b)=>byType[b].length-byType[a].length);
+  const bt=document.getElementById('bytype');
+  if(tkeys.length){
+    const avg=(a,k)=>a.length?Math.round(a.reduce((s,x)=>s+(x[k]||0),0)/a.length):0;
+    const avgEng=a=>{const v=a.filter(x=>typeof x.eng_rate==='number');return v.length?(v.reduce((s,x)=>s+x.eng_rate,0)/v.length*100).toFixed(1)+'%':'—';};
+    bt.innerHTML=`<table><tr><th>Type</th><th>Posts</th><th>Avg reach</th><th>Avg shares</th><th>Avg eng%</th></tr>`+
+      tkeys.map(f=>`<tr><td><b>${f}</b></td><td>${byType[f].length}</td><td>${avg(byType[f],'reach').toLocaleString()}</td><td>${avg(byType[f],'shares')}</td><td>${avgEng(byType[f])}</td></tr>`).join('')+`</table>`;
+  } else { bt.innerHTML='<div class="muted">No insights yet.</div>'; }
 
   // performance table — ranked by REACH (this account earns reach + shares, not saves)
   const ranked=ins.filter(x=>typeof x.reach==='number')
