@@ -1,0 +1,31 @@
+name: Monthly review
+
+on:
+  schedule:
+    - cron: "0 15 1 * *"      # 1st of each month, 15:00 UTC (9am Costa Rica)
+  workflow_dispatch:
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write          # commit REVIEW-LATEST.md + metrics/review-latest.json
+      models: read             # free GitHub Models for the narrative
+      issues: write            # open the review issue that notifies the owner
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python review.py
+      - run: |
+          git config user.name  "auto-poster"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Monthly review [skip ci]"
+          git push
