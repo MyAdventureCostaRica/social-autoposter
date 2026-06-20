@@ -261,12 +261,17 @@ def notify(pending):
             + (f"  (+{n-1} more)" if n > 1 else "")
             + f"\nReply: {DASH}")
 
-    # 1) Phone push — ntfy.sh (free, no account, near-instant, most reliable)
+    # 1) Phone push — ntfy.sh (free, no account, near-instant, most reliable).
+    # HTTP headers must be latin-1, so the Title header can't hold the emoji — strip it
+    # and let ntfy draw the bell via the Tags header instead. The body (UTF-8) keeps any
+    # emoji fine.
     if NTFY_TOPIC:
+        ascii_title = (title.encode("ascii", "ignore").decode().strip()
+                       or "New replies need you")
         _fire(urllib.request.Request(
             f"https://ntfy.sh/{NTFY_TOPIC}", data=body.encode("utf-8"),
-            headers={"Title": title, "Priority": "high",
-                     "Tags": "speech_balloon", "Click": DASH}), "ntfy")
+            headers={"Title": ascii_title, "Priority": "high",
+                     "Tags": "bell", "Click": DASH}), "ntfy")
     # 2) WhatsApp — CallMeBot (free; one-time opt-in gives you an apikey)
     if WA_PHONE and WA_KEY:
         q = urllib.parse.urlencode({"phone": WA_PHONE,
