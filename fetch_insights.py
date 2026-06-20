@@ -30,15 +30,31 @@ OUT = os.path.join(MET, "insights.json")
 # pulled once and cached (their numbers have settled).
 REFRESH_RECENT = 60
 
-# Tried in order. The first set the API accepts for a given post wins, so a
-# metric Instagram has deprecated for that media type just drops to the next set.
-METRIC_SETS = [
-    "reach,saved,shares,comments,likes,total_interactions,views",
-    "reach,saved,shares,comments,likes,total_interactions",
-    "reach,saved,likes,comments",
-    "reach,likes,comments",
-    "reach",
-]
+# Per media type, RICHEST set first. The API rejects the whole call if any metric
+# is invalid for that type, so we try a comprehensive set and fall back — but we
+# keep EVERY metric that comes back (we want every number we can get).
+METRIC_SETS = {
+    "feed": [
+        "reach,likes,comments,saved,shares,total_interactions,views,profile_visits,follows",
+        "reach,saved,shares,comments,likes,total_interactions,views",
+        "reach,saved,likes,comments", "reach,likes,comments", "reach"],
+    "reel": [
+        "reach,likes,comments,saved,shares,total_interactions,views,ig_reels_avg_watch_time,ig_reels_video_view_total_time,clips_replays_count",
+        "reach,likes,comments,saved,shares,total_interactions,views",
+        "reach,likes,comments,views", "reach,views", "reach"],
+    "story": [
+        "reach,replies,shares,total_interactions,views,profile_visits,follows,navigation",
+        "reach,replies,shares,total_interactions,views",
+        "reach,replies,views", "reach"],
+}
+
+
+def metric_sets_for(fmt):
+    if fmt == "reel":
+        return METRIC_SETS["reel"]
+    if fmt == "story":
+        return METRIC_SETS["story"]
+    return METRIC_SETS["feed"]
 
 
 def _get(url):
@@ -110,7 +126,7 @@ def pull_one(p):
            "format": p.get("format"), "category": p.get("category"),
            "pillar": p.get("pillar")}
     last_err = None
-    for mset in METRIC_SETS:
+    for mset in metric_sets_for(p.get("format")):
         r = _api(f"{mid}/insights", {"metric": mset, "access_token": TOKEN})
         if r.get("error"):
             last_err = r["error"].get("message"); continue
@@ -152,11 +168,15 @@ def main():
         # re-pulling all ~670 of them every run is what made this take ~40 min.
         # We only re-fetch the most recent posts (numbers still maturing) + anything
         # we've never seen before.
-        if mid in cached and mid not in recent_ids:
-            row = cached[mid]
-            row.update({k: p.get(k) for k in ("date", "base", "format",
-                                              "category", "pillar") if p.get(k)})
-            out[mid] = row
+        c = cached.get(mid)
+        # Keep the cached value for any non-recent post, AND for a story we've
+        # already captured — story numbers disappear after 24h, so we must never
+        # re-pull and overwrite a good value with a later error.
+        if c and (mid not in recent_ids
+                  or (p.get("format") == "story" and not c.get("error"))):
+            c.update({k: p.get(k) for k in ("date", "base", "format",
+                                            "category", "pillar") if p.get(k)})
+            out[mid] = c
             continue
         out[mid] = pull_one(p); fetched += 1
         time.sleep(0.5)

@@ -606,6 +606,7 @@ def publish():
             pub = meta_post(f"{ig}/media_publish",
                             {"creation_id": cont["id"], "access_token": META_TOKEN})
             print("Instagram OK:", pub.get("id"))
+        story_id = None
         if st.get("story_url"):                      # branded vertical Story (drives feed reach)
             try:
                 sc = meta_post(f"{ig}/media",
@@ -614,19 +615,24 @@ def publish():
                 time.sleep(6)
                 sp = meta_post(f"{ig}/media_publish",
                                {"creation_id": sc["id"], "access_token": META_TOKEN})
-                print("Instagram Story OK:", sp.get("id"))
+                story_id = sp.get("id")
+                print("Instagram Story OK:", story_id)
             except Exception as e:
                 print("Story skipped:", e)
-        # log the feed post so insights can be pulled later
+        # log the feed post (and the Story) so insights can be pulled later
         try:
             mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
             pj = os.path.join(mdir, "posts.json")
             posts = json.load(open(pj)) if os.path.exists(pj) else []
-            posts.append({"id": pub.get("id"), "date": time.strftime("%Y-%m-%d"),
-                          "base": st["base"],
+            today = time.strftime("%Y-%m-%d")
+            posts.append({"id": pub.get("id"), "date": today, "base": st["base"],
                           "format": st.get("format") or ("carousel" if len(image_urls) > 1 else "single"),
                           "category": st.get("category"), "pillar": st.get("pillar"),
                           "caption": caption[:120]})
+            if story_id:                              # Story insights expire in 24h — log it now
+                posts.append({"id": story_id, "date": today, "base": st["base"] + "-story",
+                              "format": "story", "category": st.get("category"),
+                              "pillar": st.get("pillar"), "caption": caption[:120]})
             json.dump(posts, open(pj, "w"), indent=1)
         except Exception as e:
             print("metrics log skipped:", e)

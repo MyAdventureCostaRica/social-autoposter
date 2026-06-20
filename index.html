@@ -26,6 +26,15 @@
   .card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#ddd}
   .card .meta{padding:10px 12px;font-size:12px;color:var(--clay)}
   .card .meta b{color:var(--ink);font-weight:600}
+  .card{position:relative;cursor:pointer}
+  .tag{position:absolute;top:8px;left:8px;background:rgba(12,16,13,.8);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:6px;z-index:1}
+  .badge{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--sand);color:var(--clay);font-family:'Fraunces',serif;font-size:22px}
+  .det{display:none;margin-top:10px}
+  .card.open .det{display:block}
+  .detail{width:100%;border-collapse:collapse;font-size:12px}
+  .detail td{padding:3px 0;border-bottom:1px solid var(--line)}
+  .detail td:last-child{text-align:right;font-weight:600}
+  .cap{margin-top:10px;font-size:12px;color:var(--clay);white-space:pre-wrap;max-height:140px;overflow:auto}
   table{width:100%;border-collapse:collapse;background:var(--bone);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px}
   th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay)}
@@ -127,15 +136,24 @@ async function load(){
     ['Total shares', totalShares||'—'],
   ].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
 
-  // recent rendered (cover images: *_1.jpg), newest first
-  let recent=Array.isArray(rendered)?rendered.filter(f=>/_1\.jpg$/i.test(f.name)):[];
-  recent=recent.slice(-12).reverse();
-  const insByBase={}; ins.forEach(x=>{if(x.base)insByBase[x.base]=x;});
-  document.getElementById('recent').innerHTML = recent.length? recent.map(f=>{
-    const base=f.name.replace(/_1\.jpg$/i,'');
-    const m=insByBase[base];
-    const stat=m?`<b>${(m.reach||0).toLocaleString()}</b> reach · <b>${m.shares||0}</b> shares`:'awaiting insights';
-    return `<div class="card"><img src="${RAW}/rendered/${encodeURIComponent(f.name)}" loading="lazy"><div class="meta">${stat}</div></div>`;
+  // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
+  const renderedSet=new Set(Array.isArray(rendered)?rendered.filter(f=>/_1\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_1\.jpg$/i,'')):[]);
+  const capById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id)capById[p.id]=p.caption||'';});
+  const recentPosts=ins.slice().filter(x=>x.date).sort((a,b)=>(''+b.date).localeCompare(''+a.date)).slice(0,12);
+  const badge={reel:'Reel',story:'Story',carousel:'Carousel',single:'Post',video:'Video'};
+  const fnum=n=>typeof n==='number'?n.toLocaleString():null;
+  const keyStats=x=>{const b=[];if(fnum(x.reach))b.push(`<b>${fnum(x.reach)}</b> reach`);if(fnum(x.views))b.push(`<b>${fnum(x.views)}</b> views`);if(x.shares)b.push(`<b>${x.shares}</b> shares`);return b.join(' · ')||(x.error?'no insights for this one':'—');};
+  const allStats=x=>{const skip=new Set(['id','date','base','format','category','pillar','error','interactions','eng_rate']);
+    const rows=Object.keys(x).filter(k=>!skip.has(k)&&typeof x[k]==='number').sort().map(k=>`<tr><td>${k.replace(/_/g,' ')}</td><td>${x[k].toLocaleString()}</td></tr>`).join('');
+    const er=typeof x.eng_rate==='number'?`<tr><td>engagement rate</td><td>${(x.eng_rate*100).toFixed(1)}%</td></tr>`:'';
+    return (rows||er)?`<table class="detail">${rows}${er}</table>`:'<div class="muted" style="font-size:12px">No insights captured for this one.</div>';};
+  document.getElementById('recent').innerHTML = recentPosts.length? recentPosts.map(x=>{
+    const base=x.base||''; const fmt=x.format||'single';
+    const cover=renderedSet.has(base)?`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy">`:`<div class="badge">${badge[fmt]||fmt}</div>`;
+    const cap=capById[x.id]||'';
+    return `<div class="card" onclick="this.classList.toggle('open')"><div class="tag">${badge[fmt]||fmt}</div>${cover}`
+      +`<div class="meta"><div class="muted" style="font-size:11px">${x.date||''} · tap for detail</div><div>${keyStats(x)}</div>`
+      +`<div class="det">${allStats(x)}${cap?`<div class="cap">${cap}</div>`:''}</div></div></div>`;
   }).join('') : '<div class="muted">No posts yet — they\'ll appear here after the next run.</div>';
 
   // performance by post type (every format with its own stats)
