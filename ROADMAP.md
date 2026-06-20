@@ -43,4 +43,15 @@ leverage now is. Ordered by leverage, not effort.
 - Content *planning* (what to shoot next), not just caption tuning of what exists.
 - Alt-text (accessibility + SEO) — API can't set it on publish; manual for now.
 
+## Known constraints (not bugs — platform limits)
+- **Music.** No API can attach Instagram's in-app / trending audio to a reel or the
+  Story music sticker — that's app-only, for licensing. Auto-posted reels carry only
+  the audio **baked into the video file**. So: add royalty-free music in your editor
+  (Epidemic, Artlist, Instagram-safe packs) and export it into the clip; and post the
+  occasional *hero* reel by hand when you specifically want a trending sound + its
+  algorithmic boost. Trending audio is a real reach lever — this is the trade for
+  automation.
+- **Reel → Story.** Can't re-share a reel to a Story as a tappable sticker via API
+  (manual only). A branded cover-image cue is possible but low payoff; deferred.
+
 _Reviewed and re-prioritized as the monthly review surfaces new evidence._
