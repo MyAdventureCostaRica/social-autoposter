@@ -97,6 +97,33 @@ def publish_reel(video_url, caption):
     return pub.get("id")
 
 
+def publish_fb_reel(video_url, caption):
+    """Cross-post the same clip as a Facebook Page Reel (hosted-file upload:
+    start -> upload-by-url -> finish/publish). Best-effort: never blocks the IG reel."""
+    if "fb" not in ap.CFG.get("targets", []):
+        return None
+    page = ap.CFG["page_id"]
+    try:
+        start = ap.meta_post(f"{page}/video_reels",
+                             {"upload_phase": "start", "access_token": TOKEN})
+        vid, upload_url = start["video_id"], start["upload_url"]
+        req = urllib.request.Request(
+            upload_url, method="POST",
+            headers={"Authorization": f"OAuth {TOKEN}", "file_url": video_url})
+        with urllib.request.urlopen(req, timeout=120) as r:
+            r.read()
+        time.sleep(8)                              # let FB ingest the hosted file
+        ap.meta_post(f"{page}/video_reels",
+                     {"upload_phase": "finish", "video_id": vid,
+                      "video_state": "PUBLISHED", "description": caption,
+                      "access_token": TOKEN})
+        print("Facebook Reel OK:", vid)
+        return vid
+    except Exception as e:
+        print("Facebook Reel skipped:", e)
+        return None
+
+
 def log_post(mid, base, meta):
     mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
     pj = os.path.join(mdir, "posts.json")
@@ -137,6 +164,7 @@ def main():
     print("Publishing reel…")
     mid = publish_reel(video_url, caption)
     print("Reel published:", mid)
+    publish_fb_reel(video_url, caption)            # cross-post to Facebook Reels
 
     cloudinary.uploader.add_tag("posted", pid, resource_type="video")
     base = pid.split("/")[-1]

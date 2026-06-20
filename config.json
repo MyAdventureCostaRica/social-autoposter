@@ -6,5 +6,11 @@
   "also_story": true,
   "caption_model": "openai/gpt-4o",
   "auto_reply_comments": false,
-  "respond_recent_media": 25
+  "respond_recent_media": 25,
+  "burst_carousel": true,
+  "burst_seconds": 90,
+  "burst_hash_distance": 8,
+  "burst_max": 6,
+  "dedupe_posted": true,
+  "dedupe_hash_distance": 6
 }

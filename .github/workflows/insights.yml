@@ -27,5 +27,12 @@ jobs:
           git config user.name  "auto-poster"
           git config user.email "actions@github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "Daily insights [skip ci]"
-          git push
+          git diff --staged --quiet && { echo "nothing to commit"; exit 0; }
+          git commit -m "Daily insights [skip ci]"
+          for i in 1 2 3 4 5; do
+            git push && exit 0
+            echo "push rejected (attempt $i) — rebasing on remote and retrying"
+            git pull --rebase --autostash origin "${{ github.ref_name }}" || true
+            sleep $((RANDOM % 4 + 2))
+          done
+          echo "push still failing after retries"; exit 1

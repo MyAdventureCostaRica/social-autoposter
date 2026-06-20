@@ -317,6 +317,15 @@ def open_issue(pending):
 def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
+    # On-demand test: fire a sample alert through every configured channel so you can
+    # confirm ntfy/WhatsApp/etc. work without waiting for a real comment. Triggered by
+    # running the workflow with the "Send a test alert" box checked.
+    if os.environ.get("TEST_NOTIFY"):
+        notify([{"type": "comment", "user": "test",
+                 "text": "Test alert from your responder — if you got this, alerts work.",
+                 "intent": "test", "permalink": DASH}])
+        print("Sent a test notification to all configured channels.")
+        return
     handled = load(HANDLED, {})
     if not isinstance(handled, dict):
         handled = {}

@@ -347,7 +347,16 @@ def git_setup():
 def commit_push(msg):
     git("add", "-A")
     subprocess.run(["git", "commit", "-m", msg], cwd=HERE)  # ok if nothing to commit
-    git("push")
+    # Several workflows now push concurrently (the Vercel cron fires a few at once),
+    # so a push can be rejected because the remote moved. Rebase on the remote and
+    # retry instead of failing the run.
+    for attempt in range(6):
+        if subprocess.run(["git", "push"], cwd=HERE).returncode == 0:
+            return
+        print(f"push rejected (attempt {attempt + 1}) — rebasing on remote, retrying")
+        subprocess.run(["git", "pull", "--rebase", "--autostash"], cwd=HERE)
+        time.sleep(2 + attempt)
+    print("commit_push: push still failing after retries")
 
 
 def summary(md):
@@ -453,6 +462,66 @@ def performance_brief():
     return "\n".join(lines)
 
 
+# ---------- photo similarity: catch same-moment bursts + near-duplicates ----------
+BURST = CFG.get("burst_carousel", True)
+BURST_SECONDS = int(CFG.get("burst_seconds", 90))     # EXIF gap that counts as one moment
+BURST_HASH = int(CFG.get("burst_hash_distance", 8))   # visual closeness for grouping
+BURST_MAX = int(CFG.get("burst_max", 6))              # max photos in an auto carousel
+DEDUPE = CFG.get("dedupe_posted", True)
+DEDUPE_HASH = int(CFG.get("dedupe_hash_distance", 6)) # stricter: skip if ~identical to a past post
+
+
+def ahash(pil_img):
+    """64-bit average hash — near-identical photos share almost all bits."""
+    g = pil_img.convert("L").resize((8, 8), Image.LANCZOS)
+    px = list(g.getdata())
+    avg = sum(px) / len(px)
+    bits = 0
+    for i, p in enumerate(px):
+        if p >= avg:
+            bits |= (1 << i)
+    return bits
+
+
+def hamming(a, b):
+    return bin(a ^ b).count("1")
+
+
+def exif_epoch(pil_img):
+    """Capture time (epoch seconds) from EXIF, or None."""
+    try:
+        ex = pil_img.getexif()
+        raw = ex.get(36867) or ex.get(306)            # DateTimeOriginal, then DateTime
+        if not raw:
+            try:
+                raw = ex.get_ifd(0x8769).get(36867)
+            except Exception:
+                raw = None
+        if raw:
+            return time.mktime(time.strptime(str(raw)[:19], "%Y:%m:%d %H:%M:%S"))
+    except Exception:
+        pass
+    return None
+
+
+def open_sig(path):
+    """(open PIL image, ahash, exif-epoch) for a file, or None on failure."""
+    try:
+        im = Image.open(path)
+        return im, ahash(im), exif_epoch(im)
+    except Exception:
+        return None
+
+
+def same_moment(sig_a, sig_b):
+    """True if two photos are the same burst / near-identical shot."""
+    _, ha, ta = sig_a
+    _, hb, tb = sig_b
+    if ta is not None and tb is not None and abs(ta - tb) <= BURST_SECONDS:
+        return True
+    return hamming(ha, hb) <= BURST_HASH
+
+
 def prepare():
     """Pick a photo, caption it, render it, push it, and stage state.json.
     Does NOT post — that's publish()."""
@@ -479,8 +548,23 @@ def prepare():
         summary("### Nothing to post\nNo photos in `source-photos/`. Add some.")
         return
 
+    posted_hashes = []
+    if DEDUPE:
+        for p in sorted(glob.glob(os.path.join(POSTED, "*")))[-200:]:
+            if p.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif")):
+                s = open_sig(p)
+                if s:
+                    posted_hashes.append(s[1])
+
     chosen = None
     for src in candidates[:6]:
+        # Skip a near-duplicate of something already posted — don't repeat near-twins.
+        if DEDUPE and posted_hashes:
+            cs = open_sig(src)
+            if cs and any(hamming(cs[1], ph) <= DEDUPE_HASH for ph in posted_hashes):
+                print("Skipping near-duplicate of an already-posted photo:", os.path.basename(src))
+                os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
+                continue
         note = ""
         note_path = os.path.splitext(src)[0] + ".txt"   # optional companion note: IMG_123.txt
         if os.path.exists(note_path):
@@ -514,11 +598,42 @@ def prepare():
     fmt = meta.get("format", "single")
     slides = meta.get("slides") or []
 
+    # --- Burst rule: gather same-moment sibling photos into one carousel set ---
+    burst_imgs, burst_files = [], []
+    if BURST:
+        chosen_sig = open_sig(src) or (img, ahash(img), exif_epoch(img))
+        for other in candidates:
+            if other == src or len(burst_files) >= BURST_MAX - 1:
+                continue
+            if not other.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif")):
+                continue
+            osig = open_sig(other)
+            if not osig or not same_moment(chosen_sig, osig):
+                continue
+            try:                                    # vet so a blurry burst frame can't sneak in
+                b = io.BytesIO(); pv = osig[0].convert("RGB"); pv.thumbnail((1280, 1280))
+                pv.save(b, format="JPEG", quality=85)
+                vm = caption_for(b.getvalue(), "", TAGS, learn)
+            except Exception:
+                vm = {"post_worthy": False}
+            if vm.get("post_worthy"):
+                burst_imgs.append(osig[0]); burst_files.append(other)
+        if burst_imgs:
+            fmt = "carousel"; slides = []           # a photo carousel, not a text-slide one
+            print(f"Burst detected — {1 + len(burst_imgs)} photos grouped into a carousel.")
+
+    sources = [os.path.basename(src)] + [os.path.basename(f) for f in burst_files]
+
     outs = []                                   # slide 1 = the photo
     out1 = os.path.join(RENDERED, f"{base}_1.jpg")
     render(img, meta["eyebrow"], meta["headline"], out1, float(meta.get("crop_bias", 0.5)))
     outs.append(out1)
-    if fmt == "carousel" and slides:
+    if burst_imgs:                              # framed photo siblings (no headline)
+        n = 2
+        for bi in burst_imgs:
+            o = os.path.join(RENDERED, f"{base}_{n}.jpg")
+            render(bi, meta["eyebrow"], "", o); outs.append(o); n += 1
+    elif fmt == "carousel" and slides:
         cta = (meta.get("cta") or "").strip()
         total = 1 + len(slides[:4]) + (1 if cta else 0)
         n = 2
@@ -546,7 +661,7 @@ def prepare():
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in [meta["caption_en"], meta["caption_es"], mentions, hashtags] if p).strip()
-    json.dump({"skip": False, "source": os.path.basename(src), "base": base,
+    json.dump({"skip": False, "source": os.path.basename(src), "sources": sources, "base": base,
                "image_urls": image_urls, "image_url": image_urls[0],
                "story_url": story_url, "caption": caption,
                "format": fmt, "category": meta.get("category"),
@@ -653,13 +768,26 @@ def publish():
             print("Facebook OK:", res.get("post_id") or res.get("id"))
         except Exception as e:
             print("Facebook skipped (needs pages_manage_posts):", e)
+        story_url = st.get("story_url")              # cross-post the same 9:16 image as a FB Story
+        if story_url:
+            try:
+                up = meta_post(f"{CFG['page_id']}/photos",
+                               {"url": story_url, "published": "false", "access_token": META_TOKEN})
+                meta_post(f"{CFG['page_id']}/photo_stories",
+                          {"photo_id": up["id"], "access_token": META_TOKEN})
+                print("Facebook Story OK")
+            except Exception as e:
+                print("Facebook Story skipped:", e)
 
-    src = os.path.join(SRC, st["source"])
-    if os.path.exists(src):
-        os.replace(src, os.path.join(POSTED, st["source"]))
-    src_note = os.path.join(SRC, st["base"] + ".txt")   # remove the companion note if any
-    if os.path.exists(src_note):
-        os.remove(src_note)
+    for sname in (st.get("sources") or [st.get("source")]):   # archive every burst photo used
+        if not sname:
+            continue
+        sp = os.path.join(SRC, sname)
+        if os.path.exists(sp):
+            os.replace(sp, os.path.join(POSTED, sname))
+        note_p = os.path.join(SRC, os.path.splitext(sname)[0] + ".txt")  # its companion note
+        if os.path.exists(note_p):
+            os.remove(note_p)
     with open(os.path.join(POSTED, st["base"] + ".txt"), "w", encoding="utf-8") as f:
         f.write(caption)
     if os.path.exists(STATE):
