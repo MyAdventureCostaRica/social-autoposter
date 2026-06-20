@@ -11,13 +11,16 @@
  *
  * Set these in Vercel → Project → Settings → Environment Variables:
  *   META_TOKEN  — the permanent Page token (same value as the GitHub secret)
- *   GH_TOKEN    — a fine-grained GitHub PAT for THIS repo with
- *                 Contents: Read/Write  +  Actions: Read/Write
- *   DASH_KEY    — a long passphrase you also paste into the dashboard's Connect box
+ *   GH_TOKEN    — a fine-grained GitHub PAT for THIS repo with Actions: Read/Write
+ *                 (Contents no longer needed — inbox/resolutions live in Upstash)
+ *   DASH_KEY    — a long, RANDOM passphrase (>=32 chars); also pasted into the dashboard
+ *   UPSTASH_REDIS_REST_URL   — Upstash Redis REST endpoint (private inbox store)
+ *   UPSTASH_REDIS_REST_TOKEN — Upstash Redis REST token
  *   ALLOW_ORIGIN (optional) — defaults to the GitHub Pages origin below
  *
  * Actions are chosen by the JSON body field "action": reply | reject | dispatch.
  */
+const crypto = require("crypto");
 const V = "v23.0";
 const IG = "17841403481255550";                        // Instagram user id
 const REPO = "MyAdventureCostaRica/social-autoposter";
@@ -41,20 +44,66 @@ module.exports = async function handler(req, res) {
   const action = (req.query && req.query.action) || body.action || "";
   if (action === "ping") return res.json({ ok: true, service: "mac-control" });
 
-  if ((req.headers["x-dash-key"] || "") !== process.env.DASH_KEY)
+  // Throttle every caller (per IP) so DASH_KEY can't be brute-forced.
+  if (await rateLimited(req))
+    return res.status(429).json({ ok: false, error: "rate limited" });
+
+  // Constant-time passphrase check; fail closed if DASH_KEY is unset.
+  if (!process.env.DASH_KEY || !safeEq(req.headers["x-dash-key"] || "", process.env.DASH_KEY))
     return res.status(401).json({ ok: false, error: "unauthorized" });
 
   try {
+    if (action === "inbox") return res.json(await getInbox());
     if (action === "reply") return res.json(await doReply(body));
     if (action === "reject") return res.json(await resolve(body.id, { status: "rejected" }));
     if (action === "dispatch") return res.json(await dispatch(body.workflow));
-    return res.status(404).json({ ok: false, error: "unknown action: " + action });
+    return res.status(404).json({ ok: false, error: "unknown action" });
   } catch (e) {
-    return res.status(500).json({ ok: false, error: String(e) });
+    console.error("control error:", e);                  // detail stays server-side
+    return res.status(500).json({ ok: false, error: "internal error" });
   }
 }
 
 function safeParse(s) { try { return JSON.parse(s); } catch (e) { return {}; } }
+
+// --- Auth + abuse helpers -----------------------------------------------------
+function safeEq(a, b) {
+  const ab = Buffer.from(String(a)), bb = Buffer.from(String(b));
+  if (ab.length !== bb.length) return false;
+  return crypto.timingSafeEqual(ab, bb);
+}
+async function rateLimited(req) {                          // ~60 requests / minute / IP
+  try {
+    const ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "unknown";
+    const j = await redis(["INCR", `rl:${ip}`]);
+    const n = Number(j && j.result);
+    if (n === 1) await redis(["EXPIRE", `rl:${ip}`, "60"]);
+    return n > 60;
+  } catch (e) { return false; }                           // never lock the owner out on limiter error
+}
+
+// --- Upstash Redis (private store for inbox + resolutions) ---------------------
+async function redis(cmd) {
+  const r = await fetch(process.env.UPSTASH_REDIS_REST_URL, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+               "Content-Type": "application/json" },
+    body: JSON.stringify(cmd),
+  });
+  return r.json();
+}
+async function rget(key, dflt) {
+  try { const j = await redis(["GET", key]); return j && j.result ? JSON.parse(j.result) : dflt; }
+  catch (e) { console.error("redis get", key, e); return dflt; }
+}
+async function rset(key, obj) {
+  try { const j = await redis(["SET", key, JSON.stringify(obj)]); return !!(j && j.result); }
+  catch (e) { console.error("redis set", key, e); return false; }
+}
+async function getInbox() {
+  const [inbox, resolutions] = await Promise.all([rget("inbox", []), rget("resolutions", {})]);
+  return { ok: true, inbox, resolutions };
+}
 
 // --- Send a reply (comment or DM) via the Graph API, then mark it resolved -----
 async function doReply({ id, type, text, recipient }) {
@@ -72,25 +121,18 @@ async function doReply({ id, type, text, recipient }) {
     g = await fetch(`https://graph.facebook.com/${V}/${id}/replies`, { method: "POST", body: p });
   }
   const gj = await g.json();
-  if (gj.error) return { ok: false, error: gj.error.message };
+  if (gj.error) { console.error("graph error:", gj.error); return { ok: false, error: "Meta rejected the reply" }; }
   await resolve(id, { status: "sent", text });
   return { ok: true, sent: gj.id || true };
 }
 
-// --- Persist a resolution (sent/rejected) to metrics/resolutions.json ----------
-// Single file this backend owns; respond.py and the dashboard read it. No race
-// with the Action (which writes inbox.json/handled.json — different files).
+// --- Persist a resolution (sent/rejected) to Upstash (PRIVATE) -----------------
 async function resolve(id, info) {
   if (!id) return { ok: false, error: "missing id" };
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const { sha, data } = await ghGetJson("metrics/resolutions.json");
-    data[id] = { ...info, ts: new Date().toISOString() };
-    const ok = await ghPutJson("metrics/resolutions.json", data, sha,
-                               `resolve ${id} (${info.status}) [skip ci]`);
-    if (ok) return { ok: true, id, status: info.status };
-    // 409 sha conflict — loop and retry with the fresh sha
-  }
-  return { ok: false, error: "could not write resolutions.json" };
+  const data = await rget("resolutions", {});
+  data[id] = { ...info, ts: new Date().toISOString() };
+  const ok = await rset("resolutions", data);
+  return ok ? { ok: true, id, status: info.status } : { ok: false, error: "could not persist resolution" };
 }
 
 // --- Trigger any of our workflows (workflow_dispatch) --------------------------
@@ -103,7 +145,7 @@ async function dispatch(key) {
   return { ok: r.status === 204, status: r.status, workflow: wf };
 }
 
-// --- GitHub contents helpers (base64 via Buffer) ------------------------------
+// --- GitHub headers (used only to trigger workflow_dispatch) ------------------
 function ghHeaders() {
   return {
     Authorization: `Bearer ${process.env.GH_TOKEN}`,
@@ -112,21 +154,4 @@ function ghHeaders() {
     "Content-Type": "application/json",
   };
 }
-async function ghGetJson(path) {
-  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,
-                        { headers: ghHeaders() });
-  if (r.status === 404) return { sha: null, data: {} };
-  const j = await r.json();
-  let data = {};
-  try { data = JSON.parse(Buffer.from(j.content || "", "base64").toString("utf8")); }
-  catch (e) { data = {}; }
-  return { sha: j.sha, data };
-}
-async function ghPutJson(path, obj, sha, message) {
-  const content = Buffer.from(JSON.stringify(obj, null, 1), "utf8").toString("base64");
-  const body = { message, content };
-  if (sha) body.sha = sha;
-  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,
-                        { method: "PUT", headers: ghHeaders(), body: JSON.stringify(body) });
-  return r.ok;
-}
+// (GitHub Contents helpers removed — inbox/resolutions now live in Upstash, not git.)

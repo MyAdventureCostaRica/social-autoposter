@@ -294,16 +294,24 @@ function renderInbox(items,resolved,postsById){
 }
 
 async function load(){
-  const [src,posted,rendered,insights,posts,review,inbox,resolved]=await Promise.all([
+  const [src,posted,rendered,insights,posts,review]=await Promise.all([
     j(`${API}/source-photos`), j(`${API}/posted`), j(`${API}/rendered`),
     j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`),
-    j(`${RAW}/metrics/review-latest.json`), j(`${RAW}/metrics/inbox.json`),
-    j(`${RAW}/metrics/resolutions.json`)
+    j(`${RAW}/metrics/review-latest.json`)
   ]);
   renderControls();
   renderReview(review);
   const postsById={}; if(Array.isArray(posts)) for(const pp of posts){ if(pp&&pp.id) postsById[pp.id]=pp; }
-  renderInbox(inbox, resolved||{}, postsById);
+  // Inbox is PRIVATE: it never touches the public repo. Load it through the
+  // authenticated backend (api/control "inbox"). Requires you to be connected.
+  const inboxEl=document.getElementById('inbox');
+  if(connected()){
+    const r=await ctrl('inbox',{});
+    if(r&&r.ok){ renderInbox(r.inbox||[], r.resolutions||{}, postsById); }
+    else if(inboxEl){ inboxEl.innerHTML='<p class="muted" style="margin-top:8px">Could not load the inbox — check your connection details.</p>'; }
+  } else if(inboxEl){
+    inboxEl.innerHTML='<p class="muted" style="margin-top:8px">Connect mission control (above) to view and reply to your inbox.</p>';
+  }
   const queue=Array.isArray(src)?src.filter(f=>photoExt(f.name)).length:0;
   const postedCount=Array.isArray(posted)?posted.filter(f=>imgExt(f.name)).length:0;
   const ins=Array.isArray(insights)?insights:[];

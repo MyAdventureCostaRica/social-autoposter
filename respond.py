@@ -9,13 +9,13 @@ Runs in GitHub Actions (the cloud; no app open). Each run it:
      (free, built-in) — mirroring the writer's language, Spanish always in usted;
   3. classifies each one: a SAFE simple appreciation, or something that needs you
      (a question, a booking signal, a complaint);
-  4. writes metrics/inbox.json (the dashboard Inbox reads this) and opens/updates a
-     GitHub Issue that tags you, so the sensitive ones reach you with a draft ready;
+  4. stores the inbox in Upstash Redis (PRIVATE — the dashboard reads it through the
+     authenticated backend) and opens a PII-free GitHub Issue (counts + link only);
   5. optionally AUTO-SENDS replies to SAFE comments only — but ONLY if you set
      "auto_reply_comments": true in config.json. Default is OFF: it drafts, you send.
 
-Bulletproof + idempotent: every id we've already handled is recorded in
-metrics/handled.json, so re-runs never double-reply and a flaky cron is harmless.
+Bulletproof + idempotent: every id we've already handled is recorded in Upstash
+(handled), so re-runs never double-reply and a flaky cron is harmless.
 
 Never auto-sends DMs (too personal, and Meta's 24h window makes timing tricky) —
 DMs are always surfaced for you. Secrets: META_ACCESS_TOKEN (you add it),
@@ -27,9 +27,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CFG = json.load(open(os.path.join(HERE, "config.json")))
 MET = os.path.join(HERE, "metrics")
 os.makedirs(MET, exist_ok=True)
-HANDLED = os.path.join(MET, "handled.json")
-INBOX = os.path.join(MET, "inbox.json")
-RESOL = os.path.join(MET, "resolutions.json")   # written by the dashboard backend
+# Inbox / handled / resolutions live in Upstash Redis (PRIVATE) — never in the public
+# repo. Required: UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN (GitHub secrets).
+UPSTASH_URL = (os.environ.get("UPSTASH_REDIS_REST_URL") or "").rstrip("/")
+UPSTASH_TOKEN = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
 
 TOKEN = os.environ.get("META_ACCESS_TOKEN")
 GH_TOKEN = os.environ.get("GITHUB_TOKEN")
@@ -48,7 +49,9 @@ AUTO_REPLY = bool(CFG.get("auto_reply_comments", False))   # default OFF — dra
 # Every channel is optional: it fires only if its secret is set, and each is wrapped
 # so one failing never blocks the others. Fastest+most reliable first.
 DASH = CFG.get("dashboard_url", "https://myadventurecostarica.github.io/social-autoposter/")
-NTFY_TOPIC = os.environ.get("NTFY_TOPIC")                   # phone push (ntfy.sh, free, instant)
+NTFY_BASE = (os.environ.get("NTFY_BASE") or "https://ntfy.sh").rstrip("/")
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC")                   # phone push (use a long, random, RESERVED topic)
+NTFY_TOKEN = os.environ.get("NTFY_TOKEN")                   # ntfy access token (protects the topic)
 WA_PHONE = os.environ.get("WHATSAPP_PHONE")                 # WhatsApp via CallMeBot (free)
 WA_KEY = os.environ.get("WHATSAPP_APIKEY")
 TG_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")             # Telegram (free, instant)
@@ -103,11 +106,30 @@ def _post(path, params):
         return {"error": {"message": str(e)}}
 
 
-def load(p, default):
+def _redis(cmd):
+    req = urllib.request.Request(
+        UPSTASH_URL, data=json.dumps(cmd).encode("utf-8"),
+        headers={"Authorization": f"Bearer {UPSTASH_TOKEN}",
+                 "Content-Type": "application/json"}, method="POST")
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.loads(r.read().decode())
+
+def rget(key, default):
+    if not (UPSTASH_URL and UPSTASH_TOKEN):
+        print("WARNING: Upstash not configured — state will not persist."); return default
     try:
-        return json.load(open(p))
-    except Exception:
-        return default
+        res = _redis(["GET", key]).get("result")
+        return json.loads(res) if res else default
+    except Exception as e:
+        print(f"redis get {key} failed: {e}"); return default
+
+def rset(key, obj):
+    if not (UPSTASH_URL and UPSTASH_TOKEN):
+        print("WARNING: Upstash not configured — skipping write of", key); return
+    try:
+        _redis(["SET", key, json.dumps(obj, ensure_ascii=False)])
+    except Exception as e:
+        print(f"redis set {key} failed: {e}")
 
 
 def draft_reply(text, kind):
@@ -252,14 +274,10 @@ def notify(pending):
     if not pending:
         return
     n = len(pending)
-    first = pending[0]
-    who = first.get("user") or "someone"
-    kind = "DM" if first.get("type") == "dm" else "comment"
-    snippet = (first.get("text") or "").strip()[:90]
+    # Privacy: alerts carry only a COUNT and a link — never usernames or message text.
     title = f"🔔 {n} {'reply' if n == 1 else 'replies'} need you"
-    body = (f"{kind} from @{who}: {snippet}"
-            + (f"  (+{n-1} more)" if n > 1 else "")
-            + f"\nReply: {DASH}")
+    body = (f"{n} message{'' if n == 1 else 's'} waiting for you."
+            f"\nOpen your dashboard to read & reply: {DASH}")
 
     # 1) Phone push — ntfy.sh (free, no account, near-instant, most reliable).
     # HTTP headers must be latin-1, so the Title header can't hold the emoji — strip it
@@ -268,10 +286,12 @@ def notify(pending):
     if NTFY_TOPIC:
         ascii_title = (title.encode("ascii", "ignore").decode().strip()
                        or "New replies need you")
+        _hdrs = {"Title": ascii_title, "Priority": "high", "Tags": "bell", "Click": DASH}
+        if NTFY_TOKEN:                       # protected/reserved topic (recommended)
+            _hdrs["Authorization"] = f"Bearer {NTFY_TOKEN}"
         _fire(urllib.request.Request(
-            f"https://ntfy.sh/{NTFY_TOPIC}", data=body.encode("utf-8"),
-            headers={"Title": ascii_title, "Priority": "high",
-                     "Tags": "bell", "Click": DASH}), "ntfy")
+            f"{NTFY_BASE}/{NTFY_TOPIC}", data=body.encode("utf-8"),
+            headers=_hdrs), "ntfy")
     # 2) WhatsApp — CallMeBot (free; one-time opt-in gives you an apikey)
     if WA_PHONE and WA_KEY:
         q = urllib.parse.urlencode({"phone": WA_PHONE,
@@ -296,17 +316,17 @@ def open_issue(pending):
     if not (GH_TOKEN and REPO and pending):
         return
     owner = REPO.split("/")[0]
-    lines = [f"@{owner} — {len(pending)} message(s) waiting for you. Drafts are ready; "
-             "approve by replying on Instagram (or in Claude). The full list is on your "
-             "dashboard Inbox.\n"]
+    n = len(pending)
+    # Privacy: this Issue is PUBLIC, so it carries only counts + a link — never
+    # usernames, message text, or permalinks. Details live behind the dashboard.
+    types = {}
     for p in pending:
-        where = p.get("permalink") or "(direct message)"
-        lines.append(f"- **{p.get('user','?')}** · {p.get('intent','')} · {p.get('type')}\n"
-                     f"  > {p.get('text','')[:200]}\n"
-                     f"  _Draft:_ {p.get('reply') or '(none — needs your words)'}\n"
-                     f"  {where}")
-    body = "\n".join(lines)[:60000]
-    title = f"Engagement — {len(pending)} to reply · {datetime.date.today().isoformat()}"
+        t = p.get("type", "comment"); types[t] = types.get(t, 0) + 1
+    breakdown = ", ".join(f"{v} {k}{'' if v == 1 else 's'}" for k, v in types.items())
+    body = (f"@{owner} — {n} message{'' if n == 1 else 's'} waiting for you"
+            + (f" ({breakdown})" if breakdown else "") + ".\n\n"
+            f"Open your dashboard to read and reply: {DASH}\n")
+    title = f"Engagement — {n} to reply · {datetime.date.today().isoformat()}"
     data = json.dumps({"title": title, "body": body}).encode()
     req = urllib.request.Request(
         f"https://api.github.com/repos/{REPO}/issues", data=data,
@@ -331,13 +351,13 @@ def main():
                  "intent": "test", "permalink": DASH}])
         print("Sent a test notification to all configured channels.")
         return
-    handled = load(HANDLED, {})
+    handled = rget("handled", {})
     if not isinstance(handled, dict):
         handled = {}
     # Anything you've already sent or rejected from the dashboard is recorded in
     # resolutions.json — seed it into handled so it never re-surfaces or gets
     # re-drafted.
-    resolved = load(RESOL, {})
+    resolved = rget("resolutions", {})
     if not isinstance(resolved, dict):
         resolved = {}
     for rid, info in resolved.items():
@@ -348,14 +368,14 @@ def main():
 
     # Inbox = everything still needing you (auto-sent items drop off). Keep newest first
     # and cap so the dashboard stays light. Carry forward yesterday's still-pending ones.
-    prev = [x for x in load(INBOX, []) if x.get("status") == "pending"]
+    prev = [x for x in rget("inbox", []) if x.get("status") == "pending"]
     prev_ids = {x["id"] for x in items}
     merged = items + [x for x in prev if x["id"] not in prev_ids]
     pending = [x for x in merged
                if x.get("status") == "pending" and x["id"] not in resolved]
     pending.sort(key=lambda x: x.get("ts") or "", reverse=True)
-    json.dump(pending[:100], open(INBOX, "w"), ensure_ascii=False, indent=1)
-    json.dump(handled, open(HANDLED, "w"), indent=1)
+    rset("inbox", pending[:100])
+    rset("handled", handled)
 
     new_pending = [x for x in items if x.get("status") == "pending"]
     if new_pending:

@@ -16,8 +16,9 @@
  *   reels       Tue & Fri 18:15 UTC = 12:15 CR
  *   review      1st of month 15:20 UTC
  *
- * Security: if CRON_SECRET is set in Vercel, the platform sends it as
- * `Authorization: Bearer <CRON_SECRET>` and we verify it. Reuses GH_TOKEN.
+ * Security: CRON_SECRET is REQUIRED. Vercel Cron sends it as
+ * `Authorization: Bearer <CRON_SECRET>`; we fail closed if it is unset or wrong,
+ * so the endpoint can never be triggered anonymously. Reuses GH_TOKEN.
  */
 const REPO = "MyAdventureCostaRica/social-autoposter";
 
@@ -44,7 +45,7 @@ async function dispatch(workflow) {
 
 module.exports = async function handler(req, res) {
   const secret = process.env.CRON_SECRET;
-  if (secret && req.headers.authorization !== `Bearer ${secret}`) {
+  if (!secret || req.headers.authorization !== `Bearer ${secret}`) {
     return res.status(401).json({ ok: false, error: "unauthorized" });
   }
 
