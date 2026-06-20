@@ -8613,17 +8613,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 29,
+  "reach": 30,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 53,
+  "views": 54,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1379
+  "eng_rate": 0.1333
  },
  {
   "id": "18086708858429365",
@@ -8632,17 +8632,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 66,
+  "reach": 67,
   "likes": 12,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
   "views": 158,
-  "profile_visits": 2,
+  "profile_visits": 3,
   "follows": 0,
   "interactions": 12,
-  "eng_rate": 0.1818
+  "eng_rate": 0.1791
  },
  {
   "id": "18339135430221614",
