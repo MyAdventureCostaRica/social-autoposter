@@ -1,0 +1,125 @@
+{
+ "stats": {
+  "generated": "2026-06-20",
+  "total_posts": 745,
+  "with_insights": 74,
+  "eligible": 21,
+  "eligible_recent_12mo": 16,
+  "date_range": [
+   "2017-07-23",
+   "2026-06-19"
+  ],
+  "interaction_mix_pct": {
+   "saved": 0.003,
+   "shares": 0.086,
+   "likes": 0.832,
+   "comments": 0.032
+  },
+  "format_leaderboard": [
+   {
+    "format": "carousel",
+    "avg_eng_rate": 0.0695,
+    "n": 1
+   },
+   {
+    "format": "reel",
+    "avg_eng_rate": 0.0536,
+    "n": 14
+   },
+   {
+    "format": "single",
+    "avg_eng_rate": 0.0535,
+    "n": 6
+   }
+  ],
+  "top_posts": [
+   {
+    "date": "2026-04-04",
+    "format": "single",
+    "reach": 272,
+    "shares": 1,
+    "saved": 0,
+    "eng_rate": 0.0551,
+    "caption": "Most people would walk right past this… 👀🐍\n\nHidden in plain sight on the rainforest floor, this is a Hognose pit viper —"
+   },
+   {
+    "date": "2025-11-27",
+    "format": "reel",
+    "reach": 603,
+    "shares": 2,
+    "saved": 0,
+    "eng_rate": 0.0796,
+    "caption": "Day 1 of the My Adventure Costa Rica Trail Running Tour (December 2026). Today’s route stays entirely above 3000 meters,"
+   },
+   {
+    "date": "2025-10-25",
+    "format": "reel",
+    "reach": 990,
+    "shares": 3,
+    "saved": 0,
+    "eng_rate": 0.0818,
+    "caption": "Born from the mountains and rivers of Costa Rica. Crafted from years of adventure. This is where your story begins.\n\nWel"
+   },
+   {
+    "date": "2025-10-28",
+    "format": "reel",
+    "reach": 298,
+    "shares": 3,
+    "saved": 1,
+    "eng_rate": 0.0772,
+    "caption": "It’s not just rain. It’s the sound of Costa Rica calling.\n\nAdventure in the cloud forest.\n\nDiscover the wild side of lux"
+   },
+   {
+    "date": "2025-10-22",
+    "format": "carousel",
+    "reach": 187,
+    "shares": 4,
+    "saved": 0,
+    "eng_rate": 0.0695,
+    "caption": "🌿 The wait is over — the My Adventure Costa Rica website is now live!\n\nOur first signature experience is ready: a 9-day "
+   },
+   {
+    "date": "2025-10-31",
+    "format": "reel",
+    "reach": 95,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0632,
+    "caption": "\"Life begins at the end of your confort zone\"\n Neal Donald Walsh \n\n #MyAdventureCostaRica\n#wearemyadventurecostarica #to"
+   },
+   {
+    "date": "2026-01-02",
+    "format": "reel",
+    "reach": 459,
+    "shares": 2,
+    "saved": 0,
+    "eng_rate": 0.0458,
+    "caption": "Wishing you a beautiful 2026 ✨\nMay it come filled with sunrises, peace, friendship, health,\nand many mountains to discov"
+   },
+   {
+    "date": "2025-10-30",
+    "format": "single",
+    "reach": 218,
+    "shares": 1,
+    "saved": 0,
+    "eng_rate": 0.0505,
+    "caption": "The jaguar (Panthera onca) is the largest feline in the Americas and a silent guardian of our forests. 🌿\nIn Costa Rica, "
+   }
+  ],
+  "themes": [
+   "trail",
+   "running",
+   "luxury",
+   "people",
+   "walk",
+   "right",
+   "past",
+   "hidden",
+   "plain",
+   "sight"
+  ],
+  "photo_queue": 232,
+  "errored_posts": 671
+ },
+ "markdown": "# Monthly Performance Review: June 2026\n\n## **Readout**\nThe data indicates that **shares are the live currency** for engagement, accounting for 8.6% of interactions, far outweighing saves (0.3%). Likes still dominate overall engagement (83.2%), but shares are the clearest signal of content resonance and reach. Reels are the strongest format, with an average engagement rate of 0.0536 across 14 posts, slightly ahead of single-image posts (0.0535). The top-performing posts feature themes of adventure, nature, and Costa Rica’s unique landscapes and wildlife — particularly when paired with aspirational or poetic captions. However, the dataset remains thin, with only 16 eligible posts from the past 12 months.\n\n---\n\n## **Proposed Changes**\n1. **Lower REACH_FLOOR to 200**  \n   Justification: The top-performing posts in the last year include several with reach between 200–300 (e.g., 272, 298). The current threshold may exclude posts that still provide valuable signals for analysis.\n\n2. **Increase HALFLIFE_DAYS to 120**  \n   Justification: Posts from as far back as October 2025 are still contributing meaningful insights. Extending the halflife will ensure we capture longer-term engagement trends.\n\n3. **Remove SAVES_DEAD**  \n   Justification: Saves are negligible in the interaction mix (0.3%). Optimizing for this metric would be counterproductive given its lack of impact.\n\n4. **Refine captioner brief to emphasize shareable hooks**  \n   Justification: Posts with poetic or emotionally evocative captions (e.g., \"It’s not just rain. It’s the sound of Costa Rica calling.\") tend to perform well on shares. The brief should encourage opening with a one-line hook that inspires sharing.\n\n---\n\n## **3 Experiments**\n1. **Test reels with shareable hooks on Costa Rica’s unique wildlife**  \n   - **Description:** Create reels featuring Costa Rica’s iconic animals (e.g., jaguars, sloths, vipers), paired with poetic or intriguing one-liners that encourage sharing.  \n   - **Metric:** Number of shares per post.  \n   - **Duration:** 30 days.\n\n2. **Post carousels highlighting luxury adventure experiences**  \n   - **Description:** Use carousel posts to showcase multi-day itineraries, emphasizing the blend of adventure and luxury (e.g., trail running tours, cloud forest stays).  \n   - **Metric:** Engagement rate (shares + likes).  \n   - **Duration:** 30 days.\n\n3. **Experiment with Spanish captions for local resonance**  \n   - **Description:** Translate captions into formal Spanish (usted) for posts targeting Costa Rican audiences or Spanish-speaking travelers.  \n   - **Metric:** Reach and shares per post.  \n   - **Duration:** 30 days.\n\n---\n\n### Summary of Recommendations\n1. **Lower REACH_FLOOR to 200** to capture more eligible posts.  \n2. **Increase HALFLIFE_DAYS to 120** to account for longer engagement windows.  \n3. **Remove SAVES_DEAD** due to negligible impact on engagement.  \n4. **Refine captioner brief** to encourage shareable hooks and poetic language.  \n\n### Next Steps\nLet me know if you approve these changes and experiments, and I will implement them accordingly."
+}
