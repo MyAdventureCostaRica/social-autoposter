@@ -139,6 +139,7 @@ async function load(){
 
   // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
   const renderedSet=new Set(Array.isArray(rendered)?rendered.filter(f=>/_1\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_1\.jpg$/i,'')):[]);
+  const storyRendered=new Set(Array.isArray(rendered)?rendered.filter(f=>/_story\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_story\.jpg$/i,'')):[]);
   const capById={},urlById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id){capById[p.id]=p.caption||'';urlById[p.id]=p.thumb||'';}});
   const recentPosts=ins.slice().filter(x=>x.date).sort((a,b)=>(''+b.date).localeCompare(''+a.date)).slice(0,12);
   const badge={reel:'Reel',story:'Story',carousel:'Carousel',single:'Post',video:'Video'};
@@ -151,8 +152,15 @@ async function load(){
   document.getElementById('recent').innerHTML = recentPosts.length? recentPosts.map(x=>{
     const base=x.base||''; const fmt=x.format||'single';
     const lbl=badge[fmt]||fmt;
-    const cover=renderedSet.has(base)?`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy" onerror="imgFail(this,'${lbl}')">`
-              :(urlById[x.id]?`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this,'${lbl}')">`:`<div class="badge">${lbl}</div>`);
+    const storyBase=base.replace(/-story$/,'');
+    let cover;
+    if(fmt==='story' && storyRendered.has(storyBase))
+      cover=`<img src="${RAW}/rendered/${encodeURIComponent(storyBase)}_story.jpg" loading="lazy" onerror="imgFail(this,'Story')">`;
+    else if(renderedSet.has(base))
+      cover=`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy" onerror="imgFail(this,'${lbl}')">`;
+    else if(urlById[x.id])
+      cover=`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this,'${lbl}')">`;
+    else cover=`<div class="badge">${lbl}</div>`;
     const cap=capById[x.id]||'';
     return `<div class="card" onclick="this.classList.toggle('open')"><div class="tag">${badge[fmt]||fmt}</div>${cover}`
       +`<div class="meta"><div class="muted" style="font-size:11px">${x.date||''} · tap for detail</div><div>${keyStats(x)}</div>`
