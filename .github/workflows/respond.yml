@@ -1,0 +1,44 @@
+name: Engagement responder
+
+on:
+  schedule:
+    # Comments + DMs are PRIORITY — they need a human, so the goal is to reach you
+    # the soonest possible. Sweep at GitHub's floor of every 5 min. If a slot is
+    # skipped (GitHub throttles high-frequency crons), the next slot catches it —
+    # nothing is ever lost (idempotent via handled.json), so latency only ever
+    # rounds up to the next run. Empty sweeps cost nothing (zero model calls when
+    # there's nothing new), and a public repo has unlimited free minutes.
+    - cron: "*/5 * * * *"     # every 5 minutes, around the clock
+  workflow_dispatch:
+
+jobs:
+  respond:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write          # commit handled.json + inbox.json
+      issues: write            # open the "you have replies waiting" issue
+      models: read             # GitHub Models for drafting
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Notification fan-out — each lights up only if you add its secret:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}                 # phone push
+          WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}         # WhatsApp (CallMeBot)
+          WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} # Telegram
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}   # Slack/Discord webhook
+        run: python respond.py
+      - run: |
+          git config user.name  "auto-poster"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Engagement sweep [skip ci]"
+          git push

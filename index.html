@@ -52,6 +52,13 @@
   .rv-body ol,.rv-body ul{margin:8px 0;padding-left:22px}
   .rv-body li{margin:5px 0;line-height:1.5}
   .rv-body code{background:rgba(12,16,13,.06);padding:1px 6px;border-radius:5px;font-size:13px}
+  .inbox-card{background:var(--bone);border:1px solid var(--clay-soft);border-left:4px solid var(--forest);border-radius:12px;padding:14px 18px;margin-bottom:14px}
+  .ic-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .chip{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:rgba(12,16,13,.07);color:var(--clay)}
+  .chip.dm{background:var(--clay);color:#fff}
+  .ic-msg{margin:4px 0 10px;line-height:1.5}
+  .ic-draft{background:rgba(176,137,72,.10);border-radius:9px;padding:10px 12px;line-height:1.5;position:relative}
+  .ic-copy{position:absolute;top:8px;right:8px;font-size:12px;padding:3px 10px;border:1px solid var(--clay-soft);background:#fff;border-radius:7px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -64,6 +71,7 @@
     <button onclick="load()">↻ Refresh</button>
   </div>
   <div id="review-top"></div>
+  <div id="inbox"></div>
   <div class="stats" id="stats"></div>
   <h2>Recent posts</h2>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
@@ -115,14 +123,44 @@ function renderReview(rv){
     +`<div class="review"><div class="rv-body">${md(rv.markdown)}</div></div>`;
   if(isNew && !/^●/.test(document.title)) document.title='● '+document.title;
 }
+function copyText(btn,txt){ navigator.clipboard.writeText(txt).then(()=>{const o=btn.textContent;btn.textContent='Copied';setTimeout(()=>btn.textContent=o,1400);}); }
+function renderInbox(items){
+  const el=document.getElementById('inbox'); if(!el) return;
+  const list=Array.isArray(items)?items.filter(x=>x&&x.status==='pending'):[];
+  if(!list.length){ el.innerHTML=''; return; }
+  let seen=0; try{seen=+localStorage.getItem('lastSeenInbox')||0;}catch(e){}
+  const isNew=list.length>seen;
+  let html=`<div class="rv-banner"><span class="eyebrow">Inbox · ${list.length} waiting</span>`
+    +(isNew?`<span class="new-pill">New</span>`:``)
+    +`<a href="#inbox-full" onclick="try{localStorage.setItem('lastSeenInbox',${list.length})}catch(e){};(document.querySelector('#inbox .new-pill')||{}).remove&&document.querySelector('#inbox .new-pill').remove();">See drafts ↓</a></div>`;
+  html+=`<div id="inbox-full" style="scroll-margin-top:16px">`;
+  for(const p of list){
+    const link=p.type==='comment'?(p.permalink||''):'https://www.instagram.com/direct/inbox/';
+    const reply=p.reply||'';
+    html+=`<div class="inbox-card"><div class="ic-head">`
+      +`<b>@${esc(p.user||'someone')}</b> <span class="chip">${esc(p.intent||'')}</span>`
+      +`<span class="chip ${p.type}">${p.type==='dm'?'DM':'comment'}</span>`
+      +(link?`<a href="${esc(link)}" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">Reply on Instagram ↗</a>`:``)
+      +`</div><p class="ic-msg">${esc(p.text||'')}</p>`
+      +(reply?`<div class="ic-draft"><span class="muted" style="font-size:12px">Draft reply</span>`
+        +`<button class="ic-copy" onclick='copyText(this,${JSON.stringify(reply)})'>Copy</button>`
+        +`<div>${esc(reply)}</div></div>`
+        :`<p class="muted" style="font-size:13px">No draft — ${esc(p.note||'needs your words')}</p>`)
+      +`</div>`;
+  }
+  html+=`</div>`;
+  el.innerHTML=html;
+  if(isNew && !/^●/.test(document.title)) document.title='● '+document.title;
+}
 
 async function load(){
-  const [src,posted,rendered,insights,posts,review]=await Promise.all([
+  const [src,posted,rendered,insights,posts,review,inbox]=await Promise.all([
     j(`${API}/source-photos`), j(`${API}/posted`), j(`${API}/rendered`),
     j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`),
-    j(`${RAW}/metrics/review-latest.json`)
+    j(`${RAW}/metrics/review-latest.json`), j(`${RAW}/metrics/inbox.json`)
   ]);
   renderReview(review);
+  renderInbox(inbox);
   const queue=Array.isArray(src)?src.filter(f=>photoExt(f.name)).length:0;
   const postedCount=Array.isArray(posted)?posted.filter(f=>imgExt(f.name)).length:0;
   const ins=Array.isArray(insights)?insights:[];

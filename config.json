@@ -4,5 +4,7 @@
   "page_id": "1495946694015283",
   "targets": ["ig", "fb"],
   "also_story": true,
-  "caption_model": "openai/gpt-4o"
+  "caption_model": "openai/gpt-4o",
+  "auto_reply_comments": false,
+  "respond_recent_media": 25
 }
