@@ -33,6 +33,13 @@
   .muted{color:var(--clay);font-size:14px}
   .note{background:var(--bone);border:1px dashed var(--clay-soft);border-radius:12px;padding:16px;color:var(--clay);font-size:14px;margin-top:12px}
   a{color:var(--forest)}
+  .review{background:var(--bone);border:1px solid var(--clay-soft);border-left:4px solid var(--clay);border-radius:14px;padding:20px 24px;margin-bottom:32px}
+  .rv-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  .rv-body h2,.rv-body h3,.rv-body h4{font-family:'Fraunces',serif;font-weight:500;margin:16px 0 6px;font-size:17px}
+  .rv-body p{margin:8px 0;line-height:1.55}
+  .rv-body ol,.rv-body ul{margin:8px 0;padding-left:22px}
+  .rv-body li{margin:5px 0;line-height:1.5}
+  .rv-body code{background:rgba(12,16,13,.06);padding:1px 6px;border-radius:5px;font-size:13px}
 </style>
 </head>
 <body>
@@ -44,6 +51,7 @@
     </div>
     <button onclick="load()">↻ Refresh</button>
   </div>
+  <div id="review"></div>
   <div class="stats" id="stats"></div>
   <h2>Recent posts</h2>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
@@ -58,12 +66,38 @@ const API=`https://api.github.com/repos/${REPO}/contents`;
 async function j(u){try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
 function imgExt(n){return /\.(jpe?g|png)$/i.test(n);}
 function photoExt(n){return /\.(jpe?g|png|heic|heif)$/i.test(n);}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function md(t){
+  const lines=esc(t).split('\n'); let html='', list=null;
+  const inline=s=>s.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/`(.+?)`/g,'<code>$1</code>');
+  const close=()=>{ if(list){html+=`</${list}>`; list=null;} };
+  for(const ln of lines){
+    if(/^#{1,6}\s/.test(ln)){ close(); const lvl=Math.min(ln.match(/^#+/)[0].length+1,4); html+=`<h${lvl}>${inline(ln.replace(/^#+\s/,''))}</h${lvl}>`; continue; }
+    let m=ln.match(/^\s*\d+\.\s+(.*)/);
+    if(m){ if(list!=='ol'){close();html+='<ol>';list='ol';} html+=`<li>${inline(m[1])}</li>`; continue; }
+    m=ln.match(/^\s*[-*]\s+(.*)/);
+    if(m){ if(list!=='ul'){close();html+='<ul>';list='ul';} html+=`<li>${inline(m[1])}</li>`; continue; }
+    if(ln.trim()===''){ close(); continue; }
+    close(); html+=`<p>${inline(ln)}</p>`;
+  }
+  close(); return html;
+}
+function renderReview(rv){
+  const el=document.getElementById('review'); if(!el)return;
+  if(!rv||!rv.markdown){ el.innerHTML=''; return; }
+  const when=(rv.stats&&rv.stats.generated)||'';
+  el.innerHTML=`<div class="review"><div class="rv-head"><span class="eyebrow">Latest review · ${when}</span>`
+    +`<span class="muted" style="font-size:12px">proposals — reply to Claude to apply</span></div>`
+    +`<div class="rv-body">${md(rv.markdown)}</div></div>`;
+}
 
 async function load(){
-  const [src,posted,rendered,insights,posts]=await Promise.all([
+  const [src,posted,rendered,insights,posts,review]=await Promise.all([
     j(`${API}/source-photos`), j(`${API}/posted`), j(`${API}/rendered`),
-    j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`)
+    j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`),
+    j(`${RAW}/metrics/review-latest.json`)
   ]);
+  renderReview(review);
   const queue=Array.isArray(src)?src.filter(f=>photoExt(f.name)).length:0;
   const postedCount=Array.isArray(posted)?posted.filter(f=>imgExt(f.name)).length:0;
   const ins=Array.isArray(insights)?insights:[];
