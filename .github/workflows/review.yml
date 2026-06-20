@@ -2,7 +2,10 @@ name: Monthly review
 
 on:
   schedule:
-    - cron: "0 15 1 * *"      # 1st of each month, 15:00 UTC (9am Costa Rica)
+    # 1st of the month, off :00, with a backup attempt. A "once per month" guard in
+    # review.py ensures the backup never opens a duplicate review.
+    - cron: "17 15 1 * *"     # 1st, 9:17 Costa Rica
+    - cron: "47 15 1 * *"     # 1st, 9:47 Costa Rica (backup)
   workflow_dispatch:
 
 jobs:

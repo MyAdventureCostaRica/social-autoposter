@@ -2,7 +2,10 @@ name: Daily insights
 
 on:
   schedule:
-    - cron: "23 16 * * *"     # every day 16:23 UTC (10:23am Costa Rica) — off :00 for reliability
+    # Two attempts so a skipped/delayed cron still runs. Re-running is harmless
+    # (it just refreshes the numbers), so no guard is needed.
+    - cron: "23 16 * * *"     # 10:23am Costa Rica
+    - cron: "53 16 * * *"     # 10:53am Costa Rica (backup)
   workflow_dispatch:
 
 jobs:

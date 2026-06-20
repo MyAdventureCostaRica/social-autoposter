@@ -111,6 +111,11 @@ def log_post(mid, base, meta):
 def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
+    # Guard: one reel per day. We schedule a backup attempt, so skip if already done.
+    lr = os.path.join(HERE, "metrics", "last_reel.txt")
+    today = time.strftime("%Y-%m-%d")
+    if os.path.exists(lr) and open(lr).read().strip() == today:
+        print("Already posted a reel today; skipping."); return
     import cloudinary, cloudinary.uploader
     config_cloudinary()
     clip = next_clip()
@@ -136,6 +141,8 @@ def main():
     cloudinary.uploader.add_tag("posted", pid, resource_type="video")
     base = pid.split("/")[-1]
     log_post(mid, base, meta)
+    os.makedirs(os.path.join(HERE, "metrics"), exist_ok=True)
+    open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(today)
     ap.git_setup()
     ap.commit_push(f"Posted reel {base} [skip ci]")
     print("Done.")

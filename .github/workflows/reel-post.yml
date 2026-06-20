@@ -3,7 +3,10 @@ name: Post a reel
 on:
   workflow_dispatch:            # run manually any time
   schedule:
-    - cron: "0 18 * * 2,5"      # Tue & Fri 18:00 UTC (noon Costa Rica) — reels twice a week
+    # Tue & Fri, off :00, with a backup attempt. A "one reel per day" guard in
+    # reel.py ensures the backup never posts a second reel.
+    - cron: "13 18 * * 2,5"     # Tue & Fri 12:13 Costa Rica
+    - cron: "43 18 * * 2,5"     # Tue & Fri 12:43 Costa Rica (backup)
 
 jobs:
   reel:

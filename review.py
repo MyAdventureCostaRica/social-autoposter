@@ -151,6 +151,12 @@ def open_issue(title, body):
 
 
 def main():
+    # Guard: one review per month. We schedule a backup attempt, so skip (and don't
+    # open a duplicate issue) if we already reviewed this month.
+    month = datetime.date.today().strftime("%Y-%m")
+    marker = os.path.join(MET, "last_review.txt")
+    if os.path.exists(marker) and open(marker).read().strip() == month:
+        print("Review already done this month; skipping."); return
     stats = analyze()
     md = ask_models(stats) or "_No model output this run._"
     os.makedirs(MET, exist_ok=True)
@@ -163,6 +169,7 @@ def main():
     if sp:
         open(sp, "a").write(header + md + "\n")
     open_issue(f"Monthly review — {stats['generated']}", header + md)
+    open(marker, "w").write(month)
     print("Review generated for", stats["generated"],
           f"| eligible={stats['eligible']} recent12={stats['eligible_recent_12mo']}")
 
