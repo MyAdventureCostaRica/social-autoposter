@@ -2,7 +2,7 @@ name: Daily insights
 
 on:
   schedule:
-    - cron: "0 16 * * *"      # every day 16:00 UTC (10am Costa Rica)
+    - cron: "23 16 * * *"     # every day 16:23 UTC (10:23am Costa Rica) — off :00 for reliability
   workflow_dispatch:
 
 jobs:

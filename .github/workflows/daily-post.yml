@@ -2,15 +2,21 @@ name: Daily social post
 
 on:
   schedule:
-    - cron: "0 15 * * *"
-  workflow_dispatch:
+    # 15:17 UTC = 9:17 AM Costa Rica (UTC-6). Off the top of the hour on purpose:
+    # GitHub's scheduler is most congested at :00, so it runs late or skips. An odd
+    # minute is more reliable. Scheduled runs can still be a few–30 min late.
+    - cron: "17 15 * * *"
+  workflow_dispatch:        # also runnable manually from the Actions tab
 
 jobs:
+  # 1) Pick a photo, caption it, render it, push it, and write a preview to the run summary.
   prepare:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      models: read
+      contents: write       # to push the rendered image + staged state
+      models: read          # to use GitHub's free AI for captions
+    outputs:
+      staged: ${{ steps.prep.outputs.staged }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,10 +25,15 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install --quiet pillow pillow-heif
-      - env:
+      - id: prep
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python autopost.py prepare
 
+  # 2) Publish it. This job is gated by the "review" environment:
+  #    add yourself as a Required Reviewer on that environment (repo Settings ->
+  #    Environments -> review) and it will WAIT for your one-tap approval each day.
+  #    Remove the reviewer later to make it fully hands-off.
   publish:
     needs: prepare
     runs-on: ubuntu-latest
@@ -32,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.ref_name }}   # gets prepare's pushed commits (state.json + image)
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
