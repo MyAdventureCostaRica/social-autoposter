@@ -33,6 +33,9 @@
   .muted{color:var(--clay);font-size:14px}
   .note{background:var(--bone);border:1px dashed var(--clay-soft);border-radius:12px;padding:16px;color:var(--clay);font-size:14px;margin-top:12px}
   a{color:var(--forest)}
+  .rv-banner{display:flex;align-items:center;gap:14px;background:var(--bone);border:1px solid var(--clay-soft);border-radius:12px;padding:12px 18px;margin-bottom:28px}
+  .rv-banner a{margin-left:auto;font-size:13px;font-weight:600;white-space:nowrap}
+  .new-pill{background:var(--clay);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:2px 9px;border-radius:999px;text-transform:uppercase}
   .review{background:var(--bone);border:1px solid var(--clay-soft);border-left:4px solid var(--clay);border-radius:14px;padding:20px 24px;margin-bottom:32px}
   .rv-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
   .rv-body h2,.rv-body h3,.rv-body h4{font-family:'Fraunces',serif;font-weight:500;margin:16px 0 6px;font-size:17px}
@@ -51,12 +54,13 @@
     </div>
     <button onclick="load()">↻ Refresh</button>
   </div>
-  <div id="review"></div>
+  <div id="review-top"></div>
   <div class="stats" id="stats"></div>
   <h2>Recent posts</h2>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
   <h2>Top performers <span class="muted" style="font-size:13px">— by reach + shares</span></h2>
   <div id="perf"></div>
+  <div id="review-full" style="scroll-margin-top:16px;margin-top:44px"></div>
   <p class="muted" id="updated" style="margin-top:40px"></p>
 </div>
 <script>
@@ -82,13 +86,22 @@ function md(t){
   }
   close(); return html;
 }
+function markSeen(when){ try{localStorage.setItem('lastSeenReview',when);}catch(e){}
+  const p=document.querySelector('.new-pill'); if(p)p.remove();
+  document.title=document.title.replace(/^●\s*/,''); }
 function renderReview(rv){
-  const el=document.getElementById('review'); if(!el)return;
-  if(!rv||!rv.markdown){ el.innerHTML=''; return; }
+  const top=document.getElementById('review-top'), full=document.getElementById('review-full');
+  if(!top||!full) return;
+  if(!rv||!rv.markdown){ top.innerHTML=''; full.innerHTML=''; return; }
   const when=(rv.stats&&rv.stats.generated)||'';
-  el.innerHTML=`<div class="review"><div class="rv-head"><span class="eyebrow">Latest review · ${when}</span>`
-    +`<span class="muted" style="font-size:12px">proposals — reply to Claude to apply</span></div>`
-    +`<div class="rv-body">${md(rv.markdown)}</div></div>`;
+  let seen=null; try{seen=localStorage.getItem('lastSeenReview');}catch(e){}
+  const isNew = when && when!==seen;
+  top.innerHTML=`<div class="rv-banner"><span class="eyebrow">Monthly review · ${when}</span>`
+    +(isNew?`<span class="new-pill">New</span>`:``)
+    +`<a href="#review-full" onclick="markSeen('${when}')">Read proposals ↓</a></div>`;
+  full.innerHTML=`<h2>Monthly review <span class="muted" style="font-size:13px">— ${when} · reply to Claude to apply</span></h2>`
+    +`<div class="review"><div class="rv-body">${md(rv.markdown)}</div></div>`;
+  if(isNew && !/^●/.test(document.title)) document.title='● '+document.title;
 }
 
 async function load(){
