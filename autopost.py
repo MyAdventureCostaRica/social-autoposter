@@ -457,6 +457,15 @@ def prepare():
     """Pick a photo, caption it, render it, push it, and stage state.json.
     Does NOT post — that's publish()."""
     git_setup()
+    # Guard: only one post per day. We run the schedule several times each morning
+    # (GitHub skips/delays single crons), so skip if we already posted today.
+    lp = os.path.join(HERE, "metrics", "last_posted.txt")
+    today = time.strftime("%Y-%m-%d")
+    if os.path.exists(lp) and open(lp).read().strip() == today:
+        json.dump({"skip": True, "why": "already posted today"}, open(STATE, "w"))
+        commit_push("Already posted today [skip ci]")
+        summary("### Already posted today\nA post already went out today — skipping.")
+        print("Already posted today; skipping."); return
     learn = performance_brief()          # what our own analytics say is working now
     if learn:
         print("Performance brief:\n" + learn)
@@ -654,6 +663,8 @@ def publish():
         f.write(caption)
     if os.path.exists(STATE):
         os.remove(STATE)
+    mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
+    open(os.path.join(mdir, "last_posted.txt"), "w").write(time.strftime("%Y-%m-%d"))
     commit_push(f"Posted {st['base']} [skip ci]")
     print("Done.")
 

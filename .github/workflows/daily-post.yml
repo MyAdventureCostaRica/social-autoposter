@@ -2,10 +2,12 @@ name: Daily social post
 
 on:
   schedule:
-    # 15:17 UTC = 9:17 AM Costa Rica (UTC-6). Off the top of the hour on purpose:
-    # GitHub's scheduler is most congested at :00, so it runs late or skips. An odd
-    # minute is more reliable. Scheduled runs can still be a few–30 min late.
-    - cron: "17 15 * * *"
+    # THREE attempts across the 9–10am Costa Rica window. GitHub's scheduler often
+    # delays or skips a single cron (worst at :00), so we give it 3 shots and an
+    # "already posted today" guard in autopost.py ensures only the first one posts.
+    - cron: "17 15 * * *"     # 9:17 AM Costa Rica
+    - cron: "47 15 * * *"     # 9:47 AM Costa Rica
+    - cron: "17 16 * * *"     # 10:17 AM Costa Rica
   workflow_dispatch:        # also runnable manually from the Actions tab
 
 jobs:
