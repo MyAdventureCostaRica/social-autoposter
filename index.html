@@ -59,6 +59,19 @@
   .ic-msg{margin:4px 0 10px;line-height:1.5}
   .ic-draft{background:rgba(176,137,72,.10);border-radius:9px;padding:10px 12px;line-height:1.5;position:relative}
   .ic-copy{position:absolute;top:8px;right:8px;font-size:12px;padding:3px 10px;border:1px solid var(--clay-soft);background:#fff;border-radius:7px;cursor:pointer}
+  .mc-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bone);border:1px solid var(--clay-soft);border-radius:12px;padding:12px 16px;margin-bottom:24px}
+  .mc-status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:999px}
+  .mc-status.on{background:var(--forest,#169F48);color:#fff}
+  .mc-status.off{background:rgba(12,16,13,.10);color:var(--clay)}
+  .mc-btn{font-size:13px;font-weight:600;padding:6px 14px;border:1px solid var(--clay-soft);background:#fff;color:var(--ink);border-radius:8px;cursor:pointer}
+  .mc-btn:hover{background:var(--sand,#f2ebd9)}
+  .mc-btn:disabled{opacity:.55;cursor:default}
+  .mc-btn.send{background:var(--forest,#169F48);color:#fff;border-color:var(--forest,#169F48)}
+  .mc-btn.ghost{border-style:dashed}
+  .mc-gear{margin-left:auto;font-size:16px;background:none;border:none;cursor:pointer;color:var(--clay)}
+  .mc-in{width:100%;max-width:420px;display:block;margin:6px 0;padding:8px 10px;border:1px solid var(--clay-soft);border-radius:8px;font-size:14px}
+  .ic-edit{width:100%;box-sizing:border-box;margin:8px 0 4px;padding:9px 11px;border:1px solid var(--clay-soft);border-radius:9px;font:inherit;font-size:14px;line-height:1.5;background:#fff;resize:vertical}
+  .ic-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -70,6 +83,7 @@
     </div>
     <button onclick="load()">↻ Refresh</button>
   </div>
+  <div id="controls"></div>
   <div id="review-top"></div>
   <div id="inbox"></div>
   <div class="stats" id="stats"></div>
@@ -124,29 +138,107 @@ function renderReview(rv){
   if(isNew && !/^●/.test(document.title)) document.title='● '+document.title;
 }
 function copyText(btn,txt){ navigator.clipboard.writeText(txt).then(()=>{const o=btn.textContent;btn.textContent='Copied';setTimeout(()=>btn.textContent=o,1400);}); }
-function renderInbox(items){
+function escA(s){ return esc(String(s==null?'':s)).replace(/"/g,'&quot;'); }
+
+// --- Mission control: talk to the Vercel backend (api/control.js) -------------
+function cfg(k){ try{return localStorage.getItem(k)||'';}catch(e){return '';} }
+function setCfg(k,v){ try{localStorage.setItem(k,v);}catch(e){} }
+function apiBase(){ return cfg('ctrlUrl').replace(/\/+$/,''); }
+function connected(){ return !!(apiBase() && cfg('ctrlKey')); }
+async function ctrl(action,payload){
+  if(!connected()){ toggleConnect(true); return {ok:false,error:'not connected'}; }
+  try{
+    const r=await fetch(apiBase()+'/api/control',{method:'POST',
+      headers:{'Content-Type':'application/json','x-dash-key':cfg('ctrlKey')},
+      body:JSON.stringify(Object.assign({action},payload))});
+    return await r.json();
+  }catch(e){ return {ok:false,error:String(e)}; }
+}
+function toggleConnect(force){
+  const p=document.getElementById('connectPanel'); if(!p) return;
+  p.style.display=(force===true||p.style.display==='none')?'block':'none';
+}
+function saveConnect(){
+  setCfg('ctrlUrl',(document.getElementById('cUrl').value||'').trim());
+  setCfg('ctrlKey',(document.getElementById('cKey').value||'').trim());
+  toggleConnect(false); renderControls();
+}
+async function testConnect(){
+  const s=document.getElementById('cTest'); s.textContent='Testing…';
+  setCfg('ctrlUrl',(document.getElementById('cUrl').value||'').trim());
+  setCfg('ctrlKey',(document.getElementById('cKey').value||'').trim());
+  const r=await ctrl('ping',{}); s.textContent=(r&&r.ok)?'Connected ✓':('Failed: '+((r&&r.error)||'?'));
+}
+function trigger(workflow,label,btn){
+  if(!confirm('Run '+label+' now?')) return;
+  const o=btn.textContent; btn.disabled=true; btn.textContent='Starting…';
+  ctrl('dispatch',{workflow}).then(r=>{
+    btn.textContent=(r&&r.ok)?'Started ✓':('Failed'+((r&&r.error)?': '+r.error:''));
+    setTimeout(()=>{btn.textContent=o; btn.disabled=false;},2800);
+  });
+}
+function renderControls(){
+  const el=document.getElementById('controls'); if(!el) return;
+  const on=connected();
+  el.innerHTML=`<div class="mc-bar"><span class="eyebrow">Mission control</span>`
+    +`<span class="mc-status ${on?'on':'off'}">${on?'connected':'not connected'}</span>`
+    +`<button class="mc-btn" onclick="trigger('post','the daily post',this)">Post now</button>`
+    +`<button class="mc-btn" onclick="trigger('insights','insights refresh',this)">Refresh insights</button>`
+    +`<button class="mc-btn" onclick="trigger('reel','a reel',this)">Post a reel</button>`
+    +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
+    +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
+    +`<div id="connectPanel" style="display:none">`
+    +`<p class="muted" style="font-size:13px;margin:10px 0 6px">Paste your Vercel URL (e.g. https://your-project.vercel.app) and the passphrase you set as DASH_KEY. Stored only in this browser.</p>`
+    +`<input class="mc-in" id="cUrl" placeholder="https://your-project.vercel.app" value="${escA(cfg('ctrlUrl'))}">`
+    +`<input class="mc-in" id="cKey" type="password" placeholder="passphrase (DASH_KEY)" value="${escA(cfg('ctrlKey'))}">`
+    +`<div style="margin-top:8px"><button class="mc-btn" onclick="saveConnect()">Save</button>`
+    +`<button class="mc-btn" onclick="testConnect()">Test</button>`
+    +`<span id="cTest" class="muted" style="font-size:13px;margin-left:10px"></span></div></div>`;
+}
+
+function inboxAction(btn,act){
+  const card=btn.closest('.inbox-card');
+  const id=card.dataset.id, type=card.dataset.type, recipient=card.dataset.recipient||'';
+  const ta=card.querySelector('.ic-edit'); const text=ta?ta.value.trim():'';
+  if(act==='reply' && !text){ alert('Write a reply first.'); return; }
+  if(act==='reject' && !confirm('Reject and dismiss this one?')) return;
+  const stat=card.querySelector('.ic-stat'); stat.textContent=act==='reply'?'Sending…':'Dismissing…';
+  card.querySelectorAll('button').forEach(b=>b.disabled=true);
+  ctrl(act, act==='reply'?{id,type,text,recipient}:{id}).then(r=>{
+    if(r&&r.ok){
+      card.style.opacity=.45; stat.textContent=act==='reply'?'Sent ✓':'Dismissed ✓';
+      card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
+      setTimeout(()=>{card.remove();
+        if(!document.querySelectorAll('.inbox-card').length){
+          const el=document.getElementById('inbox'); if(el) el.innerHTML='<p class="muted" style="margin-top:8px">Inbox clear — nothing waiting.</p>';}
+      },900);
+    }else{ stat.textContent='Error: '+((r&&r.error)||'failed'); card.querySelectorAll('button').forEach(b=>b.disabled=false); }
+  });
+}
+function renderInbox(items,resolved){
   const el=document.getElementById('inbox'); if(!el) return;
-  const list=Array.isArray(items)?items.filter(x=>x&&x.status==='pending'):[];
+  resolved=resolved||{};
+  const list=Array.isArray(items)?items.filter(x=>x&&x.status==='pending'&&!resolved[x.id]):[];
   if(!list.length){ el.innerHTML=''; return; }
   let seen=0; try{seen=+localStorage.getItem('lastSeenInbox')||0;}catch(e){}
   const isNew=list.length>seen;
   let html=`<div class="rv-banner"><span class="eyebrow">Inbox · ${list.length} waiting</span>`
     +(isNew?`<span class="new-pill">New</span>`:``)
-    +`<a href="#inbox-full" onclick="try{localStorage.setItem('lastSeenInbox',${list.length})}catch(e){};(document.querySelector('#inbox .new-pill')||{}).remove&&document.querySelector('#inbox .new-pill').remove();">See drafts ↓</a></div>`;
+    +`<a href="#inbox-full" onclick="try{localStorage.setItem('lastSeenInbox',${list.length})}catch(e){};">See drafts ↓</a></div>`;
   html+=`<div id="inbox-full" style="scroll-margin-top:16px">`;
   for(const p of list){
     const link=p.type==='comment'?(p.permalink||''):'https://www.instagram.com/direct/inbox/';
-    const reply=p.reply||'';
-    html+=`<div class="inbox-card"><div class="ic-head">`
+    html+=`<div class="inbox-card" data-id="${escA(p.id)}" data-type="${escA(p.type||'comment')}" data-recipient="${escA(p.recipient||'')}"><div class="ic-head">`
       +`<b>@${esc(p.user||'someone')}</b> <span class="chip">${esc(p.intent||'')}</span>`
       +`<span class="chip ${p.type}">${p.type==='dm'?'DM':'comment'}</span>`
-      +(link?`<a href="${esc(link)}" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">Reply on Instagram ↗</a>`:``)
+      +(link?`<a href="${escA(link)}" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px">On Instagram ↗</a>`:``)
       +`</div><p class="ic-msg">${esc(p.text||'')}</p>`
-      +(reply?`<div class="ic-draft"><span class="muted" style="font-size:12px">Draft reply</span>`
-        +`<button class="ic-copy" onclick='copyText(this,${JSON.stringify(reply)})'>Copy</button>`
-        +`<div>${esc(reply)}</div></div>`
-        :`<p class="muted" style="font-size:13px">No draft — ${esc(p.note||'needs your words')}</p>`)
-      +`</div>`;
+      +`<textarea class="ic-edit" rows="2" placeholder="Write or edit the reply…">${esc(p.reply||'')}</textarea>`
+      +`<div class="ic-actions">`
+      +`<button class="mc-btn send" onclick="inboxAction(this,'reply')">Approve &amp; send</button>`
+      +`<button class="mc-btn" onclick="inboxAction(this,'reject')">Reject</button>`
+      +`<button class="mc-btn ghost" onclick="copyText(this,this.closest('.inbox-card').querySelector('.ic-edit').value)">Copy</button>`
+      +`<span class="ic-stat muted" style="font-size:13px"></span></div></div>`;
   }
   html+=`</div>`;
   el.innerHTML=html;
@@ -154,13 +246,15 @@ function renderInbox(items){
 }
 
 async function load(){
-  const [src,posted,rendered,insights,posts,review,inbox]=await Promise.all([
+  const [src,posted,rendered,insights,posts,review,inbox,resolved]=await Promise.all([
     j(`${API}/source-photos`), j(`${API}/posted`), j(`${API}/rendered`),
     j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`),
-    j(`${RAW}/metrics/review-latest.json`), j(`${RAW}/metrics/inbox.json`)
+    j(`${RAW}/metrics/review-latest.json`), j(`${RAW}/metrics/inbox.json`),
+    j(`${RAW}/metrics/resolutions.json`)
   ]);
+  renderControls();
   renderReview(review);
-  renderInbox(inbox);
+  renderInbox(inbox, resolved||{});
   const queue=Array.isArray(src)?src.filter(f=>photoExt(f.name)).length:0;
   const postedCount=Array.isArray(posted)?posted.filter(f=>imgExt(f.name)).length:0;
   const ins=Array.isArray(insights)?insights:[];

@@ -29,6 +29,7 @@ MET = os.path.join(HERE, "metrics")
 os.makedirs(MET, exist_ok=True)
 HANDLED = os.path.join(MET, "handled.json")
 INBOX = os.path.join(MET, "inbox.json")
+RESOL = os.path.join(MET, "resolutions.json")   # written by the dashboard backend
 
 TOKEN = os.environ.get("META_ACCESS_TOKEN")
 GH_TOKEN = os.environ.get("GITHUB_TOKEN")
@@ -223,6 +224,7 @@ def scan_dms(handled, items):
                 handled[mid] = "empty"; continue
             d = draft_reply(text, "direct message")
             items.append({"type": "dm", "id": mid, "convo_id": conv.get("id"),
+                          "recipient": frm.get("id"),   # IGSID — needed to send a DM reply
                           "user": frm.get("username") or frm.get("name"),
                           "text": text, "ts": msg.get("created_time"),
                           "intent": d.get("intent"), "sentiment": d.get("sentiment"),
@@ -315,6 +317,14 @@ def main():
     handled = load(HANDLED, {})
     if not isinstance(handled, dict):
         handled = {}
+    # Anything you've already sent or rejected from the dashboard is recorded in
+    # resolutions.json — seed it into handled so it never re-surfaces or gets
+    # re-drafted.
+    resolved = load(RESOL, {})
+    if not isinstance(resolved, dict):
+        resolved = {}
+    for rid, info in resolved.items():
+        handled.setdefault(rid, (info or {}).get("status", "resolved"))
     items = []
     scan_comments(handled, items)
     scan_dms(handled, items)
@@ -324,7 +334,8 @@ def main():
     prev = [x for x in load(INBOX, []) if x.get("status") == "pending"]
     prev_ids = {x["id"] for x in items}
     merged = items + [x for x in prev if x["id"] not in prev_ids]
-    pending = [x for x in merged if x.get("status") == "pending"]
+    pending = [x for x in merged
+               if x.get("status") == "pending" and x["id"] not in resolved]
     pending.sort(key=lambda x: x.get("ts") or "", reverse=True)
     json.dump(pending[:100], open(INBOX, "w"), ensure_ascii=False, indent=1)
     json.dump(handled, open(HANDLED, "w"), indent=1)
