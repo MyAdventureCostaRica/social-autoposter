@@ -32,11 +32,30 @@ def get(path, params):
         return json.loads(r.read().decode())
 
 
+def config_cloudinary():
+    """Configure Cloudinary. Prefer three separate secrets (foolproof — no URL to
+    assemble); fall back to a CLOUDINARY_URL, sanitised of common paste mistakes."""
+    import cloudinary
+    if os.environ.get("CLOUDINARY_API_KEY"):
+        cloudinary.config(
+            cloud_name=(os.environ.get("CLOUDINARY_CLOUD_NAME") or "").strip(),
+            api_key=(os.environ.get("CLOUDINARY_API_KEY") or "").strip(),
+            api_secret=(os.environ.get("CLOUDINARY_API_SECRET") or "").strip(),
+            secure=True)
+    elif os.environ.get("CLOUDINARY_URL"):
+        v = os.environ["CLOUDINARY_URL"].strip().strip('"').strip("'")
+        if "cloudinary://" in v:
+            v = v[v.index("cloudinary://"):]          # drop any CLOUDINARY_URL= prefix
+        os.environ["CLOUDINARY_URL"] = v
+        cloudinary.config()
+    else:
+        raise SystemExit("No Cloudinary credentials. Add CLOUDINARY_CLOUD_NAME, "
+                         "CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET as repo secrets.")
+
+
 def next_clip():
     """Oldest Cloudinary video not yet tagged 'posted'."""
     import cloudinary, cloudinary.api
-    if not os.environ.get("CLOUDINARY_URL"):
-        raise SystemExit("Missing CLOUDINARY_URL secret.")
     res = cloudinary.api.resources(resource_type="video", type="upload",
                                    max_results=100, tags=True, context=True)
     vids = [r for r in res.get("resources", []) if "posted" not in (r.get("tags") or [])]
@@ -86,6 +105,7 @@ def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
     import cloudinary, cloudinary.uploader
+    config_cloudinary()
     clip = next_clip()
     if not clip:
         print("No un-posted clips in Cloudinary. Nothing to do.")
