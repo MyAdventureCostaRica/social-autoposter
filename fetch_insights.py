@@ -103,14 +103,15 @@ def discover_media():
                    "video" if mt == "VIDEO" else "single")
             # a displayable cover for the dashboard (real IG image/poster)
             thumb = m.get("thumbnail_url") or (m.get("media_url") if mt == "IMAGE" else "") or ""
-            row = {"id": mid, "date": (m.get("timestamp") or "")[:10],
+            ts = m.get("timestamp") or ""
+            row = {"id": mid, "date": ts[:10], "ts": ts,
                    "base": "ig-" + mid[-6:], "format": fmt,
                    "caption": (m.get("caption") or "")[:140], "thumb": thumb}
             if mid in by_id:
-                # refresh date/caption/thumb each run (IG urls rotate); keep the
+                # refresh date/ts/caption/thumb each run (IG urls rotate); keep the
                 # auto-poster's own base/format/category/pillar.
                 e = by_id[mid]
-                e["date"], e["caption"], e["thumb"] = row["date"], row["caption"], thumb
+                e["date"], e["ts"], e["caption"], e["thumb"] = row["date"], ts, row["caption"], thumb
                 for k in ("base", "format"):
                     if not e.get(k):
                         e[k] = row[k]

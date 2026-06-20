@@ -140,8 +140,8 @@ async function load(){
   // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
   const renderedSet=new Set(Array.isArray(rendered)?rendered.filter(f=>/_1\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_1\.jpg$/i,'')):[]);
   const storyRendered=new Set(Array.isArray(rendered)?rendered.filter(f=>/_story\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_story\.jpg$/i,'')):[]);
-  const capById={},urlById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id){capById[p.id]=p.caption||'';urlById[p.id]=p.thumb||'';}});
-  const recentPosts=ins.slice().filter(x=>x.date).sort((a,b)=>(''+b.date).localeCompare(''+a.date)).slice(0,12);
+  const capById={},urlById={},tsById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id){capById[p.id]=p.caption||'';urlById[p.id]=p.thumb||'';tsById[p.id]=p.ts||p.date||'';}});
+  const recentPosts=ins.slice().filter(x=>x.date).sort((a,b)=>(''+(tsById[b.id]||b.date)).localeCompare(''+(tsById[a.id]||a.date))).slice(0,12);
   const badge={reel:'Reel',story:'Story',carousel:'Carousel',single:'Post',video:'Video'};
   const fnum=n=>typeof n==='number'?n.toLocaleString():null;
   const keyStats=x=>{const b=[];if(fnum(x.reach))b.push(`<b>${fnum(x.reach)}</b> reach`);if(fnum(x.views))b.push(`<b>${fnum(x.views)}</b> views`);if(x.shares)b.push(`<b>${x.shares}</b> shares`);return b.join(' · ')||(x.error?'no insights for this one':'—');};
