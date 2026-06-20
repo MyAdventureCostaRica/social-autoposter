@@ -634,12 +634,13 @@ def publish():
             pj = os.path.join(mdir, "posts.json")
             posts = json.load(open(pj)) if os.path.exists(pj) else []
             today = time.strftime("%Y-%m-%d")
-            posts.append({"id": pub.get("id"), "date": today, "base": st["base"],
+            now = time.strftime("%Y-%m-%dT%H:%M:%S")
+            posts.append({"id": pub.get("id"), "date": today, "ts": now, "base": st["base"],
                           "format": st.get("format") or ("carousel" if len(image_urls) > 1 else "single"),
                           "category": st.get("category"), "pillar": st.get("pillar"),
                           "caption": caption[:120]})
             if story_id:                              # Story insights expire in 24h — log it now
-                posts.append({"id": story_id, "date": today, "base": st["base"] + "-story",
+                posts.append({"id": story_id, "date": today, "ts": now, "base": st["base"] + "-story",
                               "format": "story", "category": st.get("category"),
                               "pillar": st.get("pillar"), "caption": caption[:120]})
             json.dump(posts, open(pj, "w"), indent=1)
