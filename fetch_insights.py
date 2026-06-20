@@ -86,7 +86,7 @@ def discover_media():
     existing = load_list(POSTS)
     by_id = {p["id"]: p for p in existing if p.get("id")}
     url = f"https://graph.facebook.com/{V}/{IG}/media?" + urllib.parse.urlencode({
-        "fields": "id,timestamp,media_type,media_product_type,caption",
+        "fields": "id,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url",
         "limit": "50", "access_token": TOKEN})
     pages, found = 0, 0
     while url and pages < 60:                      # up to ~3000 posts
@@ -101,13 +101,19 @@ def discover_media():
             fmt = ("reel" if pt == "REELS" else
                    "carousel" if mt == "CAROUSEL_ALBUM" else
                    "video" if mt == "VIDEO" else "single")
+            # a displayable cover for the dashboard (real IG image/poster)
+            thumb = m.get("thumbnail_url") or (m.get("media_url") if mt == "IMAGE" else "") or ""
             row = {"id": mid, "date": (m.get("timestamp") or "")[:10],
                    "base": "ig-" + mid[-6:], "format": fmt,
-                   "caption": (m.get("caption") or "")[:140]}
+                   "caption": (m.get("caption") or "")[:140], "thumb": thumb}
             if mid in by_id:
-                # keep any auto-poster fields (base/category/pillar); refresh meta
-                by_id[mid].update({k: v for k, v in row.items()
-                                   if k in ("date", "caption") or not by_id[mid].get(k)})
+                # refresh date/caption/thumb each run (IG urls rotate); keep the
+                # auto-poster's own base/format/category/pillar.
+                e = by_id[mid]
+                e["date"], e["caption"], e["thumb"] = row["date"], row["caption"], thumb
+                for k in ("base", "format"):
+                    if not e.get(k):
+                        e[k] = row[k]
             else:
                 by_id[mid] = row; found += 1
         url = (r.get("paging") or {}).get("next")

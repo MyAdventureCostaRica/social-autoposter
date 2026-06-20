@@ -21,7 +21,7 @@
   .stat .n{font-family:'Fraunces',serif;font-size:38px;line-height:1}
   .stat .l{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--clay);margin-top:8px;font-weight:600}
   h2{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:36px 0 16px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;align-items:start}
   .card{background:var(--bone);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#ddd}
   .card .meta{padding:10px 12px;font-size:12px;color:var(--clay)}
@@ -138,7 +138,7 @@ async function load(){
 
   // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
   const renderedSet=new Set(Array.isArray(rendered)?rendered.filter(f=>/_1\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_1\.jpg$/i,'')):[]);
-  const capById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id)capById[p.id]=p.caption||'';});
+  const capById={},urlById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id){capById[p.id]=p.caption||'';urlById[p.id]=p.thumb||'';}});
   const recentPosts=ins.slice().filter(x=>x.date).sort((a,b)=>(''+b.date).localeCompare(''+a.date)).slice(0,12);
   const badge={reel:'Reel',story:'Story',carousel:'Carousel',single:'Post',video:'Video'};
   const fnum=n=>typeof n==='number'?n.toLocaleString():null;
@@ -149,7 +149,8 @@ async function load(){
     return (rows||er)?`<table class="detail">${rows}${er}</table>`:'<div class="muted" style="font-size:12px">No insights captured for this one.</div>';};
   document.getElementById('recent').innerHTML = recentPosts.length? recentPosts.map(x=>{
     const base=x.base||''; const fmt=x.format||'single';
-    const cover=renderedSet.has(base)?`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy">`:`<div class="badge">${badge[fmt]||fmt}</div>`;
+    const cover=renderedSet.has(base)?`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy">`
+              :(urlById[x.id]?`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer">`:`<div class="badge">${badge[fmt]||fmt}</div>`);
     const cap=capById[x.id]||'';
     return `<div class="card" onclick="this.classList.toggle('open')"><div class="tag">${badge[fmt]||fmt}</div>${cover}`
       +`<div class="meta"><div class="muted" style="font-size:11px">${x.date||''} · tap for detail</div><div>${keyStats(x)}</div>`
