@@ -61,7 +61,7 @@ def next_clip():
     import cloudinary, cloudinary.search
     try:
         r = (cloudinary.search.Search()
-             .expression("resource_type:video AND folder:reels AND -tags:posted")
+             .expression("resource_type:video AND (folder:Reels OR folder:reels) AND -tags:posted")
              .sort_by("created_at", "asc").max_results(50).execute())
         vids = r.get("resources", [])
         return vids[0] if vids else None
