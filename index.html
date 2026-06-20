@@ -81,6 +81,7 @@ const API=`https://api.github.com/repos/${REPO}/contents`;
 async function j(u){try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
 function imgExt(n){return /\.(jpe?g|png)$/i.test(n);}
 function photoExt(n){return /\.(jpe?g|png|heic|heif)$/i.test(n);}
+function imgFail(el,label){el.outerHTML='<div class="badge">'+label+'</div>';}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function md(t){
   const lines=esc(t).split('\n'); let html='', list=null;
@@ -149,8 +150,9 @@ async function load(){
     return (rows||er)?`<table class="detail">${rows}${er}</table>`:'<div class="muted" style="font-size:12px">No insights captured for this one.</div>';};
   document.getElementById('recent').innerHTML = recentPosts.length? recentPosts.map(x=>{
     const base=x.base||''; const fmt=x.format||'single';
-    const cover=renderedSet.has(base)?`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy">`
-              :(urlById[x.id]?`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer">`:`<div class="badge">${badge[fmt]||fmt}</div>`);
+    const lbl=badge[fmt]||fmt;
+    const cover=renderedSet.has(base)?`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy" onerror="imgFail(this,'${lbl}')">`
+              :(urlById[x.id]?`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this,'${lbl}')">`:`<div class="badge">${lbl}</div>`);
     const cap=capById[x.id]||'';
     return `<div class="card" onclick="this.classList.toggle('open')"><div class="tag">${badge[fmt]||fmt}</div>${cover}`
       +`<div class="meta"><div class="muted" style="font-size:11px">${x.date||''} · tap for detail</div><div>${keyStats(x)}</div>`
