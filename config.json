@@ -12,5 +12,8 @@
   "burst_hash_distance": 8,
   "burst_max": 6,
   "dedupe_posted": true,
-  "dedupe_hash_distance": 6
+  "dedupe_hash_distance": 6,
+  "pillar_plan": { "KNOWLEDGE": 2, "ROUTE": 2, "FOUNDER": 2, "EXPERIENCE": 1 },
+  "plan_window": 14,
+  "plan_scan": 8
 }

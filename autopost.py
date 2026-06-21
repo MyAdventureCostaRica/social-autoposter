@@ -472,14 +472,20 @@ DEDUPE_HASH = int(CFG.get("dedupe_hash_distance", 6)) # stricter: skip if ~ident
 
 
 def ahash(pil_img):
-    """64-bit average hash — near-identical photos share almost all bits."""
-    g = pil_img.convert("L").resize((8, 8), Image.LANCZOS)
+    """64-bit DIFFERENCE hash (dHash) — compares each pixel to its right neighbour, so
+    it captures real structure and tells different scenes apart far better than an
+    average hash (which wrongly made every landscape look identical). Name kept for the
+    call sites; used only for the strict "is this a literal repost" dedupe check."""
+    g = pil_img.convert("L").resize((9, 8), Image.LANCZOS)
     px = list(g.getdata())
-    avg = sum(px) / len(px)
     bits = 0
-    for i, p in enumerate(px):
-        if p >= avg:
-            bits |= (1 << i)
+    idx = 0
+    for r in range(8):
+        base = r * 9
+        for c in range(8):
+            if px[base + c] > px[base + c + 1]:
+                bits |= (1 << idx)
+            idx += 1
     return bits
 
 
@@ -514,12 +520,54 @@ def open_sig(path):
 
 
 def same_moment(sig_a, sig_b):
-    """True if two photos are the same burst / near-identical shot."""
-    _, ha, ta = sig_a
-    _, hb, tb = sig_b
-    if ta is not None and tb is not None and abs(ta - tb) <= BURST_SECONDS:
-        return True
-    return hamming(ha, hb) <= BURST_HASH
+    """Same burst = same CAPTURE TIME. Time is the only reliable signal for "same
+    moment" — a visual hash alone wrongly fuses different-day landscapes — so grouping
+    is time-based, and a photo with no EXIF time is never auto-grouped."""
+    _, _, ta = sig_a
+    _, _, tb = sig_b
+    return ta is not None and tb is not None and abs(ta - tb) <= BURST_SECONDS
+
+
+# ---------- content plan: hold the four pillars in their planned proportions ----------
+PILLAR_PLAN = CFG.get("pillar_plan", {"KNOWLEDGE": 2, "ROUTE": 2, "FOUNDER": 2, "EXPERIENCE": 1})
+PLAN_WINDOW = int(CFG.get("plan_window", 14))   # how many recent posts define "the mix"
+PLAN_SCAN = int(CFG.get("plan_scan", 8))        # how many candidates to weigh per day
+
+
+def _recent_pillars():
+    try:
+        log = json.load(open(POSTS_LOG))
+    except Exception:
+        return []
+    out = []
+    for p in reversed(log):                      # newest first
+        pil = (p.get("pillar") or "").upper()
+        if pil:
+            out.append(pil)
+        if len(out) >= PLAN_WINDOW:
+            break
+    return out
+
+
+def target_pillar():
+    """Today's slot = the pillar most UNDER its planned share over recent posts. This
+    holds the KNOWLEDGE/ROUTE/FOUNDER/EXPERIENCE mix in the traffic-first proportions and
+    caps the EXPERIENCE soft-sell so it never runs hot. Returns an uppercase pillar."""
+    plan = {k.upper(): float(v) for k, v in PILLAR_PLAN.items() if v}
+    if not plan:
+        return "KNOWLEDGE"
+    tot = sum(plan.values())
+    target_share = {k: v / tot for k, v in plan.items()}
+    recent = _recent_pillars()
+    n = len(recent) or 1
+    actual = {k: recent.count(k) / n for k in plan}
+
+    def deficit(k):
+        if k == "EXPERIENCE" and actual.get(k, 0) >= target_share[k]:
+            return -9                            # never exceed the sell cap
+        return target_share[k] - actual.get(k, 0)
+
+    return max(plan, key=deficit)
 
 
 def prepare():
@@ -556,8 +604,10 @@ def prepare():
                 if s:
                     posted_hashes.append(s[1])
 
-    chosen = None
-    for src in candidates[:6]:
+    target = target_pillar()
+    print(f"Content plan — today's target pillar: {target} | recent mix: {_recent_pillars()}")
+    chosen = fallback = None
+    for src in candidates[:PLAN_SCAN]:
         # Skip a near-duplicate of something already posted — don't repeat near-twins.
         if DEDUPE and posted_hashes:
             cs = open_sig(src)
@@ -582,11 +632,22 @@ def prepare():
         except Exception as e:
             print("Caption error on", os.path.basename(src), "->", e)
             continue
-        if meta.get("post_worthy"):
-            chosen = (src, img, meta); break
-        print("Not post-worthy:", os.path.basename(src), "-", meta.get("reason"))
-        os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
+        if not meta.get("post_worthy"):
+            print("Not post-worthy:", os.path.basename(src), "-", meta.get("reason"))
+            os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
+            continue
+        if fallback is None:
+            fallback = (src, img, meta)                  # first post-worthy = safety net
+        if (meta.get("pillar") or "").upper() == target:
+            chosen = (src, img, meta)                    # fills today's plan slot — take it
+            print(f"Picked for plan pillar {target}: {os.path.basename(src)}")
+            break
+        # post-worthy but wrong pillar for today — leave it in the queue for a future day
+        print(f"Post-worthy but pillar {meta.get('pillar')} ≠ target {target} — keeping:",
+              os.path.basename(src))
 
+    if not chosen:
+        chosen = fallback                                # no target match found in the scan
     if not chosen:
         json.dump({"skip": True, "why": "none post-worthy"}, open(STATE, "w"))
         commit_push("No post-worthy photo [skip ci]")
