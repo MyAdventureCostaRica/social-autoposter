@@ -8280,7 +8280,7 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 62,
+  "reach": 63,
   "likes": 9,
   "comments": 0,
   "saved": 0,
@@ -8288,7 +8288,7 @@
   "total_interactions": 9,
   "views": 367,
   "interactions": 9,
-  "eng_rate": 0.1452
+  "eng_rate": 0.1429
  },
  {
   "id": "18142768579384105",
@@ -8316,7 +8316,7 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 360,
+  "reach": 361,
   "likes": 7,
   "comments": 0,
   "saved": 0,
@@ -8324,7 +8324,7 @@
   "total_interactions": 9,
   "views": 457,
   "interactions": 9,
-  "eng_rate": 0.025
+  "eng_rate": 0.0249
  },
  {
   "id": "17894881236336016",
@@ -8333,15 +8333,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 242,
+  "reach": 243,
   "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 11,
-  "views": 380,
+  "views": 381,
   "interactions": 11,
-  "eng_rate": 0.0455
+  "eng_rate": 0.0453
  },
  {
   "id": "18055277819638570",
@@ -8350,15 +8350,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 108,
+  "reach": 109,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 6,
-  "views": 163,
+  "views": 164,
   "interactions": 6,
-  "eng_rate": 0.0556
+  "eng_rate": 0.055
  },
  {
   "id": "17989383362890528",
@@ -8613,17 +8613,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 35,
+  "reach": 36,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 64,
+  "views": 65,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1143
+  "eng_rate": 0.1111
  },
  {
   "id": "18086708858429365",
@@ -8632,17 +8632,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 81,
+  "reach": 85,
   "likes": 12,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
-  "views": 183,
+  "views": 187,
   "profile_visits": 3,
   "follows": 0,
   "interactions": 12,
-  "eng_rate": 0.1481
+  "eng_rate": 0.1412
  },
  {
   "id": "18339135430221614",
@@ -8651,15 +8651,15 @@
   "format": "reel",
   "category": "WATER SPORTS",
   "pillar": "ROUTE",
-  "reach": 121,
+  "reach": 123,
   "likes": 5,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 151,
+  "views": 154,
   "interactions": 7,
-  "eng_rate": 0.0579
+  "eng_rate": 0.0569
  },
  {
   "id": "18092981957021254",
@@ -8734,14 +8734,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 1760,
-  "likes": 28,
+  "reach": 2572,
+  "likes": 39,
   "comments": 0,
   "saved": 0,
   "shares": 4,
-  "total_interactions": 32,
-  "views": 2590,
-  "interactions": 32,
-  "eng_rate": 0.0182
+  "total_interactions": 43,
+  "views": 3398,
+  "interactions": 43,
+  "eng_rate": 0.0167
  }
 ]
