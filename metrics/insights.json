@@ -8632,17 +8632,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 80,
+  "reach": 81,
   "likes": 12,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
-  "views": 182,
+  "views": 183,
   "profile_visits": 3,
   "follows": 0,
   "interactions": 12,
-  "eng_rate": 0.15
+  "eng_rate": 0.1481
  },
  {
   "id": "18339135430221614",
@@ -8734,14 +8734,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 435,
-  "likes": 9,
+  "reach": 648,
+  "likes": 12,
   "comments": 0,
   "saved": 0,
   "shares": 2,
-  "total_interactions": 11,
-  "views": 687,
-  "interactions": 11,
-  "eng_rate": 0.0253
+  "total_interactions": 14,
+  "views": 976,
+  "interactions": 14,
+  "eng_rate": 0.0216
  }
 ]
