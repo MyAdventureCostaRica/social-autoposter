@@ -54,6 +54,7 @@ module.exports = async function handler(req, res) {
 
   try {
     if (action === "inbox") return res.json(await getInbox());
+    if (action === "runs") return res.json(await getRuns());
     if (action === "reply") return res.json(await doReply(body));
     if (action === "reject") return res.json(await resolve(body.id, { status: "rejected" }));
     if (action === "dispatch") return res.json(await dispatch(body.workflow));
@@ -103,6 +104,22 @@ async function rset(key, obj) {
 async function getInbox() {
   const [inbox, resolutions] = await Promise.all([rget("inbox", []), rget("resolutions", {})]);
   return { ok: true, inbox, resolutions };
+}
+// --- Workflow run status (uses GH_TOKEN -> high rate limit, for live dashboard) -
+async function getRuns() {
+  const out = {};
+  await Promise.all(Object.entries(WORKFLOWS).map(async ([k, file]) => {
+    try {
+      const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${file}/runs?per_page=20`,
+                            { headers: ghHeaders() });
+      const j = await r.json();
+      out[k] = ((j && j.workflow_runs) || []).map(x => ({
+        status: x.status, conclusion: x.conclusion,
+        created_at: x.created_at, run_started_at: x.run_started_at, updated_at: x.updated_at,
+      }));
+    } catch (e) { out[k] = []; }
+  }));
+  return { ok: true, runs: out };
 }
 
 // --- Send a reply (comment or DM) via the Graph API, then mark it resolved -----

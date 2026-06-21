@@ -218,8 +218,8 @@ function trigger(workflow,label,btn){
   });
 }
 const RUN_WF={
-  post:{file:'daily-post.yml',name:'Post now'},
   insights:{file:'insights.yml',name:'Refresh insights'},
+  post:{file:'daily-post.yml',name:'Post now'},
   reel:{file:'reel-post.yml',name:'Post a reel'},
   responder:{file:'respond.yml',name:'Check messages'}
 };
@@ -232,41 +232,67 @@ function fmtRel(iso){
   const d=h/24; if(d<7) return Math.floor(d)+'d ago';
   return new Date(iso).toLocaleDateString();
 }
-async function loadRunStatus(){
-  const box=document.getElementById('mcRuns'); if(!box) return;
+let _runTimer=null,_runTick=null,_runState=[];
+async function fetchRuns(){
+  if(connected()){
+    try{ const r=await ctrl('runs'); if(r&&r.ok&&r.runs) return r.runs; }catch(e){}
+  }
   const keys=Object.keys(RUN_WF);
   const res=await Promise.all(keys.map(k=>
     j(`https://api.github.com/repos/${REPO}/actions/workflows/${RUN_WF[k].file}/runs?per_page=20`)));
+  const out={}; keys.forEach((k,i)=>{ out[k]=(res[i]&&res[i].workflow_runs)||[]; });
+  return out;
+}
+function renderRuns(){
+  const box=document.getElementById('mcRuns'); if(!box) return;
   let html='';
-  keys.forEach((k,i)=>{
-    const w=RUN_WF[k];
-    const runs=(res[i]&&res[i].workflow_runs)||[];
-    const link=`https://github.com/${REPO}/actions/workflows/${w.file}`;
-    if(!runs.length){
-      html+=`<div class="mc-run"><a href="${link}" target="_blank" rel="noopener"><b>${w.name}</b></a> <span class="muted">never run</span></div>`;
-      return;
+  for(const it of _runState){
+    if(it.empty){ html+=`<div class="mc-run"><a href="${it.link}" target="_blank" rel="noopener"><b>${it.name}</b></a> <span class="muted">never run</span></div>`; continue; }
+    let state;
+    if(it.running){
+      let prog='';
+      if(it.avg){ const pct=Math.min(99,Math.max(1,Math.round((Date.now()-it.start)/it.avg*100))); prog=` ~${pct}% complete`; }
+      state=`<span class="run-go">●</span> running…${prog} · started ${fmtRel(new Date(it.start).toISOString())}`;
+    } else {
+      const ic=it.ok?'<span class="run-ok">✓</span>':'<span class="run-bad">✗</span>';
+      state=`${ic} triggered ${fmtRel(new Date(it.start).toISOString())} · last success ${it.succWhen?fmtRel(it.succWhen):'none'}`;
     }
-    const last=runs[0];
-    const start=last.run_started_at||last.created_at;
-    const running=last.status!=='completed';
-    const succ=runs.find(r=>r.conclusion==='success');
-    const succWhen=succ?succ.updated_at:null;
-    const done=runs.filter(r=>r.status==='completed');
-    const pct=done.length?Math.round(done.filter(r=>r.conclusion==='success').length/done.length*100):null;
-    const icon=running?'<span class="run-go">\u25cf</span>':(last.conclusion==='success'?'<span class="run-ok">\u2713</span>':'<span class="run-bad">\u2717</span>');
-    const rate=(pct===null)?'':` \u00b7 ${pct}% ok (last ${done.length})`;
-    const state=`${icon} triggered ${fmtRel(start)}${running?' (running\u2026)':''} \u00b7 last success ${succWhen?fmtRel(succWhen):'none'}${rate}`;
-    html+=`<div class="mc-run"><a href="${link}" target="_blank" rel="noopener"><b>${w.name}</b></a> <span class="muted">${state}</span></div>`;
-  });
+    html+=`<div class="mc-run"><a href="${it.link}" target="_blank" rel="noopener"><b>${it.name}</b></a> <span class="muted">${state}</span></div>`;
+  }
   box.innerHTML=html;
+}
+async function loadRunStatus(){
+  const box=document.getElementById('mcRuns'); if(!box) return;
+  let data={}; try{ data=await fetchRuns(); }catch(e){ data={}; }
+  let anyRunning=false;
+  _runState=Object.keys(RUN_WF).map(k=>{
+    const w=RUN_WF[k]; const runs=data[k]||[];
+    const link=`https://github.com/${REPO}/actions/workflows/${w.file}`;
+    if(!runs.length) return {name:w.name,link,empty:true};
+    const last=runs[0];
+    const start=new Date(last.run_started_at||last.created_at).getTime();
+    const running=!!(last.status&&last.status!=='completed'); if(running) anyRunning=true;
+    const succ=runs.find(r=>r.conclusion==='success');
+    const durs=runs.filter(r=>r.conclusion==='success'&&r.run_started_at&&r.updated_at)
+      .slice(0,5).map(r=>new Date(r.updated_at)-new Date(r.run_started_at)).filter(d=>d>0);
+    const avg=durs.length?durs.reduce((a,b)=>a+b,0)/durs.length:0;
+    return {name:w.name,link,running,start,avg,ok:last.conclusion==='success',succWhen:succ?succ.updated_at:null};
+  });
+  renderRuns();
+  if(_runTimer) clearTimeout(_runTimer);
+  const conn=connected();
+  const ms=anyRunning?(conn?10000:30000):(conn?30000:300000);
+  _runTimer=setTimeout(loadRunStatus, ms);
+  if(anyRunning && !_runTick) _runTick=setInterval(renderRuns,1000);
+  if(!anyRunning && _runTick){ clearInterval(_runTick); _runTick=null; }
 }
 function renderControls(){
   const el=document.getElementById('controls'); if(!el) return;
   const on=connected();
   el.innerHTML=`<div class="mc-bar"><span class="eyebrow">Mission control</span>`
     +`<span class="mc-status ${on?'on':'off'}">${on?'connected':'not connected'}</span>`
-    +`<button class="mc-btn" onclick="trigger('post','the daily post',this)">Post now</button>`
     +`<button class="mc-btn" onclick="trigger('insights','insights refresh',this)">Refresh insights</button>`
+    +`<button class="mc-btn" onclick="trigger('post','the daily post',this)">Post now</button>`
     +`<button class="mc-btn" onclick="trigger('reel','a reel',this)">Post a reel</button>`
     +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
     +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
