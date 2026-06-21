@@ -68,6 +68,12 @@
   .mc-btn:disabled{opacity:.55;cursor:default}
   .mc-btn.send{background:var(--forest,#169F48);color:#fff;border-color:var(--forest,#169F48)}
   .mc-btn.ghost{border-style:dashed}
+  .mc-runs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 18px;margin-top:10px}
+  .mc-run{font-size:12.5px;line-height:1.5}
+  .mc-run a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--clay-soft)}
+  .run-ok{color:var(--forest,#169F48);font-weight:700}
+  .run-bad{color:#c0392b;font-weight:700}
+  .run-go{color:#b8860b;font-weight:700}
   .mc-gear{margin-left:auto;font-size:16px;background:none;border:none;cursor:pointer;color:var(--clay)}
   .mc-in{width:100%;max-width:420px;display:block;margin:6px 0;padding:8px 10px;border:1px solid var(--clay-soft);border-radius:8px;font-size:14px}
   .ic-edit{width:100%;box-sizing:border-box;margin:8px 0 4px;padding:9px 11px;border:1px solid var(--clay-soft);border-radius:9px;font:inherit;font-size:14px;line-height:1.5;background:#fff;resize:vertical}
@@ -206,9 +212,53 @@ function trigger(workflow,label,btn){
       const good=r&&r.ok;
       btn.textContent=good?'Started ✓':'Failed';
       uiToast(good?(label.replace(/^(the|a) /,'')+' started'):('Could not start: '+((r&&r.error)||'error')));
+      if(good) setTimeout(loadRunStatus,4000);
       setTimeout(()=>{btn.textContent=o; btn.disabled=false;},2800);
     });
   });
+}
+const RUN_WF={
+  post:{file:'daily-post.yml',name:'Post now'},
+  insights:{file:'insights.yml',name:'Refresh insights'},
+  reel:{file:'reel-post.yml',name:'Post a reel'},
+  responder:{file:'respond.yml',name:'Check messages'}
+};
+function fmtRel(iso){
+  if(!iso) return '\u2014';
+  let s=(Date.now()-new Date(iso).getTime())/1000; if(s<0)s=0;
+  if(s<60) return 'just now';
+  const m=s/60; if(m<60) return Math.floor(m)+'m ago';
+  const h=m/60; if(h<24) return Math.floor(h)+'h ago';
+  const d=h/24; if(d<7) return Math.floor(d)+'d ago';
+  return new Date(iso).toLocaleDateString();
+}
+async function loadRunStatus(){
+  const box=document.getElementById('mcRuns'); if(!box) return;
+  const keys=Object.keys(RUN_WF);
+  const res=await Promise.all(keys.map(k=>
+    j(`https://api.github.com/repos/${REPO}/actions/workflows/${RUN_WF[k].file}/runs?per_page=20`)));
+  let html='';
+  keys.forEach((k,i)=>{
+    const w=RUN_WF[k];
+    const runs=(res[i]&&res[i].workflow_runs)||[];
+    const link=`https://github.com/${REPO}/actions/workflows/${w.file}`;
+    if(!runs.length){
+      html+=`<div class="mc-run"><a href="${link}" target="_blank" rel="noopener"><b>${w.name}</b></a> <span class="muted">never run</span></div>`;
+      return;
+    }
+    const last=runs[0];
+    const start=last.run_started_at||last.created_at;
+    const running=last.status!=='completed';
+    const succ=runs.find(r=>r.conclusion==='success');
+    const succWhen=succ?succ.updated_at:null;
+    const done=runs.filter(r=>r.status==='completed');
+    const pct=done.length?Math.round(done.filter(r=>r.conclusion==='success').length/done.length*100):null;
+    const icon=running?'<span class="run-go">\u25cf</span>':(last.conclusion==='success'?'<span class="run-ok">\u2713</span>':'<span class="run-bad">\u2717</span>');
+    const rate=(pct===null)?'':` \u00b7 ${pct}% ok (last ${done.length})`;
+    const state=`${icon} triggered ${fmtRel(start)}${running?' (running\u2026)':''} \u00b7 last success ${succWhen?fmtRel(succWhen):'none'}${rate}`;
+    html+=`<div class="mc-run"><a href="${link}" target="_blank" rel="noopener"><b>${w.name}</b></a> <span class="muted">${state}</span></div>`;
+  });
+  box.innerHTML=html;
 }
 function renderControls(){
   const el=document.getElementById('controls'); if(!el) return;
@@ -220,6 +270,7 @@ function renderControls(){
     +`<button class="mc-btn" onclick="trigger('reel','a reel',this)">Post a reel</button>`
     +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
     +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
+    +`<div class="mc-runs" id="mcRuns"></div>`
     +`<div id="connectPanel" style="display:none">`
     +`<p class="muted" style="font-size:13px;margin:10px 0 6px">Paste your Vercel URL (e.g. https://your-project.vercel.app) and the passphrase you set as DASH_KEY. Stored only in this browser.</p>`
     +`<input class="mc-in" id="cUrl" placeholder="https://your-project.vercel.app" value="${escA(cfg('ctrlUrl'))}">`
@@ -227,6 +278,7 @@ function renderControls(){
     +`<div style="margin-top:8px"><button class="mc-btn" onclick="saveConnect()">Save</button>`
     +`<button class="mc-btn" onclick="testConnect()">Test</button>`
     +`<span id="cTest" class="muted" style="font-size:13px;margin-left:10px"></span></div></div>`;
+  loadRunStatus();
 }
 
 function inboxAction(btn,act){
