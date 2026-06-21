@@ -8632,7 +8632,7 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 79,
+  "reach": 80,
   "likes": 12,
   "comments": 0,
   "saved": 0,
@@ -8642,7 +8642,7 @@
   "profile_visits": 3,
   "follows": 0,
   "interactions": 12,
-  "eng_rate": 0.1519
+  "eng_rate": 0.15
  },
  {
   "id": "18339135430221614",
@@ -8651,7 +8651,7 @@
   "format": "reel",
   "category": "WATER SPORTS",
   "pillar": "ROUTE",
-  "reach": 108,
+  "reach": 121,
   "likes": 5,
   "comments": 2,
   "saved": 0,
@@ -8659,7 +8659,7 @@
   "total_interactions": 7,
   "views": 151,
   "interactions": 7,
-  "eng_rate": 0.0648
+  "eng_rate": 0.0579
  },
  {
   "id": "18092981957021254",
@@ -8734,14 +8734,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 354,
-  "likes": 7,
+  "reach": 435,
+  "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 2,
-  "total_interactions": 9,
-  "views": 610,
-  "interactions": 9,
-  "eng_rate": 0.0254
+  "total_interactions": 11,
+  "views": 687,
+  "interactions": 11,
+  "eng_rate": 0.0253
  }
 ]
