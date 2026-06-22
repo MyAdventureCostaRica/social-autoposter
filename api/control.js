@@ -56,6 +56,7 @@ module.exports = async function handler(req, res) {
     if (action === "inbox") return res.json(await getInbox());
     if (action === "runs") return res.json(await getRuns());
     if (action === "pending") return res.json(await getPending());
+    if (action === "status") return res.json(await getStatus());
     if (action === "reply") return res.json(await doReply(body));
     if (action === "reject") return res.json(await resolve(body.id, { status: "rejected" }));
     if (action === "approve_post") return res.json(await approvePost(body));
@@ -161,6 +162,16 @@ async function resolve(id, info) {
 async function getPending() {
   const p = await rget("pending_post", null);
   return { ok: true, pending: p && !p.skip && p.status !== "approved" ? p : null };
+}
+
+// One call for the live dashboard poll: what's awaiting approval + what just went live.
+async function getStatus() {
+  const [p, published] = await Promise.all([rget("pending_post", null), rget("last_published", null)]);
+  return {
+    ok: true,
+    pending: p && !p.skip && p.status !== "approved" ? p : null,
+    published: published || null,
+  };
 }
 
 async function approvePost({ caption }) {

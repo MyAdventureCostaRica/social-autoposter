@@ -926,6 +926,21 @@ def publish(st=None):
         os.remove(STATE)
     mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
     open(os.path.join(mdir, "last_posted.txt"), "w").write(time.strftime("%Y-%m-%d"))
+    # Announce it's LIVE — to the dashboard (Upstash) and WhatsApp, with a direct link.
+    permalink = ""
+    try:
+        if "ig" in targets and pub.get("id"):
+            gv = CFG.get("graph_version", "v23.0")
+            with urllib.request.urlopen(
+                    f"https://graph.facebook.com/{gv}/{pub['id']}?fields=permalink"
+                    f"&access_token={META_TOKEN}", timeout=30) as r:
+                permalink = (json.loads(r.read().decode()) or {}).get("permalink", "")
+    except Exception as e:
+        print("permalink fetch skipped:", e)
+    rset("last_published", {"base": st.get("base"), "pillar": st.get("pillar"),
+                            "permalink": permalink, "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    wa_notify(f"✅ Posted live — {(st.get('pillar') or 'post').title()}. "
+              + (f"View: {permalink}" if permalink else "Check Instagram."))
     commit_push(f"Posted {st['base']} [skip ci]")
     print("Done.")
 

@@ -110,6 +110,7 @@
     <button onclick="load()">↻ Refresh</button>
   </div>
   <div id="controls"></div>
+  <div id="published"></div>
   <div id="pending"></div>
   <div id="review-top"></div>
   <div id="inbox"></div>
@@ -333,11 +334,21 @@ function setAutoApprove(on){
               :'Human review ON — posts wait for your approval');
   });
 }
-async function renderPendingPost(){
+// Live poll: one call returns what's awaiting approval + what just went live.
+async function renderLive(announce){
+  const pe=document.getElementById('pending'), pubEl=document.getElementById('published');
+  if(!connected()){ if(pe)pe.innerHTML=''; if(pubEl)pubEl.innerHTML=''; return; }
+  let s=null; try{ const r=await ctrl('status',{}); s=r&&r.ok?r:null; }catch(e){}
+  if(!s) return;
+  renderPendingCard(s.pending, announce);
+  renderPublishedBanner(s.published, announce);
+}
+function renderPendingCard(p, announce){
   const el=document.getElementById('pending'); if(!el) return;
-  if(!connected()){ el.innerHTML=''; return; }
-  let p=null; try{ const r=await ctrl('pending',{}); p=r&&r.ok?r.pending:null; }catch(e){}
-  if(!p){ el.innerHTML=''; return; }
+  if(!p){ el.innerHTML=''; el.dataset.ts=''; return; }
+  // don't wipe an in-progress edit if it's the same pending post
+  if(el.dataset.ts===String(p.ts||'') && el.querySelector('.pending-card')) return;
+  el.dataset.ts=String(p.ts||'');
   const imgs=(p.image_urls&&p.image_urls.length?p.image_urls:[p.image_url]).filter(Boolean);
   let thumbs=imgs.map(u=>`<img class="pp-thumb" src="${escA(u)}" onerror="imgFail(this,'IMG')">`).join('');
   if(p.story_url) thumbs+=`<img class="pp-thumb" src="${escA(p.story_url)}" onerror="imgFail(this,'STORY')">`;
@@ -352,7 +363,18 @@ async function renderPendingPost(){
     +`<button class="mc-btn send" onclick="approvePending(this)">Approve &amp; post</button>`
     +`<button class="mc-btn" onclick="rejectPending(this)">Reject &amp; pick another</button>`
     +`<span class="ic-stat muted" style="font-size:13px"></span></div></div>`;
-  if(!/^●/.test(document.title)) document.title='● '+document.title;
+  if(announce){ uiToast('📸 A post is ready to approve'); if(!/^●/.test(document.title)) document.title='● '+document.title; }
+}
+function renderPublishedBanner(pub, announce){
+  const el=document.getElementById('published'); if(!el) return;
+  if(!pub||!pub.ts){ el.innerHTML=''; return; }
+  let seen=null; try{seen=localStorage.getItem('lastSeenPublished');}catch(e){}
+  const isNew=pub.ts!==seen;
+  const link=pub.permalink||'https://www.instagram.com/myadventurecostarica/';
+  el.innerHTML=`<div class="rv-banner"><span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}</span>`
+    +(isNew?`<span class="new-pill">Live</span>`:``)
+    +`<a href="${escA(link)}" target="_blank" rel="noopener" onclick="try{localStorage.setItem('lastSeenPublished','${escA(pub.ts)}')}catch(e){}">View on Instagram ↗</a></div>`;
+  if(announce && isNew) uiToast('✅ Your post is live on Instagram');
 }
 function approvePending(btn){
   const card=btn.closest('.pending-card');
@@ -451,7 +473,8 @@ async function load(){
     j(`${RAW}/metrics/review-latest.json`)
   ]);
   renderControls();
-  renderPendingPost();
+  renderLive(false);
+  if(!window._livePoll){ window._livePoll=setInterval(()=>{ if(connected()) renderLive(true); }, 30000); }
   renderReview(review);
   const postsById={}; if(Array.isArray(posts)) for(const pp of posts){ if(pp&&pp.id) postsById[pp.id]=pp; }
   // Inbox is PRIVATE: it never touches the public repo. Load it through the
