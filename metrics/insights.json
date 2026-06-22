@@ -8794,5 +8794,35 @@
   "error": "Unsupported get request. Object with ID '17893272258544116' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
   "interactions": 0,
   "eng_rate": null
+ },
+ {
+  "id": "18094359320361671",
+  "date": "2026-06-22",
+  "base": "IMG_0028",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "reach": 0,
+  "likes": 1,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 1,
+  "views": 0,
+  "profile_visits": 0,
+  "follows": 0,
+  "interactions": 1,
+  "eng_rate": null
+ },
+ {
+  "id": "17919521691388751",
+  "date": "2026-06-22",
+  "base": "IMG_0028-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "error": "(#10) Not enough viewers for the media to show insights",
+  "interactions": 0,
+  "eng_rate": null
  }
 ]
