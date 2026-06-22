@@ -41,6 +41,58 @@ GH_TOKEN = os.environ.get("GITHUB_TOKEN")
 META_TOKEN = os.environ.get("META_ACCESS_TOKEN")
 REPO = os.environ.get("GITHUB_REPOSITORY", "")
 
+# Upstash Redis (PRIVATE) — the pending post awaiting approval + the learning log live
+# here, never in the public repo. Same DB the responder uses.
+UPSTASH_URL = (os.environ.get("UPSTASH_REDIS_REST_URL") or "").rstrip("/")
+UPSTASH_TOKEN = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+WA_PHONE = os.environ.get("WHATSAPP_PHONE")          # CallMeBot WhatsApp ping (optional)
+WA_KEY = os.environ.get("WHATSAPP_APIKEY")
+DASHBOARD_URL = CFG.get("dashboard_url", "https://social-autoposter-five.vercel.app/")
+
+
+def _redis(cmd):
+    req = urllib.request.Request(
+        UPSTASH_URL, data=json.dumps(cmd).encode("utf-8"),
+        headers={"Authorization": f"Bearer {UPSTASH_TOKEN}", "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.loads(r.read().decode())
+
+
+def rget(key, default=None):
+    if not (UPSTASH_URL and UPSTASH_TOKEN):
+        return default
+    try:
+        res = _redis(["GET", key]).get("result")
+        return json.loads(res) if res else default
+    except Exception as e:
+        print(f"redis get {key} failed:", e); return default
+
+
+def rset(key, obj):
+    if not (UPSTASH_URL and UPSTASH_TOKEN):
+        print("Upstash not configured — skipping write of", key); return
+    try:
+        _redis(["SET", key, json.dumps(obj, ensure_ascii=False)])
+    except Exception as e:
+        print(f"redis set {key} failed:", e)
+
+
+def rdel(key):
+    try:
+        _redis(["DEL", key])
+    except Exception as e:
+        print(f"redis del {key} failed:", e)
+
+
+def wa_notify(text):
+    if not (WA_PHONE and WA_KEY):
+        return
+    try:
+        q = urllib.parse.urlencode({"phone": WA_PHONE, "text": text, "apikey": WA_KEY})
+        urllib.request.urlopen(f"https://api.callmebot.com/whatsapp.php?{q}", timeout=20).read()
+    except Exception as e:
+        print("WhatsApp notify failed:", e)
+
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 MODEL = CFG.get("caption_model", "openai/gpt-4o")
 
@@ -607,10 +659,15 @@ def prepare():
                 if s:
                     posted_hashes.append(s[1])
 
+    rejected_bases = set(rget("rejected_bases", []) or [])   # photos you rejected — never re-pick
     target = target_pillar()
     print(f"Content plan — today's target pillar: {target} | recent mix: {_recent_pillars()}")
     chosen = fallback = None
     for src in candidates[:PLAN_SCAN]:
+        if os.path.splitext(os.path.basename(src))[0] in rejected_bases:
+            print("Skipping a photo you rejected earlier:", os.path.basename(src))
+            os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
+            continue
         # Skip a near-duplicate of something already posted — don't repeat near-twins.
         if DEDUPE and posted_hashes:
             cs = open_sig(src)
@@ -725,13 +782,23 @@ def prepare():
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in [meta["caption_en"], meta["caption_es"], mentions, hashtags] if p).strip()
-    json.dump({"skip": False, "source": os.path.basename(src), "sources": sources, "base": base,
-               "image_urls": image_urls, "image_url": image_urls[0],
-               "story_url": story_url, "caption": caption,
-               "format": fmt, "category": meta.get("category"),
-               "pillar": meta.get("pillar")},
-              open(STATE, "w"))
+    state = {"skip": False, "source": os.path.basename(src), "sources": sources, "base": base,
+             "image_urls": image_urls, "image_url": image_urls[0],
+             "story_url": story_url, "caption": caption,
+             "format": fmt, "category": meta.get("category"),
+             "pillar": meta.get("pillar"), "status": "pending",
+             "ts": time.strftime("%Y-%m-%dT%H:%M:%S")}
+    json.dump(state, open(STATE, "w"))
     commit_push(f"Stage {base} for review [skip ci]")
+    if (rget("settings", {}) or {}).get("auto_approve"):
+        print("Auto-approve is ON — publishing immediately.")
+        publish(state)
+        rdel("pending_post")
+    else:                                             # human review: stage + ping for approval
+        rset("pending_post", state)
+        wa_notify(f"Post ready to approve — {(meta.get('pillar') or 'post').title()}, "
+                  f"{'carousel ' + str(len(image_urls)) if len(image_urls) > 1 else 'single'}"
+                  f"{' + story' if story_url else ''}. Review & approve: {DASHBOARD_URL}")
 
     remaining = len([f for f in glob.glob(os.path.join(SRC, "*"))
                      if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif"))]) - 1
@@ -759,11 +826,12 @@ def prepare():
     print("Prepared:", base, f"({kind}) | photos remaining:", remaining)
 
 
-def publish():
-    """Read staged state.json and actually post it."""
-    if not os.path.exists(STATE):
-        print("No state.json — nothing staged."); return
-    st = json.load(open(STATE))
+def publish(st=None):
+    """Post a staged item — from state.json by default, or a passed dict (an approved post)."""
+    if st is None:
+        if not os.path.exists(STATE):
+            print("No state.json — nothing staged."); return
+        st = json.load(open(STATE))
     if st.get("skip"):
         print("Nothing staged to publish."); return
     if not META_TOKEN:
@@ -862,12 +930,32 @@ def publish():
     print("Done.")
 
 
+def publish_pending():
+    """Publish the post the owner APPROVED on the dashboard (read from Upstash)."""
+    st = rget("pending_post")
+    if not st or st.get("skip"):
+        print("No pending post to publish."); return
+    if st.get("status") != "approved":
+        print("Pending post not approved yet (status:", st.get("status"), ") — skipping."); return
+    git_setup()
+    publish(st)                                        # reuse the full publish path
+    decisions = rget("post_decisions", []) or []       # learning: log the approval
+    decisions.append({"base": st.get("base"), "pillar": st.get("pillar"),
+                      "decision": "approved", "edited": bool(st.get("edited")),
+                      "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    rset("post_decisions", decisions[-200:])
+    rdel("pending_post")                               # clear the slot
+    print("Published approved post:", st.get("base"))
+
+
 if __name__ == "__main__":
     phase = sys.argv[1] if len(sys.argv) > 1 else "all"
     if phase == "prepare":
         prepare()
     elif phase == "publish":
         publish()
-    else:  # "all" = no approval gate
+    elif phase == "publish_pending":
+        publish_pending()
+    else:  # "all" = legacy immediate post (no approval gate)
         prepare()
         publish()

@@ -27,7 +27,7 @@ const REPO = "MyAdventureCostaRica/social-autoposter";
 const DEFAULT_ORIGIN = "https://myadventurecostarica.github.io";
 const WORKFLOWS = {                                     // friendly name -> workflow file
   post: "daily-post.yml", insights: "insights.yml", reel: "reel-post.yml",
-  responder: "respond.yml", review: "review.yml",
+  responder: "respond.yml", review: "review.yml", publish: "publish.yml",
 };
 
 function setCors(res) {
@@ -55,8 +55,13 @@ module.exports = async function handler(req, res) {
   try {
     if (action === "inbox") return res.json(await getInbox());
     if (action === "runs") return res.json(await getRuns());
+    if (action === "pending") return res.json(await getPending());
     if (action === "reply") return res.json(await doReply(body));
     if (action === "reject") return res.json(await resolve(body.id, { status: "rejected" }));
+    if (action === "approve_post") return res.json(await approvePost(body));
+    if (action === "reject_post") return res.json(await rejectPost(body));
+    if (action === "get_settings") return res.json(await getSettings());
+    if (action === "set_setting") return res.json(await setSetting(body));
     if (action === "dispatch") return res.json(await dispatch(body.workflow));
     return res.status(404).json({ ok: false, error: "unknown action" });
   } catch (e) {
@@ -152,14 +157,71 @@ async function resolve(id, info) {
   return ok ? { ok: true, id, status: info.status } : { ok: false, error: "could not persist resolution" };
 }
 
+// --- Daily-post approval (the staged post lives in Upstash as "pending_post") --
+async function getPending() {
+  const p = await rget("pending_post", null);
+  return { ok: true, pending: p && !p.skip && p.status !== "approved" ? p : null };
+}
+
+async function approvePost({ caption }) {
+  const p = await rget("pending_post", null);
+  if (!p || p.skip) return { ok: false, error: "no pending post" };
+  if (caption && String(caption).trim()) {
+    p.edited = p.caption !== String(caption).trim();
+    p.caption = String(caption).trim();
+  }
+  p.status = "approved";
+  await rset("pending_post", p);
+  const dec = await rget("post_decisions", []);
+  dec.push({ base: p.base, pillar: p.pillar, decision: "approved",
+             edited: !!p.edited, ts: new Date().toISOString() });
+  await rset("post_decisions", dec.slice(-200));
+  const ok = await dispatchWf("publish.yml");           // publish it now
+  return { ok, status: "approved" };
+}
+
+async function rejectPost({ reason }) {
+  const p = await rget("pending_post", null);
+  if (!p || p.skip) return { ok: false, error: "no pending post" };
+  const rb = await rget("rejected_bases", []);
+  if (p.base && !rb.includes(p.base)) rb.push(p.base);   // never re-pick this photo
+  await rset("rejected_bases", rb.slice(-500));
+  const dec = await rget("post_decisions", []);
+  dec.push({ base: p.base, pillar: p.pillar, decision: "rejected",
+             reason: reason || "", ts: new Date().toISOString() });
+  await rset("post_decisions", dec.slice(-200));
+  await redis(["DEL", "pending_post"]);
+  await dispatchWf("daily-post.yml", { force: "true" }); // stage the next candidate now
+  return { ok: true, status: "rejected" };
+}
+
+// --- Settings (auto-approve vs human review) ----------------------------------
+async function getSettings() {
+  const s = (await rget("settings", {})) || {};
+  return { ok: true, settings: { auto_approve: !!s.auto_approve } };
+}
+async function setSetting({ key, value }) {
+  if (!key) return { ok: false, error: "missing key" };
+  const s = (await rget("settings", {})) || {};
+  s[key] = value;
+  await rset("settings", s);
+  return { ok: true, settings: s };
+}
+
 // --- Trigger any of our workflows (workflow_dispatch) --------------------------
 async function dispatch(key) {
   const wf = WORKFLOWS[key];
   if (!wf) return { ok: false, error: "unknown workflow: " + key };
+  return { ok: await dispatchWf(wf), workflow: wf };
+}
+
+async function dispatchWf(file, inputs) {
+  const body = { ref: "main" };
+  if (inputs) body.inputs = inputs;
   const r = await fetch(
-    `https://api.github.com/repos/${REPO}/actions/workflows/${wf}/dispatches`,
-    { method: "POST", headers: ghHeaders(), body: JSON.stringify({ ref: "main" }) });
-  return { ok: r.status === 204, status: r.status, workflow: wf };
+    `https://api.github.com/repos/${REPO}/actions/workflows/${file}/dispatches`,
+    { method: "POST", headers: ghHeaders(), body: JSON.stringify(body) });
+  return r.status === 204;
 }
 
 // --- GitHub headers (used only to trigger workflow_dispatch) ------------------

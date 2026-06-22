@@ -4,26 +4,26 @@ on:
   schedule:
     # THREE attempts across the 9–10am Costa Rica window. GitHub's scheduler often
     # delays or skips a single cron (worst at :00), so we give it 3 shots and an
-    # "already posted today" guard in autopost.py ensures only the first one posts.
+    # "already posted today" guard in autopost.py ensures only the first one stages.
     - cron: "17 15 * * *"     # 9:17 AM Costa Rica
     - cron: "47 15 * * *"     # 9:47 AM Costa Rica
     - cron: "17 16 * * *"     # 10:17 AM Costa Rica
   workflow_dispatch:        # also runnable manually from the Actions tab
     inputs:
       force:
-        description: "Post even if one already went out today (bypass the daily guard)"
+        description: "Stage a post even if one already went out today (bypass the daily guard)"
         type: boolean
         default: false
 
+# This job only PREPARES + STAGES the post (renders it, writes a private pending post to
+# Upstash, and WhatsApps you). It does NOT publish. You approve it on the dashboard, which
+# triggers publish.yml. (Legacy auto-publish removed — approval is now the gate.)
 jobs:
-  # 1) Pick a photo, caption it, render it, push it, and write a preview to the run summary.
   prepare:
     runs-on: ubuntu-latest
     permissions:
-      contents: write       # to push the rendered image + staged state
-      models: read          # to use GitHub's free AI for captions
-    outputs:
-      staged: ${{ steps.prep.outputs.staged }}
+      contents: write       # push the rendered image + staged state
+      models: read          # GitHub's free AI for captions
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -32,30 +32,11 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install --quiet pillow pillow-heif
-      - id: prep
-        env:
+      - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FORCE_POST: ${{ inputs.force && '1' || '' }}   # manual "Force" bypasses the daily guard
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}    # "post ready to approve" ping
+          WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
         run: python autopost.py prepare
-
-  # 2) Publish it. This job is gated by the "review" environment:
-  #    add yourself as a Required Reviewer on that environment (repo Settings ->
-  #    Environments -> review) and it will WAIT for your one-tap approval each day.
-  #    Remove the reviewer later to make it fully hands-off.
-  publish:
-    needs: prepare
-    runs-on: ubuntu-latest
-    environment: review
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: ${{ github.ref_name }}   # gets prepare's pushed commits (state.json + image)
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-        with:
-          python-version: "3.11"
-      - run: pip install --quiet pillow pillow-heif
-      - env:
-          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
-        run: python autopost.py publish
