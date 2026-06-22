@@ -8566,7 +8566,7 @@
   "saved": 0,
   "shares": 2,
   "total_interactions": 50,
-  "views": 1067,
+  "views": 1068,
   "interactions": 50,
   "eng_rate": 0.0829
  },
@@ -8668,17 +8668,9 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 25,
-  "likes": 5,
-  "comments": 0,
-  "saved": 0,
-  "shares": 0,
-  "total_interactions": 5,
-  "views": 56,
-  "profile_visits": 0,
-  "follows": 0,
-  "interactions": 5,
-  "eng_rate": 0.2
+  "error": "Unsupported get request. Object with ID '18092981957021254' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  },
  {
   "id": "18011776586865170",
@@ -8734,13 +8726,13 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 2863,
+  "reach": 2871,
   "likes": 49,
   "comments": 0,
   "saved": 2,
   "shares": 4,
   "total_interactions": 55,
-  "views": 3797,
+  "views": 3801,
   "interactions": 55,
   "eng_rate": 0.0192
  },
@@ -8780,5 +8772,27 @@
   "navigation": 10,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "18081369398210464",
+  "date": "2026-06-22",
+  "base": "IMG_0015",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "error": "Unsupported get request. Object with ID '18081369398210464' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
+ },
+ {
+  "id": "17893272258544116",
+  "date": "2026-06-22",
+  "base": "IMG_0015-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "error": "Unsupported get request. Object with ID '17893272258544116' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  }
 ]
