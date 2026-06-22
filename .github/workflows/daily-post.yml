@@ -9,6 +9,11 @@ on:
     - cron: "47 15 * * *"     # 9:47 AM Costa Rica
     - cron: "17 16 * * *"     # 10:17 AM Costa Rica
   workflow_dispatch:        # also runnable manually from the Actions tab
+    inputs:
+      force:
+        description: "Post even if one already went out today (bypass the daily guard)"
+        type: boolean
+        default: false
 
 jobs:
   # 1) Pick a photo, caption it, render it, push it, and write a preview to the run summary.
@@ -30,6 +35,7 @@ jobs:
       - id: prep
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE_POST: ${{ inputs.force && '1' || '' }}   # manual "Force" bypasses the daily guard
         run: python autopost.py prepare
 
   # 2) Publish it. This job is gated by the "review" environment:

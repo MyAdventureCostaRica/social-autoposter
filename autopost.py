@@ -578,7 +578,10 @@ def prepare():
     # (GitHub skips/delays single crons), so skip if we already posted today.
     lp = os.path.join(HERE, "metrics", "last_posted.txt")
     today = time.strftime("%Y-%m-%d")
-    if os.path.exists(lp) and open(lp).read().strip() == today:
+    forced = os.environ.get("FORCE_POST") == "1"   # manual "Force" run overrides the guard
+    if forced:
+        print("FORCE_POST set — bypassing the once-per-day guard.")
+    if not forced and os.path.exists(lp) and open(lp).read().strip() == today:
         json.dump({"skip": True, "why": "already posted today"}, open(STATE, "w"))
         commit_push("Already posted today [skip ci]")
         summary("### Already posted today\nA post already went out today — skipping.")
