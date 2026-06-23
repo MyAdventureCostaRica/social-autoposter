@@ -8726,15 +8726,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 2896,
+  "reach": 2900,
   "likes": 52,
   "comments": 0,
   "saved": 3,
   "shares": 5,
   "total_interactions": 61,
-  "views": 3852,
+  "views": 3854,
   "interactions": 61,
-  "eng_rate": 0.0211
+  "eng_rate": 0.021
  },
  {
   "id": "18117189001651722",
@@ -8839,17 +8839,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 9,
+  "reach": 16,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 24,
+  "views": 35,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.4444
+  "eng_rate": 0.25
  },
  {
   "id": "18121139608684500",
@@ -8868,5 +8868,22 @@
   "navigation": 9,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "18090890144528691",
+  "date": "2026-06-23",
+  "base": "IMG_5120_gc2dl1",
+  "format": "reel",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "reach": 88,
+  "likes": 4,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 4,
+  "views": 152,
+  "interactions": 4,
+  "eng_rate": 0.0455
  }
 ]
