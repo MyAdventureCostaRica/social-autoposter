@@ -8732,7 +8732,7 @@
   "saved": 3,
   "shares": 5,
   "total_interactions": 61,
-  "views": 3854,
+  "views": 3856,
   "interactions": 61,
   "eng_rate": 0.021
  },
@@ -8839,17 +8839,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 16,
+  "reach": 17,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 35,
+  "views": 38,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.25
+  "eng_rate": 0.2353
  },
  {
   "id": "18121139608684500",
@@ -8876,14 +8876,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 88,
+  "reach": 112,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 152,
+  "views": 186,
   "interactions": 4,
-  "eng_rate": 0.0455
+  "eng_rate": 0.0357
  }
 ]
