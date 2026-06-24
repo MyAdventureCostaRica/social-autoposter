@@ -8632,17 +8632,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 97,
+  "reach": 98,
   "likes": 12,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
-  "views": 213,
+  "views": 215,
   "profile_visits": 3,
   "follows": 0,
   "interactions": 12,
-  "eng_rate": 0.1237
+  "eng_rate": 0.1224
  },
  {
   "id": "18339135430221614",
@@ -8743,17 +8743,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 30,
+  "reach": 31,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 105,
+  "views": 106,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.2333
+  "eng_rate": 0.2258
  },
  {
   "id": "18327223486251307",
@@ -8802,17 +8802,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 25,
+  "reach": 26,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 51,
+  "views": 52,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.12
+  "eng_rate": 0.1154
  },
  {
   "id": "17919521691388751",
@@ -8839,17 +8839,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 22,
+  "reach": 26,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 44,
+  "views": 50,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1818
+  "eng_rate": 0.1538
  },
  {
   "id": "18121139608684500",
@@ -8876,15 +8876,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 156,
+  "reach": 171,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 246,
+  "views": 275,
   "interactions": 5,
-  "eng_rate": 0.0321
+  "eng_rate": 0.0292
  },
  {
   "id": "17979482651872061",
@@ -8893,17 +8893,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "EXPERIENCE",
-  "reach": 0,
-  "likes": 1,
+  "reach": 80,
+  "likes": 5,
   "comments": 0,
   "saved": 0,
-  "shares": 0,
-  "total_interactions": 1,
-  "views": 0,
-  "profile_visits": 0,
-  "follows": 0,
-  "interactions": 1,
-  "eng_rate": null
+  "shares": 1,
+  "total_interactions": 6,
+  "views": 125,
+  "profile_visits": 1,
+  "follows": 1,
+  "interactions": 6,
+  "eng_rate": 0.075
  },
  {
   "id": "17988459056822714",
@@ -8912,8 +8912,15 @@
   "format": "story",
   "category": "CYCLING",
   "pillar": "EXPERIENCE",
-  "error": "(#10) Not enough viewers for the media to show insights",
-  "interactions": 0,
-  "eng_rate": null
+  "reach": 54,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 5,
+  "views": 70,
+  "profile_visits": 1,
+  "follows": 0,
+  "navigation": 57,
+  "interactions": 5,
+  "eng_rate": 0.0926
  }
 ]
