@@ -8645,15 +8645,15 @@
   "format": "reel",
   "category": "WATER SPORTS",
   "pillar": "ROUTE",
-  "reach": 129,
+  "reach": 130,
   "likes": 5,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 161,
+  "views": 162,
   "interactions": 7,
-  "eng_rate": 0.0543
+  "eng_rate": 0.0538
  },
  {
   "id": "18092981957021254",
@@ -8737,17 +8737,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 31,
+  "reach": 32,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 106,
+  "views": 108,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.2258
+  "eng_rate": 0.2188
  },
  {
   "id": "18327223486251307",
@@ -8802,7 +8802,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 54,
+  "views": 55,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
@@ -8833,7 +8833,7 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 29,
+  "reach": 30,
   "likes": 4,
   "comments": 0,
   "saved": 0,
@@ -8843,7 +8843,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1379
+  "eng_rate": 0.1333
  },
  {
   "id": "18121139608684500",
@@ -8870,15 +8870,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 181,
+  "reach": 182,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 296,
+  "views": 299,
   "interactions": 5,
-  "eng_rate": 0.0276
+  "eng_rate": 0.0275
  },
  {
   "id": "17979482651872061",
@@ -8888,16 +8888,16 @@
   "category": "CYCLING",
   "pillar": "EXPERIENCE",
   "reach": 221,
-  "likes": 6,
+  "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 1,
-  "total_interactions": 7,
-  "views": 317,
+  "total_interactions": 8,
+  "views": 319,
   "profile_visits": 2,
   "follows": 1,
-  "interactions": 7,
-  "eng_rate": 0.0317
+  "interactions": 8,
+  "eng_rate": 0.0362
  },
  {
   "id": "17988459056822714",
