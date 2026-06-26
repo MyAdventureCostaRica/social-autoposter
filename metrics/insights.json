@@ -8953,5 +8953,16 @@
   "navigation": 21,
   "interactions": 1,
   "eng_rate": 0.05
+ },
+ {
+  "id": "18057614846746460",
+  "date": "2026-06-26",
+  "base": "IMG_0290_lxvrvd",
+  "format": "reel",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "error": "Unsupported get request. Object with ID '18057614846746460' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  }
 ]
