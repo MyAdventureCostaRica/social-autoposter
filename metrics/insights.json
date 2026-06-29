@@ -8560,7 +8560,7 @@
   "saved": 0,
   "shares": 2,
   "total_interactions": 50,
-  "views": 1070,
+  "views": 1071,
   "interactions": 50,
   "eng_rate": 0.0826
  },
@@ -8626,17 +8626,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 102,
+  "reach": 103,
   "likes": 13,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 13,
-  "views": 221,
+  "views": 222,
   "profile_visits": 3,
   "follows": 0,
   "interactions": 13,
-  "eng_rate": 0.1275
+  "eng_rate": 0.1262
  },
  {
   "id": "18339135430221614",
@@ -8726,7 +8726,7 @@
   "saved": 3,
   "shares": 5,
   "total_interactions": 61,
-  "views": 3876,
+  "views": 3878,
   "interactions": 61,
   "eng_rate": 0.021
  },
@@ -8833,17 +8833,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 32,
+  "reach": 34,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 61,
+  "views": 63,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.125
+  "eng_rate": 0.1176
  },
  {
   "id": "18121139608684500",
@@ -8876,7 +8876,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 320,
+  "views": 323,
   "interactions": 5,
   "eng_rate": 0.0265
  },
@@ -8887,7 +8887,7 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "EXPERIENCE",
-  "reach": 227,
+  "reach": 228,
   "likes": 7,
   "comments": 0,
   "saved": 0,
@@ -8897,7 +8897,7 @@
   "profile_visits": 3,
   "follows": 1,
   "interactions": 8,
-  "eng_rate": 0.0352
+  "eng_rate": 0.0351
  },
  {
   "id": "17988459056822714",
@@ -8930,7 +8930,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 70,
+  "views": 71,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
@@ -8972,17 +8972,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 12,
-  "likes": 2,
+  "reach": 21,
+  "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 2,
-  "views": 27,
+  "total_interactions": 4,
+  "views": 42,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 2,
-  "eng_rate": 0.1667
+  "interactions": 4,
+  "eng_rate": 0.1905
  },
  {
   "id": "17879223924671569",
