@@ -422,8 +422,10 @@ function renderPublishedBanner(pub, announce){
   if(el.dataset.ts!==String(pub.ts)){
     el.dataset.ts=String(pub.ts);
     const link=pub.permalink||'https://www.instagram.com/myadventurecostarica/';
+    // Use the saved image; if an older record lacks it, fall back to the rendered file.
+    const img=pub.image||(pub.base&&pub.format!=='reel'?`${RAW}/rendered/${pub.base}_1.jpg`:'');
     el.innerHTML=`<div class="rv-banner">`
-      +(pub.image?`<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-thumb" src="${escA(pub.image)}" onerror="imgFail(this,'LIVE')"></a>`:``)
+      +(img?`<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-thumb" src="${escA(img)}" onerror="imgFail(this,'LIVE')"></a>`:``)
       +`<span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}</span>`
       +`<span class="new-pill">Live</span>`
       +`<a href="${escA(link)}" target="_blank" rel="noopener">View on Instagram ↗</a></div>`;
