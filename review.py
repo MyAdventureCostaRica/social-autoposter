@@ -150,6 +150,22 @@ def open_issue(title, body):
         print("Issue creation skipped:", e)
 
 
+def _redis_set(key, obj):
+    """Mirror the review into Upstash so the dashboard reads it instantly through the
+    backend (the public raw.githubusercontent URL is CDN-cached for minutes)."""
+    url = (os.environ.get("UPSTASH_REDIS_REST_URL") or "").rstrip("/")
+    tok = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+    if not (url and tok):
+        return
+    try:
+        req = urllib.request.Request(
+            url, data=json.dumps(["SET", key, json.dumps(obj, ensure_ascii=False)]).encode(),
+            headers={"Authorization": f"Bearer {tok}", "Content-Type": "application/json"})
+        urllib.request.urlopen(req, timeout=20).read()
+    except Exception as e:
+        print("redis set (review) failed:", e)
+
+
 def main():
     # Guard: one review per month. We schedule a backup attempt, so skip (and don't
     # open a duplicate issue) if we already reviewed this month.
@@ -163,9 +179,10 @@ def main():
     stats = analyze()
     md = ask_models(stats) or "_No model output this run._"
     os.makedirs(MET, exist_ok=True)
-    json.dump({"stats": stats, "markdown": md},
-              open(os.path.join(MET, "review-latest.json"), "w"),
+    payload = {"stats": stats, "markdown": md}
+    json.dump(payload, open(os.path.join(MET, "review-latest.json"), "w"),
               ensure_ascii=False, indent=1)
+    _redis_set("review_latest", payload)        # served instantly via the backend (no CDN cache)
     header = f"# Latest review — {stats['generated']}\n\n"
     open(os.path.join(HERE, "REVIEW-LATEST.md"), "w").write(header + md + "\n")
     sp = os.environ.get("GITHUB_STEP_SUMMARY")

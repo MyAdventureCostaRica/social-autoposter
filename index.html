@@ -535,7 +535,9 @@ async function load(){
   renderControls();
   renderLive(false);
   if(!window._livePoll){ window._livePoll=setInterval(()=>{ if(connected()) renderLive(true); }, 30000); }
-  renderReview(review);
+  let reviewObj=review;   // prefer the instant backend copy over the CDN-cached raw file
+  if(connected()){ try{ const rr=await ctrl('review',{}); if(rr&&rr.ok&&rr.review) reviewObj=rr.review; }catch(e){} }
+  renderReview(reviewObj);
   const postsById={}; if(Array.isArray(posts)) for(const pp of posts){ if(pp&&pp.id) postsById[pp.id]=pp; }
   // Inbox is PRIVATE: it never touches the public repo. Load it through the
   // authenticated backend (api/control "inbox"). Requires you to be connected.
