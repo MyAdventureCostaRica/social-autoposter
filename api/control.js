@@ -260,9 +260,9 @@ async function setSetting({ key, value }) {
 async function dispatch(key) {
   const wf = WORKFLOWS[key];
   if (!wf) return { ok: false, error: "unknown workflow: " + key };
-  // Manual dashboard runs of post/reel bypass the once-a-day cap — you can stage as
-  // many as you want by hand; the cap only governs the automatic scheduled runs.
-  const inputs = (key === "post" || key === "reel") ? { force: "true" } : undefined;
+  // Manual dashboard runs of post/reel/review bypass their once-a-day / once-a-month
+  // guards — you can run them on demand by hand; the guards only govern scheduled runs.
+  const inputs = (key === "post" || key === "reel" || key === "review") ? { force: "true" } : undefined;
   return { ok: await dispatchWf(wf, inputs), workflow: wf };
 }
 

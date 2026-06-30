@@ -155,7 +155,10 @@ def main():
     # open a duplicate issue) if we already reviewed this month.
     month = datetime.date.today().strftime("%Y-%m")
     marker = os.path.join(MET, "last_review.txt")
-    if os.path.exists(marker) and open(marker).read().strip() == month:
+    force = os.environ.get("FORCE_POST") == "1"     # manual "Run review" overrides the monthly guard
+    if force:
+        print("FORCE_POST set — regenerating the review on demand.")
+    if not force and os.path.exists(marker) and open(marker).read().strip() == month:
         print("Review already done this month; skipping."); return
     stats = analyze()
     md = ask_models(stats) or "_No model output this run._"

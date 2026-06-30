@@ -237,9 +237,11 @@ function trigger(workflow,label,btn,stages){
 }
 const RUN_WF={
   insights:{file:'insights.yml',name:'Refresh insights'},
-  post:{file:'daily-post.yml',name:'Post now'},
-  reel:{file:'reel-post.yml',name:'Post a reel'},
-  responder:{file:'respond.yml',name:'Check messages'}
+  post:{file:'daily-post.yml',name:'Prepare a post'},
+  reel:{file:'reel-post.yml',name:'Prepare a reel'},
+  responder:{file:'respond.yml',name:'Check messages'},
+  review:{file:'review.yml',name:'Monthly review'},
+  publish:{file:'publish.yml',name:'Publish approved'}
 };
 function fmtRel(iso){
   if(!iso) return '\u2014';

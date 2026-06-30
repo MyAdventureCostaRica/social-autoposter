@@ -7,6 +7,11 @@ on:
     - cron: "17 15 1 * *"     # 1st, 9:17 Costa Rica
     - cron: "47 15 1 * *"     # 1st, 9:47 Costa Rica (backup)
   workflow_dispatch:
+    inputs:
+      force:
+        description: "Regenerate the review now (bypass the once-a-month guard)"
+        type: boolean
+        default: false
 
 jobs:
   review:
@@ -25,6 +30,7 @@ jobs:
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          FORCE_POST: ${{ inputs.force && '1' || '' }}   # manual run regenerates on demand
         run: python review.py
       - run: |
           git config user.name  "auto-poster"
