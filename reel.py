@@ -219,6 +219,7 @@ def _do_publish_reel(state):
     except Exception as e:
         print("permalink skipped:", e)
     ap.rset("last_published", {"base": base, "pillar": state.get("pillar"), "format": "reel",
+                               "image": state.get("thumb_url", ""),
                                "permalink": perm, "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
     ap.wa_notify(f"✅ Reel live — {(state.get('pillar') or 'reel').title()}. "
                  + (f"View: {perm}" if perm else "Check Instagram."))

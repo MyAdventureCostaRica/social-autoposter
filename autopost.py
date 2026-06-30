@@ -938,6 +938,7 @@ def publish(st=None):
     except Exception as e:
         print("permalink fetch skipped:", e)
     rset("last_published", {"base": st.get("base"), "pillar": st.get("pillar"),
+                            "image": image_urls[0] if image_urls else "",
                             "permalink": permalink, "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
     wa_notify(f"✅ Posted live — {(st.get('pillar') or 'post').title()}. "
               + (f"View: {permalink}" if permalink else "Check Instagram."))
