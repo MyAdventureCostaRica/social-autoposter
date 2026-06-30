@@ -175,13 +175,25 @@ async function getReview() {
 
 // One call for the live dashboard poll: what's awaiting approval + what just went live.
 async function getStatus() {
-  const [p, reel, published] = await Promise.all([
+  const [p, reel, pubRaw] = await Promise.all([
     rget("pending_post", null), rget("pending_reel", null), rget("last_published", null)]);
+  let published = pubRaw || null;
+  // Always have a preview: if the saved record has no image but knows its Instagram
+  // media id, pull the post's thumbnail straight from Instagram (once) and cache it.
+  if (published && !published.image && published.media_id) {
+    try {
+      const g = await fetch(`https://graph.facebook.com/${V}/${published.media_id}`
+        + `?fields=media_url,thumbnail_url&access_token=${process.env.META_TOKEN}`);
+      const gj = await g.json();
+      const img = (gj && (gj.thumbnail_url || gj.media_url)) || "";
+      if (img) { published = { ...published, image: img }; await rset("last_published", published); }
+    } catch (e) { console.error("enrich image:", e); }
+  }
   return {
     ok: true,
     pending: p && !p.skip && p.status !== "approved" ? p : null,
     pendingReel: reel && reel.status !== "approved" ? reel : null,
-    published: published || null,
+    published,
   };
 }
 
