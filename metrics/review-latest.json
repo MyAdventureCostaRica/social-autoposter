@@ -1,34 +1,39 @@
 {
  "stats": {
-  "generated": "2026-06-23",
-  "total_posts": 757,
-  "with_insights": 82,
-  "eligible": 24,
-  "eligible_recent_12mo": 19,
+  "generated": "2026-06-30",
+  "total_posts": 773,
+  "with_insights": 95,
+  "eligible": 26,
+  "eligible_recent_12mo": 21,
   "date_range": [
    "2017-07-23",
-   "2026-06-22"
+   "2026-06-30"
   ],
   "interaction_mix_pct": {
-   "saved": 0.009,
+   "saved": 0.008,
    "shares": 0.08,
-   "likes": 0.828,
-   "comments": 0.041
+   "likes": 0.82,
+   "comments": 0.04
   },
   "format_leaderboard": [
    {
+    "format": "story",
+    "avg_eng_rate": 0.0926,
+    "n": 1
+   },
+   {
     "format": "single",
-    "avg_eng_rate": 0.0811,
-    "n": 7
+    "avg_eng_rate": 0.0712,
+    "n": 8
    },
    {
     "format": "carousel",
-    "avg_eng_rate": 0.0695,
+    "avg_eng_rate": 0.0691,
     "n": 1
    },
    {
     "format": "reel",
-    "avg_eng_rate": 0.0496,
+    "avg_eng_rate": 0.0412,
     "n": 16
    }
   ],
@@ -36,90 +41,90 @@
    {
     "date": "2026-06-19",
     "format": "single",
-    "reach": 93,
+    "reach": 103,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.129,
+    "eng_rate": 0.1262,
     "caption": "Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements."
+   },
+   {
+    "date": "2026-06-24",
+    "format": "story",
+    "reach": 54,
+    "shares": 0,
+    "saved": null,
+    "eng_rate": 0.0926,
+    "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
    },
    {
     "date": "2026-06-20",
     "format": "reel",
-    "reach": 127,
+    "reach": 131,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.0551,
+    "eng_rate": 0.0534,
     "caption": "Beneath the surface, Costa Rica reveals a world of calm and wonder. The gentle rhythm of a sea turtle’s journey reminds "
+   },
+   {
+    "date": "2026-06-24",
+    "format": "single",
+    "reach": 228,
+    "shares": 1,
+    "saved": 0,
+    "eng_rate": 0.0351,
+    "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
    },
    {
     "date": "2026-04-04",
     "format": "single",
-    "reach": 276,
+    "reach": 277,
     "shares": 1,
     "saved": 0,
-    "eng_rate": 0.0543,
+    "eng_rate": 0.0542,
     "caption": "Most people would walk right past this… 👀🐍\n\nHidden in plain sight on the rainforest floor, this is a Hognose pit viper —"
+   },
+   {
+    "date": "2026-06-23",
+    "format": "reel",
+    "reach": 189,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0265,
+    "caption": "In the dense green of Costa Rica’s rainforests, patience reveals nature’s subtle wonders. This vine snake, almost hidden"
+   },
+   {
+    "date": "2026-06-20",
+    "format": "reel",
+    "reach": 2908,
+    "shares": 5,
+    "saved": 3,
+    "eng_rate": 0.021,
+    "caption": "A fleeting glimpse of squirrel monkeys in the wild — a reminder of Costa Rica's vibrant biodiversity. Moments like these"
    },
    {
     "date": "2025-11-27",
     "format": "reel",
-    "reach": 603,
+    "reach": 605,
     "shares": 2,
     "saved": 0,
-    "eng_rate": 0.0829,
+    "eng_rate": 0.0826,
     "caption": "Day 1 of the My Adventure Costa Rica Trail Running Tour (December 2026). Today’s route stays entirely above 3000 meters,"
-   },
-   {
-    "date": "2025-10-25",
-    "format": "reel",
-    "reach": 990,
-    "shares": 3,
-    "saved": 0,
-    "eng_rate": 0.0838,
-    "caption": "Born from the mountains and rivers of Costa Rica. Crafted from years of adventure. This is where your story begins.\n\nWel"
-   },
-   {
-    "date": "2025-10-28",
-    "format": "reel",
-    "reach": 298,
-    "shares": 3,
-    "saved": 1,
-    "eng_rate": 0.0772,
-    "caption": "It’s not just rain. It’s the sound of Costa Rica calling.\n\nAdventure in the cloud forest.\n\nDiscover the wild side of lux"
-   },
-   {
-    "date": "2025-10-22",
-    "format": "carousel",
-    "reach": 187,
-    "shares": 4,
-    "saved": 0,
-    "eng_rate": 0.0695,
-    "caption": "🌿 The wait is over — the My Adventure Costa Rica website is now live!\n\nOur first signature experience is ready: a 9-day "
-   },
-   {
-    "date": "2025-10-31",
-    "format": "reel",
-    "reach": 95,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0632,
-    "caption": "\"Life begins at the end of your confort zone\"\n Neal Donald Walsh \n\n #MyAdventureCostaRica\n#wearemyadventurecostarica #to"
    }
   ],
   "themes": [
-   "running",
    "trails",
-   "demand",
-   "endurance",
-   "resilience",
-   "focus",
-   "willingness",
-   "embrace",
-   "elements",
-   "through"
+   "quiet",
+   "moment",
+   "ride",
+   "begins",
+   "adjusting",
+   "preparing",
+   "focusing",
+   "mountain",
+   "biking"
   ],
-  "photo_queue": 216,
-  "errored_posts": 675
+  "photo_queue": 200,
+  "errored_posts": 678
  },
- "markdown": "# Monthly Social Media Performance Review\n\n## **1. Readout**\nThe data indicates that **reach** is the dominant currency for performance, with shares and saves contributing minimally (8% and 0.9% of interactions, respectively). Recent posts show that **single-image posts** are outperforming other formats in engagement rate (0.0811 vs. 0.0695 for carousels and 0.0496 for reels). However, historical data suggests that **reels have the highest potential for reach**, with the top-performing posts in the last year being reels that achieved the highest reach (e.g., 990 on 2025-10-25). The **top themes** revolve around adventure, Costa Rica’s natural beauty, and endurance-focused activities like trail running. The **photo queue is healthy** with 216 images, but the high number of errored posts (675) suggests some past issues with posting consistency or system errors.\n\n---\n\n## **2. Proposed changes**\n1. **Adjust REACH_FLOOR**:  \n   Current reach floor is likely too high given that only **24 posts are eligible** and only **19 in the past 12 months**. Propose lowering the floor to **50 reach** to increase the pool of eligible posts for analysis. This would include more recent posts and help the system learn from current trends.  \n\n2. **Revisit HALFLIFE_DAYS**:  \n   The current top-performing posts are from October 2025 and earlier, indicating that older posts are still relevant but may be over-weighted. Propose reducing the half-life to **90 days** to better prioritize recent trends while still accounting for older performance.  \n\n3. **Update captioner brief to emphasize single-image posts**:  \n   Single-image posts have the highest engagement rate (0.0811) and should be prioritized for themes like Costa Rica’s natural beauty, adventure, and trail running. Update the brief to reflect this by encouraging evocative descriptions of single images, focusing on storytelling and emotional connection.  \n\n4. **Deprioritize saves as a metric (SAVES_DEAD)**:  \n   Saves are contributing only 0.9% to the interaction mix and are not a meaningful signal. Propose increasing SAVES_DEAD to **5%** to deprioritize this metric in performance calculations.  \n\n---\n\n## **3. Experiments**\n1. **Test single-image posts with strong storytelling captions**:  \n   Post 4 single-image posts over the next 30 days, each with a focus on storytelling and vivid descriptions of Costa Rica’s natural beauty or adventure themes. Use **engagement rate** as the primary metric to evaluate success.  \n\n2. **Experiment with reels optimized for reach**:  \n   Post 3 reels over the next 30 days, focusing on visually striking content (e.g., dramatic landscapes, wildlife, or action shots of trail running). Use **reach** as the primary metric to evaluate success, as reels historically have the highest reach potential.  \n\n3. **Test call-to-action for shares**:  \n   In 2 posts (1 single image, 1 reel), include a subtle call-to-action encouraging users to share (e.g., “Share this with someone who needs a little adventure in their life”). Use **shares** as the primary metric to evaluate success.  \n\n---\n\nLet me know if you'd like to approve these changes and experiments, or if further adjustments are needed!"
+ "markdown": "# Monthly Performance Review: June 2026\n\n## Readout\n\nThe data suggests that **reach** is the live currency for measuring success, as it is the most consistently available and meaningful metric across formats. Engagement metrics (likes, comments, shares, saves) skew heavily toward likes (82% of total interactions), but shares (8%) and saves (0.8%) are more indicative of audience value. Among formats, **single posts** lead in average engagement rate (0.0712) when excluding the single-story post. **Reels**, while underperforming in engagement rate (0.0412), have the highest potential for reach, as evidenced by the top-performing post (2,908 reach). Themes around Costa Rica’s natural beauty, wildlife, and adventure resonate well, with captions emphasizing reflection, wonder, and discovery.\n\n## Proposed Changes\n\n1. **Adjust REACH_FLOOR to 200**: The current top-performing posts in the past 12 months have a reach of 200+ (e.g., 228, 277, 2,908). This threshold will better filter for meaningful performance.\n   \n2. **Increase HALFLIFE_DAYS to 90**: Reels, which dominate reach, often gain traction over a longer period. Extending the half-life will better account for their delayed performance curve.\n\n3. **Refine captioner brief to emphasize shareable insights and wonder**: The top-performing captions focus on moments of reflection, discovery, and awe (e.g., \"a fleeting glimpse of squirrel monkeys\" or \"hidden in plain sight\"). Update the brief to prioritize these tones and themes, emphasizing Costa Rica’s natural beauty and adventure.\n\n4. **Deprioritize saves (SAVES_DEAD = 0)**: Saves account for only 0.8% of interaction mix and are not significant enough to warrant optimization. Focus instead on reach and shares.\n\n## 3 Experiments\n\n1. **Test shareable hooks in captions**  \n   - **Action**: Begin captions with a one-line, shareable hook that sparks curiosity or awe (e.g., \"Most people would walk right past this… 👀🐍\").  \n   - **Metric**: Shares per post.  \n   - **Duration**: 30 days.\n\n2. **Prioritize single posts for reach and engagement**  \n   - **Action**: Post 3-4 single image posts per week, focusing on themes of reflection, preparation, and Costa Rica’s natural wonders.  \n   - **Metric**: Engagement rate (likes + comments / reach).  \n   - **Duration**: 30 days.\n\n3. **Experiment with Reels featuring wildlife and action**  \n   - **Action**: Create Reels showcasing Costa Rica’s wildlife (e.g., squirrel monkeys, snakes) and adventure activities (e.g., mountain biking), with captions that highlight fleeting moments of wonder.  \n   - **Metric**: Reach per Reel.  \n   - **Duration**: 30 days.\n\n---\n\nLet me know if you approve these changes and experiments, and I’ll implement the updates to the system."
 }
