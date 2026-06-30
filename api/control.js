@@ -61,6 +61,8 @@ module.exports = async function handler(req, res) {
     if (action === "reject") return res.json(await resolve(body.id, { status: "rejected" }));
     if (action === "approve_post") return res.json(await approvePost(body));
     if (action === "reject_post") return res.json(await rejectPost(body));
+    if (action === "approve_reel") return res.json(await approveReel(body));
+    if (action === "reject_reel") return res.json(await rejectReel(body));
     if (action === "get_settings") return res.json(await getSettings());
     if (action === "set_setting") return res.json(await setSetting(body));
     if (action === "dispatch") return res.json(await dispatch(body.workflow));
@@ -166,10 +168,12 @@ async function getPending() {
 
 // One call for the live dashboard poll: what's awaiting approval + what just went live.
 async function getStatus() {
-  const [p, published] = await Promise.all([rget("pending_post", null), rget("last_published", null)]);
+  const [p, reel, published] = await Promise.all([
+    rget("pending_post", null), rget("pending_reel", null), rget("last_published", null)]);
   return {
     ok: true,
     pending: p && !p.skip && p.status !== "approved" ? p : null,
+    pendingReel: reel && reel.status !== "approved" ? reel : null,
     published: published || null,
   };
 }
@@ -206,6 +210,39 @@ async function rejectPost({ reason }) {
   return { ok: true, status: "rejected" };
 }
 
+// --- Reel approval (staged reel lives in Upstash as "pending_reel") -----------
+async function approveReel({ caption }) {
+  const p = await rget("pending_reel", null);
+  if (!p) return { ok: false, error: "no pending reel" };
+  if (caption && String(caption).trim()) {
+    p.edited = p.caption !== String(caption).trim();
+    p.caption = String(caption).trim();
+  }
+  p.status = "approved";
+  await rset("pending_reel", p);
+  const dec = await rget("post_decisions", []);
+  dec.push({ base: p.base, pillar: p.pillar, format: "reel", decision: "approved",
+             edited: !!p.edited, ts: new Date().toISOString() });
+  await rset("post_decisions", dec.slice(-200));
+  const ok = await dispatchWf("publish.yml");
+  return { ok, status: "approved" };
+}
+
+async function rejectReel({ reason }) {
+  const p = await rget("pending_reel", null);
+  if (!p) return { ok: false, error: "no pending reel" };
+  const rc = await rget("rejected_clips", []);
+  if (p.public_id && !rc.includes(p.public_id)) rc.push(p.public_id);  // never re-pick this clip
+  await rset("rejected_clips", rc.slice(-500));
+  const dec = await rget("post_decisions", []);
+  dec.push({ base: p.base, pillar: p.pillar, format: "reel", decision: "rejected",
+             reason: reason || "", ts: new Date().toISOString() });
+  await rset("post_decisions", dec.slice(-200));
+  await redis(["DEL", "pending_reel"]);
+  await dispatchWf("reel-post.yml", { force: "true" });   // stage the next clip now
+  return { ok: true, status: "rejected" };
+}
+
 // --- Settings (auto-approve vs human review) ----------------------------------
 async function getSettings() {
   const s = (await rget("settings", {})) || {};
@@ -223,7 +260,10 @@ async function setSetting({ key, value }) {
 async function dispatch(key) {
   const wf = WORKFLOWS[key];
   if (!wf) return { ok: false, error: "unknown workflow: " + key };
-  return { ok: await dispatchWf(wf), workflow: wf };
+  // Manual dashboard runs of post/reel bypass the once-a-day cap — you can stage as
+  // many as you want by hand; the cap only governs the automatic scheduled runs.
+  const inputs = (key === "post" || key === "reel") ? { force: "true" } : undefined;
+  return { ok: await dispatchWf(wf, inputs), workflow: wf };
 }
 
 async function dispatchWf(file, inputs) {

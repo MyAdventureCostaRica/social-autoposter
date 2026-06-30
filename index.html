@@ -94,6 +94,7 @@
   .pending-card{background:var(--bone);border:1px solid var(--clay-soft);border-left:4px solid var(--clay);border-radius:14px;padding:18px 20px;margin-bottom:26px}
   .pp-imgs{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
   .pp-thumb{width:128px;height:128px;object-fit:cover;border-radius:10px;flex:none;border:1px solid var(--clay-soft)}
+  .pp-video{width:200px;max-height:356px;border-radius:10px;border:1px solid var(--clay-soft);background:#000;flex:none}
   .pp-edit{width:100%;box-sizing:border-box;margin:6px 0 10px;padding:11px 13px;border:1px solid var(--clay-soft);border-radius:10px;font:inherit;font-size:14px;line-height:1.55;background:#fff;resize:vertical;white-space:pre-wrap}
 </style>
 </head>
@@ -112,6 +113,7 @@
   <div id="controls"></div>
   <div id="published"></div>
   <div id="pending"></div>
+  <div id="pendingReel"></div>
   <div id="review-top"></div>
   <div id="inbox"></div>
   <div class="stats" id="stats"></div>
@@ -216,15 +218,18 @@ function uiConfirm(msg,okLabel){
     ov.addEventListener('click',e=>{if(e.target===ov)done(false);});
   });
 }
-function trigger(workflow,label,btn){
-  uiConfirm('Run '+label+' now?','Run it').then(ok=>{
+function trigger(workflow,label,btn,stages){
+  uiConfirm(stages?('Prepare '+label+' for your review?'):('Run '+label+' now?'),stages?'Prepare it':'Run it').then(ok=>{
     if(!ok) return;
-    const o=btn.textContent; btn.disabled=true; btn.textContent='Starting…';
+    const o=btn.textContent; btn.disabled=true; btn.textContent=stages?'Preparing…':'Starting…';
     ctrl('dispatch',{workflow}).then(r=>{
       const good=r&&r.ok;
-      btn.textContent=good?'Started ✓':'Failed';
-      uiToast(good?(label.replace(/^(the|a) /,'')+' started'):('Could not start: '+((r&&r.error)||'error')));
+      btn.textContent=good?(stages?'Preparing ✓':'Started ✓'):'Failed';
+      uiToast(good?(stages?'Preparing — it will appear above to approve in ~1 min'
+                          :(label.replace(/^(the|a) /,'')+' started'))
+                  :('Could not start: '+((r&&r.error)||'error')));
       if(good) setTimeout(loadRunStatus,4000);
+      if(good && stages) setTimeout(()=>renderLive(true),60000);
       setTimeout(()=>{btn.textContent=o; btn.disabled=false;},2800);
     });
   });
@@ -304,8 +309,8 @@ function renderControls(){
   el.innerHTML=`<div class="mc-bar"><span class="eyebrow">Mission control</span>`
     +`<span class="mc-status ${on?'on':'off'}">${on?'connected':'not connected'}</span>`
     +`<button class="mc-btn" onclick="trigger('insights','insights refresh',this)">Refresh insights</button>`
-    +`<button class="mc-btn" onclick="trigger('post','the daily post',this)">Post now</button>`
-    +`<button class="mc-btn" onclick="trigger('reel','a reel',this)">Post a reel</button>`
+    +`<button class="mc-btn" onclick="trigger('post','a post',this,true)">Prepare a post</button>`
+    +`<button class="mc-btn" onclick="trigger('reel','a reel',this,true)">Prepare a reel</button>`
     +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
     +`<button class="mc-btn" onclick="trigger('review','the monthly review',this)">Run review</button>`
     +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve</label>`
@@ -336,12 +341,54 @@ function setAutoApprove(on){
 }
 // Live poll: one call returns what's awaiting approval + what just went live.
 async function renderLive(announce){
-  const pe=document.getElementById('pending'), pubEl=document.getElementById('published');
-  if(!connected()){ if(pe)pe.innerHTML=''; if(pubEl)pubEl.innerHTML=''; return; }
+  const pe=document.getElementById('pending'), pre=document.getElementById('pendingReel'), pubEl=document.getElementById('published');
+  if(!connected()){ if(pe)pe.innerHTML=''; if(pre)pre.innerHTML=''; if(pubEl)pubEl.innerHTML=''; return; }
   let s=null; try{ const r=await ctrl('status',{}); s=r&&r.ok?r:null; }catch(e){}
   if(!s) return;
   renderPendingCard(s.pending, announce);
+  renderReelCard(s.pendingReel, announce);
   renderPublishedBanner(s.published, announce);
+}
+function renderReelCard(p, announce){
+  const el=document.getElementById('pendingReel'); if(!el) return;
+  if(!p){ el.innerHTML=''; el.dataset.ts=''; return; }
+  if(el.dataset.ts===String(p.ts||'') && el.querySelector('.pending-card')) return;
+  el.dataset.ts=String(p.ts||'');
+  const media=p.video_url
+    ?`<video class="pp-video" src="${escA(p.video_url)}" poster="${escA(p.thumb_url||'')}" controls preload="metadata"></video>`
+    :(p.thumb_url?`<img class="pp-thumb" src="${escA(p.thumb_url)}" onerror="imgFail(this,'REEL')">`:'');
+  el.innerHTML=`<div class="pending-card"><div class="ic-head">`
+    +`<span class="eyebrow">Reel awaiting your approval</span>`
+    +`<span class="chip">${esc((p.pillar||'').toString())}</span>`
+    +`<span class="chip">${esc((p.duration||'')+'s')}</span></div>`
+    +`<div class="pp-imgs">${media}</div>`
+    +`<span class="muted" style="font-size:12px">Caption — edit before approving</span>`
+    +`<textarea class="pp-edit" rows="6">${esc(p.caption||'')}</textarea>`
+    +`<div class="ic-actions">`
+    +`<button class="mc-btn send" onclick="approveReelBtn(this)">Approve &amp; post</button>`
+    +`<button class="mc-btn" onclick="rejectReelBtn(this)">Reject &amp; pick another</button>`
+    +`<span class="ic-stat muted" style="font-size:13px"></span></div></div>`;
+  if(announce){ uiToast('🎬 A reel is ready to approve'); if(!/^●/.test(document.title)) document.title='● '+document.title; }
+}
+function approveReelBtn(btn){
+  const card=btn.closest('.pending-card'); const cap=card.querySelector('.pp-edit').value;
+  const stat=card.querySelector('.ic-stat'); stat.textContent='Publishing…';
+  card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
+  ctrl('approve_reel',{caption:cap}).then(r=>{
+    if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Reel approved — publishing now'); setTimeout(()=>card.remove(),1000); }
+    else { stat.textContent='Failed: '+((r&&r.error)||'error'); card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }
+  });
+}
+function rejectReelBtn(btn){
+  uiConfirm("Reject this clip and stage another? It won't be picked again.",'Reject').then(ok=>{
+    if(!ok) return;
+    const card=btn.closest('.pending-card'); const stat=card.querySelector('.ic-stat');
+    stat.textContent='Rejecting…'; card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
+    ctrl('reject_reel',{}).then(r=>{
+      if(r&&r.ok){ stat.textContent='Rejected — staging another ✓'; uiToast('Reel rejected — staging another'); setTimeout(()=>card.remove(),1400); }
+      else { stat.textContent='Failed: '+((r&&r.error)||'error'); card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }
+    });
+  });
 }
 function renderPendingCard(p, announce){
   const el=document.getElementById('pending'); if(!el) return;
@@ -367,14 +414,22 @@ function renderPendingCard(p, announce){
 }
 function renderPublishedBanner(pub, announce){
   const el=document.getElementById('published'); if(!el) return;
-  if(!pub||!pub.ts){ el.innerHTML=''; return; }
-  let seen=null; try{seen=localStorage.getItem('lastSeenPublished');}catch(e){}
-  const isNew=pub.ts!==seen;
-  const link=pub.permalink||'https://www.instagram.com/myadventurecostarica/';
-  el.innerHTML=`<div class="rv-banner"><span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}</span>`
-    +(isNew?`<span class="new-pill">Live</span>`:``)
-    +`<a href="${escA(link)}" target="_blank" rel="noopener" onclick="try{localStorage.setItem('lastSeenPublished','${escA(pub.ts)}')}catch(e){}">View on Instagram ↗</a></div>`;
-  if(announce && isNew) uiToast('✅ Your post is live on Instagram');
+  if(!pub||!pub.ts){ el.innerHTML=''; el.dataset.ts=''; return; }
+  // Re-render the banner only when the published post actually changes (no flicker).
+  if(el.dataset.ts!==String(pub.ts)){
+    el.dataset.ts=String(pub.ts);
+    const link=pub.permalink||'https://www.instagram.com/myadventurecostarica/';
+    el.innerHTML=`<div class="rv-banner"><span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}</span>`
+      +`<span class="new-pill">Live</span>`
+      +`<a href="${escA(link)}" target="_blank" rel="noopener">View on Instagram ↗</a></div>`;
+  }
+  // Toast EXACTLY ONCE per published post — mark it announced immediately so the
+  // 30s poll never repeats it (the old code only cleared on link-click).
+  let announced=null; try{announced=localStorage.getItem('announcedPublished');}catch(e){}
+  if(announce && String(pub.ts)!==announced){
+    try{localStorage.setItem('announcedPublished',String(pub.ts));}catch(e){}
+    uiToast('✅ Your post is live on Instagram');
+  }
 }
 function approvePending(btn){
   const card=btn.closest('.pending-card');

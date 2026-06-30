@@ -15,5 +15,6 @@
   "dedupe_hash_distance": 6,
   "pillar_plan": { "KNOWLEDGE": 2, "ROUTE": 2, "FOUNDER": 2, "EXPERIENCE": 1 },
   "plan_window": 14,
-  "plan_scan": 8
+  "plan_scan": 8,
+  "reel_min_seconds": 7
 }

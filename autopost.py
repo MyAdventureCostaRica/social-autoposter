@@ -422,7 +422,7 @@ def summary(md):
 INSIGHTS = os.path.join(HERE, "metrics", "insights.json")
 POSTS_LOG = os.path.join(HERE, "metrics", "posts.json")
 REACH_FLOOR = 50            # below this, an engagement "rate" is statistical noise
-HALFLIFE_DAYS = 180        # recent performance is weighted ~2x each 6 months
+HALFLIFE_DAYS = 90         # recent performance is weighted ~2x each 3 months (June 2026 review)
 SAVES_DEAD = 0.05          # if saves are <5% of interactions, stop chasing them
 STOP = frozenset("""
 the and for with this that your you our are was has have from into out off over

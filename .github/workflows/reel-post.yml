@@ -2,9 +2,14 @@ name: Post a reel
 
 on:
   workflow_dispatch:            # run manually any time
+    inputs:
+      force:
+        description: "Stage a reel even if one already went out today (bypass the guard)"
+        type: boolean
+        default: false
   schedule:
     # Tue & Fri, off :00, with a backup attempt. A "one reel per day" guard in
-    # reel.py ensures the backup never posts a second reel.
+    # reel.py ensures the backup never stages a second reel.
     - cron: "13 18 * * 2,5"     # Tue & Fri 12:13 Costa Rica
     - cron: "43 18 * * 2,5"     # Tue & Fri 12:43 Costa Rica (backup)
 
@@ -25,8 +30,13 @@ jobs:
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          FORCE_POST: ${{ inputs.force && '1' || '' }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
+          WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
-        run: python reel.py
+        run: python reel.py stage

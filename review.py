@@ -21,7 +21,7 @@ REPO = os.environ.get("GITHUB_REPOSITORY", "")          # owner/repo
 MODEL = "openai/gpt-4o"
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 REACH_FLOOR = 50
-HALFLIFE = 180
+HALFLIFE = 90              # ~2x weight each 3 months — favor current trends (June 2026 review)
 STOP = frozenset("""
 the and for with this that your you our are was has have from into out off over
 then than back give gives gave take when what where here there will would could

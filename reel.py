@@ -54,20 +54,36 @@ def config_cloudinary():
 
 
 def next_clip():
-    """Oldest video in the Cloudinary 'reels' folder not yet tagged 'posted'.
-    Scoped to a folder ON PURPOSE so Cloudinary's stock SAMPLE videos (which live
-    outside it) can never be posted. Upload your own clips into a folder named
-    'reels' in the Cloudinary Media Library."""
+    """Oldest video in the Cloudinary 'reels' folder not yet tagged 'posted', that is
+    long enough and hasn't been rejected. Scoped to the folder ON PURPOSE so stock
+    SAMPLE videos can never post. Skips clips shorter than reel_min_seconds (super-short
+    clips were slipping through) and any clip you've rejected from the dashboard."""
     import cloudinary, cloudinary.search
+    min_s = float(ap.CFG.get("reel_min_seconds", 5))
+    rejected = set(ap.rget("rejected_clips", []) or [])
     try:
         r = (cloudinary.search.Search()
              .expression("resource_type:video AND (folder:Reels OR folder:reels) AND -tags:posted")
              .sort_by("created_at", "asc").max_results(50).execute())
-        vids = r.get("resources", [])
-        return vids[0] if vids else None
     except Exception as e:
         print("Cloudinary search error (no reel posted):", e)
         return None
+    for v in r.get("resources", []):
+        dur = float(v.get("duration") or 0)
+        if dur and dur < min_s:                       # too short for good reach — evict it
+            pid = v.get("public_id")
+            print(f"Too-short clip ({dur:.1f}s < {min_s}s) — moving out of the Reels folder:", pid)
+            try:
+                import cloudinary.uploader
+                cloudinary.uploader.rename(pid, "reels-too-short/" + pid.split("/")[-1],
+                                           resource_type="video")
+            except Exception as e:
+                print("evict skipped (left in place):", e)
+            continue
+        if v.get("public_id") in rejected:
+            print("Skipping a rejected clip:", v.get("public_id")); continue
+        return v
+    return None
 
 
 def thumb_bytes(public_id):
@@ -176,5 +192,107 @@ def main():
     print("Done.")
 
 
+def _do_publish_reel(state):
+    """Actually publish a reel (IG + FB), tag it posted, log it, announce it live."""
+    import cloudinary, cloudinary.uploader
+    config_cloudinary()
+    video_url, caption, pid = state["video_url"], state["caption"], state["public_id"]
+    print("Publishing reel…")
+    mid = publish_reel(video_url, caption)
+    print("Reel published:", mid)
+    publish_fb_reel(video_url, caption)                # cross-post to Facebook Reels
+    try:
+        cloudinary.uploader.add_tag("posted", pid, resource_type="video")
+    except Exception as e:
+        print("tag 'posted' skipped:", e)
+    base = state.get("base") or pid.split("/")[-1]
+    log_post(mid, base, {"category": state.get("category"), "pillar": state.get("pillar"),
+                         "caption_en": state.get("_caption_en", "")})
+    os.makedirs(os.path.join(HERE, "metrics"), exist_ok=True)
+    open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(time.strftime("%Y-%m-%d"))
+    perm = ""
+    try:
+        with urllib.request.urlopen(
+                f"https://graph.facebook.com/{V}/{mid}?fields=permalink&access_token={TOKEN}",
+                timeout=30) as r:
+            perm = (json.loads(r.read().decode()) or {}).get("permalink", "")
+    except Exception as e:
+        print("permalink skipped:", e)
+    ap.rset("last_published", {"base": base, "pillar": state.get("pillar"), "format": "reel",
+                               "permalink": perm, "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    ap.wa_notify(f"✅ Reel live — {(state.get('pillar') or 'reel').title()}. "
+                 + (f"View: {perm}" if perm else "Check Instagram."))
+    ap.git_setup()
+    ap.commit_push(f"Posted reel {base} [skip ci]")
+    print("Done.")
+
+
+def stage_reel():
+    """Find the next clip, caption it, and STAGE it for approval (publish now only if
+    auto-approve is on). Never posts on its own."""
+    if not TOKEN:
+        raise SystemExit("Missing META_ACCESS_TOKEN.")
+    lr = os.path.join(HERE, "metrics", "last_reel.txt")
+    today = time.strftime("%Y-%m-%d")
+    force = os.environ.get("FORCE_POST") == "1"
+    if not force and os.path.exists(lr) and open(lr).read().strip() == today:
+        print("Already staged/posted a reel today; skipping."); return
+    config_cloudinary()
+    clip = next_clip()
+    if not clip:
+        print("No eligible clips (none long enough, or all posted/rejected)."); return
+    pid = clip["public_id"]
+    dur = float(clip.get("duration") or 0)
+    note = ((clip.get("context") or {}).get("custom") or {}).get("note", "")
+    print("Clip:", pid, f"({dur:.1f}s)")
+    learn = ap.performance_brief()
+    meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn)
+    hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
+    mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
+    caption = "\n\n".join(p for p in [meta.get("caption_en", ""), meta.get("caption_es", ""),
+                                      mentions, hashtags] if p).strip()
+    import cloudinary.utils
+    thumb_url = cloudinary.utils.cloudinary_url(pid, resource_type="video", format="jpg",
+                                                start_offset="1", secure=True)[0]
+    state = {"type": "reel", "public_id": pid, "video_url": clip["secure_url"],
+             "thumb_url": thumb_url, "duration": round(dur, 1), "caption": caption,
+             "pillar": meta.get("pillar"), "category": meta.get("category"),
+             "base": pid.split("/")[-1], "status": "pending",
+             "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "_caption_en": meta.get("caption_en", "")}
+    if (ap.rget("settings", {}) or {}).get("auto_approve"):
+        print("Auto-approve ON — publishing reel now.")
+        _do_publish_reel(state)
+        ap.rdel("pending_reel")
+    else:
+        ap.rset("pending_reel", state)
+        ap.git_setup()
+        open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(today)  # don't double-stage
+        ap.commit_push("Stage reel for review [skip ci]")
+        ap.wa_notify(f"Reel ready to approve — {(meta.get('pillar') or 'reel').title()}, "
+                     f"{round(dur, 1)}s. Review & approve: {ap.DASHBOARD_URL}")
+
+
+def publish_pending_reel():
+    """Publish the reel the owner APPROVED on the dashboard (read from Upstash)."""
+    state = ap.rget("pending_reel")
+    if not state or state.get("status") != "approved":
+        print("No approved reel to publish."); return
+    _do_publish_reel(state)
+    dec = ap.rget("post_decisions", []) or []
+    dec.append({"base": state.get("base"), "pillar": state.get("pillar"), "format": "reel",
+                "decision": "approved", "edited": bool(state.get("edited")),
+                "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    ap.rset("post_decisions", dec[-200:])
+    ap.rdel("pending_reel")
+    print("Published approved reel:", state.get("base"))
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    phase = sys.argv[1] if len(sys.argv) > 1 else "stage"
+    if phase == "publish_pending_reel":
+        publish_pending_reel()
+    elif phase == "all":
+        main()                                    # legacy: find + publish immediately
+    else:
+        stage_reel()
