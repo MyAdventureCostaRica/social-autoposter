@@ -423,9 +423,12 @@ function renderPublishedBanner(pub, announce){
     el.dataset.ts=String(pub.ts);
     const link=pub.permalink||'https://www.instagram.com/myadventurecostarica/';
     // Use the saved image; if an older record lacks it, fall back to the rendered file.
-    const img=pub.image||(pub.base&&pub.format!=='reel'?`${RAW}/rendered/${pub.base}_1.jpg`:'');
+    // Prefer the thumbnail saved at publish time; then the Instagram thumbnail
+    // from posts.json (works for reels too); then the rendered file for photos.
+    const tb=(window._thumbByBase||{})[pub.base]||'';
+    const img=pub.image||tb||(pub.base&&pub.format!=='reel'?`${RAW}/rendered/${pub.base}_1.jpg`:'');
     el.innerHTML=`<div class="rv-banner">`
-      +(img?`<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-thumb" src="${escA(img)}" onerror="imgFail(this,'LIVE')"></a>`:``)
+      +(img?`<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-thumb" src="${escA(img)}" referrerpolicy="no-referrer" onerror="imgFail(this,'LIVE')"></a>`:``)
       +`<span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}</span>`
       +`<span class="new-pill">Live</span>`
       +`<a href="${escA(link)}" target="_blank" rel="noopener">View on Instagram ↗</a></div>`;
@@ -535,6 +538,9 @@ async function load(){
     j(`${RAW}/metrics/review-latest.json`)
   ]);
   renderControls();
+  // base -> Instagram thumbnail, so the "Just posted" banner can always show a
+  // preview even for records saved before the publish-time thumbnail existed.
+  window._thumbByBase={}; (Array.isArray(posts)?posts:[]).forEach(p=>{ if(p&&p.base&&p.thumb) window._thumbByBase[p.base]=p.thumb; });
   renderLive(false);
   if(!window._livePoll){ window._livePoll=setInterval(()=>{ if(connected()) renderLive(true); }, 30000); }
   let reviewObj=review;   // prefer the instant backend copy over the CDN-cached raw file
