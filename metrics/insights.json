@@ -8737,17 +8737,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 34,
+  "reach": 35,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 114,
+  "views": 118,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.2059
+  "eng_rate": 0.2
  },
  {
   "id": "18327223486251307",
@@ -8833,17 +8833,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 35,
+  "reach": 36,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 63,
+  "views": 64,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1143
+  "eng_rate": 0.1111
  },
  {
   "id": "18121139608684500",
@@ -8870,15 +8870,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 189,
+  "reach": 190,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 326,
+  "views": 328,
   "interactions": 5,
-  "eng_rate": 0.0265
+  "eng_rate": 0.0263
  },
  {
   "id": "17979482651872061",
@@ -8972,17 +8972,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 23,
+  "reach": 24,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 45,
+  "views": 46,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1739
+  "eng_rate": 0.1667
  },
  {
   "id": "17879223924671569",
@@ -9009,17 +9009,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 17,
+  "reach": 20,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 52,
+  "views": 57,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1765
+  "eng_rate": 0.15
  },
  {
   "id": "18125700085648637",
@@ -9046,17 +9046,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 14,
+  "reach": 16,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 20,
+  "views": 23,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.1429
+  "eng_rate": 0.125
  },
  {
   "id": "18098548367520614",
@@ -9094,14 +9094,14 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 53,
-  "likes": 5,
+  "reach": 142,
+  "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 5,
-  "views": 88,
-  "interactions": 5,
-  "eng_rate": 0.0943
+  "total_interactions": 6,
+  "views": 206,
+  "interactions": 6,
+  "eng_rate": 0.0423
  }
 ]
