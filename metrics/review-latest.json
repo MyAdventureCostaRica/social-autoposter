@@ -1,18 +1,18 @@
 {
  "stats": {
-  "generated": "2026-06-30",
+  "generated": "2026-07-01",
   "total_posts": 773,
   "with_insights": 95,
-  "eligible": 26,
-  "eligible_recent_12mo": 21,
+  "eligible": 27,
+  "eligible_recent_12mo": 22,
   "date_range": [
    "2017-07-23",
    "2026-06-30"
   ],
   "interaction_mix_pct": {
    "saved": 0.008,
-   "shares": 0.08,
-   "likes": 0.82,
+   "shares": 0.079,
+   "likes": 0.822,
    "comments": 0.04
   },
   "format_leaderboard": [
@@ -33,8 +33,8 @@
    },
    {
     "format": "reel",
-    "avg_eng_rate": 0.0412,
-    "n": 16
+    "avg_eng_rate": 0.0507,
+    "n": 17
    }
   ],
   "top_posts": [
@@ -46,6 +46,15 @@
     "saved": 0,
     "eng_rate": 0.1262,
     "caption": "Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements."
+   },
+   {
+    "date": "2026-06-30",
+    "format": "reel",
+    "reach": 53,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0943,
+    "caption": "In the embrace of nature, the trail winds its way through mist-laden greenery. This is the kind of run that clears the m"
    },
    {
     "date": "2026-06-24",
@@ -100,31 +109,22 @@
     "saved": 3,
     "eng_rate": 0.021,
     "caption": "A fleeting glimpse of squirrel monkeys in the wild — a reminder of Costa Rica's vibrant biodiversity. Moments like these"
-   },
-   {
-    "date": "2025-11-27",
-    "format": "reel",
-    "reach": 605,
-    "shares": 2,
-    "saved": 0,
-    "eng_rate": 0.0826,
-    "caption": "Day 1 of the My Adventure Costa Rica Trail Running Tour (December 2026). Today’s route stays entirely above 3000 meters,"
    }
   ],
   "themes": [
    "trails",
+   "embrace",
+   "through",
    "quiet",
    "moment",
    "ride",
    "begins",
    "adjusting",
    "preparing",
-   "focusing",
-   "mountain",
-   "biking"
+   "focusing"
   ],
   "photo_queue": 200,
   "errored_posts": 678
  },
- "markdown": "# Monthly Performance Review: June 2026\n\n## Readout\n\nThe data suggests that **reach** is the live currency for measuring success, as it is the most consistently available and meaningful metric across formats. Engagement metrics (likes, comments, shares, saves) skew heavily toward likes (82% of total interactions), but shares (8%) and saves (0.8%) are more indicative of audience value. Among formats, **single posts** lead in average engagement rate (0.0712) when excluding the single-story post. **Reels**, while underperforming in engagement rate (0.0412), have the highest potential for reach, as evidenced by the top-performing post (2,908 reach). Themes around Costa Rica’s natural beauty, wildlife, and adventure resonate well, with captions emphasizing reflection, wonder, and discovery.\n\n## Proposed Changes\n\n1. **Adjust REACH_FLOOR to 200**: The current top-performing posts in the past 12 months have a reach of 200+ (e.g., 228, 277, 2,908). This threshold will better filter for meaningful performance.\n   \n2. **Increase HALFLIFE_DAYS to 90**: Reels, which dominate reach, often gain traction over a longer period. Extending the half-life will better account for their delayed performance curve.\n\n3. **Refine captioner brief to emphasize shareable insights and wonder**: The top-performing captions focus on moments of reflection, discovery, and awe (e.g., \"a fleeting glimpse of squirrel monkeys\" or \"hidden in plain sight\"). Update the brief to prioritize these tones and themes, emphasizing Costa Rica’s natural beauty and adventure.\n\n4. **Deprioritize saves (SAVES_DEAD = 0)**: Saves account for only 0.8% of interaction mix and are not significant enough to warrant optimization. Focus instead on reach and shares.\n\n## 3 Experiments\n\n1. **Test shareable hooks in captions**  \n   - **Action**: Begin captions with a one-line, shareable hook that sparks curiosity or awe (e.g., \"Most people would walk right past this… 👀🐍\").  \n   - **Metric**: Shares per post.  \n   - **Duration**: 30 days.\n\n2. **Prioritize single posts for reach and engagement**  \n   - **Action**: Post 3-4 single image posts per week, focusing on themes of reflection, preparation, and Costa Rica’s natural wonders.  \n   - **Metric**: Engagement rate (likes + comments / reach).  \n   - **Duration**: 30 days.\n\n3. **Experiment with Reels featuring wildlife and action**  \n   - **Action**: Create Reels showcasing Costa Rica’s wildlife (e.g., squirrel monkeys, snakes) and adventure activities (e.g., mountain biking), with captions that highlight fleeting moments of wonder.  \n   - **Metric**: Reach per Reel.  \n   - **Duration**: 30 days.\n\n---\n\nLet me know if you approve these changes and experiments, and I’ll implement the updates to the system."
+ "markdown": "# Monthly Social Media Review: July 2026\n\n## **1. Readout**\n\nThe data shows that **reach** is the dominant metric for performance, with shares and saves contributing minimally to engagement (7.9% and 0.8% respectively). Among formats, **single posts** lead in engagement rate (7.12%), followed closely by **carousels** (6.91%). **Reels**, while showing lower engagement rates (5.07%), still dominate in absolute reach, with one reel achieving 2,908 views — far exceeding the next highest reach of 277 for a single post. The top-performing content focuses on **nature, trails, and quiet moments of preparation**, aligning with the brand's adventure and Costa Rica themes. However, the data pool remains limited, with only 27 eligible posts and 22 from the past 12 months.\n\n---\n\n## **2. Proposed Changes**\n\n1. **Adjust REACH_FLOOR**:  \n   - Current: Not specified in the data provided.  \n   - Proposed: Set REACH_FLOOR to **100**.  \n   - **Why**: The median reach of recent eligible posts is 103. Setting the floor at 100 ensures we focus on posts that perform above average for meaningful insights.\n\n2. **Update HALFLIFE_DAYS**:  \n   - Current: Not specified in the data provided.  \n   - Proposed: Set HALFLIFE_DAYS to **30 days**.  \n   - **Why**: Recent performance (last 12 months) is more indicative of current trends. Older data (pre-2025) is less relevant given platform algorithm changes.\n\n3. **Refine Captioner Brief**:  \n   - Current: Not provided in detail.  \n   - Proposed: Emphasize themes of **nature, trails, and quiet preparation moments**. Encourage captions that evoke emotion, focus on resilience, and highlight Costa Rica's unique biodiversity.  \n   - **Why**: Recent top-performing posts resonate with these themes, as seen in captions like \"Some trails demand more than just endurance…\" and \"A fleeting glimpse of squirrel monkeys in the wild…\".\n\n4. **Reassess SAVES_DEAD**:  \n   - Current: Not specified in the data provided.  \n   - Proposed: Set SAVES_DEAD to **5 saves per post**.  \n   - **Why**: Saves are currently negligible (0.8% of interactions). Setting a low threshold will help identify any future growth in this metric without overemphasizing it.\n\n---\n\n## **3. 30-Day Experiments**\n\n1. **Test single post frequency**:  \n   - **What**: Increase the frequency of single posts to 2-3 per week, focusing on themes like trails, quiet moments, and preparation.  \n   - **Why**: Single posts have the highest engagement rate (7.12%) and align with top-performing content.  \n   - **Metric**: Compare average reach and engagement rate of single posts to other formats over the next 30 days.\n\n2. **Experiment with reels featuring wildlife**:  \n   - **What**: Post 1-2 reels per week showcasing Costa Rica's unique wildlife, with a focus on fleeting, awe-inspiring moments (e.g., squirrel monkeys, sea turtles).  \n   - **Why**: Reels achieve the highest reach, and the top-performing reel featured wildlife (2,908 reach, 5 shares, 3 saves).  \n   - **Metric**: Measure reach and shares on wildlife-focused reels.\n\n3. **Test carousel storytelling**:  \n   - **What**: Post 1 carousel per week that tells a story about a trail or adventure in Costa Rica, incorporating a mix of stunning visuals and engaging captions.  \n   - **Why**: Carousels have the second-highest engagement rate (6.91%) and allow for more in-depth storytelling, which aligns with the brand's luxury-editorial voice.  \n   - **Metric**: Compare engagement rate and reach of carousels to other formats.\n\n---\n\nLet me know if you'd like to proceed with these changes and experiments, or if you'd like further analysis!"
 }
