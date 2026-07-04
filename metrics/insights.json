@@ -9111,17 +9111,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 30,
+  "reach": 31,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 71,
+  "views": 73,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.2
+  "eng_rate": 0.1935
  },
  {
   "id": "17960171796136626",
@@ -9185,14 +9185,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 120,
+  "reach": 121,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 164,
+  "views": 171,
   "interactions": 3,
-  "eng_rate": 0.025
+  "eng_rate": 0.0248
  }
 ]
