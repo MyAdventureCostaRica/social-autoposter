@@ -7109,5 +7109,25 @@
   "category": "CYCLING",
   "pillar": "ROUTE",
   "caption": "The trail winds upward, and the world below fades into mist. This is mountain biking in Costa Rica: a journey through lu"
+ },
+ {
+  "id": "18110919890512288",
+  "date": "2026-07-11",
+  "ts": "2026-07-11T15:33:01",
+  "base": "IMG_0498",
+  "format": "single",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "Every finish line comes with its own story \u2014 the climbs, the descents, the moments you wanted to stop but didn\u2019t. This i"
+ },
+ {
+  "id": "18117902905867742",
+  "date": "2026-07-11",
+  "ts": "2026-07-11T15:33:01",
+  "base": "IMG_0498-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "Every finish line comes with its own story \u2014 the climbs, the descents, the moments you wanted to stop but didn\u2019t. This i"
  }
 ]
