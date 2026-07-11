@@ -9237,7 +9237,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 15,
-  "views": 269,
+  "views": 270,
   "interactions": 15,
   "eng_rate": 0.0789
  },
@@ -9285,15 +9285,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 98,
-  "likes": 5,
+  "reach": 131,
+  "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 5,
-  "views": 133,
-  "interactions": 5,
-  "eng_rate": 0.051
+  "total_interactions": 8,
+  "views": 172,
+  "interactions": 8,
+  "eng_rate": 0.0611
  },
  {
   "id": "18110919890512288",
@@ -9302,17 +9302,17 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 5,
-  "likes": 1,
+  "reach": 14,
+  "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 1,
-  "views": 12,
+  "total_interactions": 3,
+  "views": 28,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 1,
-  "eng_rate": 0.2
+  "interactions": 3,
+  "eng_rate": 0.2143
  },
  {
   "id": "18117902905867742",
@@ -9321,8 +9321,15 @@
   "format": "story",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "error": "(#10) Not enough viewers for the media to show insights",
-  "interactions": 0,
-  "eng_rate": null
+  "reach": 36,
+  "replies": 1,
+  "shares": 0,
+  "total_interactions": 6,
+  "views": 48,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 35,
+  "interactions": 6,
+  "eng_rate": 0.1667
  }
 ]
