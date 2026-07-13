@@ -1,18 +1,18 @@
 {
  "stats": {
-  "generated": "2026-07-01",
-  "total_posts": 773,
-  "with_insights": 95,
-  "eligible": 27,
-  "eligible_recent_12mo": 22,
+  "generated": "2026-07-13",
+  "total_posts": 790,
+  "with_insights": 110,
+  "eligible": 30,
+  "eligible_recent_12mo": 25,
   "date_range": [
    "2017-07-23",
-   "2026-06-30"
+   "2026-07-13"
   ],
   "interaction_mix_pct": {
    "saved": 0.008,
-   "shares": 0.079,
-   "likes": 0.822,
+   "shares": 0.073,
+   "likes": 0.832,
    "comments": 0.04
   },
   "format_leaderboard": [
@@ -23,7 +23,7 @@
    },
    {
     "format": "single",
-    "avg_eng_rate": 0.0712,
+    "avg_eng_rate": 0.0769,
     "n": 8
    },
    {
@@ -33,28 +33,19 @@
    },
    {
     "format": "reel",
-    "avg_eng_rate": 0.0507,
-    "n": 17
+    "avg_eng_rate": 0.048,
+    "n": 20
    }
   ],
   "top_posts": [
    {
     "date": "2026-06-19",
     "format": "single",
-    "reach": 103,
+    "reach": 104,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.1262,
+    "eng_rate": 0.1346,
     "caption": "Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements."
-   },
-   {
-    "date": "2026-06-30",
-    "format": "reel",
-    "reach": 53,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0943,
-    "caption": "In the embrace of nature, the trail winds its way through mist-laden greenery. This is the kind of run that clears the m"
    },
    {
     "date": "2026-06-24",
@@ -64,6 +55,33 @@
     "saved": null,
     "eng_rate": 0.0926,
     "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
+   },
+   {
+    "date": "2026-07-08",
+    "format": "reel",
+    "reach": 195,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0718,
+    "caption": "A pause by the river, where the ride slows and the landscape takes over. Mountain biking here is as much about the quiet"
+   },
+   {
+    "date": "2026-06-30",
+    "format": "reel",
+    "reach": 166,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0602,
+    "caption": "In the embrace of nature, the trail winds its way through mist-laden greenery. This is the kind of run that clears the m"
+   },
+   {
+    "date": "2026-07-11",
+    "format": "reel",
+    "reach": 175,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0514,
+    "caption": "The trail winds upward, and the world below fades into mist. This is mountain biking in Costa Rica: a journey through lu"
    },
    {
     "date": "2026-06-20",
@@ -77,54 +95,36 @@
    {
     "date": "2026-06-24",
     "format": "single",
-    "reach": 228,
+    "reach": 231,
     "shares": 1,
     "saved": 0,
-    "eng_rate": 0.0351,
+    "eng_rate": 0.0433,
     "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
    },
    {
-    "date": "2026-04-04",
-    "format": "single",
-    "reach": 277,
-    "shares": 1,
-    "saved": 0,
-    "eng_rate": 0.0542,
-    "caption": "Most people would walk right past this… 👀🐍\n\nHidden in plain sight on the rainforest floor, this is a Hognose pit viper —"
-   },
-   {
-    "date": "2026-06-23",
+    "date": "2026-07-04",
     "format": "reel",
-    "reach": 189,
+    "reach": 232,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.0265,
-    "caption": "In the dense green of Costa Rica’s rainforests, patience reveals nature’s subtle wonders. This vine snake, almost hidden"
-   },
-   {
-    "date": "2026-06-20",
-    "format": "reel",
-    "reach": 2908,
-    "shares": 5,
-    "saved": 3,
-    "eng_rate": 0.021,
-    "caption": "A fleeting glimpse of squirrel monkeys in the wild — a reminder of Costa Rica's vibrant biodiversity. Moments like these"
+    "eng_rate": 0.0388,
+    "caption": "#myadventurecostarica #costarica"
    }
   ],
   "themes": [
+   "mountain",
+   "biking",
    "trails",
-   "embrace",
    "through",
    "quiet",
-   "moment",
    "ride",
+   "embrace",
+   "moment",
    "begins",
-   "adjusting",
-   "preparing",
-   "focusing"
+   "adjusting"
   ],
-  "photo_queue": 200,
-  "errored_posts": 678
+  "photo_queue": 182,
+  "errored_posts": 680
  },
- "markdown": "# Monthly Social Media Review: July 2026\n\n## **1. Readout**\n\nThe data shows that **reach** is the dominant metric for performance, with shares and saves contributing minimally to engagement (7.9% and 0.8% respectively). Among formats, **single posts** lead in engagement rate (7.12%), followed closely by **carousels** (6.91%). **Reels**, while showing lower engagement rates (5.07%), still dominate in absolute reach, with one reel achieving 2,908 views — far exceeding the next highest reach of 277 for a single post. The top-performing content focuses on **nature, trails, and quiet moments of preparation**, aligning with the brand's adventure and Costa Rica themes. However, the data pool remains limited, with only 27 eligible posts and 22 from the past 12 months.\n\n---\n\n## **2. Proposed Changes**\n\n1. **Adjust REACH_FLOOR**:  \n   - Current: Not specified in the data provided.  \n   - Proposed: Set REACH_FLOOR to **100**.  \n   - **Why**: The median reach of recent eligible posts is 103. Setting the floor at 100 ensures we focus on posts that perform above average for meaningful insights.\n\n2. **Update HALFLIFE_DAYS**:  \n   - Current: Not specified in the data provided.  \n   - Proposed: Set HALFLIFE_DAYS to **30 days**.  \n   - **Why**: Recent performance (last 12 months) is more indicative of current trends. Older data (pre-2025) is less relevant given platform algorithm changes.\n\n3. **Refine Captioner Brief**:  \n   - Current: Not provided in detail.  \n   - Proposed: Emphasize themes of **nature, trails, and quiet preparation moments**. Encourage captions that evoke emotion, focus on resilience, and highlight Costa Rica's unique biodiversity.  \n   - **Why**: Recent top-performing posts resonate with these themes, as seen in captions like \"Some trails demand more than just endurance…\" and \"A fleeting glimpse of squirrel monkeys in the wild…\".\n\n4. **Reassess SAVES_DEAD**:  \n   - Current: Not specified in the data provided.  \n   - Proposed: Set SAVES_DEAD to **5 saves per post**.  \n   - **Why**: Saves are currently negligible (0.8% of interactions). Setting a low threshold will help identify any future growth in this metric without overemphasizing it.\n\n---\n\n## **3. 30-Day Experiments**\n\n1. **Test single post frequency**:  \n   - **What**: Increase the frequency of single posts to 2-3 per week, focusing on themes like trails, quiet moments, and preparation.  \n   - **Why**: Single posts have the highest engagement rate (7.12%) and align with top-performing content.  \n   - **Metric**: Compare average reach and engagement rate of single posts to other formats over the next 30 days.\n\n2. **Experiment with reels featuring wildlife**:  \n   - **What**: Post 1-2 reels per week showcasing Costa Rica's unique wildlife, with a focus on fleeting, awe-inspiring moments (e.g., squirrel monkeys, sea turtles).  \n   - **Why**: Reels achieve the highest reach, and the top-performing reel featured wildlife (2,908 reach, 5 shares, 3 saves).  \n   - **Metric**: Measure reach and shares on wildlife-focused reels.\n\n3. **Test carousel storytelling**:  \n   - **What**: Post 1 carousel per week that tells a story about a trail or adventure in Costa Rica, incorporating a mix of stunning visuals and engaging captions.  \n   - **Why**: Carousels have the second-highest engagement rate (6.91%) and allow for more in-depth storytelling, which aligns with the brand's luxury-editorial voice.  \n   - **Metric**: Compare engagement rate and reach of carousels to other formats.\n\n---\n\nLet me know if you'd like to proceed with these changes and experiments, or if you'd like further analysis!"
+ "markdown": "# Performance Review\n\n## **Readout**\n\nBy today's standards, **reach** is the clearest live currency, as shares and saves remain negligible (7.3% and 0.8% of interactions, respectively). Recent data highlights a strong performance from **single-image posts**, which lead in engagement rate (0.0769) compared to reels (0.048). However, reels dominate in volume (20 out of 30 eligible posts) and consistently achieve higher reach (e.g., 232 vs. 104 for top single posts). Themes like **mountain biking, trails, and quiet moments in nature** resonate most, with captions emphasizing reflection and connection to the environment. The photo queue is healthy (182), but a significant number of posts (680) lack insights, limiting the dataset.\n\n---\n\n## **Proposed changes**\n\n1. **Adjust REACH_FLOOR to 100 (from 50).**  \n   Justification: The lowest-performing posts in the top set (reels with ~130 reach) already exceed the current floor. Raising this threshold will better filter for meaningful insights while still including the majority of eligible posts (25/30 in the past year).\n\n2. **Increase HALFLIFE_DAYS to 60 (from 30).**  \n   Justification: Reels dominate recent posts, and their performance often grows over time. Extending the halflife will allow the learner to better account for this delayed engagement pattern.\n\n3. **Refine caption brief to emphasize reflection and connection.**  \n   Justification: The top-performing captions (e.g., \"Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements\") focus on introspective, evocative themes. Update the brief to explicitly encourage this tone, while still maintaining variety.\n\n4. **Add a STOP list for overly generic hashtags.**  \n   Justification: Posts with hashtags like `#myadventurecostarica` and `#costarica` underperform (e.g., 0.0388 engagement rate). These should be deprioritized in favor of more specific, niche hashtags tied to adventure, mountain biking, or Costa Rica’s unique landscapes.\n\n---\n\n## **3 experiments**\n\n1. **Test single-image posts with reflective captions.**  \n   - **What:** Post 4 single-image posts in the next 30 days, focusing on the themes of mountain biking, trails, and quiet moments in nature. Use captions that evoke resilience, connection to nature, and introspection.  \n   - **Metric:** Engagement rate (likes + comments / reach).  \n\n2. **Experiment with reels featuring dynamic action shots.**  \n   - **What:** Post 6 reels showcasing action-packed moments (e.g., biking descents, river crossings) with a one-line opening hook in the caption to grab attention.  \n   - **Metric:** Reach per reel.  \n\n3. **Hashtag specificity test.**  \n   - **What:** For all posts, replace broad hashtags like `#costarica` with niche ones tied to the activity or location (e.g., `#mountainbikingcostarica`, `#puravidatrails`).  \n   - **Metric:** Reach and engagement rate compared to past posts using generic hashtags.  \n\n---\n\nLet me know which changes and experiments you'd like to proceed with, and I’ll implement them!"
 }

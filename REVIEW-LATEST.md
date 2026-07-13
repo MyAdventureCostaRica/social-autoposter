@@ -1,54 +1,43 @@
-# Latest review — 2026-07-01
+# Latest review — 2026-07-13
 
-# Monthly Social Media Review: July 2026
+# Performance Review
 
-## **1. Readout**
+## **Readout**
 
-The data shows that **reach** is the dominant metric for performance, with shares and saves contributing minimally to engagement (7.9% and 0.8% respectively). Among formats, **single posts** lead in engagement rate (7.12%), followed closely by **carousels** (6.91%). **Reels**, while showing lower engagement rates (5.07%), still dominate in absolute reach, with one reel achieving 2,908 views — far exceeding the next highest reach of 277 for a single post. The top-performing content focuses on **nature, trails, and quiet moments of preparation**, aligning with the brand's adventure and Costa Rica themes. However, the data pool remains limited, with only 27 eligible posts and 22 from the past 12 months.
-
----
-
-## **2. Proposed Changes**
-
-1. **Adjust REACH_FLOOR**:  
-   - Current: Not specified in the data provided.  
-   - Proposed: Set REACH_FLOOR to **100**.  
-   - **Why**: The median reach of recent eligible posts is 103. Setting the floor at 100 ensures we focus on posts that perform above average for meaningful insights.
-
-2. **Update HALFLIFE_DAYS**:  
-   - Current: Not specified in the data provided.  
-   - Proposed: Set HALFLIFE_DAYS to **30 days**.  
-   - **Why**: Recent performance (last 12 months) is more indicative of current trends. Older data (pre-2025) is less relevant given platform algorithm changes.
-
-3. **Refine Captioner Brief**:  
-   - Current: Not provided in detail.  
-   - Proposed: Emphasize themes of **nature, trails, and quiet preparation moments**. Encourage captions that evoke emotion, focus on resilience, and highlight Costa Rica's unique biodiversity.  
-   - **Why**: Recent top-performing posts resonate with these themes, as seen in captions like "Some trails demand more than just endurance…" and "A fleeting glimpse of squirrel monkeys in the wild…".
-
-4. **Reassess SAVES_DEAD**:  
-   - Current: Not specified in the data provided.  
-   - Proposed: Set SAVES_DEAD to **5 saves per post**.  
-   - **Why**: Saves are currently negligible (0.8% of interactions). Setting a low threshold will help identify any future growth in this metric without overemphasizing it.
+By today's standards, **reach** is the clearest live currency, as shares and saves remain negligible (7.3% and 0.8% of interactions, respectively). Recent data highlights a strong performance from **single-image posts**, which lead in engagement rate (0.0769) compared to reels (0.048). However, reels dominate in volume (20 out of 30 eligible posts) and consistently achieve higher reach (e.g., 232 vs. 104 for top single posts). Themes like **mountain biking, trails, and quiet moments in nature** resonate most, with captions emphasizing reflection and connection to the environment. The photo queue is healthy (182), but a significant number of posts (680) lack insights, limiting the dataset.
 
 ---
 
-## **3. 30-Day Experiments**
+## **Proposed changes**
 
-1. **Test single post frequency**:  
-   - **What**: Increase the frequency of single posts to 2-3 per week, focusing on themes like trails, quiet moments, and preparation.  
-   - **Why**: Single posts have the highest engagement rate (7.12%) and align with top-performing content.  
-   - **Metric**: Compare average reach and engagement rate of single posts to other formats over the next 30 days.
+1. **Adjust REACH_FLOOR to 100 (from 50).**  
+   Justification: The lowest-performing posts in the top set (reels with ~130 reach) already exceed the current floor. Raising this threshold will better filter for meaningful insights while still including the majority of eligible posts (25/30 in the past year).
 
-2. **Experiment with reels featuring wildlife**:  
-   - **What**: Post 1-2 reels per week showcasing Costa Rica's unique wildlife, with a focus on fleeting, awe-inspiring moments (e.g., squirrel monkeys, sea turtles).  
-   - **Why**: Reels achieve the highest reach, and the top-performing reel featured wildlife (2,908 reach, 5 shares, 3 saves).  
-   - **Metric**: Measure reach and shares on wildlife-focused reels.
+2. **Increase HALFLIFE_DAYS to 60 (from 30).**  
+   Justification: Reels dominate recent posts, and their performance often grows over time. Extending the halflife will allow the learner to better account for this delayed engagement pattern.
 
-3. **Test carousel storytelling**:  
-   - **What**: Post 1 carousel per week that tells a story about a trail or adventure in Costa Rica, incorporating a mix of stunning visuals and engaging captions.  
-   - **Why**: Carousels have the second-highest engagement rate (6.91%) and allow for more in-depth storytelling, which aligns with the brand's luxury-editorial voice.  
-   - **Metric**: Compare engagement rate and reach of carousels to other formats.
+3. **Refine caption brief to emphasize reflection and connection.**  
+   Justification: The top-performing captions (e.g., "Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements") focus on introspective, evocative themes. Update the brief to explicitly encourage this tone, while still maintaining variety.
+
+4. **Add a STOP list for overly generic hashtags.**  
+   Justification: Posts with hashtags like `#myadventurecostarica` and `#costarica` underperform (e.g., 0.0388 engagement rate). These should be deprioritized in favor of more specific, niche hashtags tied to adventure, mountain biking, or Costa Rica’s unique landscapes.
 
 ---
 
-Let me know if you'd like to proceed with these changes and experiments, or if you'd like further analysis!
+## **3 experiments**
+
+1. **Test single-image posts with reflective captions.**  
+   - **What:** Post 4 single-image posts in the next 30 days, focusing on the themes of mountain biking, trails, and quiet moments in nature. Use captions that evoke resilience, connection to nature, and introspection.  
+   - **Metric:** Engagement rate (likes + comments / reach).  
+
+2. **Experiment with reels featuring dynamic action shots.**  
+   - **What:** Post 6 reels showcasing action-packed moments (e.g., biking descents, river crossings) with a one-line opening hook in the caption to grab attention.  
+   - **Metric:** Reach per reel.  
+
+3. **Hashtag specificity test.**  
+   - **What:** For all posts, replace broad hashtags like `#costarica` with niche ones tied to the activity or location (e.g., `#mountainbikingcostarica`, `#puravidatrails`).  
+   - **Metric:** Reach and engagement rate compared to past posts using generic hashtags.  
+
+---
+
+Let me know which changes and experiments you'd like to proceed with, and I’ll implement them!
