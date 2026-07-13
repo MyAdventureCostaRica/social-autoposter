@@ -9231,15 +9231,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 194,
+  "reach": 195,
   "likes": 12,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 14,
-  "views": 277,
+  "views": 278,
   "interactions": 14,
-  "eng_rate": 0.0722
+  "eng_rate": 0.0718
  },
  {
   "id": "18198541663323399",
@@ -9382,8 +9382,8 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 0,
-  "profile_visits": 0,
+  "views": 4,
+  "profile_visits": 1,
   "follows": 0,
   "interactions": 2,
   "eng_rate": null
