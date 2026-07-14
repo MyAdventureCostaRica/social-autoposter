@@ -8462,7 +8462,7 @@
   "saved": 0,
   "shares": 1,
   "total_interactions": 13,
-  "views": 719,
+  "views": 724,
   "interactions": 13,
   "eng_rate": 0.0287
  },
@@ -9177,15 +9177,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 232,
+  "reach": 233,
   "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 9,
-  "views": 335,
+  "views": 337,
   "interactions": 9,
-  "eng_rate": 0.0388
+  "eng_rate": 0.0386
  },
  {
   "id": "18455575093114638",
@@ -9194,17 +9194,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 25,
+  "reach": 26,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 40,
+  "views": 41,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.12
+  "eng_rate": 0.1154
  },
  {
   "id": "18107212931055646",
@@ -9231,15 +9231,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 196,
+  "reach": 198,
   "likes": 12,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 14,
-  "views": 280,
+  "views": 286,
   "interactions": 14,
-  "eng_rate": 0.0714
+  "eng_rate": 0.0707
  },
  {
   "id": "18198541663323399",
@@ -9248,17 +9248,17 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 27,
+  "reach": 28,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 55,
+  "views": 56,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1111
+  "eng_rate": 0.1071
  },
  {
   "id": "18088729259430979",
@@ -9285,15 +9285,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 175,
+  "reach": 176,
   "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 9,
-  "views": 237,
+  "views": 239,
   "interactions": 9,
-  "eng_rate": 0.0514
+  "eng_rate": 0.0511
  },
  {
   "id": "18110919890512288",
@@ -9339,17 +9339,17 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 16,
-  "likes": 2,
+  "reach": 19,
+  "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 2,
-  "views": 30,
+  "total_interactions": 3,
+  "views": 38,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 2,
-  "eng_rate": 0.125
+  "interactions": 3,
+  "eng_rate": 0.1579
  },
  {
   "id": "18343708477217020",
@@ -9376,17 +9376,17 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 10,
+  "reach": 16,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 20,
+  "views": 27,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.2
+  "eng_rate": 0.125
  },
  {
   "id": "18123052879741071",
