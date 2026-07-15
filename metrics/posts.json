@@ -7174,5 +7174,25 @@
   "category": "RUNNING",
   "pillar": "FOUNDER",
   "caption": "Somewhere between the rocks and the rushing water, the trail becomes an unrelenting teacher. Every step is earned, every"
+ },
+ {
+  "id": "18109193297058037",
+  "date": "2026-07-15",
+  "ts": "2026-07-15T03:05:53",
+  "base": "IMG_1437",
+  "format": "carousel",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "A still moment beneath the towering volcano, where the clouds linger and the earth feels alive. This is Costa Rica, wher"
+ },
+ {
+  "id": "17866936494633384",
+  "date": "2026-07-15",
+  "ts": "2026-07-15T03:05:53",
+  "base": "IMG_1437-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "A still moment beneath the towering volcano, where the clouds linger and the earth feels alive. This is Costa Rica, wher"
  }
 ]
