@@ -9504,17 +9504,17 @@
   "format": "carousel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 10,
+  "reach": 11,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 39,
+  "views": 40,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.3
+  "eng_rate": 0.2727
  },
  {
   "id": "17908557414442294",
@@ -9541,14 +9541,14 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 15,
-  "likes": 1,
+  "reach": 28,
+  "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 1,
-  "views": 28,
-  "interactions": 1,
-  "eng_rate": 0.0667
+  "total_interactions": 2,
+  "views": 58,
+  "interactions": 2,
+  "eng_rate": 0.0714
  }
 ]
