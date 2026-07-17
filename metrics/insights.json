@@ -9413,17 +9413,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 31,
+  "reach": 32,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 95,
+  "views": 96,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.129
+  "eng_rate": 0.125
  },
  {
   "id": "17866936494633384",
@@ -9450,7 +9450,7 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 248,
+  "reach": 249,
   "likes": 11,
   "comments": 0,
   "saved": 0,
@@ -9458,7 +9458,7 @@
   "total_interactions": 12,
   "views": 342,
   "interactions": 12,
-  "eng_rate": 0.0484
+  "eng_rate": 0.0482
  },
  {
   "id": "18426420415134715",
@@ -9467,13 +9467,13 @@
   "format": "single",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 18,
+  "reach": 20,
   "likes": 0,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 0,
-  "views": 34,
+  "views": 38,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 0,
@@ -9504,17 +9504,17 @@
   "format": "carousel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 7,
-  "likes": 0,
+  "reach": 10,
+  "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 0,
-  "views": 25,
+  "total_interactions": 3,
+  "views": 39,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 0,
-  "eng_rate": 0.0
+  "interactions": 3,
+  "eng_rate": 0.3
  },
  {
   "id": "17908557414442294",
@@ -9533,5 +9533,22 @@
   "navigation": 7,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "17884801494611054",
+  "date": "2026-07-17",
+  "base": "IMG_0953_r9rhkq",
+  "format": "reel",
+  "category": "RUNNING",
+  "pillar": "EXPERIENCE",
+  "reach": 15,
+  "likes": 1,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 1,
+  "views": 28,
+  "interactions": 1,
+  "eng_rate": 0.0667
  }
 ]
