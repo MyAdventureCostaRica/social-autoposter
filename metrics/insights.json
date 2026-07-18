@@ -8560,7 +8560,7 @@
   "saved": 0,
   "shares": 2,
   "total_interactions": 52,
-  "views": 1083,
+  "views": 1084,
   "interactions": 52,
   "eng_rate": 0.0851
  },
@@ -9194,17 +9194,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 28,
+  "reach": 29,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 46,
+  "views": 47,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1071
+  "eng_rate": 0.1034
  },
  {
   "id": "18107212931055646",
@@ -9231,15 +9231,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 204,
+  "reach": 205,
   "likes": 13,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 15,
-  "views": 301,
+  "views": 302,
   "interactions": 15,
-  "eng_rate": 0.0735
+  "eng_rate": 0.0732
  },
  {
   "id": "18198541663323399",
@@ -9285,7 +9285,7 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 182,
+  "reach": 183,
   "likes": 9,
   "comments": 0,
   "saved": 0,
@@ -9293,7 +9293,7 @@
   "total_interactions": 9,
   "views": 253,
   "interactions": 9,
-  "eng_rate": 0.0495
+  "eng_rate": 0.0492
  },
  {
   "id": "18110919890512288",
@@ -9376,17 +9376,17 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 24,
+  "reach": 27,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 38,
+  "views": 42,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.0833
+  "eng_rate": 0.0741
  },
  {
   "id": "18123052879741071",
@@ -9413,17 +9413,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 32,
+  "reach": 35,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 96,
+  "views": 103,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.125
+  "eng_rate": 0.1143
  },
  {
   "id": "17866936494633384",
@@ -9467,13 +9467,13 @@
   "format": "single",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 20,
+  "reach": 21,
   "likes": 0,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 0,
-  "views": 38,
+  "views": 41,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 0,
@@ -9504,17 +9504,17 @@
   "format": "carousel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 11,
+  "reach": 16,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 40,
+  "views": 58,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.2727
+  "eng_rate": 0.1875
  },
  {
   "id": "17908557414442294",
@@ -9541,14 +9541,14 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 28,
-  "likes": 2,
+  "reach": 143,
+  "likes": 7,
   "comments": 0,
   "saved": 0,
-  "shares": 0,
-  "total_interactions": 2,
-  "views": 58,
-  "interactions": 2,
-  "eng_rate": 0.0714
+  "shares": 1,
+  "total_interactions": 8,
+  "views": 202,
+  "interactions": 8,
+  "eng_rate": 0.0559
  }
 ]
