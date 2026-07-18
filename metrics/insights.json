@@ -9231,15 +9231,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 205,
+  "reach": 206,
   "likes": 13,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 15,
-  "views": 302,
+  "views": 303,
   "interactions": 15,
-  "eng_rate": 0.0732
+  "eng_rate": 0.0728
  },
  {
   "id": "18198541663323399",
@@ -9291,7 +9291,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 9,
-  "views": 253,
+  "views": 254,
   "interactions": 9,
   "eng_rate": 0.0492
  },
@@ -9456,7 +9456,7 @@
   "saved": 0,
   "shares": 1,
   "total_interactions": 12,
-  "views": 342,
+  "views": 343,
   "interactions": 12,
   "eng_rate": 0.0482
  },
@@ -9510,7 +9510,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 58,
+  "views": 61,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
@@ -9541,14 +9541,14 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 143,
+  "reach": 155,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 8,
-  "views": 202,
+  "views": 218,
   "interactions": 8,
-  "eng_rate": 0.0559
+  "eng_rate": 0.0516
  }
 ]
