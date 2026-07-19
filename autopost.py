@@ -662,10 +662,63 @@ def target_pillar():
     return max(plan, key=deficit)
 
 
+def ingest_image(url, note=""):
+    """Prepare ONE user-uploaded image (Cloudinary URL): caption, clean-render, and
+    stage it as a pending post for approval. Clean by default (same as the auto poster)."""
+    print("Ingesting uploaded image:", (url or "")[:80])
+    data = urllib.request.urlopen(url, timeout=120).read()
+    img = Image.open(io.BytesIO(data))
+    base = "upload-" + time.strftime("%Y%m%d-%H%M%S")
+    buf = io.BytesIO(); pv = img.convert("RGB"); pv.thumbnail((1280, 1280)); pv.save(buf, "JPEG", quality=85)
+    learn = performance_brief()
+    meta = caption_for(buf.getvalue(), note or "", TAGS, learn)
+    burn = wants_title_card(note, meta)
+    bias = float(meta.get("crop_bias", 0.5))
+    out1 = os.path.join(RENDERED, f"{base}_1.jpg")
+    if burn: render(img, meta.get("eyebrow", ""), meta.get("headline", ""), out1, bias)
+    else:    render_clean(img, out1, bias)
+    story_out = None
+    if CFG.get("also_story"):
+        story_out = os.path.join(RENDERED, f"{base}_story.jpg")
+        if burn: render_story(img, meta.get("eyebrow", ""), meta.get("headline", ""), story_out)
+        else:    render_story_clean(img, story_out)
+    commit_push(f"Render {base} (upload) [skip ci]")
+    sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=HERE).decode().strip()
+    def _raw(p):
+        return (f"https://raw.githubusercontent.com/{REPO}/{sha}/"
+                + urllib.parse.quote(os.path.relpath(p, HERE).replace(os.sep, "/")))
+    image_urls = [_raw(out1)]
+    story_url = _raw(story_out) if story_out else None
+    hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
+    mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
+    caption = "\n\n".join(p for p in [meta.get("caption_en", ""), meta.get("caption_es", ""),
+                                        mentions, hashtags] if p).strip()
+    state = {"skip": False, "source": base, "sources": [base], "base": base,
+             "image_urls": image_urls, "image_url": image_urls[0], "story_url": story_url,
+             "caption": caption, "format": "single", "category": meta.get("category"),
+             "pillar": meta.get("pillar"), "status": "pending",
+             "ts": time.strftime("%Y-%m-%dT%H:%M:%S")}
+    json.dump(state, open(STATE, "w"))
+    commit_push(f"Stage {base} (upload) for review [skip ci]")
+    if (rget("settings", {}) or {}).get("auto_approve"):
+        print("Auto-approve ON — publishing uploaded post now."); publish(state); rdel("pending_post")
+    else:
+        rset("pending_post", state)
+        wa_notify(f"Uploaded post ready to approve. Review & approve: {DASHBOARD_URL}")
+    summary(f"## Uploaded post — review before it goes live\n\n![preview]({image_urls[0]})\n\n"
+            f"**Caption:**\n\n{caption}")
+    print("Ingested & staged:", base)
+
+
 def prepare():
     """Pick a photo, caption it, render it, push it, and stage state.json.
     Does NOT post — that's publish()."""
     git_setup()
+    ing = rget("ingest_image", None)
+    if ing and ing.get("url"):
+        rdel("ingest_image")
+        ingest_image(ing["url"], ing.get("note", ""))
+        return
     # Guard: only one post per day. We run the schedule several times each morning
     # (GitHub skips/delays single crons), so skip if we already posted today.
     lp = os.path.join(HERE, "metrics", "last_posted.txt")

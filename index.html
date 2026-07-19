@@ -235,6 +235,45 @@ function trigger(workflow,label,btn,stages){
     });
   });
 }
+function pickUpload(){
+  if(!connected()){ toggleConnect(true); uiToast('Connect mission control first (⚙), then upload.'); return; }
+  let inp=document.getElementById('upFile');
+  if(!inp){
+    inp=document.createElement('input'); inp.type='file'; inp.id='upFile';
+    inp.accept='image/*,video/*'; inp.style.display='none';
+    inp.onchange=()=>{ if(inp.files&&inp.files[0]) doUpload(inp.files[0]); };
+    document.body.appendChild(inp);
+  }
+  inp.value=''; inp.click();
+}
+async function doUpload(file){
+  const st=()=>document.getElementById('upStat');
+  const isVid=/^video\//.test(file.type)|| /\.(mp4|mov|m4v|webm)$/i.test(file.name);
+  if(st()) st().textContent='Preparing upload\u2026';
+  let cfg2=null; try{ const r=await ctrl('upload_config',{}); if(r&&r.ok) cfg2=r; }catch(e){}
+  if(!cfg2||!cfg2.cloudName||!cfg2.preset){ uiToast('Upload isn\u2019t set up yet \u2014 add the Cloudinary preset (I\u2019ll guide you).'); if(st())st().textContent=''; return; }
+  const fd=new FormData();
+  fd.append('file',file);
+  fd.append('upload_preset',cfg2.preset);
+  if(isVid) fd.append('folder','Reels');
+  const ep=`https://api.cloudinary.com/v1_1/${cfg2.cloudName}/${isVid?'video':'image'}/upload`;
+  const xhr=new XMLHttpRequest(); xhr.open('POST',ep);
+  xhr.upload.onprogress=e=>{ if(e.lengthComputable&&st()) st().textContent='Uploading '+(isVid?'video':'photo')+'\u2026 '+Math.round(e.loaded/e.total*100)+'%'; };
+  xhr.onload=async()=>{
+    if(xhr.status>=200&&xhr.status<300){
+      let j={}; try{ j=JSON.parse(xhr.responseText); }catch(e){}
+      if(st()) st().textContent='Uploaded \u2014 captioning & rendering\u2026';
+      const r=await ctrl('ingest',{resource_type:j.resource_type||(isVid?'video':'image'),secure_url:j.secure_url,public_id:j.public_id});
+      if(r&&r.ok){
+        uiToast((isVid?'Video':'Photo')+' uploaded \u2713 \u2014 it\u2019ll appear below to approve in ~1 min');
+        if(st()) setTimeout(()=>{ if(st()) st().textContent=''; },8000);
+        setTimeout(()=>{ if(connected()) renderLive(true); }, 45000);
+      } else { uiToast('Ingest failed: '+((r&&r.error)||'error')); if(st())st().textContent=''; }
+    } else { uiToast('Upload failed ('+xhr.status+')'); if(st())st().textContent=''; }
+  };
+  xhr.onerror=()=>{ uiToast('Upload error \u2014 check your connection'); if(st())st().textContent=''; };
+  xhr.send(fd);
+}
 const RUN_WF={
   insights:{file:'insights.yml',name:'Refresh insights'},
   post:{file:'daily-post.yml',name:'Prepare a post'},
@@ -315,6 +354,8 @@ function renderControls(){
     +`<button class="mc-btn" onclick="trigger('post','a post',this,true)">Prepare a post</button>`
     +`<button class="mc-btn" onclick="trigger('reel','a reel',this,true)">Prepare a reel</button>`
     +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
+    +`<button class="mc-btn" onclick="pickUpload()" title="Upload a photo or video to caption, render, and stage for approval">⬆ Upload</button>`
+    +`<span id="upStat" class="muted" style="font-size:12px;margin-left:6px"></span>`
     +`<button class="mc-btn" onclick="trigger('review','the monthly review',this)">Run review</button>`
     +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve</label>`
     +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`

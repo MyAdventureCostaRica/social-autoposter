@@ -239,7 +239,19 @@ def stage_reel():
     if not force and os.path.exists(lr) and open(lr).read().strip() == today:
         print("Already staged/posted a reel today; skipping."); return
     config_cloudinary()
-    clip = next_clip()
+    ing = ap.rget("ingest_video", None)
+    if ing and ing.get("public_id"):
+        ap.rdel("ingest_video")
+        import cloudinary.api, cloudinary.utils
+        try: info = cloudinary.api.resource(ing["public_id"], resource_type="video")
+        except Exception: info = {}
+        clip = {"public_id": ing["public_id"],
+                "secure_url": info.get("secure_url") or cloudinary.utils.cloudinary_url(
+                    ing["public_id"], resource_type="video", secure=True)[0],
+                "duration": info.get("duration") or 0}
+        print("Ingesting uploaded reel:", ing["public_id"])
+    else:
+        clip = next_clip()
     if not clip:
         print("No eligible clips (none long enough, or all posted/rejected)."); return
     pid = clip["public_id"]

@@ -55,6 +55,8 @@ module.exports = async function handler(req, res) {
   try {
     if (action === "inbox") return res.json(await getInbox());
     if (action === "runs") return res.json(await getRuns());
+    if (action === "upload_config") return res.json(uploadConfig());
+    if (action === "ingest") return res.json(await ingest(body));
     if (action === "pending") return res.json(await getPending());
     if (action === "status") return res.json(await getStatus());
     if (action === "review") return res.json(await getReview());
@@ -129,6 +131,25 @@ async function getRuns() {
     } catch (e) { out[k] = []; }
   }));
   return { ok: true, runs: out };
+}
+
+// --- Direct media upload (browser -> Cloudinary), then ingest for approval ----
+function uploadConfig() {
+  return { ok: true, cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+           preset: process.env.CLOUDINARY_UPLOAD_PRESET || "" };
+}
+async function ingest(body) {
+  const type = String(body.resource_type || "").toLowerCase();
+  const url = body.secure_url || "";
+  const pid = body.public_id || "";
+  if (type === "video") {
+    if (!pid) return { ok: false, error: "missing public_id" };
+    await rset("ingest_video", { public_id: pid, ts: new Date().toISOString() });
+    return { ok: await dispatchWf("reel-post.yml", { force: "true" }), kind: "video" };
+  }
+  if (!url) return { ok: false, error: "missing url" };
+  await rset("ingest_image", { url, note: String(body.note || ""), ts: new Date().toISOString() });
+  return { ok: await dispatchWf("daily-post.yml", { force: "true" }), kind: "photo" };
 }
 
 // --- Send a reply (comment or DM) via the Graph API, then mark it resolved -----
