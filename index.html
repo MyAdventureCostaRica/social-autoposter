@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Adventure Costa Rica — Social Dashboard</title>
-<link rel="icon" type="image/png" href="https://www.myadventurecostarica.com/logo-mark.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo-mark.png">
 <style>
+  @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-normal.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
+  @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-italic.ttf') format('truetype');font-weight:400 600;font-style:italic;font-display:swap}
+  @font-face{font-family:'DM Sans';src:url('fonts/dm-sans-latin-standard-normal.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
   :root{--sand:#F2EBD9;--bone:#F4EFE3;--ink:#0c100d;--clay:#5C4520;--clay-soft:#b08948;--forest:#169F48;--line:rgba(12,16,13,.12)}
   *{box-sizing:border-box}
   body{margin:0;background:var(--sand);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -103,7 +104,7 @@
 <div class="wrap">
   <div class="top">
     <div style="display:flex;align-items:center;gap:14px">
-      <img src="https://www.myadventurecostarica.com/logo-mark.png" alt="My Adventure Costa Rica" style="height:44px;width:auto" onerror="this.style.display='none'">
+      <img src="logo-mark.png" alt="My Adventure Costa Rica" style="height:44px;width:auto" onerror="this.style.display='none'">
       <div>
         <div class="eyebrow">My Adventure Costa Rica</div>
         <h1>Social Dashboard</h1>
@@ -131,7 +132,7 @@
 const REPO='MyAdventureCostaRica/social-autoposter', BRANCH='main';
 const RAW=`https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
 const API=`https://api.github.com/repos/${REPO}/contents`;
-async function j(u){try{const r=await fetch(u,{cache:'no-store'});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
+async function j(u){try{const r=await fetch(u,{cache:'default'});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
 function imgExt(n){return /\.(jpe?g|png)$/i.test(n);}
 function photoExt(n){return /\.(jpe?g|png|heic|heif)$/i.test(n);}
 function imgFail(el,label){el.outerHTML='<div class="badge">'+label+'</div>';}
@@ -573,8 +574,8 @@ function renderInbox(items,resolved,postsById){
 }
 
 async function load(){
-  const [src,posted,rendered,insights,posts,review]=await Promise.all([
-    j(`${API}/source-photos`), j(`${API}/posted`), j(`${API}/rendered`),
+  const [counts,insights,posts,review]=await Promise.all([
+    j(`${RAW}/metrics/counts.json`),
     j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`),
     j(`${RAW}/metrics/review-latest.json`)
   ]);
@@ -598,8 +599,8 @@ async function load(){
   } else if(inboxEl){
     inboxEl.innerHTML='<p class="muted" style="margin-top:8px">Connect mission control (above) to view and reply to your inbox.</p>';
   }
-  const queue=Array.isArray(src)?src.filter(f=>photoExt(f.name)).length:0;
-  const postedCount=Array.isArray(posted)?posted.filter(f=>imgExt(f.name)).length:0;
+  const queue=(counts&&counts.queued)||0;
+  const postedCount=(counts&&counts.posted)||0;
   const ins=Array.isArray(insights)?insights:[];
   const withReach=ins.filter(x=>typeof x.reach==='number');
   const avgReach=withReach.length?Math.round(withReach.reduce((a,b)=>a+b.reach,0)/withReach.length):null;
@@ -613,10 +614,8 @@ async function load(){
   ].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
 
   // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
-  const renderedSet=new Set(Array.isArray(rendered)?rendered.filter(f=>/_1\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_1\.jpg$/i,'')):[]);
-  const storyRendered=new Set(Array.isArray(rendered)?rendered.filter(f=>/_story\.jpg$/i.test(f.name)).map(f=>f.name.replace(/_story\.jpg$/i,'')):[]);
   const capById={},urlById={},tsById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id){capById[p.id]=p.caption||'';urlById[p.id]=p.thumb||'';tsById[p.id]=p.ts||p.date||'';}});
-  const recentPosts=ins.slice().filter(x=>x.date).sort((a,b)=>(''+(tsById[b.id]||b.date)).localeCompare(''+(tsById[a.id]||a.date))).slice(0,12);
+  const recentPosts=ins.slice().filter(x=>x.date).sort((a,b)=>(''+(tsById[b.id]||b.date)).localeCompare(''+(tsById[a.id]||a.date)));
   const badge={reel:'Reel',story:'Story',carousel:'Carousel',single:'Post',video:'Video'};
   const fnum=n=>typeof n==='number'?n.toLocaleString():null;
   const keyStats=x=>{const b=[];if(fnum(x.reach))b.push(`<b>${fnum(x.reach)}</b> reach`);if(fnum(x.views))b.push(`<b>${fnum(x.views)}</b> views`);if(x.shares)b.push(`<b>${x.shares}</b> shares`);return b.join(' · ')||(x.error?'no insights for this one':'—');};
@@ -629,12 +628,10 @@ async function load(){
     const lbl=badge[fmt]||fmt;
     const storyBase=base.replace(/-story$/,'');
     let cover;
-    if(fmt==='story' && storyRendered.has(storyBase))
-      cover=`<img src="${RAW}/rendered/${encodeURIComponent(storyBase)}_story.jpg" loading="lazy" onerror="imgFail(this,'Story')">`;
-    else if(renderedSet.has(base))
-      cover=`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy" onerror="imgFail(this,'${lbl}')">`;
-    else if(urlById[x.id])
+    if(urlById[x.id])
       cover=`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this,'${lbl}')">`;
+    else if(base)
+      cover=`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy" onerror="imgFail(this,'${lbl}')">`;
     else cover=`<div class="badge">${lbl}</div>`;
     const cap=capById[x.id]||'';
     return `<div class="card" onclick="this.classList.toggle('open')"><div class="tag">${badge[fmt]||fmt}</div>${cover}`
@@ -664,8 +661,27 @@ async function load(){
   } else {
     perf.innerHTML='<div class="note">No performance numbers yet — the daily insights job fills these in. Ranked by reach + shares, the signals this account actually earns (saves are ~zero).</div>';
   }
+  collapseRecent();
   document.getElementById('updated').textContent='Updated '+new Date().toLocaleString();
 }
+function collapseRecent(){
+  const el=document.getElementById('recent'); if(!el) return;
+  const cards=[...el.children].filter(c=>c.classList&&c.classList.contains('card'));
+  const old=document.getElementById('recentToggle'); if(old) old.remove();
+  if(cards.length<=1){ cards.forEach(c=>c.style.display=''); return; }
+  cards.forEach(c=>c.style.display='');                       // show all to measure the first row
+  const top0=cards[0].offsetTop;
+  const cols=cards.filter(c=>Math.abs(c.offsetTop-top0)<4).length||cards.length;
+  if(!window._recentOpen) cards.forEach((c,i)=>{ if(i>=cols) c.style.display='none'; });
+  if(cards.length>cols){
+    const btn=document.createElement('button');
+    btn.id='recentToggle'; btn.className='mc-btn'; btn.style.cssText='display:block;margin:14px auto 0';
+    btn.textContent=window._recentOpen?'Show less \u2191':('Show all '+cards.length+' posts \u2193');
+    btn.onclick=()=>{ window._recentOpen=!window._recentOpen; collapseRecent(); };
+    el.parentNode.insertBefore(btn, el.nextSibling);
+  }
+}
+if(!window._recentResize){ window._recentResize=1; addEventListener('resize',()=>{ clearTimeout(window._rrT); window._rrT=setTimeout(collapseRecent,200); }); }
 load();
 </script>
 </body>

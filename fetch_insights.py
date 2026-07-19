@@ -122,6 +122,12 @@ def discover_media():
     out = sorted(by_id.values(), key=lambda p: p.get("date", ""))
     os.makedirs(MET, exist_ok=True)
     json.dump(out, open(POSTS, "w"), indent=1)
+    def _imgcount(d, exts):
+        try: return sum(1 for x in os.listdir(os.path.join(HERE, d)) if x.lower().endswith(exts))
+        except Exception: return 0
+    json.dump({"queued": _imgcount("source-photos", (".jpg", ".jpeg", ".png", ".heic", ".heif")),
+               "posted": _imgcount("posted", (".jpg", ".jpeg", ".png"))},
+              open(os.path.join(MET, "counts.json"), "w"))
     print(f"Discovered {found} new post(s); {len(out)} total in posts.json")
     return out
 
