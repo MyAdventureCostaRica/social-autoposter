@@ -2,7 +2,10 @@
   "graph_version": "v23.0",
   "ig_user_id": "17841403481255550",
   "page_id": "1495946694015283",
-  "targets": ["ig", "fb"],
+  "targets": [
+    "ig",
+    "fb"
+  ],
   "also_story": true,
   "caption_model": "openai/gpt-4o",
   "auto_reply_comments": false,
@@ -13,8 +16,14 @@
   "burst_max": 6,
   "dedupe_posted": true,
   "dedupe_hash_distance": 6,
-  "pillar_plan": { "KNOWLEDGE": 2, "ROUTE": 2, "FOUNDER": 2, "EXPERIENCE": 1 },
+  "pillar_plan": {
+    "KNOWLEDGE": 2,
+    "ROUTE": 2,
+    "FOUNDER": 2,
+    "EXPERIENCE": 1
+  },
   "plan_window": 14,
   "plan_scan": 8,
-  "reel_min_seconds": 7
+  "reel_min_seconds": 7,
+  "burn_text": false
 }

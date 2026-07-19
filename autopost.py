@@ -372,6 +372,46 @@ def render_story(pil_img, eyebrow, headline, out):
     im.save(out, quality=92)
 
 
+def render_clean(pil_img, out, bias=0.5):
+    """The luxury default: a clean square crop of the photograph — no gradient,
+    no wordmark, no headline. The words live in the caption, not on the image."""
+    im = pil_img.convert("RGB")
+    w, h = im.size
+    if w >= h:
+        left = int((w - h) * 0.5); im = im.crop((left, 0, left + h, h))
+    else:
+        top = int((h - w) * bias); im = im.crop((0, top, w, top + w))
+    im.resize((S, S), Image.LANCZOS).save(out, quality=92)
+
+
+def render_story_clean(pil_img, out):
+    """Clean 9:16 crop for Stories — photo only, no gradient or text."""
+    W, H = 1080, 1920
+    im = pil_img.convert("RGB")
+    w, h = im.size
+    tr = W / H
+    if w / h > tr:
+        nw = int(h * tr); left = (w - nw) // 2; im = im.crop((left, 0, left + nw, h))
+    else:
+        nh = int(w / tr); top = int((h - nh) * 0.35); im = im.crop((0, top, w, top + nh))
+    im.resize((W, H), Image.LANCZOS).save(out, quality=92)
+
+
+def wants_title_card(note, meta):
+    """Text-on-image is OFF by default. It turns on only when a post is deliberately
+    flagged as a title card — reserved for the rare, special moment."""
+    if os.environ.get("FORCE_TITLE") == "1":
+        return True
+    if CFG.get("burn_text"):                      # global opt-in (config.json) — default off
+        return True
+    n = (note or "").strip().lower()
+    if n.startswith("!title") or "[title" in n:   # per-photo opt-in via companion .txt note
+        return True
+    if meta.get("title_card") is True:
+        return True
+    return False
+
+
 # ---------- meta posting ----------
 def meta_post(path, params):
     url = f"https://graph.facebook.com/{CFG.get('graph_version','v23.0')}/{path}"
@@ -745,16 +785,29 @@ def prepare():
 
     sources = [os.path.basename(src)] + [os.path.basename(f) for f in burst_files]
 
+    # Clean photo is the DEFAULT. Text is burned on only for a deliberate title card
+    # (config "burn_text": true, env FORCE_TITLE=1, or a companion note beginning "!title").
+    note = ""
+    _np = os.path.splitext(src)[0] + ".txt"
+    if os.path.exists(_np):
+        try:
+            with open(_np, encoding="utf-8") as _nf: note = _nf.read()
+        except Exception: note = ""
+    burn = wants_title_card(note, meta)
+    bias = float(meta.get("crop_bias", 0.5))
     outs = []                                   # slide 1 = the photo
     out1 = os.path.join(RENDERED, f"{base}_1.jpg")
-    render(img, meta["eyebrow"], meta["headline"], out1, float(meta.get("crop_bias", 0.5)))
+    if burn:
+        render(img, meta["eyebrow"], meta["headline"], out1, bias)
+    else:
+        render_clean(img, out1, bias)
     outs.append(out1)
-    if burst_imgs:                              # framed photo siblings (no headline)
+    if burst_imgs:                              # sibling photos in a burst — always clean
         n = 2
         for bi in burst_imgs:
             o = os.path.join(RENDERED, f"{base}_{n}.jpg")
-            render(bi, meta["eyebrow"], "", o); outs.append(o); n += 1
-    elif fmt == "carousel" and slides:
+            render_clean(bi, o); outs.append(o); n += 1
+    elif burn and fmt == "carousel" and slides:  # editorial text slides only on a flagged title post
         cta = (meta.get("cta") or "").strip()
         total = 1 + len(slides[:4]) + (1 if cta else 0)
         n = 2
@@ -764,11 +817,16 @@ def prepare():
         if cta:
             o = os.path.join(RENDERED, f"{base}_{n}.jpg")
             render_text_slide(cta, n, total, o, kicker="The journey"); outs.append(o)
+    if len(outs) == 1:
+        fmt = "single"                          # a clean single photo, never a text-slide carousel
 
     story_out = None
     if CFG.get("also_story"):
         story_out = os.path.join(RENDERED, f"{base}_story.jpg")
-        render_story(img, meta["eyebrow"], meta["headline"], story_out)
+        if burn:
+            render_story(img, meta["eyebrow"], meta["headline"], story_out)
+        else:
+            render_story_clean(img, story_out)
 
     commit_push(f"Render {base} [skip ci]")
     sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=HERE).decode().strip()
