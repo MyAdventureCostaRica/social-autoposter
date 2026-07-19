@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Adventure Costa Rica — Social Dashboard</title>
-<link rel="icon" type="image/png" href="logo-mark.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PHJlY3Qgd2lkdGg9JzMyJyBoZWlnaHQ9JzMyJyByeD0nNycgZmlsbD0nIzVDNDUyMCcvPjxjaXJjbGUgY3g9JzIzJyBjeT0nMTAnIHI9JzIuNicgZmlsbD0nI0IwODk0OCcvPjxwYXRoIGQ9J000IDI0IEwxMiAxMiBMMTcgMTkgTDIwLjUgMTQuNSBMMjggMjQgWicgZmlsbD0nI0YyRUJEOScvPjwvc3ZnPg==">
 <style>
   @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-normal.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
   @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-italic.ttf') format('truetype');font-weight:400 600;font-style:italic;font-display:swap}
@@ -628,7 +628,9 @@ async function load(){
     const lbl=badge[fmt]||fmt;
     const storyBase=base.replace(/-story$/,'');
     let cover;
-    if(urlById[x.id])
+    if(fmt==='story')
+      cover=`<img src="${RAW}/rendered/${encodeURIComponent(storyBase)}_story.jpg" loading="lazy" onerror="imgFail(this,'Story')">`;
+    else if(urlById[x.id])
       cover=`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this,'${lbl}')">`;
     else if(base)
       cover=`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy" onerror="imgFail(this,'${lbl}')">`;
