@@ -249,23 +249,32 @@ function pickUpload(){
   inp.value=''; inp.click();
 }
 async function compressVideo(file, onProg){
-  if(!window.FFmpeg){
-    await new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js'; sc.onload=res; sc.onerror=()=>rej(new Error('ffmpeg failed to load')); document.head.appendChild(sc); });
+  // Single-threaded ffmpeg.wasm 0.12 — works on static hosts (no SharedArrayBuffer needed).
+  const loadScript=src=>new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src=src; sc.onload=res; sc.onerror=()=>rej(new Error('load '+src)); document.head.appendChild(sc); });
+  if(!window.FFmpegWASM) await loadScript('https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
+  if(!window.FFmpegUtil) await loadScript('https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js');
+  const { FFmpeg } = window.FFmpegWASM;
+  const { toBlobURL, fetchFile } = window.FFmpegUtil;
+  let ff = window._ff;
+  if(!ff){
+    ff = new FFmpeg();
+    const base='https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+    await ff.load({ coreURL: await toBlobURL(base+'/ffmpeg-core.js','text/javascript'), wasmURL: await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm') });
+    window._ff = ff;
   }
-  const { createFFmpeg, fetchFile } = window.FFmpeg;
-  const ff = window._ff || (window._ff = createFFmpeg({ log:false, corePath:'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js' }));
-  if(!ff.isLoaded()) await ff.load();
   const dur = await new Promise(r=>{ const v=document.createElement('video'); v.preload='metadata'; v.onloadedmetadata=()=>{ const d=v.duration||60; URL.revokeObjectURL(v.src); r(d); }; v.onerror=()=>r(60); v.src=URL.createObjectURL(file); });
-  const targetBytes = 85*1024*1024;                         // aim well under the 100 MB cap
+  const targetBytes = 85*1024*1024;
   let vbr = Math.floor(targetBytes*8/Math.max(dur,1)) - 128000;
   vbr = Math.max(400000, Math.min(vbr, 8000000));
-  ff.FS('writeFile','in.bin', await fetchFile(file));
-  ff.setProgress(({ratio})=>{ if(onProg && ratio>=0 && ratio<=1) onProg(ratio); });
-  await ff.run('-i','in.bin','-vf',"scale='min(1080,iw)':-2",'-c:v','libx264','-preset','veryfast','-b:v',String(vbr),'-maxrate',String(Math.floor(vbr*1.45)),'-bufsize',String(vbr*2),'-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart','out.mp4');
-  const data = ff.FS('readFile','out.mp4');
-  try{ ff.FS('unlink','in.bin'); ff.FS('unlink','out.mp4'); }catch(e){}
-  const base = (file.name.replace(/\.[^.]+$/,'') || 'video');
-  return new File([data.buffer], base+'.mp4', { type:'video/mp4' });
+  await ff.writeFile('in.bin', await fetchFile(file));
+  const onP = e => { if(onProg && e && e.progress>=0 && e.progress<=1) onProg(e.progress); };
+  ff.on('progress', onP);
+  await ff.exec(['-i','in.bin','-vf',"scale='min(1080,iw)':-2",'-c:v','libx264','-preset','veryfast','-b:v',String(vbr),'-maxrate',String(Math.floor(vbr*1.45)),'-bufsize',String(vbr*2),'-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart','out.mp4']);
+  try{ ff.off && ff.off('progress', onP); }catch(e){}
+  const data = await ff.readFile('out.mp4');
+  try{ await ff.deleteFile('in.bin'); await ff.deleteFile('out.mp4'); }catch(e){}
+  const nm = (file.name.replace(/\.[^.]+$/,'') || 'video');
+  return new File([data], nm+'.mp4', { type:'video/mp4' });
 }
 async function doUpload(file){
   const st=()=>document.getElementById('upStat');
