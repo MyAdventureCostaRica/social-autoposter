@@ -251,6 +251,9 @@ function pickUpload(){
 async function doUpload(file){
   const st=()=>document.getElementById('upStat');
   const isVid=/^video\//.test(file.type)|| /\.(mp4|mov|m4v|webm)$/i.test(file.name);
+  const MAXV=100*1024*1024, MAXI=10*1024*1024, mb=Math.round(file.size/1048576);
+  if(isVid && file.size>MAXV){ uiToast('Video is '+mb+' MB \u2014 the max is 100 MB on this plan. Trim or compress it under 100 MB and try again.'); return; }
+  if(!isVid && file.size>MAXI){ uiToast('Image is '+mb+' MB \u2014 the max is 10 MB. Export a smaller version and try again.'); return; }
   if(st()) st().textContent='Preparing upload\u2026';
   let cfg2=null; try{ const r=await ctrl('upload_config',{}); if(r&&r.ok) cfg2=r; }catch(e){}
   if(!cfg2||!cfg2.cloudName||!cfg2.preset){ uiToast('Upload isn\u2019t set up yet \u2014 add the Cloudinary preset (I\u2019ll guide you).'); if(st())st().textContent=''; return; }
