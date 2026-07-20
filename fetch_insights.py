@@ -164,6 +164,32 @@ def pull_one(p):
     return row
 
 
+def pull_audience():
+    """Account audience by COUNTRY — who we're actually reaching/engaging vs local.
+    Best-effort: Instagram demographic metrics need 100+ followers + manage_insights."""
+    attempts = [
+        ("reached",   {"metric":"reached_audience_demographics","metric_type":"total_value","timeframe":"last_90_days","breakdown":"country","access_token":TOKEN}),
+        ("engaged",   {"metric":"engaged_audience_demographics","metric_type":"total_value","timeframe":"last_90_days","breakdown":"country","access_token":TOKEN}),
+        ("followers", {"metric":"follower_demographics","metric_type":"total_value","period":"lifetime","timeframe":"last_90_days","breakdown":"country","access_token":TOKEN}),
+    ]
+    for label, params in attempts:
+        r = _api(f"{IG}/insights", params)
+        if r.get("error"):
+            print("audience", label, "skip:", (r["error"] or {}).get("message")); continue
+        try:
+            results = r["data"][0]["total_value"]["breakdowns"][0]["results"]
+            rows = sorted(((x["dimension_values"][0], int(x["value"])) for x in results), key=lambda t: -t[1])
+            total = sum(v for _, v in rows) or 1
+            out = {"metric": label, "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "total": total,
+                   "countries": [{"code": c, "pct": round(v * 100.0 / total, 1), "value": v} for c, v in rows[:12]]}
+            json.dump(out, open(os.path.join(MET, "audience.json"), "w"))
+            print(f"Audience ({label}) top:", out["countries"][:4]); return out
+        except Exception as e:
+            print("audience parse fail", label, e); continue
+    print("Audience: no demographic data yet (needs 100+ followers / manage_insights).")
+    return None
+
+
 def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
@@ -197,6 +223,10 @@ def main():
     rows = sorted(out.values(), key=lambda x: x.get("date") or "")
     json.dump(rows, open(OUT, "w"), indent=1)
     print(f"Insights: {len(rows)} posts ({fetched} freshly pulled) -> insights.json")
+    try:
+        pull_audience()
+    except Exception as e:
+        print("audience err:", e)
 
     ranked = sorted([x for x in rows if isinstance(x.get("eng_rate"), float)],
                     key=lambda x: -x["eng_rate"])[:5]

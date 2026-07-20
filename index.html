@@ -119,6 +119,7 @@
   <div id="review-top"></div>
   <div id="inbox"></div>
   <div class="stats" id="stats"></div>
+  <div id="audience" class="muted" style="font-size:13px;margin:-14px 0 30px"></div>
   <h2>Recent posts</h2>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
   <h2>By post type <span class="muted" style="font-size:13px">— how each format performs</span></h2>
@@ -574,10 +575,10 @@ function renderInbox(items,resolved,postsById){
 }
 
 async function load(){
-  const [counts,insights,posts,review]=await Promise.all([
+  const [counts,insights,posts,review,aud]=await Promise.all([
     j(`${RAW}/metrics/counts.json`),
     j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`),
-    j(`${RAW}/metrics/review-latest.json`)
+    j(`${RAW}/metrics/review-latest.json`), j(`${RAW}/metrics/audience.json`)
   ]);
   renderControls();
   // base -> Instagram thumbnail, so the "Just posted" banner can always show a
@@ -612,6 +613,14 @@ async function load(){
     ['Avg reach', avgReach!=null?avgReach.toLocaleString():'—'],
     ['Total shares', totalShares||'—'],
   ].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+  const audEl=document.getElementById('audience');
+  if(audEl){
+    if(aud&&Array.isArray(aud.countries)&&aud.countries.length){
+      const flag=c=>(c&&c.length===2)?String.fromCodePoint(...[...c.toUpperCase()].map(ch=>127397+ch.charCodeAt(0))):'';
+      const label=aud.metric==='followers'?'Followers by country':'Reach by country · last 90 days';
+      audEl.innerHTML=`<b>${label}:</b> `+aud.countries.slice(0,7).map(c=>`${flag(c.code)} ${esc(c.code)} ${c.pct}%`).join('  ·  ');
+    } else { audEl.innerHTML=''; }
+  }
 
   // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
   const capById={},urlById={},tsById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id){capById[p.id]=p.caption||'';urlById[p.id]=p.thumb||'';tsById[p.id]=p.ts||p.date||'';}});

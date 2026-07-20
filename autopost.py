@@ -132,7 +132,7 @@ Look closely at what is ACTUALLY in the photo, then return STRICT JSON (only the
 - "headline": ONE short editorial line, ~4–7 words. Evocative, restrained.
 - "caption_en": 2–4 sentence English caption matching the chosen pillar. KNOWLEDGE posts must actually teach. FOUNDER posts tell the true story (first person if it's Esteban). End with a quiet positioning/invite line only when natural — not every post.
 - "caption_es": the Spanish caption. NOT a literal translation — write it natively and elegantly.
-- "hashtags": array of 4–5 lowercase tags (no #), always include "myadventurecostarica" and "costarica".
+- "hashtags": array of 4–5 lowercase tags (no #). Always include "myadventurecostarica". Then choose tags that INTERNATIONAL luxury & adventure travelers actually search when planning a trip abroad — e.g. luxurytravel, adventuretravel, trailrunning, gravelcycling, costaricatravel, visitcostarica, traveldeeper — matched to the photo. These exist for DISCOVERY by prospective guests overseas (your buyers), so favor international travel-intent tags over Costa-Rica-local or Spanish-only ones.
 - "crop_bias": 0.0–1.0 vertical crop focus (0.3 if subject/horizon is upper, 0.6 to keep people/foreground at the bottom, 0.5 default).
 - "format": "single" or "carousel". Choose "carousel" when the post genuinely teaches or tells a story across steps — almost always for KNOWLEDGE, often for FOUNDER. Use "single" for a purely atmospheric image.
 - "slides": carousel ONLY — an array of 2–4 short text lines, each its own slide (the teaching points or story beats). Each ≤ ~18 words, editorial, self-contained, and in order. Slide 1 is always the photo, so these are the slides that follow it.
