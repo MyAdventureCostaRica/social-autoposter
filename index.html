@@ -248,12 +248,36 @@ function pickUpload(){
   }
   inp.value=''; inp.click();
 }
+async function compressVideo(file, onProg){
+  if(!window.FFmpeg){
+    await new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js'; sc.onload=res; sc.onerror=()=>rej(new Error('ffmpeg failed to load')); document.head.appendChild(sc); });
+  }
+  const { createFFmpeg, fetchFile } = window.FFmpeg;
+  const ff = window._ff || (window._ff = createFFmpeg({ log:false, corePath:'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js' }));
+  if(!ff.isLoaded()) await ff.load();
+  const dur = await new Promise(r=>{ const v=document.createElement('video'); v.preload='metadata'; v.onloadedmetadata=()=>{ const d=v.duration||60; URL.revokeObjectURL(v.src); r(d); }; v.onerror=()=>r(60); v.src=URL.createObjectURL(file); });
+  const targetBytes = 85*1024*1024;                         // aim well under the 100 MB cap
+  let vbr = Math.floor(targetBytes*8/Math.max(dur,1)) - 128000;
+  vbr = Math.max(400000, Math.min(vbr, 8000000));
+  ff.FS('writeFile','in.bin', await fetchFile(file));
+  ff.setProgress(({ratio})=>{ if(onProg && ratio>=0 && ratio<=1) onProg(ratio); });
+  await ff.run('-i','in.bin','-vf',"scale='min(1080,iw)':-2",'-c:v','libx264','-preset','veryfast','-b:v',String(vbr),'-maxrate',String(Math.floor(vbr*1.45)),'-bufsize',String(vbr*2),'-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart','out.mp4');
+  const data = ff.FS('readFile','out.mp4');
+  try{ ff.FS('unlink','in.bin'); ff.FS('unlink','out.mp4'); }catch(e){}
+  const base = (file.name.replace(/\.[^.]+$/,'') || 'video');
+  return new File([data.buffer], base+'.mp4', { type:'video/mp4' });
+}
 async function doUpload(file){
   const st=()=>document.getElementById('upStat');
   const isVid=/^video\//.test(file.type)|| /\.(mp4|mov|m4v|webm)$/i.test(file.name);
   const MAXV=100*1024*1024, MAXI=10*1024*1024, mb=Math.round(file.size/1048576);
-  if(isVid && file.size>MAXV){ uiToast('Video is '+mb+' MB \u2014 the max is 100 MB on this plan. Trim or compress it under 100 MB and try again.'); return; }
   if(!isVid && file.size>MAXI){ uiToast('Image is '+mb+' MB \u2014 the max is 10 MB. Export a smaller version and try again.'); return; }
+  if(isVid && file.size>95*1024*1024){
+    if(st()) st().textContent='Compressing video\u2026 this can take a minute';
+    try{ file = await compressVideo(file, r=>{ if(st()) st().textContent='Compressing video\u2026 '+Math.round(r*100)+'%'; }); }
+    catch(e){ console.error(e); uiToast('Couldn\u2019t auto-compress this video \u2014 trim/export it under 100 MB and retry.'); if(st())st().textContent=''; return; }
+    if(file.size>MAXV){ uiToast('Still over 100 MB after compressing \u2014 it is a very long clip; trim it and retry.'); if(st())st().textContent=''; return; }
+  }
   if(st()) st().textContent='Preparing upload\u2026';
   let cfg2=null; try{ const r=await ctrl('upload_config',{}); if(r&&r.ok) cfg2=r; }catch(e){}
   if(!cfg2||!cfg2.cloudName||!cfg2.preset){ uiToast('Upload isn\u2019t set up yet \u2014 add the Cloudinary preset (I\u2019ll guide you).'); if(st())st().textContent=''; return; }
