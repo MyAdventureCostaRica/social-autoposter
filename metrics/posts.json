@@ -7280,5 +7280,25 @@
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
   "caption": "Costa Rica is home to over 110 species of bats, making it one of the most diverse places for these nocturnal creatures. "
+ },
+ {
+  "id": "18095559455357447",
+  "date": "2026-07-20",
+  "ts": "2026-07-20T13:26:44",
+  "base": "IMG_1814",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "This is where time feels infinite \u2014 an ancient tree standing as a quiet witness to centuries of stories in the forest. A"
+ },
+ {
+  "id": "18119963401847722",
+  "date": "2026-07-20",
+  "ts": "2026-07-20T13:26:44",
+  "base": "IMG_1814-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "This is where time feels infinite \u2014 an ancient tree standing as a quiet witness to centuries of stories in the forest. A"
  }
 ]
