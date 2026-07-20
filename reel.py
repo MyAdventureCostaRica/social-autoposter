@@ -245,9 +245,12 @@ def stage_reel():
         import cloudinary.api, cloudinary.utils
         try: info = cloudinary.api.resource(ing["public_id"], resource_type="video")
         except Exception: info = {}
+        # Always hand Instagram an H.264 .mp4 delivery URL. The browser-side compressor
+        # may emit .webm, which Instagram will not accept; Cloudinary transcodes on delivery.
         clip = {"public_id": ing["public_id"],
-                "secure_url": info.get("secure_url") or cloudinary.utils.cloudinary_url(
-                    ing["public_id"], resource_type="video", secure=True)[0],
+                "secure_url": cloudinary.utils.cloudinary_url(
+                    ing["public_id"], resource_type="video", secure=True,
+                    format="mp4", video_codec="h264")[0],
                 "duration": info.get("duration") or 0}
         print("Ingesting uploaded reel:", ing["public_id"])
     else:

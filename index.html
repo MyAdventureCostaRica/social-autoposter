@@ -249,32 +249,60 @@ function pickUpload(){
   inp.value=''; inp.click();
 }
 async function compressVideo(file, onProg){
-  // Single-threaded ffmpeg.wasm 0.12 — works on static hosts (no SharedArrayBuffer needed).
-  const loadScript=src=>new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src=src; sc.onload=res; sc.onerror=()=>rej(new Error('load '+src)); document.head.appendChild(sc); });
-  if(!window.FFmpegWASM) await loadScript('https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
-  if(!window.FFmpegUtil) await loadScript('https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js');
-  const { FFmpeg } = window.FFmpegWASM;
-  const { toBlobURL, fetchFile } = window.FFmpegUtil;
-  let ff = window._ff;
-  if(!ff){
-    ff = new FFmpeg();
-    const base='https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
-    await ff.load({ coreURL: await toBlobURL(base+'/ffmpeg-core.js','text/javascript'), wasmURL: await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm') });
-    window._ff = ff;
-  }
-  const dur = await new Promise(r=>{ const v=document.createElement('video'); v.preload='metadata'; v.onloadedmetadata=()=>{ const d=v.duration||60; URL.revokeObjectURL(v.src); r(d); }; v.onerror=()=>r(60); v.src=URL.createObjectURL(file); });
-  const targetBytes = 85*1024*1024;
-  let vbr = Math.floor(targetBytes*8/Math.max(dur,1)) - 128000;
-  vbr = Math.max(400000, Math.min(vbr, 8000000));
-  await ff.writeFile('in.bin', await fetchFile(file));
-  const onP = e => { if(onProg && e && e.progress>=0 && e.progress<=1) onProg(e.progress); };
-  ff.on('progress', onP);
-  await ff.exec(['-i','in.bin','-vf',"scale='min(1080,iw)':-2",'-c:v','libx264','-preset','veryfast','-b:v',String(vbr),'-maxrate',String(Math.floor(vbr*1.45)),'-bufsize',String(vbr*2),'-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-movflags','+faststart','out.mp4']);
-  try{ ff.off && ff.off('progress', onP); }catch(e){}
-  const data = await ff.readFile('out.mp4');
-  try{ await ff.deleteFile('in.bin'); await ff.deleteFile('out.mp4'); }catch(e){}
-  const nm = (file.name.replace(/\.[^.]+$/,'') || 'video');
-  return new File([data], nm+'.mp4', { type:'video/mp4' });
+  // Native MediaRecorder re-encode. No wasm, no SharedArrayBuffer, nothing to download.
+  // Plays the clip once and records it at a bitrate sized to land under the 100 MB cap,
+  // so it takes roughly the length of the video.
+  if(typeof MediaRecorder==='undefined') throw new Error('This browser cannot re-encode video');
+  const url=URL.createObjectURL(file);
+  const v=document.createElement('video');
+  v.src=url; v.playsInline=true; v.preload='auto'; v.setAttribute('playsinline','');
+  v.style.cssText='position:fixed;left:0;top:0;width:2px;height:2px;opacity:0.01;pointer-events:none;z-index:-1';
+  document.body.appendChild(v);
+  const cleanup=()=>{ try{v.pause();}catch(e){} try{v.remove();}catch(e){} try{URL.revokeObjectURL(url);}catch(e){} };
+  try{
+    await new Promise((res,rej)=>{ v.onloadedmetadata=()=>res(); v.onerror=()=>rej(new Error('Could not read this video')); });
+    let dur=v.duration;
+    if(!isFinite(dur)||!dur){                      // some recordings only report duration after a seek
+      dur=await new Promise(res=>{ v.onseeked=()=>res(isFinite(v.duration)?v.duration:60); try{ v.currentTime=1e6; }catch(e){ res(60); } });
+      try{ v.currentTime=0; }catch(e){}
+    }
+    dur=Math.max(1, dur||60);
+    if(!v.captureStream && !v.mozCaptureStream) throw new Error('This browser cannot re-encode video');
+    const MIMES=['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+    const mime=MIMES.find(m=>{ try{ return MediaRecorder.isTypeSupported(m); }catch(e){ return false; } })||'';
+    const run=async(vbr)=>{
+      try{ v.currentTime=0; }catch(e){}
+      // warm the decoder so captureStream() hands back live tracks
+      try{ await v.play(); }
+      catch(e){ v.muted=true; try{ await v.play(); }catch(e2){ throw new Error('The browser blocked playback'); } }
+      v.pause(); try{ v.currentTime=0; }catch(e){}
+      const stream=(v.captureStream? v.captureStream() : v.mozCaptureStream());
+      const opts=Object.assign({videoBitsPerSecond:vbr, audioBitsPerSecond:128000}, mime?{mimeType:mime}:{});
+      const rec=new MediaRecorder(stream, opts);
+      const chunks=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+      const stopped=new Promise(res=>{ rec.onstop=()=>res(); });
+      const tick=setInterval(()=>{ if(onProg) onProg(Math.min(0.99,(v.currentTime||0)/dur)); },250);
+      rec.start(1000);
+      await v.play();
+      await Promise.race([
+        new Promise(res=>{ v.onended=()=>res(); }),
+        new Promise(res=> setTimeout(res, dur*1000+30000))     // never hang forever
+      ]);
+      clearInterval(tick);
+      try{ rec.stop(); }catch(e){}
+      await stopped;
+      if(onProg) onProg(1);
+      return new Blob(chunks,{type:mime||'video/webm'});
+    };
+    let vbr=Math.floor(80*1024*1024*8/dur)-128000;
+    vbr=Math.max(500000, Math.min(vbr, 6000000));
+    let blob=await run(vbr);
+    if(blob.size>95*1024*1024) blob=await run(Math.max(400000, Math.floor(vbr*0.55)));
+    if(!blob.size) throw new Error('Re-encode produced an empty file');
+    const ext=(blob.type.indexOf('mp4')>-1)?'mp4':'webm';
+    const nm=(file.name.replace(/\.[^.]+$/,'')||'video');
+    return new File([blob], nm+'-web.'+ext, {type:blob.type||('video/'+ext)});
+  } finally { cleanup(); }
 }
 async function doUpload(file){
   const st=()=>document.getElementById('upStat');
@@ -282,8 +310,8 @@ async function doUpload(file){
   const MAXV=100*1024*1024, MAXI=10*1024*1024, mb=Math.round(file.size/1048576);
   if(!isVid && file.size>MAXI){ uiToast('Image is '+mb+' MB \u2014 the max is 10 MB. Export a smaller version and try again.'); return; }
   if(isVid && file.size>95*1024*1024){
-    if(st()) st().textContent='Compressing video\u2026 this can take a minute';
-    try{ file = await compressVideo(file, r=>{ if(st()) st().textContent='Compressing video\u2026 '+Math.round(r*100)+'%'; }); }
+    if(st()) st().textContent='Compressing video\u2026 (takes about the length of the clip \u2014 keep this tab open)';
+    try{ file = await compressVideo(file, r=>{ if(st()) st().textContent='Compressing video\u2026 '+Math.round(r*100)+'% (keep this tab open)'; }); }
     catch(e){ console.error(e); uiToast('Couldn\u2019t auto-compress this video \u2014 trim/export it under 100 MB and retry.'); if(st())st().textContent=''; return; }
     if(file.size>MAXV){ uiToast('Still over 100 MB after compressing \u2014 it is a very long clip; trim it and retry.'); if(st())st().textContent=''; return; }
   }
