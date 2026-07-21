@@ -9413,17 +9413,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 38,
+  "reach": 39,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 114,
-  "profile_visits": 1,
+  "views": 118,
+  "profile_visits": 2,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1053
+  "eng_rate": 0.1026
  },
  {
   "id": "17866936494633384",
@@ -9450,15 +9450,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 253,
+  "reach": 254,
   "likes": 11,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 12,
-  "views": 345,
+  "views": 346,
   "interactions": 12,
-  "eng_rate": 0.0474
+  "eng_rate": 0.0472
  },
  {
   "id": "18426420415134715",
@@ -9504,17 +9504,17 @@
   "format": "carousel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 23,
+  "reach": 25,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 79,
+  "views": 82,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1304
+  "eng_rate": 0.12
  },
  {
   "id": "17908557414442294",
@@ -9541,15 +9541,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 211,
+  "reach": 212,
   "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 10,
-  "views": 293,
+  "views": 294,
   "interactions": 10,
-  "eng_rate": 0.0474
+  "eng_rate": 0.0472
  },
  {
   "id": "17974125471119783",
@@ -9558,17 +9558,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 21,
+  "reach": 24,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 37,
+  "views": 40,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0476
+  "eng_rate": 0.0417
  },
  {
   "id": "18109240204973784",
@@ -9595,17 +9595,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 16,
+  "reach": 18,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 26,
+  "views": 29,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1875
+  "eng_rate": 0.1667
  },
  {
   "id": "18119963401847722",
@@ -9624,5 +9624,35 @@
   "navigation": 12,
   "interactions": 1,
   "eng_rate": 0.0909
+ },
+ {
+  "id": "18110252954051424",
+  "date": "2026-07-21",
+  "base": "IMG_1974",
+  "format": "carousel",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "reach": 7,
+  "likes": 2,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 2,
+  "views": 15,
+  "profile_visits": 0,
+  "follows": 0,
+  "interactions": 2,
+  "eng_rate": 0.2857
+ },
+ {
+  "id": "17899847211540914",
+  "date": "2026-07-21",
+  "base": "IMG_1974-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "error": "(#10) Not enough viewers for the media to show insights",
+  "interactions": 0,
+  "eng_rate": null
  }
 ]
