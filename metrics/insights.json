@@ -9632,17 +9632,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 7,
+  "reach": 11,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 15,
+  "views": 25,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.2857
+  "eng_rate": 0.1818
  },
  {
   "id": "17899847211540914",
@@ -9651,8 +9651,15 @@
   "format": "story",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "error": "(#10) Not enough viewers for the media to show insights",
-  "interactions": 0,
-  "eng_rate": null
+  "reach": 10,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 2,
+  "views": 10,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 10,
+  "interactions": 2,
+  "eng_rate": 0.2
  }
 ]
