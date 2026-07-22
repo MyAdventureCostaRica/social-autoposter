@@ -423,7 +423,7 @@ function renderControls(){
     +`<button class="mc-btn" onclick="pickUpload()" title="Upload a photo or video to caption, render, and stage for approval">⬆ Upload</button>`
     +`<span id="upStat" class="muted" style="font-size:12px;margin-left:6px"></span>`
     +`<button class="mc-btn" onclick="trigger('review','the monthly review',this)">Run review</button>`
-    +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve</label>`
+    +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve<span id="aaState" style="font-size:12px;color:var(--clay);margin-left:6px"></span></label>`
     +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
     +`<div class="mc-runs" id="mcRuns"></div>`
     +`<div id="connectPanel" style="display:none">`
@@ -437,10 +437,25 @@ function renderControls(){
   refreshAutoApprove();
 }
 function refreshAutoApprove(){
-  if(!connected()) return;
+  // Never let this box show a confident "off" it hasn't actually verified — an unchecked
+  // box while the stored setting is ON is exactly how a post publishes without approval.
+  const t=document.getElementById('autoApprove'), s=document.getElementById('aaState');
+  if(!t) return;
+  if(!connected()){
+    t.checked=false; t.indeterminate=true; t.disabled=true;
+    if(s) s.textContent='— connect to check';
+    return;
+  }
+  if(s) s.textContent='— checking…';
+  t.indeterminate=true; t.disabled=true;
   ctrl('get_settings',{}).then(r=>{
-    const t=document.getElementById('autoApprove');
-    if(t&&r&&r.ok&&r.settings) t.checked=!!r.settings.auto_approve;
+    if(r&&r.ok&&r.settings){
+      t.indeterminate=false; t.disabled=false; t.checked=!!r.settings.auto_approve;
+      if(s) s.textContent = t.checked ? '— ON: posts publish without asking you' : '';
+    } else {
+      t.checked=false; t.indeterminate=true; t.disabled=true;
+      if(s) s.textContent='— couldn’t read the setting';
+    }
   });
 }
 function setAutoApprove(on){

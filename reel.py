@@ -174,8 +174,7 @@ def main():
     meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn)
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
-    caption = "\n\n".join(p for p in [meta.get("caption_en", ""), meta.get("caption_es", ""),
-                                      mentions, hashtags] if p).strip()
+    caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()
 
     print("Publishing reel…")
     mid = publish_reel(video_url, caption)
@@ -265,8 +264,7 @@ def stage_reel():
     meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn)
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
-    caption = "\n\n".join(p for p in [meta.get("caption_en", ""), meta.get("caption_es", ""),
-                                      mentions, hashtags] if p).strip()
+    caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()
     import cloudinary.utils
     thumb_url = cloudinary.utils.cloudinary_url(pid, resource_type="video", format="jpg",
                                                 start_offset="1", secure=True)[0]

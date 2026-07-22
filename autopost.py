@@ -96,6 +96,21 @@ def wa_notify(text):
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 MODEL = CFG.get("caption_model", "openai/gpt-4o")
 
+# Which caption languages actually get POSTED. Instagram reads caption language as an
+# audience signal, so English-only keeps the feed pointed at international buyers rather
+# than at a Costa Rican audience. Both captions are still written by the model; this only
+# controls what ships. Set "caption_langs": ["en","es"] in config.json to go bilingual again.
+CAPTION_LANGS = [str(l).lower().strip() for l in CFG.get("caption_langs", ["en"])]
+
+def caption_body(meta):
+    """Caption text in the configured languages, in order. Returns a list of paragraphs."""
+    out = []
+    for lang in CAPTION_LANGS:
+        txt = (meta.get("caption_" + lang) or "").strip()
+        if txt:
+            out.append(txt)
+    return out
+
 # Accounts we may @mention. name (lowercase) -> exact handle. Filled in over time.
 TAGS = {}
 _tagfile = os.path.join(HERE, "tags.json")
@@ -691,8 +706,7 @@ def ingest_image(url, note=""):
     story_url = _raw(story_out) if story_out else None
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
-    caption = "\n\n".join(p for p in [meta.get("caption_en", ""), meta.get("caption_es", ""),
-                                        mentions, hashtags] if p).strip()
+    caption = "\n\n".join(p for p in caption_body(meta) + [mentions, hashtags] if p).strip()
     state = {"skip": False, "source": base, "sources": [base], "base": base,
              "image_urls": image_urls, "image_url": image_urls[0], "story_url": story_url,
              "caption": caption, "format": "single", "category": meta.get("category"),
@@ -892,7 +906,7 @@ def prepare():
 
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
-    caption = "\n\n".join(p for p in [meta["caption_en"], meta["caption_es"], mentions, hashtags] if p).strip()
+    caption = "\n\n".join(p for p in caption_body(meta) + [mentions, hashtags] if p).strip()
     state = {"skip": False, "source": os.path.basename(src), "sources": sources, "base": base,
              "image_urls": image_urls, "image_url": image_urls[0],
              "story_url": story_url, "caption": caption,
