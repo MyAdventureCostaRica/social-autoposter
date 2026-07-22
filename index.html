@@ -70,7 +70,7 @@
   .mc-btn:disabled{opacity:.55;cursor:default}
   .mc-btn.send{background:var(--forest,#169F48);color:#fff;border-color:var(--forest,#169F48)}
   .mc-btn.ghost{border-style:dashed}
-  .mc-runs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 18px;margin-top:10px}
+  .mc-runs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 18px;margin-top:10px;margin-bottom:24px}
   .mc-run{font-size:12.5px;line-height:1.5}
   .mc-run a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--clay-soft)}
   .run-ok{color:var(--forest,#169F48);font-weight:700}
@@ -96,7 +96,15 @@
   .pp-imgs{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
   .pp-thumb{width:128px;height:128px;object-fit:cover;border-radius:10px;flex:none;border:1px solid var(--clay-soft)}
   .pp-video{width:200px;max-height:356px;border-radius:10px;border:1px solid var(--clay-soft);background:#000;flex:none}
-  .pub-thumb{width:52px;height:52px;object-fit:cover;border-radius:8px;border:1px solid var(--clay-soft);flex:none;display:block}
+  .pub-card{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;background:var(--bone);border:1px solid var(--clay-soft);border-radius:14px;padding:18px;margin-bottom:28px}
+  .pub-img{width:220px;max-width:42vw;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid var(--clay-soft);display:block;flex:none}
+  .pub-body{flex:1;min-width:240px}
+  .pub-cap{font-size:14px;line-height:1.65;margin:10px 0 12px;white-space:pre-wrap}
+  .rv-head{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;padding:16px 22px}
+  .rv-chev{margin-left:auto;color:var(--clay);font-size:13px}
+  .rv-body{padding:0 22px 18px;line-height:1.6}
+  .rv-modal{max-width:760px;width:calc(100vw - 48px);max-height:82vh;display:flex;flex-direction:column}
+  .rv-mbody{overflow:auto;line-height:1.6;margin:6px 0 14px;padding-right:8px}
   .pp-edit{width:100%;box-sizing:border-box;margin:6px 0 10px;padding:11px 13px;border:1px solid var(--clay-soft);border-radius:10px;font:inherit;font-size:14px;line-height:1.55;background:#fff;resize:vertical;white-space:pre-wrap}
 </style>
 </head>
@@ -156,19 +164,47 @@ function md(t){
 function markSeen(when){ try{localStorage.setItem('lastSeenReview',when);}catch(e){}
   const p=document.querySelector('.new-pill'); if(p)p.remove();
   document.title=document.title.replace(/^●\s*/,''); }
+// Review UX (Esteban, Jul 22): no banner. A NEW review opens as a clearable
+// popup (any close marks it read); the bottom section is a collapsible card —
+// expanded while new, collapsed once read (click the header to reopen).
 function renderReview(rv){
   const top=document.getElementById('review-top'), full=document.getElementById('review-full');
   if(!top||!full) return;
-  if(!rv||!rv.markdown){ top.innerHTML=''; full.innerHTML=''; return; }
+  top.innerHTML='';
+  if(!rv||!rv.markdown){ full.innerHTML=''; return; }
+  window._lastReview=rv;
   const when=(rv.stats&&rv.stats.generated)||'';
   let seen=null; try{seen=localStorage.getItem('lastSeenReview');}catch(e){}
   const isNew = when && when!==seen;
-  top.innerHTML=`<div class="rv-banner"><span class="eyebrow">Monthly review · ${when}</span>`
+  full.innerHTML=`<div class="review" style="padding:0;overflow:hidden">`
+    +`<div class="rv-head" onclick="toggleReview()">`
+    +`<span class="eyebrow">Monthly review · ${when}</span>`
     +(isNew?`<span class="new-pill">New</span>`:``)
-    +`<a href="#review-full" onclick="markSeen('${when}')">Read proposals ↓</a></div>`;
-  full.innerHTML=`<h2>Monthly review <span class="muted" style="font-size:13px">— ${when} · reply to Claude to apply</span></h2>`
-    +`<div class="review"><div class="rv-body">${md(rv.markdown)}</div></div>`;
-  if(isNew && !/^●/.test(document.title)) document.title='● '+document.title;
+    +`<span class="muted" style="font-size:12px">reply to Claude to apply</span>`
+    +`<span class="rv-chev" id="rvChev">${isNew?'▲':'▼'}</span></div>`
+    +`<div class="rv-body" id="rvBody"${isNew?'':' style="display:none"'}>${md(rv.markdown)}</div></div>`;
+  if(isNew){
+    if(!/^●/.test(document.title)) document.title='● '+document.title;
+    openReviewModal(when, rv.markdown);
+  }
+}
+function toggleReview(){
+  const b=document.getElementById('rvBody'), c=document.getElementById('rvChev');
+  if(!b) return; const open=b.style.display==='none';
+  b.style.display=open?'':'none'; if(c) c.textContent=open?'▲':'▼';
+}
+function openReviewModal(when, text){
+  if(window._rvPopped===when) return; window._rvPopped=when;   // once per page life
+  const ov=document.createElement('div'); ov.className='modal-ov';
+  const bx=document.createElement('div'); bx.className='modal rv-modal';
+  bx.innerHTML=`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">`
+    +`<span class="eyebrow">Monthly review · ${esc(when)}</span><span class="new-pill">New</span></div>`
+    +`<div class="rv-mbody">${md(text)}</div>`
+    +`<div class="modal-btns"><button class="mc-btn send" data-clear>Clear — mark as read</button></div>`;
+  ov.appendChild(bx); document.body.appendChild(ov);
+  const close=()=>{ ov.remove(); markSeen(when); renderReview(window._lastReview); };
+  bx.querySelector('[data-clear]').onclick=close;
+  ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
 }
 function copyText(btn,txt){ navigator.clipboard.writeText(txt).then(()=>{const o=btn.textContent;btn.textContent='Copied';setTimeout(()=>btn.textContent=o,1400);}); }
 function escA(s){ return esc(String(s==null?'':s)).replace(/"/g,'&quot;'); }
@@ -441,7 +477,7 @@ async function refreshReview(){
   let rv=null;
   if(connected()){ try{ const rr=await ctrl('review',{}); if(rr&&rr.ok&&rr.review) rv=rr.review; }catch(e){} }
   if(!rv) rv=await j(`${RAW}/metrics/review-latest.json?t=${Date.now()}`);   // cache-busted raw fallback
-  if(rv&&rv.markdown){ renderReview(rv); uiToast('Monthly review updated — proposals below'); }
+  if(rv&&rv.markdown){ renderReview(rv); uiToast('Monthly review ready'); }
 }
 function inboxBusy(){ const a=document.activeElement; return !!(a&&a.closest&&a.closest('#inbox')); }
 async function refreshInbox(){
@@ -609,16 +645,22 @@ function renderPublishedBanner(pub, announce){
   if(el.dataset.ts!==String(pub.ts)){
     el.dataset.ts=String(pub.ts);
     const link=pub.permalink||'https://www.instagram.com/myadventurecostarica/';
-    // Use the saved image; if an older record lacks it, fall back to the rendered file.
     // Prefer the thumbnail saved at publish time; then the Instagram thumbnail
     // from posts.json (works for reels too); then the rendered file for photos.
     const tb=(window._thumbByBase||{})[pub.base]||'';
     const img=pub.image||tb||(pub.base&&pub.format!=='reel'?`${RAW}/rendered/${pub.base}_1.jpg`:'');
-    el.innerHTML=`<div class="rv-banner">`
-      +(img?`<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-thumb" src="${escA(img)}" referrerpolicy="no-referrer" onerror="imgFail(this,'LIVE')"></a>`:``)
-      +`<span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}</span>`
-      +`<span class="new-pill">Live</span>`
-      +`<a href="${escA(link)}" target="_blank" rel="noopener">View on Instagram ↗</a></div>`;
+    // Full post view (Esteban, Jul 22): big image + the caption that went out,
+    // joined from posts.json by the published media_id.
+    const meta=(window._postsById||{})[pub.media_id]||{};
+    const cap=pub.caption||meta.caption||'';
+    const fmt=pub.format||meta.format||'';
+    el.innerHTML=`<div class="pub-card">`
+      +(img?`<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-img" src="${escA(img)}" referrerpolicy="no-referrer" onerror="imgFail(this,'LIVE')"></a>`:``)
+      +`<div class="pub-body"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">`
+      +`<span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}${fmt?(' · '+esc(fmt)):''}</span>`
+      +`<span class="new-pill">Live</span></div>`
+      +(cap?`<div class="pub-cap">${esc(cap)}</div>`:'')
+      +`<a href="${escA(link)}" target="_blank" rel="noopener" style="font-size:13px;font-weight:600">View on Instagram ↗</a></div></div>`;
   }
   // Toast EXACTLY ONCE per published post — mark it announced immediately so the
   // 30s poll never repeats it (the old code only cleared on link-click).
@@ -798,14 +840,15 @@ async function load(isRefresh){
   if(!isRefresh) renderControls();
   // base -> Instagram thumbnail, so the "Just posted" banner can always show a
   // preview even for records saved before the publish-time thumbnail existed.
-  window._thumbByBase={}; (Array.isArray(posts)?posts:[]).forEach(p=>{ if(p&&p.base&&p.thumb) window._thumbByBase[p.base]=p.thumb; });
+  window._thumbByBase={}; window._postsById={};
+  (Array.isArray(posts)?posts:[]).forEach(p=>{ if(p&&p.base&&p.thumb) window._thumbByBase[p.base]=p.thumb;
+    if(p&&p.id) window._postsById[p.id]=p; });
   renderLive(false);
   if(!window._livePoll){ window._livePoll=setInterval(()=>{ if(connected()) renderLive(true); }, 30000); }
   let reviewObj=review;   // prefer the instant backend copy over the CDN-cached raw file
   if(connected()){ try{ const rr=await ctrl('review',{}); if(rr&&rr.ok&&rr.review) reviewObj=rr.review; }catch(e){} }
   renderReview(reviewObj);
-  const postsById={}; if(Array.isArray(posts)) for(const pp of posts){ if(pp&&pp.id) postsById[pp.id]=pp; }
-  window._postsById=postsById;   // for live inbox refreshes
+  const postsById=window._postsById;   // built above; also used by live inbox refreshes
   // Inbox is PRIVATE: it never touches the public repo. Load it through the
   // authenticated backend (api/control "inbox"). Requires you to be connected.
   const inboxEl=document.getElementById('inbox');
