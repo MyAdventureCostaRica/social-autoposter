@@ -1,43 +1,34 @@
-# Latest review — 2026-07-13
+# Latest review — 2026-07-22
 
-# Performance Review
+# Monthly Auto-Poster Review: July 2026
 
 ## **Readout**
+The data indicates that **reach** remains the dominant currency for measuring performance, with reels consistently earning the highest reach among formats. However, engagement rates for reels are lower (avg. 0.0547) compared to single posts (avg. 0.0769), suggesting reels may be better for visibility, while single posts drive deeper engagement. Shares are minimal across all formats (0.072% of interactions), and saves are negligible (0.007%), so these metrics should not be prioritized. Themes of "quiet," "trails," "mountain biking," and "nature" appear in top-performing captions, reinforcing the appeal of serene, immersive outdoor experiences.
 
-By today's standards, **reach** is the clearest live currency, as shares and saves remain negligible (7.3% and 0.8% of interactions, respectively). Recent data highlights a strong performance from **single-image posts**, which lead in engagement rate (0.0769) compared to reels (0.048). However, reels dominate in volume (20 out of 30 eligible posts) and consistently achieve higher reach (e.g., 232 vs. 104 for top single posts). Themes like **mountain biking, trails, and quiet moments in nature** resonate most, with captions emphasizing reflection and connection to the environment. The photo queue is healthy (182), but a significant number of posts (680) lack insights, limiting the dataset.
+## **Proposed Changes**
+1. **Adjust REACH_FLOOR**: Lower the threshold from 100 to **50** based on recent data, as the top post from 2026-07-22 achieved a strong engagement rate (0.1053) despite a reach of only 57. This ensures the learner doesn't exclude valuable signals from lower-reach posts.
+2. **Extend HALFLIFE_DAYS**: Increase from 30 to **60 days**, as engagement rates for posts from June 2026 remain competitive, suggesting content relevance persists longer than previously assumed.
+3. **Refine Captioner Brief**: Emphasize themes of tranquility, trails, and immersive nature experiences, as these resonate strongly with the audience. Add guidance to subtly highlight the unique Costa Rican landscape and experiences without being promotional.
 
----
+### Revised Captioner Brief
+- Voice: Luxury-editorial, aspirational, yet grounded in authenticity. Formal Spanish (usted) with occasional English phrases for emphasis.
+- Structure: Start with an evocative, shareable hook (e.g., "Some trails demand more than endurance — they ask for resilience and focus"). Paint a vivid sensory picture of Costa Rica's landscapes and experiences. End with a soft invitation or reflection that aligns with My Adventure Costa Rica's brand.
+- Themes: Prioritize tranquility, trails, mountain biking, and the harmony of nature. Avoid overtly promotional language; focus on storytelling.
 
-## **Proposed changes**
+## **3 Experiments**
+1. **Test Reels with Shareable Hooks**  
+   - **What**: Post 10 reels with a one-line shareable hook at the start (e.g., "Some trails are meant to be shared").  
+   - **Why**: Reels dominate reach but have low engagement rates; a compelling hook may drive shares and deeper engagement.  
+   - **Metric**: Watch for increases in shares and engagement rate.
 
-1. **Adjust REACH_FLOOR to 100 (from 50).**  
-   Justification: The lowest-performing posts in the top set (reels with ~130 reach) already exceed the current floor. Raising this threshold will better filter for meaningful insights while still including the majority of eligible posts (25/30 in the past year).
+2. **Single Posts Highlighting Costa Rican Trails**  
+   - **What**: Create 5 single posts focused on Costa Rica's trails, using themes like "quiet," "ride," and "winds."  
+   - **Why**: Single posts have the highest engagement rate and align with top-performing themes.  
+   - **Metric**: Compare engagement rate against recent single posts.
 
-2. **Increase HALFLIFE_DAYS to 60 (from 30).**  
-   Justification: Reels dominate recent posts, and their performance often grows over time. Extending the halflife will allow the learner to better account for this delayed engagement pattern.
+3. **Story Experiment with Immersive Narratives**  
+   - **What**: Post 3 stories with immersive narratives (e.g., preparing for a ride, moments of pause mid-trail).  
+   - **Why**: Stories have the highest engagement rate (0.0926) but are underutilized (only 1 post in the dataset).  
+   - **Metric**: Monitor engagement rate and reach for stories.
 
-3. **Refine caption brief to emphasize reflection and connection.**  
-   Justification: The top-performing captions (e.g., "Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements") focus on introspective, evocative themes. Update the brief to explicitly encourage this tone, while still maintaining variety.
-
-4. **Add a STOP list for overly generic hashtags.**  
-   Justification: Posts with hashtags like `#myadventurecostarica` and `#costarica` underperform (e.g., 0.0388 engagement rate). These should be deprioritized in favor of more specific, niche hashtags tied to adventure, mountain biking, or Costa Rica’s unique landscapes.
-
----
-
-## **3 experiments**
-
-1. **Test single-image posts with reflective captions.**  
-   - **What:** Post 4 single-image posts in the next 30 days, focusing on the themes of mountain biking, trails, and quiet moments in nature. Use captions that evoke resilience, connection to nature, and introspection.  
-   - **Metric:** Engagement rate (likes + comments / reach).  
-
-2. **Experiment with reels featuring dynamic action shots.**  
-   - **What:** Post 6 reels showcasing action-packed moments (e.g., biking descents, river crossings) with a one-line opening hook in the caption to grab attention.  
-   - **Metric:** Reach per reel.  
-
-3. **Hashtag specificity test.**  
-   - **What:** For all posts, replace broad hashtags like `#costarica` with niche ones tied to the activity or location (e.g., `#mountainbikingcostarica`, `#puravidatrails`).  
-   - **Metric:** Reach and engagement rate compared to past posts using generic hashtags.  
-
----
-
-Let me know which changes and experiments you'd like to proceed with, and I’ll implement them!
+Let me know if you'd like to proceed with these changes and experiments!

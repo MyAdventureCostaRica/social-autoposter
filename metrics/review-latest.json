@@ -1,19 +1,19 @@
 {
  "stats": {
-  "generated": "2026-07-13",
-  "total_posts": 790,
-  "with_insights": 110,
-  "eligible": 30,
-  "eligible_recent_12mo": 25,
+  "generated": "2026-07-22",
+  "total_posts": 805,
+  "with_insights": 126,
+  "eligible": 33,
+  "eligible_recent_12mo": 28,
   "date_range": [
    "2017-07-23",
-   "2026-07-13"
+   "2026-07-22"
   ],
   "interaction_mix_pct": {
-   "saved": 0.008,
-   "shares": 0.073,
-   "likes": 0.832,
-   "comments": 0.04
+   "saved": 0.007,
+   "shares": 0.072,
+   "likes": 0.839,
+   "comments": 0.038
   },
   "format_leaderboard": [
    {
@@ -33,11 +33,20 @@
    },
    {
     "format": "reel",
-    "avg_eng_rate": 0.048,
-    "n": 20
+    "avg_eng_rate": 0.0547,
+    "n": 23
    }
   ],
   "top_posts": [
+   {
+    "date": "2026-07-22",
+    "format": "reel",
+    "reach": 57,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.1053,
+    "caption": "Dawn on the shore, where the waves meet the stillness of untouched sands. This is Costa Rica at its most tranquil. A pla"
+   },
    {
     "date": "2026-06-19",
     "format": "single",
@@ -59,7 +68,7 @@
    {
     "date": "2026-07-08",
     "format": "reel",
-    "reach": 195,
+    "reach": 209,
     "shares": 0,
     "saved": 0,
     "eng_rate": 0.0718,
@@ -75,56 +84,47 @@
     "caption": "In the embrace of nature, the trail winds its way through mist-laden greenery. This is the kind of run that clears the m"
    },
    {
+    "date": "2026-07-17",
+    "format": "reel",
+    "reach": 212,
+    "shares": 1,
+    "saved": 0,
+    "eng_rate": 0.0519,
+    "caption": "Some trails are meant to be shared. The rhythm of footsteps, the exchange of quiet words, the pull of the path ahead — t"
+   },
+   {
     "date": "2026-07-11",
     "format": "reel",
-    "reach": 175,
+    "reach": 187,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.0514,
+    "eng_rate": 0.0535,
     "caption": "The trail winds upward, and the world below fades into mist. This is mountain biking in Costa Rica: a journey through lu"
    },
    {
-    "date": "2026-06-20",
+    "date": "2026-07-15",
     "format": "reel",
-    "reach": 131,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0534,
-    "caption": "Beneath the surface, Costa Rica reveals a world of calm and wonder. The gentle rhythm of a sea turtle’s journey reminds "
-   },
-   {
-    "date": "2026-06-24",
-    "format": "single",
-    "reach": 231,
+    "reach": 254,
     "shares": 1,
     "saved": 0,
-    "eng_rate": 0.0433,
-    "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
-   },
-   {
-    "date": "2026-07-04",
-    "format": "reel",
-    "reach": 232,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0388,
-    "caption": "#myadventurecostarica #costarica"
+    "eng_rate": 0.0512,
+    "caption": "Every trail run in Costa Rica tells its own story. Beneath a canopy of green, the soft earth gives way to miles of disco"
    }
   ],
   "themes": [
-   "mountain",
-   "biking",
+   "quiet",
    "trails",
    "through",
-   "quiet",
-   "ride",
+   "mountain",
+   "biking",
+   "trail",
+   "pause",
    "embrace",
-   "moment",
-   "begins",
-   "adjusting"
+   "ride",
+   "winds"
   ],
-  "photo_queue": 182,
-  "errored_posts": 680
+  "photo_queue": 159,
+  "errored_posts": 679
  },
- "markdown": "# Performance Review\n\n## **Readout**\n\nBy today's standards, **reach** is the clearest live currency, as shares and saves remain negligible (7.3% and 0.8% of interactions, respectively). Recent data highlights a strong performance from **single-image posts**, which lead in engagement rate (0.0769) compared to reels (0.048). However, reels dominate in volume (20 out of 30 eligible posts) and consistently achieve higher reach (e.g., 232 vs. 104 for top single posts). Themes like **mountain biking, trails, and quiet moments in nature** resonate most, with captions emphasizing reflection and connection to the environment. The photo queue is healthy (182), but a significant number of posts (680) lack insights, limiting the dataset.\n\n---\n\n## **Proposed changes**\n\n1. **Adjust REACH_FLOOR to 100 (from 50).**  \n   Justification: The lowest-performing posts in the top set (reels with ~130 reach) already exceed the current floor. Raising this threshold will better filter for meaningful insights while still including the majority of eligible posts (25/30 in the past year).\n\n2. **Increase HALFLIFE_DAYS to 60 (from 30).**  \n   Justification: Reels dominate recent posts, and their performance often grows over time. Extending the halflife will allow the learner to better account for this delayed engagement pattern.\n\n3. **Refine caption brief to emphasize reflection and connection.**  \n   Justification: The top-performing captions (e.g., \"Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements\") focus on introspective, evocative themes. Update the brief to explicitly encourage this tone, while still maintaining variety.\n\n4. **Add a STOP list for overly generic hashtags.**  \n   Justification: Posts with hashtags like `#myadventurecostarica` and `#costarica` underperform (e.g., 0.0388 engagement rate). These should be deprioritized in favor of more specific, niche hashtags tied to adventure, mountain biking, or Costa Rica’s unique landscapes.\n\n---\n\n## **3 experiments**\n\n1. **Test single-image posts with reflective captions.**  \n   - **What:** Post 4 single-image posts in the next 30 days, focusing on the themes of mountain biking, trails, and quiet moments in nature. Use captions that evoke resilience, connection to nature, and introspection.  \n   - **Metric:** Engagement rate (likes + comments / reach).  \n\n2. **Experiment with reels featuring dynamic action shots.**  \n   - **What:** Post 6 reels showcasing action-packed moments (e.g., biking descents, river crossings) with a one-line opening hook in the caption to grab attention.  \n   - **Metric:** Reach per reel.  \n\n3. **Hashtag specificity test.**  \n   - **What:** For all posts, replace broad hashtags like `#costarica` with niche ones tied to the activity or location (e.g., `#mountainbikingcostarica`, `#puravidatrails`).  \n   - **Metric:** Reach and engagement rate compared to past posts using generic hashtags.  \n\n---\n\nLet me know which changes and experiments you'd like to proceed with, and I’ll implement them!"
+ "markdown": "# Monthly Auto-Poster Review: July 2026\n\n## **Readout**\nThe data indicates that **reach** remains the dominant currency for measuring performance, with reels consistently earning the highest reach among formats. However, engagement rates for reels are lower (avg. 0.0547) compared to single posts (avg. 0.0769), suggesting reels may be better for visibility, while single posts drive deeper engagement. Shares are minimal across all formats (0.072% of interactions), and saves are negligible (0.007%), so these metrics should not be prioritized. Themes of \"quiet,\" \"trails,\" \"mountain biking,\" and \"nature\" appear in top-performing captions, reinforcing the appeal of serene, immersive outdoor experiences.\n\n## **Proposed Changes**\n1. **Adjust REACH_FLOOR**: Lower the threshold from 100 to **50** based on recent data, as the top post from 2026-07-22 achieved a strong engagement rate (0.1053) despite a reach of only 57. This ensures the learner doesn't exclude valuable signals from lower-reach posts.\n2. **Extend HALFLIFE_DAYS**: Increase from 30 to **60 days**, as engagement rates for posts from June 2026 remain competitive, suggesting content relevance persists longer than previously assumed.\n3. **Refine Captioner Brief**: Emphasize themes of tranquility, trails, and immersive nature experiences, as these resonate strongly with the audience. Add guidance to subtly highlight the unique Costa Rican landscape and experiences without being promotional.\n\n### Revised Captioner Brief\n- Voice: Luxury-editorial, aspirational, yet grounded in authenticity. Formal Spanish (usted) with occasional English phrases for emphasis.\n- Structure: Start with an evocative, shareable hook (e.g., \"Some trails demand more than endurance — they ask for resilience and focus\"). Paint a vivid sensory picture of Costa Rica's landscapes and experiences. End with a soft invitation or reflection that aligns with My Adventure Costa Rica's brand.\n- Themes: Prioritize tranquility, trails, mountain biking, and the harmony of nature. Avoid overtly promotional language; focus on storytelling.\n\n## **3 Experiments**\n1. **Test Reels with Shareable Hooks**  \n   - **What**: Post 10 reels with a one-line shareable hook at the start (e.g., \"Some trails are meant to be shared\").  \n   - **Why**: Reels dominate reach but have low engagement rates; a compelling hook may drive shares and deeper engagement.  \n   - **Metric**: Watch for increases in shares and engagement rate.\n\n2. **Single Posts Highlighting Costa Rican Trails**  \n   - **What**: Create 5 single posts focused on Costa Rica's trails, using themes like \"quiet,\" \"ride,\" and \"winds.\"  \n   - **Why**: Single posts have the highest engagement rate and align with top-performing themes.  \n   - **Metric**: Compare engagement rate against recent single posts.\n\n3. **Story Experiment with Immersive Narratives**  \n   - **What**: Post 3 stories with immersive narratives (e.g., preparing for a ride, moments of pause mid-trail).  \n   - **Why**: Stories have the highest engagement rate (0.0926) but are underutilized (only 1 post in the dataset).  \n   - **Metric**: Monitor engagement rate and reach for stories.\n\nLet me know if you'd like to proceed with these changes and experiments!"
 }
