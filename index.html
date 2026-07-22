@@ -9,7 +9,7 @@
   @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-normal.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
   @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-italic.ttf') format('truetype');font-weight:400 600;font-style:italic;font-display:swap}
   @font-face{font-family:'DM Sans';src:url('fonts/dm-sans-latin-standard-normal.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
-  :root{--sand:#F2EBD9;--bone:#F4EFE3;--ink:#0c100d;--clay:#5C4520;--clay-soft:#b08948;--forest:#169F48;--line:rgba(12,16,13,.12)}
+  :root{--sand:#F2EBD9;--sand-2:#EBE3D3;--bone:#F4EFE3;--ink:#0c100d;--clay:#5C4520;--clay-soft:#b08948;--forest:#169F48;--terracotta:#B85A20;--line:rgba(12,16,13,.12)}   /* mirrors the site tokens; forest = Pantone 149-8C (logo) */
   *{box-sizing:border-box}
   body{margin:0;background:var(--sand);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
@@ -25,7 +25,7 @@
   h2{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:36px 0 16px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;align-items:start}
   .card{background:var(--bone);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#ddd}
+  .card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--sand-2)}
   .card .meta{padding:10px 12px;font-size:12px;color:var(--clay)}
   .card .meta b{color:var(--ink);font-weight:600}
   .card{position:relative;cursor:pointer}
@@ -74,8 +74,8 @@
   .mc-run{font-size:12.5px;line-height:1.5}
   .mc-run a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--clay-soft)}
   .run-ok{color:var(--forest,#169F48);font-weight:700}
-  .run-bad{color:#c0392b;font-weight:700}
-  .run-go{color:#b8860b;font-weight:700}
+  .run-bad{color:#9E3B1B;font-weight:700}   /* terracotta, deepened — ✗ glyph carries the meaning */
+  .run-go{color:var(--clay-soft);font-weight:700}
   .mc-gear{margin-left:auto;font-size:16px;background:none;border:none;cursor:pointer;color:var(--clay)}
   .mc-in{width:100%;max-width:420px;display:block;margin:6px 0;padding:8px 10px;border:1px solid var(--clay-soft);border-radius:8px;font-size:14px}
   .ic-edit{width:100%;box-sizing:border-box;margin:8px 0 4px;padding:9px 11px;border:1px solid var(--clay-soft);border-radius:9px;font:inherit;font-size:14px;line-height:1.5;background:#fff;resize:vertical}
@@ -95,7 +95,7 @@
   .pending-card{background:var(--bone);border:1px solid var(--clay-soft);border-left:4px solid var(--clay);border-radius:14px;padding:18px 20px;margin-bottom:26px}
   .pp-imgs{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
   .pp-thumb{width:128px;height:128px;object-fit:cover;border-radius:10px;flex:none;border:1px solid var(--clay-soft)}
-  .pp-video{width:200px;max-height:356px;border-radius:10px;border:1px solid var(--clay-soft);background:#000;flex:none}
+  .pp-video{width:200px;max-height:356px;border-radius:10px;border:1px solid var(--clay-soft);background:var(--ink);flex:none}
   .pub-card{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;background:var(--bone);border:1px solid var(--clay-soft);border-radius:14px;padding:18px;margin-bottom:28px}
   .pub-img{width:220px;max-width:42vw;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid var(--clay-soft);display:block;flex:none}
   .pub-body{flex:1;min-width:240px}
@@ -764,10 +764,16 @@ function renderInbox(items,resolved,postsById){
 // History = metrics/audience-history.json, one entry per day (fetch_insights.py
 // appends on each Daily insights run; the snapshot audience.json alone is
 // overwritten). Rides the same live-refresh path as everything else.
-// Series colors validated (dataviz six-checks) on this page's bone surface
-// #F4EFE3: adjacent CVD ΔE 9.1, normal-vision 19.6; the contrast WARN is
-// relieved by direct end-labels + legend + tooltip.
-const AUD_COLORS=['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4'];
+// Series colors: BRAND-LED, validated (dataviz six-checks) on this page's bone
+// surface #F4EFE3 — terracotta (site --terracotta) and forest (Pantone 149-8C,
+// the logo green) carry slots 1+3, separated by a derived petrol blue because
+// terracotta↔forest adjacent fails deutan (ΔE 4.8); plum + gold (clay-soft with
+// the chroma raised to clear the gray floor) complete the set. Worst adjacent
+// CVD ΔE 11.2, normal-vision 21.8; the gold's contrast WARN is relieved by
+// direct end-labels + legend + tooltip. A pure-brand five (clay, clay-soft,
+// forest-mid…) is unshippable: clay-soft↔forest reads IDENTICAL to protan
+// viewers (ΔE 2.3) and clay fails the lightness band — don't retry it.
+const AUD_COLORS=['#B85A20','#3579B0','#169F48','#9C5477','#D69A2D'];
 function _flag(c){return (c&&c.length===2)?String.fromCodePoint(...[...c.toUpperCase()].map(ch=>127397+ch.charCodeAt(0))):'';}
 function renderAudience(aud,hist){
   const el=document.getElementById('audience'); if(!el) return;
