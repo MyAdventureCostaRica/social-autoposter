@@ -1,40 +1,43 @@
 # Latest review — 2026-07-22
 
-# Review: July 2026
+# Review: Social Media Performance Analysis and Recommendations
 
-## Readout
-By today's standards, **reach** remains the live currency, with reels consistently pulling the highest reach among formats (top post reach: 254). However, engagement rates suggest stories (0.0926) and single posts (0.0769) outperform reels (0.0493) in driving interactions. **Saved posts** are nearly absent (0.7% of the mix), confirming that saves are not a meaningful metric for this audience. The top-performing posts emphasize **immersive experiences** ("resilience, focus, and a willingness to embrace the elements") and **routes through nature** ("the trail winds upward, and the world below fades into mist"). The **ROUTE pillar** dominates eligible posts (8 out of 27), but the **EXPERIENCE pillar** has a slightly higher engagement rate (0.0619 vs. 0.048). **Cycling** leads categories in engagement (0.065), suggesting it resonates most.
+## **Readout**
 
-## Proposed changes
-1. **REACH_FLOOR**: No change. The current threshold (50) aligns with recent top posts and ensures the learner focuses on posts with meaningful reach.
-2. **HALFLIFE_DAYS**: Lower to **60 days** (from 90). Recent posts (June–July 2026) dominate the leaderboard, indicating recency has stronger weight in performance. A shorter halflife will better reflect current trends.
-3. **SAVES_DEAD**: Raise to **0.1** (from 0.05). Saved posts are nearly absent (0.7% of interaction mix), and the learner should deprioritize them further.
-4. **Captioner brief**: Update to emphasize **immersive experiences** and **routes through nature**, reflecting top-performing themes. Add a note to avoid "saved" language and focus on shareable moments or visual storytelling.
+1. **Live currency:** The current interaction mix indicates that **likes (83.7%)** dominate, followed by **shares (7.3%)** and **saves (0.7%)**. While saves are negligible, shares are the second most significant interaction type and should be prioritized for growth.
+2. **Format performance:** **Stories** lead in average engagement rate (0.0926), but the sample size (n=1) is too small to act on. Among formats with more data, **single posts (0.0769)** outperform **carousels (0.0691)** and **reels (0.0492)**.
+3. **Pillar performance:** The **EXPERIENCE** pillar (0.0618) outperforms **ROUTE (0.048)**, but the sample sizes are still small (n=3 and n=8, respectively). This suggests that posts focusing on the emotional and immersive aspects of adventure resonate more than those emphasizing routes.
+4. **Category performance:** **CYCLING (0.065)** leads among categories, followed by **RUNNING (0.0541)** and **WATER SPORTS (0.0534)**. **COSTA RICA (0.0302)** underperforms, suggesting that posts focused solely on the destination may not resonate as strongly without tying it to specific activities or experiences.
+5. **Top posts:** The highest-performing post (0.1346 engagement rate) is a single image with an introspective, resilience-focused caption. Posts emphasizing the emotional aspects of adventure (e.g., resilience, sharing, quiet moments) appear to resonate well.
 
-### Updated captioner brief
-**Voice:** Luxury-editorial, never pushy. Spanish in formal usted. Full brand name 'My Adventure Costa Rica,' never an acronym.  
-**Themes:**  
-- Focus on immersive experiences ("resilience, focus, and a willingness to embrace the elements") and routes through nature ("the trail winds upward, and the world below fades into mist").  
-- Avoid language emphasizing saves; instead, highlight moments worth sharing or visual storytelling that invites exploration.  
-**Structure:**  
-- Begin with a one-line hook that captures the essence of the post.  
-- Use evocative imagery and sensory details to transport the audience.  
-- End with an invitation to imagine themselves in the scene (soft, aspirational tone).  
+---
 
-## 3 experiments
-1. **Test immersive storytelling hooks in reels captions**  
-   - Metric: Reach and engagement rate (focus on shares).  
-   - Example: "Some trails demand more than endurance — they ask for resilience, focus, and a willingness to embrace the elements."  
-   - Duration: 30 days.  
+## **Proposed changes**
 
-2. **Post single images with route-focused captions**  
-   - Metric: Engagement rate (likes and comments).  
-   - Example: "The trail winds upward, and the world below fades into mist. This is mountain biking in Costa Rica: a journey through lush greenery and quiet wonder."  
-   - Duration: 30 days.  
+1. **REACH_FLOOR:** Increase from **50** to **100**. The top posts all exceed 100 reach, and only one post below this threshold is among the top performers. This change will focus the learner on posts with meaningful reach while still retaining enough data (32 eligible posts).
+2. **HALFLIFE_DAYS:** Maintain at **90**. The data shows sustained engagement over time, and there is no evidence to suggest that engagement decays faster than this.
+3. **SAVES_DEAD:** Decrease from **0.05** to **0.01**. Saves are nearly negligible (0.7% of interactions), and the current threshold may be too high to capture their minimal impact. Lowering it ensures the learner doesn't over-prioritize saves.
+4. **Captioner brief:** Emphasize emotional and immersive storytelling, especially around resilience, shared experiences, and the connection with nature. Deprioritize destination-focused captions unless tied to an activity or experience, as "COSTA RICA" posts underperform. Example addition: "Highlight the emotional and transformative aspects of adventure — resilience, shared moments, and connection with nature. Tie locations to specific experiences rather than focusing solely on the destination."
 
-3. **Experiment with stories emphasizing quiet moments before action**  
-   - Metric: Reach and engagement rate (focus on shares).  
-   - Example: "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it's about the mindset."  
-   - Duration: 30 days.  
+---
 
-Let me know if you'd like to approve these changes or adjust further!
+## **3 experiments**
+
+1. **Test emotional storytelling in reels captions:**
+   - **Hypothesis:** Reels with captions emphasizing resilience, shared experiences, and connection with nature will drive higher engagement rates.
+   - **Execution:** Post 4 reels over the next 30 days with captions inspired by the top-performing post from June 19, 2026.
+   - **Metric:** Engagement rate (likes, shares, comments).
+
+2. **Experiment with single-image posts:**
+   - **Hypothesis:** Single-image posts will outperform reels in engagement rate due to their higher historical performance.
+   - **Execution:** Post 4 single-image posts over the next 30 days, focusing on either the **EXPERIENCE** or **CYCLING** pillars.
+   - **Metric:** Engagement rate.
+
+3. **Optimize for shares:**
+   - **Hypothesis:** Posts with concise, shareable captions will increase the share rate, which is the second most significant interaction type.
+   - **Execution:** Post 5 pieces of content (mix of single posts and reels) with captions designed to be shareable — e.g., one-line insights, inspiring quotes, or intriguing questions.
+   - **Metric:** Share rate.
+
+---
+
+Let me know which changes and experiments you'd like to approve, and I’ll update the code and brief accordingly!
