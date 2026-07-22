@@ -1,34 +1,40 @@
 # Latest review — 2026-07-22
 
-# Monthly Auto-Poster Review: July 2026
+# Review: July 2026
 
-## **Readout**
-The data indicates that **reach** remains the dominant currency for measuring performance, with reels consistently earning the highest reach among formats. However, engagement rates for reels are lower (avg. 0.0547) compared to single posts (avg. 0.0769), suggesting reels may be better for visibility, while single posts drive deeper engagement. Shares are minimal across all formats (0.072% of interactions), and saves are negligible (0.007%), so these metrics should not be prioritized. Themes of "quiet," "trails," "mountain biking," and "nature" appear in top-performing captions, reinforcing the appeal of serene, immersive outdoor experiences.
+## Readout
+By today's standards, **reach** remains the live currency, with reels consistently pulling the highest reach among formats (top post reach: 254). However, engagement rates suggest stories (0.0926) and single posts (0.0769) outperform reels (0.0493) in driving interactions. **Saved posts** are nearly absent (0.7% of the mix), confirming that saves are not a meaningful metric for this audience. The top-performing posts emphasize **immersive experiences** ("resilience, focus, and a willingness to embrace the elements") and **routes through nature** ("the trail winds upward, and the world below fades into mist"). The **ROUTE pillar** dominates eligible posts (8 out of 27), but the **EXPERIENCE pillar** has a slightly higher engagement rate (0.0619 vs. 0.048). **Cycling** leads categories in engagement (0.065), suggesting it resonates most.
 
-## **Proposed Changes**
-1. **Adjust REACH_FLOOR**: Lower the threshold from 100 to **50** based on recent data, as the top post from 2026-07-22 achieved a strong engagement rate (0.1053) despite a reach of only 57. This ensures the learner doesn't exclude valuable signals from lower-reach posts.
-2. **Extend HALFLIFE_DAYS**: Increase from 30 to **60 days**, as engagement rates for posts from June 2026 remain competitive, suggesting content relevance persists longer than previously assumed.
-3. **Refine Captioner Brief**: Emphasize themes of tranquility, trails, and immersive nature experiences, as these resonate strongly with the audience. Add guidance to subtly highlight the unique Costa Rican landscape and experiences without being promotional.
+## Proposed changes
+1. **REACH_FLOOR**: No change. The current threshold (50) aligns with recent top posts and ensures the learner focuses on posts with meaningful reach.
+2. **HALFLIFE_DAYS**: Lower to **60 days** (from 90). Recent posts (June–July 2026) dominate the leaderboard, indicating recency has stronger weight in performance. A shorter halflife will better reflect current trends.
+3. **SAVES_DEAD**: Raise to **0.1** (from 0.05). Saved posts are nearly absent (0.7% of interaction mix), and the learner should deprioritize them further.
+4. **Captioner brief**: Update to emphasize **immersive experiences** and **routes through nature**, reflecting top-performing themes. Add a note to avoid "saved" language and focus on shareable moments or visual storytelling.
 
-### Revised Captioner Brief
-- Voice: Luxury-editorial, aspirational, yet grounded in authenticity. Formal Spanish (usted) with occasional English phrases for emphasis.
-- Structure: Start with an evocative, shareable hook (e.g., "Some trails demand more than endurance — they ask for resilience and focus"). Paint a vivid sensory picture of Costa Rica's landscapes and experiences. End with a soft invitation or reflection that aligns with My Adventure Costa Rica's brand.
-- Themes: Prioritize tranquility, trails, mountain biking, and the harmony of nature. Avoid overtly promotional language; focus on storytelling.
+### Updated captioner brief
+**Voice:** Luxury-editorial, never pushy. Spanish in formal usted. Full brand name 'My Adventure Costa Rica,' never an acronym.  
+**Themes:**  
+- Focus on immersive experiences ("resilience, focus, and a willingness to embrace the elements") and routes through nature ("the trail winds upward, and the world below fades into mist").  
+- Avoid language emphasizing saves; instead, highlight moments worth sharing or visual storytelling that invites exploration.  
+**Structure:**  
+- Begin with a one-line hook that captures the essence of the post.  
+- Use evocative imagery and sensory details to transport the audience.  
+- End with an invitation to imagine themselves in the scene (soft, aspirational tone).  
 
-## **3 Experiments**
-1. **Test Reels with Shareable Hooks**  
-   - **What**: Post 10 reels with a one-line shareable hook at the start (e.g., "Some trails are meant to be shared").  
-   - **Why**: Reels dominate reach but have low engagement rates; a compelling hook may drive shares and deeper engagement.  
-   - **Metric**: Watch for increases in shares and engagement rate.
+## 3 experiments
+1. **Test immersive storytelling hooks in reels captions**  
+   - Metric: Reach and engagement rate (focus on shares).  
+   - Example: "Some trails demand more than endurance — they ask for resilience, focus, and a willingness to embrace the elements."  
+   - Duration: 30 days.  
 
-2. **Single Posts Highlighting Costa Rican Trails**  
-   - **What**: Create 5 single posts focused on Costa Rica's trails, using themes like "quiet," "ride," and "winds."  
-   - **Why**: Single posts have the highest engagement rate and align with top-performing themes.  
-   - **Metric**: Compare engagement rate against recent single posts.
+2. **Post single images with route-focused captions**  
+   - Metric: Engagement rate (likes and comments).  
+   - Example: "The trail winds upward, and the world below fades into mist. This is mountain biking in Costa Rica: a journey through lush greenery and quiet wonder."  
+   - Duration: 30 days.  
 
-3. **Story Experiment with Immersive Narratives**  
-   - **What**: Post 3 stories with immersive narratives (e.g., preparing for a ride, moments of pause mid-trail).  
-   - **Why**: Stories have the highest engagement rate (0.0926) but are underutilized (only 1 post in the dataset).  
-   - **Metric**: Monitor engagement rate and reach for stories.
+3. **Experiment with stories emphasizing quiet moments before action**  
+   - Metric: Reach and engagement rate (focus on shares).  
+   - Example: "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it's about the mindset."  
+   - Duration: 30 days.  
 
-Let me know if you'd like to proceed with these changes and experiments!
+Let me know if you'd like to approve these changes or adjust further!
