@@ -183,6 +183,14 @@ def pull_audience():
             out = {"metric": label, "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "total": total,
                    "countries": [{"code": c, "pct": round(v * 100.0 / total, 1), "value": v} for c, v in rows[:12]]}
             json.dump(out, open(os.path.join(MET, "audience.json"), "w"))
+            # Daily HISTORY (audience.json alone is overwritten each run): one entry
+            # per day+metric so the dashboard can chart how the country mix shifts.
+            hp = os.path.join(MET, "audience-history.json")
+            hist = [h for h in load_list(hp)
+                    if not (h.get("date") == out["ts"][:10] and h.get("metric") == label)]
+            hist.append({"date": out["ts"][:10], "metric": label, "total": total,
+                         "countries": out["countries"]})
+            json.dump(hist[-730:], open(hp, "w"), indent=1)   # ~2 years of dailies
             print(f"Audience ({label}) top:", out["countries"][:4]); return out
         except Exception as e:
             print("audience parse fail", label, e); continue

@@ -718,12 +718,82 @@ function renderInbox(items,resolved,postsById){
   if(isNew && !/^●/.test(document.title)) document.title='● '+document.title;
 }
 
+// ---- Audience by country: today's mix + the trend over time ------------------
+// History = metrics/audience-history.json, one entry per day (fetch_insights.py
+// appends on each Daily insights run; the snapshot audience.json alone is
+// overwritten). Rides the same live-refresh path as everything else.
+// Series colors validated (dataviz six-checks) on this page's bone surface
+// #F4EFE3: adjacent CVD ΔE 9.1, normal-vision 19.6; the contrast WARN is
+// relieved by direct end-labels + legend + tooltip.
+const AUD_COLORS=['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4'];
+function _flag(c){return (c&&c.length===2)?String.fromCodePoint(...[...c.toUpperCase()].map(ch=>127397+ch.charCodeAt(0))):'';}
+function renderAudience(aud,hist){
+  const el=document.getElementById('audience'); if(!el) return;
+  if(!(aud&&Array.isArray(aud.countries)&&aud.countries.length)){ el.innerHTML=''; return; }
+  const label=aud.metric==='followers'?'Followers by country':'Reach by country · last 90 days';
+  let html=`<b>${label}:</b> `+aud.countries.slice(0,7).map(c=>`${_flag(c.code)} ${esc(c.code)} ${c.pct}%`).join('  ·  ');
+  const rows=(Array.isArray(hist)?hist:[]).filter(h=>h&&h.metric===aud.metric&&h.date&&Array.isArray(h.countries))
+    .sort((a,b)=>a.date.localeCompare(b.date));
+  if(rows.length<2){
+    html+=`<div class="muted" style="font-size:12px;margin-top:6px">Country trend: recording daily${rows.length?` since ${rows[0].date}`:''} — the chart draws once two days of history exist.</div>`;
+    el.innerHTML=html; return;
+  }
+  const latest=rows[rows.length-1];
+  const top=latest.countries.slice().sort((a,b)=>b.pct-a.pct).slice(0,5).map(c=>c.code);
+  const at=(r,c)=>{const f=(r.countries||[]).find(x=>x.code===c);return f?f.pct:null;};
+  const W=860,H=230,L=38,R=64,T=14,B=26,PW=W-L-R,PH=H-T-B;
+  const ymax=Math.max(10,Math.ceil(Math.max(...rows.map(r=>Math.max(...top.map(c=>at(r,c)||0))))*1.12));
+  const X=i=>L+i*PW/(rows.length-1), Y=v=>T+PH-(v/ymax)*PH;
+  let g='';
+  for(let i=0;i<=3;i++){const v=Math.round(ymax*i/3);
+    g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"/>`
+      +`<text x="${L-6}" y="${Y(v)+3.5}" text-anchor="end" font-size="10" fill="var(--clay)">${v}%</text>`;}
+  const xt=[...new Set([0,Math.floor((rows.length-1)/2),rows.length-1])];
+  for(const i of xt) g+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--clay)">${rows[i].date.slice(5)}</text>`;
+  let s='';const labs=[];
+  top.forEach((c,si)=>{
+    const col=AUD_COLORS[si%AUD_COLORS.length];
+    const pts=rows.map((r,i)=>({i,v:at(r,c)})).filter(p=>p.v!=null);
+    if(!pts.length) return;
+    s+=`<path d="${pts.map((p,n)=>(n?'L':'M')+X(p.i).toFixed(1)+' '+Y(p.v).toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(si<4){const lp=pts[pts.length-1];labs.push({c,v:lp.v,y:Y(lp.v)});}
+  });
+  labs.sort((a,b)=>a.y-b.y);                       // de-overlap end labels (min 13px apart)
+  for(let i=1;i<labs.length;i++) if(labs[i].y<labs[i-1].y+13) labs[i].y=labs[i-1].y+13;
+  const ends=labs.map(l=>`<text x="${W-R+6}" y="${l.y+3.5}" font-size="11" font-weight="600" fill="var(--ink)">${esc(l.c)} ${l.v}%</text>`).join('');
+  const legend=top.map((c,si)=>`<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px">`
+    +`<span style="width:10px;height:10px;border-radius:3px;background:${AUD_COLORS[si%AUD_COLORS.length]};display:inline-block"></span>`
+    +`<span style="font-size:11px;font-weight:600">${_flag(c)} ${esc(c)}</span></span>`).join('');
+  html+=`<div style="margin-top:10px;margin-bottom:2px">${legend}<span class="muted" style="font-size:11px"> · share of ${esc(aud.metric)} per day</span></div>`
+    +`<div style="position:relative" id="audTrendWrap">`
+    +`<svg id="audTrendSvg" viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">${g}${s}`
+    +`<line id="audCross" y1="${T}" y2="${T+PH}" x1="-9" x2="-9" stroke="var(--clay-soft)" stroke-width="1" style="display:none"/>${ends}</svg>`
+    +`<div id="audTip" style="display:none;position:absolute;top:8px;pointer-events:none;background:var(--bone);border:1px solid var(--clay-soft);border-radius:9px;padding:7px 10px;font-size:11.5px;line-height:1.65;box-shadow:0 6px 18px rgba(12,16,13,.14);font-variant-numeric:tabular-nums;white-space:nowrap"></div></div>`;
+  el.innerHTML=html;
+  const svg=document.getElementById('audTrendSvg'),tip=document.getElementById('audTip'),
+        cross=document.getElementById('audCross'),wrap=document.getElementById('audTrendWrap');
+  svg.addEventListener('mousemove',ev=>{
+    const rct=svg.getBoundingClientRect();
+    let i=Math.round(((ev.clientX-rct.left)*(W/rct.width)-L)/(PW/(rows.length-1)));
+    i=Math.max(0,Math.min(rows.length-1,i));
+    cross.setAttribute('x1',X(i)); cross.setAttribute('x2',X(i)); cross.style.display='';
+    tip.innerHTML=`<b>${rows[i].date}</b><br>`+top.map((c,si)=>{const v=at(rows[i],c);
+      return v==null?'':`<span style="color:${AUD_COLORS[si%AUD_COLORS.length]}">●</span> ${esc(c)} ${v}%`;}).filter(Boolean).join('<br>');
+    tip.style.display='block';
+    const wr=wrap.getBoundingClientRect();
+    let px=(X(i)/W)*wr.width+12; if(px+tip.offsetWidth+8>wr.width) px=px-24-tip.offsetWidth;
+    tip.style.left=Math.max(0,px)+'px';
+  });
+  svg.addEventListener('mouseleave',()=>{tip.style.display='none';cross.style.display='none';});
+}
+
 async function load(isRefresh){
   const cb=isRefresh?`?t=${Date.now()}`:'';   // bust the raw CDN cache on live refreshes
-  const [counts,insights,posts,review,aud]=await Promise.all([
+  const [counts,insights,posts,review,aud,audHist]=await Promise.all([
     j(`${RAW}/metrics/counts.json${cb}`),
     j(`${RAW}/metrics/insights.json${cb}`), j(`${RAW}/metrics/posts.json${cb}`),
-    j(`${RAW}/metrics/review-latest.json${cb}`), j(`${RAW}/metrics/audience.json${cb}`)
+    j(`${RAW}/metrics/review-latest.json${cb}`), j(`${RAW}/metrics/audience.json${cb}`),
+    j(`${RAW}/metrics/audience-history.json${cb}`)
   ]);
   if(!isRefresh) renderControls();
   // base -> Instagram thumbnail, so the "Just posted" banner can always show a
@@ -760,14 +830,7 @@ async function load(isRefresh){
     ['Avg reach', avgReach!=null?avgReach.toLocaleString():'—'],
     ['Total shares', totalShares||'—'],
   ].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
-  const audEl=document.getElementById('audience');
-  if(audEl){
-    if(aud&&Array.isArray(aud.countries)&&aud.countries.length){
-      const flag=c=>(c&&c.length===2)?String.fromCodePoint(...[...c.toUpperCase()].map(ch=>127397+ch.charCodeAt(0))):'';
-      const label=aud.metric==='followers'?'Followers by country':'Reach by country · last 90 days';
-      audEl.innerHTML=`<b>${label}:</b> `+aud.countries.slice(0,7).map(c=>`${flag(c.code)} ${esc(c.code)} ${c.pct}%`).join('  ·  ');
-    } else { audEl.innerHTML=''; }
-  }
+  renderAudience(aud,audHist);
 
   // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
   const capById={},urlById={},tsById={}; (Array.isArray(posts)?posts:[]).forEach(p=>{if(p.id){capById[p.id]=p.caption||'';urlById[p.id]=p.thumb||'';tsById[p.id]=p.ts||p.date||'';}});
