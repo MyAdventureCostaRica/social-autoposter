@@ -65,7 +65,7 @@
   .mc-status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:999px}
   .mc-status.on{background:var(--forest,#169F48);color:#fff}
   .mc-status.off{background:rgba(12,16,13,.10);color:var(--clay)}
-  .mc-btn{font-size:13px;font-weight:600;padding:6px 14px;border:1px solid var(--clay-soft);background:#fff;color:var(--ink);border-radius:8px;cursor:pointer}
+  .mc-btn{font-size:13px;font-weight:600;padding:0 14px;height:34px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;border:1px solid var(--clay-soft);background:#fff;color:var(--ink);border-radius:8px;cursor:pointer}
   .mc-btn:hover{background:var(--sand,#f2ebd9)}
   .mc-btn:disabled{opacity:.55;cursor:default}
   .mc-btn.send{background:var(--forest,#169F48);color:#fff;border-color:var(--forest,#169F48)}
@@ -345,7 +345,7 @@ const RUN_WF={
   post:{file:'daily-post.yml',name:'Prepare a post'},
   reel:{file:'reel-post.yml',name:'Prepare a reel'},
   responder:{file:'respond.yml',name:'Check messages'},
-  review:{file:'review.yml',name:'Monthly review'},
+  review:{file:'review.yml',name:'Run review'},
   publish:{file:'publish.yml',name:'Publish approved'}
 };
 function fmtRel(iso){
@@ -398,12 +398,21 @@ async function loadRunStatus(){
     const start=new Date(last.run_started_at||last.created_at).getTime();
     const running=!!(last.status&&last.status!=='completed'); if(running) anyRunning=true;
     const succ=runs.find(r=>r.conclusion==='success');
-    const durs=runs.filter(r=>r.conclusion==='success'&&r.run_started_at&&r.updated_at)
-      .slice(0,5).map(r=>new Date(r.updated_at)-new Date(r.run_started_at)).filter(d=>d>0);
-    const avg=durs.length?durs.reduce((a,b)=>a+b,0)/durs.length:0;
-    return {name:w.name,link,running,start,avg,ok:last.conclusion==='success',succWhen:succ?succ.updated_at:null};
+    // Duration estimate for the % readout, from ALL completed runs we can see.
+    // Median (robust to outliers), preferring real work: successes ≥45s (guard-skip
+    // runs finish in seconds and would drag the estimate); then any success; then
+    // any completed run; then a per-workflow prior so a % always shows (the review
+    // runs once a month — its history is mostly skips, so it never had an avg).
+    const dur=r=>(r.run_started_at&&r.updated_at)?(new Date(r.updated_at)-new Date(r.run_started_at)):0;
+    const med=a=>{ if(!a.length) return 0; const s=a.slice().sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; };
+    const done=runs.filter(r=>r.status==='completed');
+    const succD=done.filter(r=>r.conclusion==='success').map(dur).filter(d=>d>0);
+    const avg=med(succD.filter(d=>d>=45000))||med(succD)||med(done.map(dur).filter(d=>d>0))
+      ||({insights:240000,post:150000,reel:180000,responder:35000,review:90000,publish:120000}[k]||90000);
+    return {key:k,name:w.name,link,running,start,avg,ok:last.conclusion==='success',succWhen:succ?succ.updated_at:null};
   });
   renderRuns();
+  liveRefresh();
   if(_runTimer) clearTimeout(_runTimer);
   const conn=connected();
   const ms=anyRunning?(conn?10000:30000):(conn?30000:300000);
@@ -411,18 +420,51 @@ async function loadRunStatus(){
   if(anyRunning && !_runTick) _runTick=setInterval(renderRuns,1000);
   if(!anyRunning && _runTick){ clearInterval(_runTick); _runTick=null; }
 }
+// LIVE UPDATES: when any workflow finishes — button, Vercel cron, or GitHub
+// schedule, they all surface through the same run poll — pull its output into
+// the page right away. No reload, ever.
+function liveRefresh(){
+  window._lastDone=window._lastDone||{};
+  for(const it of _runState){
+    if(!it||it.empty||it.running||!it.key) continue;
+    const fp=it.start+':'+(it.ok?'1':'0');
+    const prev=window._lastDone[it.key];
+    window._lastDone[it.key]=fp;
+    if(prev===undefined||prev===fp||!it.ok) continue;   // first poll, unchanged, or a failed run
+    if(it.key==='review') refreshReview();
+    else if(it.key==='post'||it.key==='reel') renderLive(true);   // approval card appears
+    else if(it.key==='responder') refreshInbox();
+    else load(true);                                    // insights / publish: fresh data everywhere
+  }
+}
+async function refreshReview(){
+  let rv=null;
+  if(connected()){ try{ const rr=await ctrl('review',{}); if(rr&&rr.ok&&rr.review) rv=rr.review; }catch(e){} }
+  if(!rv) rv=await j(`${RAW}/metrics/review-latest.json?t=${Date.now()}`);   // cache-busted raw fallback
+  if(rv&&rv.markdown){ renderReview(rv); uiToast('Monthly review updated — proposals below'); }
+}
+function inboxBusy(){ const a=document.activeElement; return !!(a&&a.closest&&a.closest('#inbox')); }
+async function refreshInbox(){
+  if(!connected()||inboxBusy()) return;                 // never clobber a reply mid-type
+  try{
+    const r=await ctrl('inbox',{}); if(!(r&&r.ok)) return;
+    const key=JSON.stringify(r.inbox||[]);
+    if(key===window._inboxKey) return; window._inboxKey=key;
+    renderInbox(r.inbox||[], r.resolutions||{}, window._postsById||{});
+  }catch(e){}
+}
 function renderControls(){
   const el=document.getElementById('controls'); if(!el) return;
   const on=connected();
   el.innerHTML=`<div class="mc-bar"><span class="eyebrow">Mission control</span>`
     +`<span class="mc-status ${on?'on':'off'}">${on?'connected':'not connected'}</span>`
+    +`<button class="mc-btn" onclick="trigger('review','the monthly review',this)">Run review</button>`
     +`<button class="mc-btn" onclick="trigger('insights','insights refresh',this)">Refresh insights</button>`
+    +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
     +`<button class="mc-btn" onclick="trigger('post','a post',this,true)">Prepare a post</button>`
     +`<button class="mc-btn" onclick="trigger('reel','a reel',this,true)">Prepare a reel</button>`
-    +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
-    +`<button class="mc-btn" onclick="pickUpload()" title="Upload a photo or video to caption, render, and stage for approval">⬆ Upload</button>`
-    +`<span id="upStat" class="muted" style="font-size:12px;margin-left:6px"></span>`
-    +`<button class="mc-btn" onclick="trigger('review','the monthly review',this)">Run review</button>`
+    +`<button class="mc-btn" onclick="pickUpload()" title="Upload a photo or video to caption, render, and stage for approval">↑ Upload</button>`
+    +`<span id="upStat" class="muted" style="font-size:12px"></span>`
     +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve<span id="aaState" style="font-size:12px;color:var(--clay);margin-left:6px"></span></label>`
     +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
     +`<div class="mc-runs" id="mcRuns"></div>`
@@ -676,13 +718,14 @@ function renderInbox(items,resolved,postsById){
   if(isNew && !/^●/.test(document.title)) document.title='● '+document.title;
 }
 
-async function load(){
+async function load(isRefresh){
+  const cb=isRefresh?`?t=${Date.now()}`:'';   // bust the raw CDN cache on live refreshes
   const [counts,insights,posts,review,aud]=await Promise.all([
-    j(`${RAW}/metrics/counts.json`),
-    j(`${RAW}/metrics/insights.json`), j(`${RAW}/metrics/posts.json`),
-    j(`${RAW}/metrics/review-latest.json`), j(`${RAW}/metrics/audience.json`)
+    j(`${RAW}/metrics/counts.json${cb}`),
+    j(`${RAW}/metrics/insights.json${cb}`), j(`${RAW}/metrics/posts.json${cb}`),
+    j(`${RAW}/metrics/review-latest.json${cb}`), j(`${RAW}/metrics/audience.json${cb}`)
   ]);
-  renderControls();
+  if(!isRefresh) renderControls();
   // base -> Instagram thumbnail, so the "Just posted" banner can always show a
   // preview even for records saved before the publish-time thumbnail existed.
   window._thumbByBase={}; (Array.isArray(posts)?posts:[]).forEach(p=>{ if(p&&p.base&&p.thumb) window._thumbByBase[p.base]=p.thumb; });
@@ -692,12 +735,14 @@ async function load(){
   if(connected()){ try{ const rr=await ctrl('review',{}); if(rr&&rr.ok&&rr.review) reviewObj=rr.review; }catch(e){} }
   renderReview(reviewObj);
   const postsById={}; if(Array.isArray(posts)) for(const pp of posts){ if(pp&&pp.id) postsById[pp.id]=pp; }
+  window._postsById=postsById;   // for live inbox refreshes
   // Inbox is PRIVATE: it never touches the public repo. Load it through the
   // authenticated backend (api/control "inbox"). Requires you to be connected.
   const inboxEl=document.getElementById('inbox');
   if(connected()){
     const r=await ctrl('inbox',{});
-    if(r&&r.ok){ renderInbox(r.inbox||[], r.resolutions||{}, postsById); }
+    if(r&&r.ok){ window._inboxKey=JSON.stringify(r.inbox||[]);
+      if(!(isRefresh&&inboxBusy())) renderInbox(r.inbox||[], r.resolutions||{}, postsById); }
     else if(inboxEl){ inboxEl.innerHTML='<p class="muted" style="margin-top:8px">Could not load the inbox — check your connection details.</p>'; }
   } else if(inboxEl){
     inboxEl.innerHTML='<p class="muted" style="margin-top:8px">Connect mission control (above) to view and reply to your inbox.</p>';
