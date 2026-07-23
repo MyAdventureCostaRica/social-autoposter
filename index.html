@@ -20,6 +20,7 @@
   @font-face{font-family:'DM Sans';src:url('fonts/dm-sans-latin-standard-normal.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
   :root{--sand:#F2EBD9;--sand-2:#EBE3D3;--bone:#F4EFE3;--ink:#0c100d;--clay:#5C4520;--clay-soft:#b08948;--forest:#169F48;--terracotta:#B85A20;--line:rgba(12,16,13,.12)}   /* mirrors the site tokens; forest = Pantone 149-8C (logo) */
   *{box-sizing:border-box}
+  html{overflow-x:clip}                              /* no accidental sideways scroll of the page */
   body{margin:0;background:var(--sand);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px}
   h1{font-family:'Fraunces',serif;font-weight:500;font-size:34px;margin:0}
@@ -47,8 +48,10 @@
   .detail td:last-child{text-align:right;font-weight:600}
   .cap{margin-top:10px;font-size:12px;color:var(--clay);white-space:pre-wrap;max-height:140px;overflow:auto}
   table{width:100%;border-collapse:collapse;background:var(--bone);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px;white-space:nowrap}
   th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay)}
+  /* wide data tables scroll inside their own box (never the whole page); no data hidden */
+  #bytype,#perf{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
   tr:last-child td{border-bottom:none}
   .muted{color:var(--clay);font-size:14px}
   .note{background:var(--bone);border:1px dashed var(--clay-soft);border-radius:12px;padding:16px;color:var(--clay);font-size:14px;margin-top:12px}
@@ -144,6 +147,8 @@
     .pp-imgs img,.pp-thumb{max-width:46vw}
     /* comfortable tap targets on every action button */
     .mc-btn,.ic-actions button{min-height:40px}
+    /* tighter data-table cells so they fit (or scroll minimally) on a phone */
+    th,td{padding:9px 10px;font-size:12.5px}
   }
   /* let the just-posted image breathe on small tablets too */
   @media (max-width:820px) and (min-width:641px){ .pub-img{width:180px} }
