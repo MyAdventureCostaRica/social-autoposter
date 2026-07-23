@@ -9716,16 +9716,16 @@
   "category": "COSTA RICA",
   "pillar": "ROUTE",
   "reach": 13,
-  "likes": 1,
+  "likes": 2,
   "comments": 2,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 3,
+  "total_interactions": 4,
   "views": 27,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 3,
-  "eng_rate": 0.2308
+  "interactions": 4,
+  "eng_rate": 0.3077
  },
  {
   "id": "17994320744806304",
@@ -9789,14 +9789,14 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 55,
+  "reach": 60,
   "likes": 10,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
-  "views": 98,
+  "views": 101,
   "interactions": 12,
-  "eng_rate": 0.2182
+  "eng_rate": 0.2
  }
 ]
