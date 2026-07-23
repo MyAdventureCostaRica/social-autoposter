@@ -454,12 +454,15 @@ async function doUpload(file){
   xhr.onerror=()=>{ uiToast('Upload error \u2014 check your connection'); if(st())st().textContent=''; };
   xhr.send(fd);
 }
+// Order MATCHES the Mission-control button row (Run review, Refresh insights,
+// Check messages, Prepare a post, Prepare a reel), so the status list below reads
+// in the same order. Publish has no button — it trails at the end (Upload's slot).
 const RUN_WF={
+  review:{file:'review.yml',name:'Run review'},
   insights:{file:'insights.yml',name:'Refresh insights'},
+  responder:{file:'respond.yml',name:'Check messages'},
   post:{file:'daily-post.yml',name:'Prepare a post'},
   reel:{file:'reel-post.yml',name:'Prepare a reel'},
-  responder:{file:'respond.yml',name:'Check messages'},
-  review:{file:'review.yml',name:'Run review'},
   publish:{file:'publish.yml',name:'Publish approved'}
 };
 function fmtRel(iso){
