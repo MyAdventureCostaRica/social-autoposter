@@ -156,6 +156,7 @@
     .mc-gear{font-size:20px}
     .mc-toggle{min-height:34px}
     .mc-runs{grid-template-columns:1fr;margin-bottom:20px}
+    .mc-run{min-height:46px}   /* reserve 2 lines so skeleton→real never reflows (no page shift) */
     .mc-in{max-width:none}
     .stats{gap:12px;margin-bottom:26px}
     .stat{padding:16px}
@@ -494,6 +495,7 @@ function renderRuns(){
   const box=document.getElementById('mcRuns'); if(!box) return;
   let html='';
   for(const it of _runState){
+    if(it.checking){ html+=`<div class="mc-run"><a href="${it.link}" target="_blank" rel="noopener"><b>${it.name}</b></a> <span class="muted">checking status… · last success —</span></div>`; continue; }
     if(it.empty){ html+=`<div class="mc-run"><a href="${it.link}" target="_blank" rel="noopener"><b>${it.name}</b></a> <span class="muted">never run</span></div>`; continue; }
     let state;
     if(it.running){
@@ -599,6 +601,12 @@ function renderControls(){
     +`<div style="margin-top:8px"><button class="mc-btn" onclick="saveConnect()">Save</button>`
     +`<button class="mc-btn" onclick="testConnect()">Test</button>`
     +`<span id="cTest" class="muted" style="font-size:13px;margin-left:10px"></span></div></div>`;
+  // Render placeholder status rows IMMEDIATELY so the list has its full height from
+  // first paint — before this it started empty and popped in when the async fetch
+  // returned, shoving the page down. Same-length text = no reflow when data lands.
+  _runState=Object.keys(RUN_WF).map(k=>({key:k,name:RUN_WF[k].name,
+    link:`https://github.com/${REPO}/actions/workflows/${RUN_WF[k].file}`,checking:true}));
+  renderRuns();
   loadRunStatus();
   refreshAutoApprove();
 }
@@ -1099,7 +1107,11 @@ function collapseRecent(){
   if(!ctl) return;
   const seg=`<div class="rec-seg"><button class="${mode!=='carousel'?'on':''}" onclick="setRecentView('grid')">Grid</button>`
     +`<button class="${mode==='carousel'?'on':''}" onclick="setRecentView('carousel')">Carousel</button></div>`;
-  const counter=`<span class="muted" style="font-size:12px">Showing ${shown} of ${cards.length}</span>`;
+  // In the carousel you swipe through ALL posts (more auto-load at the end), so
+  // "Showing 48 of 812" reads wrong when only a few are on screen — show the total.
+  const counter=mode==='carousel'
+    ? `<span class="muted" style="font-size:12px">${cards.length.toLocaleString()} posts · swipe to browse</span>`
+    : `<span class="muted" style="font-size:12px">Showing ${shown} of ${cards.length.toLocaleString()}</span>`;
   if(mode==='carousel'){
     ctl.innerHTML=seg
       +`<div class="rec-nav"><button class="rec-arrow" onclick="recentArrow(-1)" aria-label="Previous">\u2039</button>`
