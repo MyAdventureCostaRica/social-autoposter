@@ -91,7 +91,10 @@
   .ic-msg{margin:4px 0 10px;line-height:1.5}
   .ic-draft{background:rgba(176,137,72,.10);border-radius:9px;padding:10px 12px;line-height:1.5;position:relative}
   .ic-copy{position:absolute;top:8px;right:8px;font-size:12px;padding:3px 10px;border:1px solid var(--clay-soft);background:#fff;border-radius:7px;cursor:pointer}
-  .mc-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bone);border:1px solid var(--clay-soft);border-radius:12px;padding:12px 16px;margin-bottom:24px}
+  .mc-bar{background:var(--bone);border:1px solid var(--clay-soft);border-radius:12px;padding:14px 16px;margin-bottom:24px}
+  .mc-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  /* buttons in a fixed grid — 6/3/2 columns (all factors of 6), so no row is ever ragged */
+  .mc-actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
   .mc-status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:999px}
   .mc-status.on{background:var(--forest,#169F48);color:#fff}
   .mc-status.off{background:rgba(12,16,13,.10);color:var(--clay)}
@@ -107,6 +110,7 @@
   .run-bad{color:#9E3B1B;font-weight:700}   /* terracotta, deepened — ✗ glyph carries the meaning */
   .run-go{color:var(--clay-soft);font-weight:700}
   .mc-gear{margin-left:auto;font-size:16px;background:none;border:none;cursor:pointer;color:var(--clay)}
+  @media(max-width:960px){ .mc-actions{grid-template-columns:repeat(3,minmax(0,1fr))} }
   .mc-in{width:100%;max-width:420px;display:block;margin:6px 0;padding:8px 10px;border:1px solid var(--clay-soft);border-radius:8px;font-size:14px}
   .ic-edit{width:100%;box-sizing:border-box;margin:8px 0 4px;padding:9px 11px;border:1px solid var(--clay-soft);border-radius:9px;font:inherit;font-size:14px;line-height:1.5;background:#fff;resize:vertical}
   .ic-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -120,7 +124,7 @@
   .modal-btns{display:flex;gap:10px;justify-content:flex-end}
   #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(18px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:10000;max-width:80%}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  .mc-toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--clay);cursor:pointer;user-select:none}
+  .mc-toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--clay);cursor:pointer;user-select:none;margin-top:12px}
   .mc-toggle input{width:16px;height:16px;accent-color:var(--forest,#169F48);cursor:pointer}
   .pending-card{background:var(--bone);border:1px solid var(--clay-soft);border-left:4px solid var(--clay);border-radius:14px;padding:18px 20px;margin-bottom:26px}
   .pp-imgs{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px}
@@ -146,10 +150,11 @@
     .top{align-items:center;margin-bottom:18px;padding-bottom:16px}
     .top img{height:38px!important}
     .top>button{min-height:40px}
-    .mc-bar{gap:8px;padding:12px}
-    .mc-bar .mc-btn{flex:1 1 42%;height:44px}          /* 2-up, thumb-sized targets */
+    .mc-bar{padding:12px}
+    .mc-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}  /* 2-up, even */
+    .mc-actions .mc-btn{height:44px}                    /* thumb-sized targets */
     .mc-gear{font-size:20px}
-    .mc-toggle{flex-basis:100%;order:9;min-height:34px} /* auto-approve on its own row */
+    .mc-toggle{min-height:34px}
     .mc-runs{grid-template-columns:1fr;margin-bottom:20px}
     .mc-in{max-width:none}
     .stats{gap:12px;margin-bottom:26px}
@@ -573,17 +578,19 @@ async function refreshInbox(){
 function renderControls(){
   const el=document.getElementById('controls'); if(!el) return;
   const on=connected();
-  el.innerHTML=`<div class="mc-bar"><span class="eyebrow">Mission control</span>`
+  el.innerHTML=`<div class="mc-bar">`
+    +`<div class="mc-head"><span class="eyebrow">Mission control</span>`
     +`<span class="mc-status ${on?'on':'off'}">${on?'connected':'not connected'}</span>`
+    +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
+    +`<div class="mc-actions">`
     +`<button class="mc-btn" onclick="trigger('review','the monthly review',this)">Run review</button>`
     +`<button class="mc-btn" onclick="trigger('insights','insights refresh',this)">Refresh insights</button>`
     +`<button class="mc-btn" onclick="trigger('responder','the message check',this)">Check messages</button>`
     +`<button class="mc-btn" onclick="trigger('post','a post',this,true)">Prepare a post</button>`
     +`<button class="mc-btn" onclick="trigger('reel','a reel',this,true)">Prepare a reel</button>`
-    +`<button class="mc-btn" onclick="pickUpload()" title="Upload a photo or video to caption, render, and stage for approval">↑ Upload</button>`
-    +`<span id="upStat" class="muted" style="font-size:12px"></span>`
-    +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve<span id="aaState" style="font-size:12px;color:var(--clay);margin-left:6px"></span></label>`
-    +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
+    +`<button class="mc-btn" onclick="pickUpload()" title="Upload a photo or video to caption, render, and stage for approval">↑ Upload</button></div>`
+    +`<div id="upStat" class="muted" style="font-size:12px;margin-top:8px"></div>`
+    +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve<span id="aaState" style="font-size:12px;color:var(--clay);margin-left:6px"></span></label></div>`
     +`<div class="mc-runs" id="mcRuns"></div>`
     +`<div id="connectPanel" style="display:none">`
     +`<p class="muted" style="font-size:13px;margin:10px 0 6px">Paste your Vercel URL (e.g. https://your-project.vercel.app) and the passphrase you set as DASH_KEY. Stored only in this browser.</p>`
