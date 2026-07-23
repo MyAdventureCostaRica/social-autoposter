@@ -39,6 +39,24 @@
   .card .meta{padding:10px 12px;font-size:12px;color:var(--clay)}
   .card .meta b{color:var(--ink);font-weight:600}
   .card{position:relative;cursor:pointer}
+  .cover{position:relative;aspect-ratio:1;overflow:hidden;background:var(--sand-2)}
+  .cover img,.cover .ph{width:100%;height:100%;object-fit:cover;display:block}
+  .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:rgba(12,16,13,.5);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;padding-left:3px;pointer-events:none}
+  .ph{display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;background:linear-gradient(155deg,#12201a,var(--ink));color:var(--sand);text-align:center}
+  .ph-g{font-size:30px;line-height:1;opacity:.92}
+  .ph-l{font-size:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.65}
+  .ph-pub{width:220px;max-width:42vw;aspect-ratio:1;border-radius:10px;border:1px solid var(--clay-soft);flex:none}
+  /* Recent posts: grid  ⇄  swipeable carousel ------------------------------- */
+  #recCtl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px}
+  .rec-seg{display:inline-flex;border:1px solid var(--clay-soft);border-radius:999px;overflow:hidden}
+  .rec-seg button{font:inherit;font-size:12.5px;font-weight:600;padding:7px 15px;border:0;background:#fff;color:var(--clay);cursor:pointer}
+  .rec-seg button.on{background:var(--ink);color:var(--sand)}
+  .rec-nav{display:inline-flex;gap:6px}
+  .rec-arrow{width:36px;height:36px;border-radius:50%;border:1px solid var(--clay-soft);background:#fff;color:var(--ink);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .rec-arrow:hover{background:var(--sand)}
+  .rec-arrow:disabled{opacity:.4;cursor:default}
+  #recent.carousel{display:flex;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;align-items:flex-start;-webkit-overflow-scrolling:touch;padding-bottom:10px;scroll-padding-left:2px}
+  #recent.carousel .card{flex:0 0 auto;width:min(80vw,300px);scroll-snap-align:start}
   .tag{position:absolute;top:8px;left:8px;background:rgba(12,16,13,.8);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:6px;z-index:1}
   .badge{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--sand);color:var(--clay);font-family:'Fraunces',serif;font-size:22px}
   .det{display:none;margin-top:10px}
@@ -138,7 +156,7 @@
     .stat{padding:16px}
     .stat .n{font-size:32px}
     .pub-card{padding:14px;gap:14px}
-    .pub-img{width:100%;max-width:none}                 /* see the whole post, big */
+    .pub-img,.ph-pub{width:100%;max-width:none}         /* see the whole post, big */
     .pub-body{min-width:0}
     .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
     .rv-head{padding:14px 16px}
@@ -175,6 +193,7 @@
   <div class="stats" id="stats"></div>
   <div id="audience" class="muted" style="font-size:13px;margin:-14px 0 30px"></div>
   <h2>Recent posts</h2>
+  <div id="recCtl"></div>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
   <h2>By post type <span class="muted" style="font-size:13px">— how each format performs</span></h2>
   <div id="bytype"></div>
@@ -191,6 +210,19 @@ async function j(u){try{const r=await fetch(u,{cache:'default'});if(!r.ok)return
 function imgExt(n){return /\.(jpe?g|png)$/i.test(n);}
 function photoExt(n){return /\.(jpe?g|png|heic|heif)$/i.test(n);}
 function imgFail(el,label){el.outerHTML='<div class="badge">'+label+'</div>';}
+// Branded placeholder for a post with no cover image (a reel/carousel/story whose
+// IG thumbnail we don't have yet). Looks intentional, not broken.
+function coverPlaceholder(fmt,big){
+  const g={reel:'▶',video:'▶',carousel:'▧',story:'◱'}[fmt]||'❖';
+  const l={reel:'Reel',video:'Video',carousel:'Carousel',story:'Story',single:'Post'}[fmt]||'Post';
+  return `<div class="ph${big?' ph-pub':''}"><span class="ph-g">${g}</span><span class="ph-l">${l}</span></div>`;
+}
+// Walk the ordered cover candidates on load error; brand-placeholder when exhausted.
+function nextCover(img){
+  let list=[]; try{ list=JSON.parse(img.getAttribute('data-srcs')||'[]'); }catch(e){}
+  if(list.length){ img.setAttribute('data-srcs',JSON.stringify(list.slice(1))); img.src=list[0]; return; }
+  img.outerHTML=coverPlaceholder(img.getAttribute('data-fmt')||'post');
+}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function md(t){
   const lines=esc(t).split('\n'); let html='', list=null;
@@ -691,17 +723,19 @@ function renderPublishedBanner(pub, announce){
   if(el.dataset.ts!==String(pub.ts)){
     el.dataset.ts=String(pub.ts);
     const link=pub.permalink||'https://www.instagram.com/myadventurecostarica/';
-    // Prefer the thumbnail saved at publish time; then the Instagram thumbnail
-    // from posts.json (works for reels too); then the rendered file for photos.
-    const tb=(window._thumbByBase||{})[pub.base]||'';
-    const img=pub.image||tb||(pub.base&&pub.format!=='reel'?`${RAW}/rendered/${pub.base}_1.jpg`:'');
-    // Full post view (Esteban, Jul 22): big image + the caption that went out,
-    // joined from posts.json by the published media_id.
+    // Full post view: big image + the caption that went out, joined from posts.json
+    // by the published media_id. For a REEL the cover is the IG thumbnail (meta.thumb) —
+    // photos use the saved image or the rendered file.
     const meta=(window._postsById||{})[pub.media_id]||{};
     const cap=pub.caption||meta.caption||'';
     const fmt=pub.format||meta.format||'';
+    const tb=(window._thumbByBase||{})[pub.base]||'';
+    const img=pub.image||meta.thumb||tb||(pub.base&&fmt!=='reel'?`${RAW}/rendered/${pub.base}_1.jpg`:'');
+    const cover=img
+      ? `<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-img" src="${escA(img)}" referrerpolicy="no-referrer" onerror="this.outerHTML=coverPlaceholder('${esc(fmt||'post')}',true)"></a>`
+      : `<a href="${escA(link)}" target="_blank" rel="noopener">${coverPlaceholder(fmt||'post',true)}</a>`;
     el.innerHTML=`<div class="pub-card">`
-      +(img?`<a href="${escA(link)}" target="_blank" rel="noopener"><img class="pub-img" src="${escA(img)}" referrerpolicy="no-referrer" onerror="imgFail(this,'LIVE')"></a>`:``)
+      +cover
       +`<div class="pub-body"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">`
       +`<span class="eyebrow">Just posted${pub.pillar?(' · '+esc(pub.pillar)):''}${fmt?(' · '+esc(fmt)):''}</span>`
       +`<span class="new-pill">Live</span></div>`
@@ -897,11 +931,11 @@ function renderAudience(aud,hist){
 
 async function load(isRefresh){
   const cb=isRefresh?`?t=${Date.now()}`:'';   // bust the raw CDN cache on live refreshes
-  const [counts,insights,posts,review,aud,audHist]=await Promise.all([
+  const [counts,insights,posts,review,aud,audHist,follHist]=await Promise.all([
     j(`${RAW}/metrics/counts.json${cb}`),
     j(`${RAW}/metrics/insights.json${cb}`), j(`${RAW}/metrics/posts.json${cb}`),
     j(`${RAW}/metrics/review-latest.json${cb}`), j(`${RAW}/metrics/audience.json${cb}`),
-    j(`${RAW}/metrics/audience-history.json${cb}`)
+    j(`${RAW}/metrics/audience-history.json${cb}`), j(`${RAW}/metrics/followers-history.json${cb}`)
   ]);
   if(!isRefresh) renderControls();
   // base -> Instagram thumbnail, so the "Just posted" banner can always show a
@@ -935,16 +969,38 @@ async function load(isRefresh){
     ? posts.filter(p=>p&&(p.format||'')!=='story').length
     : ((counts&&counts.posted)||0);
   const ins=Array.isArray(insights)?insights:[];
-  const withReach=ins.filter(x=>typeof x.reach==='number');
-  const avgReach=withReach.length?Math.round(withReach.reduce((a,b)=>a+b.reach,0)/withReach.length):null;
   const totalShares=ins.reduce((a,b)=>a+(b.shares||0),0);
-
-  document.getElementById('stats').innerHTML=[
-    ['Photos queued',queue],
-    ['Posts published',postedCount],
-    ['Avg reach', avgReach!=null?avgReach.toLocaleString():'—'],
-    ['Total shares', totalShares||'—'],
-  ].map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+  // A single "avg reach" lies here: photo posts reach ~30, reels ~450, stories a
+  // handful. So we show a TOTAL (reach in the last 30d, no averaging distortion)
+  // + the reels number on its own (the reach engine) + the follower north-star.
+  const fmtOf=x=>((window._postsById&&window._postsById[x.id]||{}).format||x.format||'');
+  const daysAgo=iso=>{ if(!iso) return 1e9; const d=(Date.now()-new Date(iso).getTime())/86400000; return d>=0?d:1e9; };
+  const feed=ins.filter(x=>typeof x.reach==='number'&&fmtOf(x)!=='story');
+  const reach30=feed.filter(x=>daysAgo(x.date)<=30).reduce((a,b)=>a+b.reach,0);
+  const reels90=ins.filter(x=>fmtOf(x)==='reel'&&typeof x.reach==='number'&&daysAgo(x.date)<=90);
+  const reelReach=reels90.length?Math.round(reels90.reduce((a,b)=>a+b.reach,0)/reels90.length):null;
+  const followers=(counts&&typeof counts.followers==='number')?counts.followers
+                  :((aud&&typeof aud.total==='number')?aud.total:null);
+  // follower growth (~30d) only from REAL follower counts in history — never the
+  // located-followers fallback, so the fallback can't fake a jump.
+  let follSub='',follUp=true;
+  if(Array.isArray(follHist)&&follHist.length&&counts&&typeof counts.followers==='number'){
+    const past=follHist.filter(h=>h&&typeof h.followers==='number'&&daysAgo(h.date)>=20)
+      .sort((a,b)=>Math.abs(daysAgo(a.date)-30)-Math.abs(daysAgo(b.date)-30))[0];
+    if(past){ const d=counts.followers-past.followers; follUp=d>=0; follSub=(d>=0?'▲ +':'▼ ')+Math.abs(d)+' · 30d'; }
+  }
+  const tiles=[
+    {n: followers!=null?followers.toLocaleString():'—', l:'Followers', sub:follSub, up:follUp},
+    {n: postedCount.toLocaleString(), l:'Posts published'},
+    {n: reach30.toLocaleString(), l:'Reach · 30d'},
+    {n: reelReach!=null?reelReach.toLocaleString():'—', l:'Avg reel reach'},
+    {n: totalShares||'—', l:'Total shares'},
+    {n: queue.toLocaleString(), l:'Photos queued'},
+  ];
+  document.getElementById('stats').innerHTML=tiles.map(t=>
+    `<div class="stat"><div class="n">${t.n}</div><div class="l">${t.l}</div>`
+    +(t.sub?`<div class="l" style="margin-top:4px;letter-spacing:.04em;color:${t.up?'var(--forest)':'var(--terracotta)'}">${t.sub}</div>`:'')
+    +`</div>`).join('');
   renderAudience(aud,audHist);
 
   // recent posts — EVERY type, newest first, with stats + a click-to-expand detail
@@ -959,18 +1015,21 @@ async function load(isRefresh){
     return (rows||er)?`<table class="detail">${rows}${er}</table>`:'<div class="muted" style="font-size:12px">No insights captured for this one.</div>';};
   document.getElementById('recent').innerHTML = recentPosts.length? recentPosts.map(x=>{
     const base=x.base||''; const fmt=x.format||'single';
-    const lbl=badge[fmt]||fmt;
     const storyBase=base.replace(/-story$/,'');
-    let cover;
-    if(fmt==='story')
-      cover=`<img src="${RAW}/rendered/${encodeURIComponent(storyBase)}_story.jpg" loading="lazy" onerror="imgFail(this,'Story')">`;
-    else if(urlById[x.id])
-      cover=`<img src="${urlById[x.id]}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this,'${lbl}')">`;
-    else if(base)
-      cover=`<img src="${RAW}/rendered/${encodeURIComponent(base)}_1.jpg" loading="lazy" onerror="imgFail(this,'${lbl}')">`;
-    else cover=`<div class="badge">${lbl}</div>`;
+    const enc=encodeURIComponent;
+    // Ordered cover candidates — IG thumbnail first (works for reels + carousels
+    // once fetch_insights captures them), then our rendered file, then a branded
+    // placeholder. Each src is tried in turn via nextCover() on error.
+    const srcs=[];
+    if(fmt==='story'){ if(base) srcs.push(`${RAW}/rendered/${enc(storyBase)}_story.jpg`); if(urlById[x.id]) srcs.push(urlById[x.id]); }
+    else { if(urlById[x.id]) srcs.push(urlById[x.id]); if(base) srcs.push(`${RAW}/rendered/${enc(base)}_1.jpg`); }
+    const cover=srcs.length
+      ? `<img loading="lazy" referrerpolicy="no-referrer" data-fmt="${fmt}" data-srcs='${escA(JSON.stringify(srcs.slice(1)))}' src="${escA(srcs[0])}" onerror="nextCover(this)">`
+      : coverPlaceholder(fmt);
+    const play=(srcs.length&&(fmt==='reel'||fmt==='video'))?`<span class="play">▶</span>`:'';
     const cap=capById[x.id]||'';
-    return `<div class="card" onclick="this.classList.toggle('open')"><div class="tag">${badge[fmt]||fmt}</div>${cover}`
+    return `<div class="card" onclick="this.classList.toggle('open')"><div class="tag">${badge[fmt]||fmt}</div>`
+      +`<div class="cover">${cover}${play}</div>`
       +`<div class="meta"><div class="muted" style="font-size:11px">${x.date||''} · tap for detail</div><div>${keyStats(x)}</div>`
       +`<div class="det">${allStats(x)}${cap?`<div class="cap">${cap}</div>`:''}</div></div></div>`;
   }).join('') : '<div class="muted">No posts yet — they\'ll appear here after the next run.</div>';
@@ -1000,21 +1059,51 @@ async function load(isRefresh){
   collapseRecent();
   document.getElementById('updated').textContent='Updated '+new Date().toLocaleString();
 }
-function collapseRecent(){
+// Recent posts: browse 800+ a screenful at a time, as a GRID or a swipeable
+// CAROUSEL (Esteban's pick, remembered). Both reveal RECENT_PAGE at a time \u2014
+// grid via "Show more", carousel via arrows + swipe-to-the-end auto-append.
+const RECENT_PAGE=24;
+function recentView(){ try{ return localStorage.getItem('recentView')||'carousel'; }catch(e){ return 'carousel'; } }
+function setRecentView(m){ try{ localStorage.setItem('recentView',m); }catch(e){}
+  window._recentShown=RECENT_PAGE; const el=document.getElementById('recent'); if(el) el.scrollLeft=0; collapseRecent(); }
+function recentArrow(dir){
   const el=document.getElementById('recent'); if(!el) return;
   const cards=[...el.children].filter(c=>c.classList&&c.classList.contains('card'));
-  const old=document.getElementById('recentToggle'); if(old) old.remove();
-  if(cards.length<=1){ cards.forEach(c=>c.style.display=''); return; }
-  cards.forEach(c=>c.style.display='');                       // show all to measure the first row
-  const top0=cards[0].offsetTop;
-  const cols=cards.filter(c=>Math.abs(c.offsetTop-top0)<4).length||cards.length;
-  if(!window._recentOpen) cards.forEach((c,i)=>{ if(i>=cols) c.style.display='none'; });
-  if(cards.length>cols){
-    const btn=document.createElement('button');
-    btn.id='recentToggle'; btn.className='mc-btn'; btn.style.cssText='display:block;margin:14px auto 0';
-    btn.textContent=window._recentOpen?'Show less \u2191':('Show all '+cards.length+' posts \u2193');
-    btn.onclick=()=>{ window._recentOpen=!window._recentOpen; collapseRecent(); };
-    el.parentNode.insertBefore(btn, el.nextSibling);
+  // reveal more before paging right, so you can always swipe past the current page
+  if(dir>0 && window._recentShown<cards.length){ window._recentShown=Math.min(cards.length,(window._recentShown||RECENT_PAGE)+RECENT_PAGE); collapseRecent(); }
+  const c=el.querySelector('.card'); const w=c?c.getBoundingClientRect().width+14:300;
+  el.scrollBy({left:dir*w*Math.max(1,Math.floor(el.clientWidth/w)),behavior:'smooth'});
+}
+function collapseRecent(){
+  const el=document.getElementById('recent'); if(!el) return;
+  const ctl=document.getElementById('recCtl');
+  const legacy=document.getElementById('recentToggle'); if(legacy) legacy.remove();
+  const cards=[...el.children].filter(c=>c.classList&&c.classList.contains('card'));
+  const mode=recentView();
+  el.classList.toggle('carousel',mode==='carousel');
+  el.classList.toggle('grid',mode!=='carousel');
+  if(!cards.length){ if(ctl) ctl.innerHTML=''; return; }
+  if(!window._recentShown) window._recentShown=RECENT_PAGE;
+  const shown=Math.min(window._recentShown,cards.length);
+  cards.forEach((c,i)=>{ c.style.display=i<shown?'':'none'; });
+  if(!ctl) return;
+  const seg=`<div class="rec-seg"><button class="${mode!=='carousel'?'on':''}" onclick="setRecentView('grid')">Grid</button>`
+    +`<button class="${mode==='carousel'?'on':''}" onclick="setRecentView('carousel')">Carousel</button></div>`;
+  const counter=`<span class="muted" style="font-size:12px">Showing ${shown} of ${cards.length}</span>`;
+  if(mode==='carousel'){
+    ctl.innerHTML=seg
+      +`<div class="rec-nav"><button class="rec-arrow" onclick="recentArrow(-1)" aria-label="Previous">\u2039</button>`
+      +`<button class="rec-arrow" onclick="recentArrow(1)" aria-label="Next">\u203a</button></div>`+counter;
+    if(!el._appendBound){ el._appendBound=1; el.addEventListener('scroll',()=>{
+      const all=[...el.children].filter(c=>c.classList&&c.classList.contains('card'));
+      if(el.scrollLeft+el.clientWidth>=el.scrollWidth-260 && (window._recentShown||0)<all.length){
+        window._recentShown=Math.min(all.length,(window._recentShown||RECENT_PAGE)+RECENT_PAGE); collapseRecent();
+      }
+    },{passive:true}); }
+  } else {
+    const more=shown<cards.length?`<button class="mc-btn" onclick="window._recentShown=${shown+RECENT_PAGE};collapseRecent()">Show more \u00b7 ${Math.min(RECENT_PAGE,cards.length-shown)} more</button>`:'';
+    const less=shown>RECENT_PAGE?`<button class="mc-btn ghost" onclick="window._recentShown=${RECENT_PAGE};collapseRecent();document.getElementById('recent').scrollIntoView({behavior:'smooth',block:'start'})">Show less \u2191</button>`:'';
+    ctl.innerHTML=seg+more+less+counter;
   }
 }
 if(!window._recentResize){ window._recentResize=1; addEventListener('resize',()=>{ clearTimeout(window._rrT); window._rrT=setTimeout(collapseRecent,200); }); }

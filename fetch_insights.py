@@ -86,7 +86,7 @@ def discover_media():
     existing = load_list(POSTS)
     by_id = {p["id"]: p for p in existing if p.get("id")}
     url = f"https://graph.facebook.com/{V}/{IG}/media?" + urllib.parse.urlencode({
-        "fields": "id,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url",
+        "fields": "id,timestamp,media_type,media_product_type,caption,media_url,thumbnail_url,children{media_url,thumbnail_url}",
         "limit": "50", "access_token": TOKEN})
     pages, found = 0, 0
     while url and pages < 60:                      # up to ~3000 posts
@@ -101,8 +101,14 @@ def discover_media():
             fmt = ("reel" if pt == "REELS" else
                    "carousel" if mt == "CAROUSEL_ALBUM" else
                    "video" if mt == "VIDEO" else "single")
-            # a displayable cover for the dashboard (real IG image/poster)
+            # a displayable cover for the dashboard (real IG image/poster).
+            # Carousels have no top-level media_url/thumbnail_url — use the first
+            # child's image (this is why all 36 carousels showed no preview).
             thumb = m.get("thumbnail_url") or (m.get("media_url") if mt == "IMAGE" else "") or ""
+            if not thumb and mt == "CAROUSEL_ALBUM":
+                kids = ((m.get("children") or {}).get("data")) or []
+                if kids:
+                    thumb = kids[0].get("media_url") or kids[0].get("thumbnail_url") or ""
             ts = m.get("timestamp") or ""
             row = {"id": mid, "date": ts[:10], "ts": ts,
                    "base": "ig-" + mid[-6:], "format": fmt,
@@ -198,6 +204,32 @@ def pull_audience():
     return None
 
 
+def pull_profile():
+    """Account-level follower + media count — the growth north-star. Writes the
+    exact followers_count into counts.json and appends a daily point to
+    followers-history.json so the dashboard can show growth over time.
+    Best-effort: never breaks the run."""
+    r = _api(f"{IG}", {"fields": "followers_count,media_count", "access_token": TOKEN})
+    if r.get("error"):
+        print("profile skip:", (r["error"] or {}).get("message")); return
+    fc, mc = r.get("followers_count"), r.get("media_count")
+    cp = os.path.join(MET, "counts.json")
+    try:
+        c = json.load(open(cp))
+    except Exception:
+        c = {}
+    if isinstance(fc, int): c["followers"] = fc
+    if isinstance(mc, int): c["media_count"] = mc
+    json.dump(c, open(cp, "w"))
+    if isinstance(fc, int):
+        hp = os.path.join(MET, "followers-history.json")
+        d = time.strftime("%Y-%m-%d")
+        h = [e for e in load_list(hp) if e.get("date") != d]
+        h.append({"date": d, "followers": fc})
+        json.dump(h[-730:], open(hp, "w"), indent=1)
+    print(f"Profile: followers={fc} media={mc}")
+
+
 def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
@@ -231,6 +263,10 @@ def main():
     rows = sorted(out.values(), key=lambda x: x.get("date") or "")
     json.dump(rows, open(OUT, "w"), indent=1)
     print(f"Insights: {len(rows)} posts ({fetched} freshly pulled) -> insights.json")
+    try:
+        pull_profile()
+    except Exception as e:
+        print("profile err:", e)
     try:
         pull_audience()
     except Exception as e:
