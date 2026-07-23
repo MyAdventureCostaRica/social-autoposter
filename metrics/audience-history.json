@@ -65,5 +65,72 @@
     "value": 9
    }
   ]
+ },
+ {
+  "date": "2026-07-23",
+  "metric": "followers",
+  "total": 664,
+  "countries": [
+   {
+    "code": "CR",
+    "pct": 54.1,
+    "value": 359
+   },
+   {
+    "code": "US",
+    "pct": 12.5,
+    "value": 83
+   },
+   {
+    "code": "GB",
+    "pct": 3.5,
+    "value": 23
+   },
+   {
+    "code": "CA",
+    "pct": 2.9,
+    "value": 19
+   },
+   {
+    "code": "ES",
+    "pct": 2.9,
+    "value": 19
+   },
+   {
+    "code": "BR",
+    "pct": 2.1,
+    "value": 14
+   },
+   {
+    "code": "FR",
+    "pct": 1.5,
+    "value": 10
+   },
+   {
+    "code": "MX",
+    "pct": 1.5,
+    "value": 10
+   },
+   {
+    "code": "IT",
+    "pct": 1.5,
+    "value": 10
+   },
+   {
+    "code": "AU",
+    "pct": 1.5,
+    "value": 10
+   },
+   {
+    "code": "CH",
+    "pct": 1.4,
+    "value": 9
+   },
+   {
+    "code": "CO",
+    "pct": 1.4,
+    "value": 9
+   }
+  ]
  }
 ]
