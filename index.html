@@ -927,7 +927,13 @@ async function load(isRefresh){
     inboxEl.innerHTML='<p class="muted" style="margin-top:8px">Connect mission control (above) to view and reply to your inbox.</p>';
   }
   const queue=(counts&&counts.queued)||0;
-  const postedCount=(counts&&counts.posted)||0;
+  // Posts published = real posts on the account (feed + reels + carousels, excluding
+  // ephemeral stories), from the feed the dashboard already loads — matches the
+  // Instagram profile grid. The old counts.posted only counted image files in the
+  // repo's posted/ folder, so it missed every reel/story/carousel (showed 7 of 784).
+  const postedCount=Array.isArray(posts)
+    ? posts.filter(p=>p&&(p.format||'')!=='story').length
+    : ((counts&&counts.posted)||0);
   const ins=Array.isArray(insights)?insights:[];
   const withReach=ins.filter(x=>typeof x.reach==='number');
   const avgReach=withReach.length?Math.round(withReach.reduce((a,b)=>a+b.reach,0)/withReach.length):null;
