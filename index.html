@@ -2,9 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>My Adventure Costa Rica — Social Dashboard</title>
-<link rel="icon" type="image/png" href="https://www.myadventurecostarica.com/logo-mark.png">
+<meta name="description" content="My Adventure Costa Rica — social auto-poster mission control">
+<!-- Self-hosted assets (no third-party requests) + iOS/Android home-screen app -->
+<link rel="icon" type="image/png" href="logo-mark.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F2EBD9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="My Adventure">
 <style>
   @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-normal.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
   @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin-standard-italic.ttf') format('truetype');font-weight:400 600;font-style:italic;font-display:swap}
@@ -106,13 +115,45 @@
   .rv-modal{max-width:760px;width:calc(100vw - 48px);max-height:82vh;display:flex;flex-direction:column}
   .rv-mbody{overflow:auto;line-height:1.6;margin:6px 0 14px;padding-right:8px}
   .pp-edit{width:100%;box-sizing:border-box;margin:6px 0 10px;padding:11px 13px;border:1px solid var(--clay-soft);border-radius:10px;font:inherit;font-size:14px;line-height:1.55;background:#fff;resize:vertical;white-space:pre-wrap}
+
+  /* ---- Phone / home-screen app (iPhone 17 Pro Max & friends) ---------------- */
+  @media (max-width:640px){
+    /* safe-area insets so nothing hides under the Dynamic Island or home bar */
+    .wrap{padding:calc(env(safe-area-inset-top,0px) + 14px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 28px) max(16px,env(safe-area-inset-left,0px))}
+    h1{font-size:26px}
+    h2{font-size:20px;margin:26px 0 14px}
+    .top{align-items:center;margin-bottom:18px;padding-bottom:16px}
+    .top img{height:38px!important}
+    .top>button{min-height:40px}
+    .mc-bar{gap:8px;padding:12px}
+    .mc-bar .mc-btn{flex:1 1 42%;height:44px}          /* 2-up, thumb-sized targets */
+    .mc-gear{font-size:20px}
+    .mc-toggle{flex-basis:100%;order:9;min-height:34px} /* auto-approve on its own row */
+    .mc-runs{grid-template-columns:1fr;margin-bottom:20px}
+    .mc-in{max-width:none}
+    .stats{gap:12px;margin-bottom:26px}
+    .stat{padding:16px}
+    .stat .n{font-size:32px}
+    .pub-card{padding:14px;gap:14px}
+    .pub-img{width:100%;max-width:none}                 /* see the whole post, big */
+    .pub-body{min-width:0}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+    .rv-head{padding:14px 16px}
+    .rv-body{padding:0 16px 16px}
+    .modal{padding:18px 16px}
+    .pp-imgs img,.pp-thumb{max-width:46vw}
+    /* comfortable tap targets on every action button */
+    .mc-btn,.ic-actions button{min-height:40px}
+  }
+  /* let the just-posted image breathe on small tablets too */
+  @media (max-width:820px) and (min-width:641px){ .pub-img{width:180px} }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
     <div style="display:flex;align-items:center;gap:14px">
-      <img src="https://www.myadventurecostarica.com/logo-mark.png" alt="My Adventure Costa Rica" style="height:44px;width:auto" onerror="this.style.display='none'">
+      <img src="logo-mark.png" alt="My Adventure Costa Rica" style="height:44px;width:auto" onerror="this.style.display='none'">
       <div>
         <div class="eyebrow">My Adventure Costa Rica</div>
         <h1>Social Dashboard</h1>
@@ -777,6 +818,9 @@ const AUD_COLORS=['#B85A20','#3579B0','#169F48','#9C5477','#D69A2D'];
 function _flag(c){return (c&&c.length===2)?String.fromCodePoint(...[...c.toUpperCase()].map(ch=>127397+ch.charCodeAt(0))):'';}
 function renderAudience(aud,hist){
   const el=document.getElementById('audience'); if(!el) return;
+  window._audData={aud,hist};                        // stash for re-draw on rotate/resize
+  if(!window._audResize){ window._audResize=1; addEventListener('resize',()=>{ clearTimeout(window._audT);
+    window._audT=setTimeout(()=>{ if(window._audData) renderAudience(window._audData.aud,window._audData.hist); },220); }); }
   if(!(aud&&Array.isArray(aud.countries)&&aud.countries.length)){ el.innerHTML=''; return; }
   const label=aud.metric==='followers'?'Followers by country':'Reach by country · last 90 days';
   let html=`<b>${label}:</b> `+aud.countries.slice(0,7).map(c=>`${_flag(c.code)} ${esc(c.code)} ${c.pct}%`).join('  ·  ');
@@ -789,15 +833,20 @@ function renderAudience(aud,hist){
   const latest=rows[rows.length-1];
   const top=latest.countries.slice().sort((a,b)=>b.pct-a.pct).slice(0,5).map(c=>c.code);
   const at=(r,c)=>{const f=(r.countries||[]).find(x=>x.code===c);return f?f.pct:null;};
-  const W=860,H=230,L=38,R=64,T=14,B=26,PW=W-L-R,PH=H-T-B;
+  // viewBox width tracks the actual container so SVG text renders ~1:1 at any
+  // width — on a phone a fixed 860-wide viewBox shrank labels to ~5px.
+  const cw=Math.round(el.clientWidth||900), narrow=cw<470;
+  const W=Math.max(300,Math.min(1100,cw)), H=narrow?248:230;
+  const L=narrow?28:38, R=narrow?70:66, T=14, B=narrow?30:26, PW=W-L-R, PH=H-T-B;
+  const fAx=10, fEnd=11, gap=fEnd+3;
   const ymax=Math.max(10,Math.ceil(Math.max(...rows.map(r=>Math.max(...top.map(c=>at(r,c)||0))))*1.12));
   const X=i=>L+i*PW/(rows.length-1), Y=v=>T+PH-(v/ymax)*PH;
   let g='';
   for(let i=0;i<=3;i++){const v=Math.round(ymax*i/3);
     g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)" stroke-width="1"/>`
-      +`<text x="${L-6}" y="${Y(v)+3.5}" text-anchor="end" font-size="10" fill="var(--clay)">${v}%</text>`;}
+      +`<text x="${L-6}" y="${Y(v)+3.5}" text-anchor="end" font-size="${fAx}" fill="var(--clay)">${v}%</text>`;}
   const xt=[...new Set([0,Math.floor((rows.length-1)/2),rows.length-1])];
-  for(const i of xt) g+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--clay)">${rows[i].date.slice(5)}</text>`;
+  for(const i of xt) g+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="${fAx}" fill="var(--clay)">${rows[i].date.slice(5)}</text>`;
   let s='';const labs=[];
   top.forEach((c,si)=>{
     const col=AUD_COLORS[si%AUD_COLORS.length];
@@ -806,9 +855,9 @@ function renderAudience(aud,hist){
     s+=`<path d="${pts.map((p,n)=>(n?'L':'M')+X(p.i).toFixed(1)+' '+Y(p.v).toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
     if(si<4){const lp=pts[pts.length-1];labs.push({c,v:lp.v,y:Y(lp.v)});}
   });
-  labs.sort((a,b)=>a.y-b.y);                       // de-overlap end labels (min 13px apart)
-  for(let i=1;i<labs.length;i++) if(labs[i].y<labs[i-1].y+13) labs[i].y=labs[i-1].y+13;
-  const ends=labs.map(l=>`<text x="${W-R+6}" y="${l.y+3.5}" font-size="11" font-weight="600" fill="var(--ink)">${esc(l.c)} ${l.v}%</text>`).join('');
+  labs.sort((a,b)=>a.y-b.y);                       // de-overlap end labels
+  for(let i=1;i<labs.length;i++) if(labs[i].y<labs[i-1].y+gap) labs[i].y=labs[i-1].y+gap;
+  const ends=labs.map(l=>`<text x="${W-R+6}" y="${l.y+3.5}" font-size="${fEnd}" font-weight="600" fill="var(--ink)">${esc(l.c)} ${l.v}%</text>`).join('');
   const legend=top.map((c,si)=>`<span style="display:inline-flex;align-items:center;gap:5px;margin-right:14px">`
     +`<span style="width:10px;height:10px;border-radius:3px;background:${AUD_COLORS[si%AUD_COLORS.length]};display:inline-block"></span>`
     +`<span style="font-size:11px;font-weight:600">${_flag(c)} ${esc(c)}</span></span>`).join('');
@@ -820,9 +869,9 @@ function renderAudience(aud,hist){
   el.innerHTML=html;
   const svg=document.getElementById('audTrendSvg'),tip=document.getElementById('audTip'),
         cross=document.getElementById('audCross'),wrap=document.getElementById('audTrendWrap');
-  svg.addEventListener('mousemove',ev=>{
+  const show=clientX=>{
     const rct=svg.getBoundingClientRect();
-    let i=Math.round(((ev.clientX-rct.left)*(W/rct.width)-L)/(PW/(rows.length-1)));
+    let i=Math.round(((clientX-rct.left)*(W/rct.width)-L)/(PW/(rows.length-1)));
     i=Math.max(0,Math.min(rows.length-1,i));
     cross.setAttribute('x1',X(i)); cross.setAttribute('x2',X(i)); cross.style.display='';
     tip.innerHTML=`<b>${rows[i].date}</b><br>`+top.map((c,si)=>{const v=at(rows[i],c);
@@ -831,8 +880,14 @@ function renderAudience(aud,hist){
     const wr=wrap.getBoundingClientRect();
     let px=(X(i)/W)*wr.width+12; if(px+tip.offsetWidth+8>wr.width) px=px-24-tip.offsetWidth;
     tip.style.left=Math.max(0,px)+'px';
-  });
-  svg.addEventListener('mouseleave',()=>{tip.style.display='none';cross.style.display='none';});
+  };
+  const hide=()=>{tip.style.display='none';cross.style.display='none';};
+  svg.addEventListener('mousemove',ev=>show(ev.clientX));
+  svg.addEventListener('mouseleave',hide);
+  // touch: tap-drag the chart to read any day (mobile has no hover)
+  svg.addEventListener('touchstart',ev=>{ if(ev.touches[0]) show(ev.touches[0].clientX); },{passive:true});
+  svg.addEventListener('touchmove', ev=>{ if(ev.touches[0]) show(ev.touches[0].clientX); },{passive:true});
+  svg.addEventListener('touchend',()=>setTimeout(hide,1800));
 }
 
 async function load(isRefresh){
