@@ -190,14 +190,14 @@
     </div>
     <button onclick="load(true)">↻ Refresh</button>
   </div>
-  <div class="stats" id="stats"></div>
-  <div id="audience" class="muted" style="font-size:13px;margin:-14px 0 30px"></div>
   <div id="controls"></div>
   <div id="pending"></div>
   <div id="pendingReel"></div>
   <div id="published"></div>
   <div id="review-top"></div>
   <div id="inbox"></div>
+  <div class="stats" id="stats"></div>
+  <div id="audience" class="muted" style="font-size:13px;margin:-14px 0 30px"></div>
   <h2>Recent posts</h2>
   <div id="recCtl"></div>
   <div class="grid" id="recent"><div class="muted">Loading…</div></div>
@@ -580,7 +580,8 @@ async function refreshInbox(){
 function renderControls(){
   const el=document.getElementById('controls'); if(!el) return;
   const on=connected();
-  el.innerHTML=`<div class="mc-bar">`
+  el.innerHTML=`<div class="mc-runs" id="mcRuns"></div>`
+    +`<div class="mc-bar">`
     +`<div class="mc-head"><span class="eyebrow">Mission control</span>`
     +`<span class="mc-status ${on?'on':'off'}">${on?'connected':'not connected'}</span>`
     +`<button class="mc-gear" onclick="toggleConnect()" title="Connect">⚙</button></div>`
@@ -593,7 +594,6 @@ function renderControls(){
     +`<button class="mc-btn" onclick="pickUpload()" title="Upload a photo or video to caption, render, and stage for approval">↑ Upload</button></div>`
     +`<div id="upStat" class="muted" style="font-size:12px;margin-top:8px"></div>`
     +`<label class="mc-toggle" title="ON = posts publish automatically. OFF = posts wait for your approval on the dashboard."><input type="checkbox" id="autoApprove" onchange="setAutoApprove(this.checked)"> Auto-approve<span id="aaState" style="font-size:12px;color:var(--clay);margin-left:6px"></span></label></div>`
-    +`<div class="mc-runs" id="mcRuns"></div>`
     +`<div id="connectPanel" style="display:none">`
     +`<p class="muted" style="font-size:13px;margin:10px 0 6px">Paste your Vercel URL (e.g. https://your-project.vercel.app) and the passphrase you set as DASH_KEY. Stored only in this browser.</p>`
     +`<input class="mc-in" id="cUrl" placeholder="https://your-project.vercel.app" value="${escA(cfg('ctrlUrl'))}">`
