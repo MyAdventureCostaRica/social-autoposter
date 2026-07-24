@@ -9622,7 +9622,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 60,
+  "views": 61,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 6,
@@ -9773,7 +9773,7 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 200,
+  "reach": 202,
   "likes": 22,
   "comments": 2,
   "saved": 1,
@@ -9781,7 +9781,7 @@
   "total_interactions": 26,
   "views": 288,
   "interactions": 26,
-  "eng_rate": 0.13
+  "eng_rate": 0.1287
  },
  {
   "id": "17930223591364198",
@@ -9807,7 +9807,7 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 41,
+  "reach": 42,
   "likes": 2,
   "comments": 0,
   "saved": 0,
@@ -9815,7 +9815,7 @@
   "total_interactions": 2,
   "views": 54,
   "interactions": 2,
-  "eng_rate": 0.0488
+  "eng_rate": 0.0476
  },
  {
   "id": "18112346548899476",
