@@ -9397,17 +9397,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 40,
+  "reach": 41,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 119,
+  "views": 121,
   "profile_visits": 2,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.125
+  "eng_rate": 0.122
  },
  {
   "id": "17866936494633384",
@@ -9434,15 +9434,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 256,
+  "reach": 257,
   "likes": 12,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 13,
-  "views": 349,
+  "views": 352,
   "interactions": 13,
-  "eng_rate": 0.0508
+  "eng_rate": 0.0506
  },
  {
   "id": "18426420415134715",
@@ -9525,15 +9525,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 216,
+  "reach": 217,
   "likes": 10,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 11,
-  "views": 301,
+  "views": 304,
   "interactions": 11,
-  "eng_rate": 0.0509
+  "eng_rate": 0.0507
  },
  {
   "id": "17974125471119783",
@@ -9616,17 +9616,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 25,
+  "reach": 27,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 63,
+  "views": 70,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.24
+  "eng_rate": 0.2222
  },
  {
   "id": "17899847211540914",
@@ -9653,15 +9653,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 76,
+  "reach": 77,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 108,
+  "views": 110,
   "interactions": 6,
-  "eng_rate": 0.0789
+  "eng_rate": 0.0779
  },
  {
   "id": "18122425639759622",
@@ -9699,17 +9699,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 16,
+  "reach": 18,
   "likes": 2,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 32,
+  "views": 34,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.25
+  "eng_rate": 0.2222
  },
  {
   "id": "17994320744806304",
@@ -9736,17 +9736,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 17,
+  "reach": 18,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 32,
+  "views": 33,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0588
+  "eng_rate": 0.0556
  },
  {
   "id": "18169934218434349",
@@ -9773,15 +9773,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 205,
+  "reach": 226,
   "likes": 23,
   "comments": 2,
   "saved": 1,
-  "shares": 0,
-  "total_interactions": 27,
-  "views": 294,
-  "interactions": 27,
-  "eng_rate": 0.1317
+  "shares": 1,
+  "total_interactions": 28,
+  "views": 318,
+  "interactions": 28,
+  "eng_rate": 0.1239
  },
  {
   "id": "17930223591364198",
@@ -9790,15 +9790,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 64,
+  "reach": 70,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 81,
+  "views": 89,
   "interactions": 1,
-  "eng_rate": 0.0156
+  "eng_rate": 0.0143
  },
  {
   "id": "18114070234932527",
@@ -9807,15 +9807,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 42,
+  "reach": 48,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 54,
+  "views": 65,
   "interactions": 2,
-  "eng_rate": 0.0476
+  "eng_rate": 0.0417
  },
  {
   "id": "18112346548899476",
@@ -9824,17 +9824,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 10,
+  "reach": 13,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 24,
+  "views": 37,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.4
+  "eng_rate": 0.3077
  },
  {
   "id": "18086081369646206",
@@ -9853,5 +9853,35 @@
   "navigation": 9,
   "interactions": 1,
   "eng_rate": 0.1111
+ },
+ {
+  "id": "18087931022454130",
+  "date": "2026-07-25",
+  "base": "IMG_2058",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "reach": 8,
+  "likes": 0,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 0,
+  "views": 14,
+  "profile_visits": 0,
+  "follows": 0,
+  "interactions": 0,
+  "eng_rate": 0.0
+ },
+ {
+  "id": "18099055244242862",
+  "date": "2026-07-25",
+  "base": "IMG_2058-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "error": "(#10) Not enough viewers for the media to show insights",
+  "interactions": 0,
+  "eng_rate": null
  }
 ]
