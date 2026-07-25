@@ -7449,5 +7449,25 @@
   "category": "COSTA RICA",
   "pillar": "ROUTE",
   "caption": "In the heart of Costa Rica\u2019s forests, life moves at its own pace. With a canopy above and the pulse of nature all around"
+ },
+ {
+  "id": "18087931022454130",
+  "date": "2026-07-25",
+  "ts": "2026-07-25T15:19:18",
+  "base": "IMG_2058",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "A view that invites stillness and reflection \u2014 where the land meets the endless blue of the Pacific. This is Costa Rica,"
+ },
+ {
+  "id": "18099055244242862",
+  "date": "2026-07-25",
+  "ts": "2026-07-25T15:19:18",
+  "base": "IMG_2058-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "A view that invites stillness and reflection \u2014 where the land meets the endless blue of the Pacific. This is Costa Rica,"
  }
 ]
