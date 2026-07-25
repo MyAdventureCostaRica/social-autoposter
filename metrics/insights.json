@@ -9525,15 +9525,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 217,
+  "reach": 218,
   "likes": 10,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 11,
-  "views": 304,
+  "views": 305,
   "interactions": 11,
-  "eng_rate": 0.0507
+  "eng_rate": 0.0505
  },
  {
   "id": "17974125471119783",
@@ -9622,7 +9622,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 70,
+  "views": 74,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 6,
@@ -9861,17 +9861,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 8,
-  "likes": 0,
+  "reach": 10,
+  "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 0,
-  "views": 14,
+  "total_interactions": 1,
+  "views": 24,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 0,
-  "eng_rate": 0.0
+  "interactions": 1,
+  "eng_rate": 0.1
  },
  {
   "id": "18099055244242862",
@@ -9880,8 +9880,15 @@
   "format": "story",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "error": "(#10) Not enough viewers for the media to show insights",
+  "reach": 8,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 0,
+  "views": 10,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 9,
   "interactions": 0,
-  "eng_rate": null
+  "eng_rate": 0.0
  }
 ]
