@@ -7499,5 +7499,25 @@
   "category": "RUNNING",
   "pillar": "ROUTE",
   "caption": "A gravel path, a soft mist, and the rhythm of your own footsteps. Trails like these invite you to disconnect \u2014 to let th"
+ },
+ {
+  "id": "18108464233833010",
+  "date": "2026-07-27",
+  "ts": "2026-07-27T12:18:43",
+  "base": "upload-20260727-005822",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "A quiet moment in Costa Rica\u2019s countryside, where the rhythm of life follows the paths of the cattle. It\u2019s here, among r"
+ },
+ {
+  "id": "18643464991016330",
+  "date": "2026-07-27",
+  "ts": "2026-07-27T12:18:43",
+  "base": "upload-20260727-005822-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "A quiet moment in Costa Rica\u2019s countryside, where the rhythm of life follows the paths of the cattle. It\u2019s here, among r"
  }
 ]
