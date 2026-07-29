@@ -9231,15 +9231,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 210,
+  "reach": 211,
   "likes": 13,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 15,
-  "views": 309,
+  "views": 310,
   "interactions": 15,
-  "eng_rate": 0.0714
+  "eng_rate": 0.0711
  },
  {
   "id": "18198541663323399",
@@ -9451,17 +9451,17 @@
   "format": "single",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 30,
+  "reach": 31,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 60,
+  "views": 61,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0333
+  "eng_rate": 0.0323
  },
  {
   "id": "18165436864454673",
@@ -9653,15 +9653,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 79,
+  "reach": 80,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 115,
+  "views": 116,
   "interactions": 6,
-  "eng_rate": 0.0759
+  "eng_rate": 0.075
  },
  {
   "id": "18122425639759622",
@@ -9773,15 +9773,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 231,
+  "reach": 232,
   "likes": 24,
   "comments": 2,
   "saved": 1,
   "shares": 1,
   "total_interactions": 29,
-  "views": 333,
+  "views": 335,
   "interactions": 29,
-  "eng_rate": 0.1255
+  "eng_rate": 0.125
  },
  {
   "id": "17930223591364198",
@@ -9807,15 +9807,15 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 52,
+  "reach": 54,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 75,
+  "views": 77,
   "interactions": 2,
-  "eng_rate": 0.0385
+  "eng_rate": 0.037
  },
  {
   "id": "18112346548899476",
@@ -9824,17 +9824,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 19,
+  "reach": 21,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 54,
+  "views": 59,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.2105
+  "eng_rate": 0.1905
  },
  {
   "id": "18086081369646206",
@@ -9861,17 +9861,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 21,
+  "reach": 22,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 44,
+  "views": 45,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0476
+  "eng_rate": 0.0455
  },
  {
   "id": "18099055244242862",
@@ -9927,15 +9927,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 175,
+  "reach": 177,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 224,
+  "views": 226,
   "interactions": 8,
-  "eng_rate": 0.0457
+  "eng_rate": 0.0452
  },
  {
   "id": "18110168276080742",
@@ -9944,17 +9944,17 @@
   "format": "single",
   "category": null,
   "pillar": null,
-  "reach": 22,
-  "likes": 1,
+  "reach": 26,
+  "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 1,
-  "views": 48,
+  "total_interactions": 2,
+  "views": 55,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 1,
-  "eng_rate": 0.0455
+  "interactions": 2,
+  "eng_rate": 0.0769
  },
  {
   "id": "18108464233833010",
@@ -9963,17 +9963,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 27,
+  "reach": 32,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 48,
+  "views": 53,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.0741
+  "eng_rate": 0.0625
  },
  {
   "id": "18643464991016330",
@@ -10000,17 +10000,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 13,
-  "likes": 3,
+  "reach": 20,
+  "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 3,
-  "views": 24,
-  "profile_visits": 0,
+  "total_interactions": 4,
+  "views": 46,
+  "profile_visits": 1,
   "follows": 0,
-  "interactions": 3,
-  "eng_rate": 0.2308
+  "interactions": 4,
+  "eng_rate": 0.2
  },
  {
   "id": "18091439246096975",
@@ -10029,5 +10029,22 @@
   "navigation": 11,
   "interactions": 1,
   "eng_rate": 0.1111
+ },
+ {
+  "id": "18084199529432028",
+  "date": "2026-07-29",
+  "base": "IMG_3950_fybysf",
+  "format": "reel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "reach": 120,
+  "likes": 5,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 5,
+  "views": 148,
+  "interactions": 5,
+  "eng_rate": 0.0417
  }
 ]
