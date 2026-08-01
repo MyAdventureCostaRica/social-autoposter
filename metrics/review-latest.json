@@ -9,15 +9,15 @@
   "min_age_days": 2,
   "total_posts": 831,
   "with_insights": 148,
-  "eligible": 38,
-  "eligible_recent_12mo": 33,
+  "eligible": 39,
+  "eligible_recent_12mo": 34,
   "date_range": [
    "2017-07-23",
    "2026-07-30"
   ],
   "interaction_mix_pct": {
    "saved": 0.8,
-   "shares": 6.8,
+   "shares": 6.9,
    "likes": 84.3,
    "comments": 3.8
   },
@@ -28,18 +28,18 @@
     "n": 1
    },
    {
+    "format": "carousel",
+    "avg_eng_rate": 0.0905,
+    "n": 2
+   },
+   {
     "format": "single",
     "avg_eng_rate": 0.0769,
     "n": 8
    },
    {
-    "format": "carousel",
-    "avg_eng_rate": 0.0691,
-    "n": 1
-   },
-   {
     "format": "reel",
-    "avg_eng_rate": 0.0534,
+    "avg_eng_rate": 0.0532,
     "n": 28
    }
   ],
@@ -51,8 +51,8 @@
    },
    {
     "pillar": "ROUTE",
-    "avg_eng_rate": 0.0537,
-    "n": 14
+    "avg_eng_rate": 0.0562,
+    "n": 15
    }
   ],
   "category_leaderboard": [
@@ -63,7 +63,7 @@
    },
    {
     "category": "CYCLING",
-    "avg_eng_rate": 0.0587,
+    "avg_eng_rate": 0.0584,
     "n": 5
    },
    {
@@ -73,8 +73,8 @@
    },
    {
     "category": "COSTA RICA",
-    "avg_eng_rate": 0.0423,
-    "n": 6
+    "avg_eng_rate": 0.0496,
+    "n": 7
    }
   ],
   "unlabeled_history_n": 21,
@@ -100,6 +100,17 @@
     "saved": 0,
     "eng_rate": 0.1346,
     "caption": "Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements."
+   },
+   {
+    "date": "2026-07-15",
+    "format": "carousel",
+    "pillar": "ROUTE",
+    "reach": 75,
+    "interactions": 7,
+    "shares": 1,
+    "saved": 0,
+    "eng_rate": 0.0933,
+    "caption": "A still moment beneath the towering volcano, where the clouds linger and the earth feels alive. This is Costa Rica, wher"
    },
    {
     "date": "2026-07-22",
@@ -138,11 +149,11 @@
     "date": "2026-07-24",
     "format": "reel",
     "pillar": "ROUTE",
-    "reach": 55,
+    "reach": 56,
     "interactions": 3,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.0545,
+    "eng_rate": 0.0536,
     "caption": "In the canopy above, the howler monkeys move with quiet purpose, their calls echoing through the forest. A moment to wit"
    },
    {
@@ -155,17 +166,6 @@
     "saved": 0,
     "eng_rate": 0.0602,
     "caption": "In the embrace of nature, the trail winds its way through mist-laden greenery. This is the kind of run that clears the m"
-   },
-   {
-    "date": "2026-07-11",
-    "format": "reel",
-    "pillar": "ROUTE",
-    "reach": 188,
-    "interactions": 10,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0532,
-    "caption": "The trail winds upward, and the world below fades into mist. This is mountain biking in Costa Rica: a journey through lu"
    }
   ],
   "photo_queue": 151,
