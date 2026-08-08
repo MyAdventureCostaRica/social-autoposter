@@ -37,8 +37,10 @@ GH_TOKEN = os.environ.get("GITHUB_TOKEN")
 REPO = os.environ.get("GITHUB_REPOSITORY", "")
 V = CFG.get("graph_version", "v23.0")
 IG = CFG["ig_user_id"]
-MODEL = CFG.get("caption_model", "openai/gpt-4o")
-MODELS_URL = "https://models.github.ai/inference/chat/completions"
+# GitHub Models retired 2026-07-30 -> Gemini OpenAI-compatible endpoint (free tier).
+MODEL = CFG.get("caption_model", "gemini-2.5-flash")
+MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
+CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or GH_TOKEN
 
 # How far back to scan, and how many posts. Comments on old posts are rare; this
 # keeps every run fast and within the recent window that actually gets activity.
@@ -135,9 +137,9 @@ def rset(key, obj):
 def draft_reply(text, kind):
     """Ask GitHub Models for a classification + a drafted reply. Resilient: if the
     model or token is unavailable, we still surface the item with an empty draft."""
-    if not GH_TOKEN:
+    if not CAPTION_KEY:
         return {"reply": "", "intent": "other", "sentiment": "neutral",
-                "safe": False, "note": "no GITHUB_TOKEN — draft unavailable"}
+                "safe": False, "note": "no GEMINI_API_KEY — draft unavailable"}
     user = (
         f"A {kind} on our Instagram reads:\n\n\"{text}\"\n\n"
         "Return STRICT JSON only (no prose, no code fences) with keys:\n"
@@ -153,7 +155,7 @@ def draft_reply(text, kind):
                             {"role": "user", "content": user}]}
     req = urllib.request.Request(
         MODELS_URL, data=json.dumps(payload).encode(),
-        headers={"Authorization": f"Bearer {GH_TOKEN}", "Content-Type": "application/json",
+        headers={"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
                  "Accept": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=90) as r:

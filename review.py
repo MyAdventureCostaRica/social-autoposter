@@ -18,8 +18,11 @@ POSTS = os.path.join(MET, "posts.json")
 SRC = os.path.join(HERE, "source-photos")
 TOKEN = os.environ.get("GITHUB_TOKEN")
 REPO = os.environ.get("GITHUB_REPOSITORY", "")          # owner/repo
-MODEL = "openai/gpt-4o"
-MODELS_URL = "https://models.github.ai/inference/chat/completions"
+# GitHub Models retired 2026-07-30 -> Gemini OpenAI-compatible endpoint. GITHUB_TOKEN
+# (TOKEN) still powers the Issue; CAPTION_KEY powers the narrative.
+CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or TOKEN
+MODEL = os.environ.get("CAPTION_MODEL", "gemini-2.5-flash")
+MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
 REACH_FLOOR = 50
 HALFLIFE = 90              # ~2x weight each 3 months — favor current trends (June 2026 review)
 SAVES_DEAD = 0.05          # mirror of autopost.py; learner_thresholds() re-reads the live values
@@ -140,7 +143,7 @@ def analyze():
 
 
 def ask_models(stats):
-    if not TOKEN:
+    if not CAPTION_KEY:
         return None
     try:
         method = open(os.path.join(HERE, "SYSTEM-REVIEW.md")).read()
@@ -177,7 +180,7 @@ def ask_models(stats):
                             {"role": "user", "content": user}]}
     req = urllib.request.Request(
         MODELS_URL, data=json.dumps(payload).encode(),
-        headers={"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json",
+        headers={"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
                  "Accept": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=120) as r:

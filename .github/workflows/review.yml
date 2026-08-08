@@ -29,6 +29,7 @@ jobs:
           python-version: "3.11"
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           FORCE_POST: ${{ inputs.force && '1' || '' }}   # manual run regenerates on demand
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}

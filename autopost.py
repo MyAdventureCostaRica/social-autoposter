@@ -93,8 +93,11 @@ def wa_notify(text):
     except Exception as e:
         print("WhatsApp notify failed:", e)
 
-MODELS_URL = "https://models.github.ai/inference/chat/completions"
-MODEL = CFG.get("caption_model", "openai/gpt-4o")
+# GitHub Models retired 2026-07-30 (410 Gone) -> Gemini OpenAI-compatible endpoint
+# (free tier, vision). Endpoint/model/key are env- and config-overridable.
+MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
+MODEL = CFG.get("caption_model", "gemini-2.5-flash")
+CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or GH_TOKEN
 
 # Which caption languages actually get POSTED. Instagram reads caption language as an
 # audience signal, so English-only keeps the feed pointed at international buyers rather
@@ -230,7 +233,7 @@ def caption_for(jpeg_bytes, note="", tags_known=None, learn=""):
             ]},
         ],
     }
-    headers = {"Authorization": f"Bearer {GH_TOKEN}", "Content-Type": "application/json",
+    headers = {"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
                "Accept": "application/json"}
     res = http_json(MODELS_URL, headers, payload)
     txt = res["choices"][0]["message"]["content"].strip()

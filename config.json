@@ -7,8 +7,10 @@
     "fb"
   ],
   "also_story": true,
-  "caption_model": "openai/gpt-4o",
-  "caption_langs": ["en"],
+  "caption_model": "gemini-2.5-flash",
+  "caption_langs": [
+    "en"
+  ],
   "auto_reply_comments": false,
   "respond_recent_media": 25,
   "burst_carousel": true,
