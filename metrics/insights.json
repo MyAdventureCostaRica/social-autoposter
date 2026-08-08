@@ -9861,17 +9861,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 24,
+  "reach": 25,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 49,
+  "views": 50,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.0833
+  "eng_rate": 0.08
  },
  {
   "id": "18099055244242862",
@@ -9963,17 +9963,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 38,
+  "reach": 40,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 61,
+  "views": 64,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.0789
+  "eng_rate": 0.075
  },
  {
   "id": "18643464991016330",
@@ -10000,17 +10000,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 33,
+  "reach": 34,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 89,
+  "views": 90,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.1818
+  "eng_rate": 0.1765
  },
  {
   "id": "18091439246096975",
@@ -10037,15 +10037,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 134,
+  "reach": 135,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 170,
+  "views": 173,
   "interactions": 5,
-  "eng_rate": 0.0373
+  "eng_rate": 0.037
  },
  {
   "id": "18065808002725206",
@@ -10054,17 +10054,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 28,
+  "reach": 29,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 52,
+  "views": 53,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0357
+  "eng_rate": 0.0345
  },
  {
   "id": "18098194889611015",
@@ -10091,17 +10091,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 28,
+  "reach": 29,
   "likes": 4,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 51,
+  "views": 52,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.2143
+  "eng_rate": 0.2069
  },
  {
   "id": "17884595940454510",
