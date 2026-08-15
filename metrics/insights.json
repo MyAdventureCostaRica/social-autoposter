@@ -10128,7 +10128,7 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 22,
+  "reach": 23,
   "likes": 6,
   "comments": 0,
   "saved": 0,
@@ -10138,7 +10138,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.2727
+  "eng_rate": 0.2609
  },
  {
   "id": "18199814560375637",
@@ -10165,7 +10165,7 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 118,
+  "reach": 119,
   "likes": 6,
   "comments": 0,
   "saved": 0,
@@ -10173,7 +10173,7 @@
   "total_interactions": 6,
   "views": 132,
   "interactions": 6,
-  "eng_rate": 0.0508
+  "eng_rate": 0.0504
  },
  {
   "id": "17963254647159544",
@@ -10182,14 +10182,14 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 106,
+  "reach": 108,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 132,
+  "views": 135,
   "interactions": 4,
-  "eng_rate": 0.0377
+  "eng_rate": 0.037
  }
 ]
