@@ -7605,5 +7605,25 @@
   "category": "CYCLING",
   "pillar": "ROUTE",
   "caption": "A stretch of road where the world slows down and the scenery takes over. Cycling in Costa Rica is a journey through roll"
+ },
+ {
+  "id": "18109574270093457",
+  "date": "2026-08-15",
+  "ts": "2026-08-15T00:55:21",
+  "base": "IMG_2125",
+  "format": "carousel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "Cycling in Costa Rica is at its best when the road climbs out of the valley and lets the wind take over. I look for rout"
+ },
+ {
+  "id": "18199814560375637",
+  "date": "2026-08-15",
+  "ts": "2026-08-15T00:55:21",
+  "base": "IMG_2125-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "Cycling in Costa Rica is at its best when the road climbs out of the valley and lets the wind take over. I look for rout"
  }
 ]
