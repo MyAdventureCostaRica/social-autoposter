@@ -10165,15 +10165,9 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 119,
-  "likes": 6,
-  "comments": 0,
-  "saved": 0,
-  "shares": 0,
-  "total_interactions": 6,
-  "views": 132,
-  "interactions": 6,
-  "eng_rate": 0.0504
+  "error": "Unsupported get request. Object with ID '17930388069383721' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  },
  {
   "id": "17963254647159544",
@@ -10182,14 +10176,25 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 108,
+  "reach": 118,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 135,
+  "views": 144,
   "interactions": 4,
-  "eng_rate": 0.037
+  "eng_rate": 0.0339
+ },
+ {
+  "id": "18161737966462033",
+  "date": "2026-08-15",
+  "base": "IMG_0788_ajigrg",
+  "format": "reel",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "error": "Unsupported get request. Object with ID '18161737966462033' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  }
 ]
