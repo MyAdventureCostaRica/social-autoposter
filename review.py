@@ -9,7 +9,7 @@ metrics/review-latest.json (the dashboard reads this), and opens a GitHub Issue
 that tags the owner so they get an email/notification. Applying any change stays
 a human decision — this only proposes.
 """
-import json, os, glob, re, datetime, collections, urllib.request
+import json, os, glob, re, time, datetime, collections, urllib.request, urllib.error
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MET = os.path.join(HERE, "metrics")
@@ -22,6 +22,9 @@ REPO = os.environ.get("GITHUB_REPOSITORY", "")          # owner/repo
 # (TOKEN) still powers the Issue; CAPTION_KEY powers the narrative.
 CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or TOKEN
 MODEL = os.environ.get("CAPTION_MODEL", "gemini-3.7-flash")
+# Same resilience as autopost.caption_for: Google retires models and free-tier
+# capacity 503s — walk primary + fallbacks instead of failing the narrative.
+CAPTION_MODELS = [MODEL] + [m for m in ("gemini-3.5-flash", "gemini-3.1-flash-lite") if m != MODEL]
 MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
 REACH_FLOOR = 50
 HALFLIFE = 90              # ~2x weight each 3 months — favor current trends (June 2026 review)
@@ -175,18 +178,28 @@ def ask_models(stats):
               "Voice: luxury-editorial, never pushy; full name 'My Adventure Costa Rica'; "
               "Spanish in usted. Humble on thin data. Do NOT tell anyone to apply changes "
               "automatically — these are for the owner to approve.")
-    payload = {"model": MODEL, "temperature": 0.4,
-               "messages": [{"role": "system", "content": method},
-                            {"role": "user", "content": user}]}
-    req = urllib.request.Request(
-        MODELS_URL, data=json.dumps(payload).encode(),
-        headers={"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
-                 "Accept": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=120) as r:
-            return json.loads(r.read().decode())["choices"][0]["message"]["content"].strip()
-    except Exception as e:
-        return f"_Automated narrative unavailable ({e}). The data table is in metrics/review-latest.json._"
+    last_err = None
+    for m in CAPTION_MODELS:
+        payload = {"model": m, "temperature": 0.4,
+                   "messages": [{"role": "system", "content": method},
+                                {"role": "user", "content": user}]}
+        for attempt in (1, 2):
+            req = urllib.request.Request(
+                MODELS_URL, data=json.dumps(payload).encode(),
+                headers={"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
+                         "Accept": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=120) as r:
+                    return json.loads(r.read().decode())["choices"][0]["message"]["content"].strip()
+            except urllib.error.HTTPError as e:
+                last_err = e
+                if e.code in (429, 500, 502, 503, 504) and attempt == 1:
+                    time.sleep(6); continue          # transient — one retry, then next model
+                break                                # 404 model gone etc. — next model
+            except Exception as e:
+                last_err = e
+                break
+    return f"_Automated narrative unavailable ({last_err}). The data table is in metrics/review-latest.json._"
 
 
 def open_issue(title, body):

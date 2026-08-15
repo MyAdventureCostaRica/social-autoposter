@@ -39,6 +39,9 @@ V = CFG.get("graph_version", "v23.0")
 IG = CFG["ig_user_id"]
 # GitHub Models retired 2026-07-30 -> Gemini OpenAI-compatible endpoint (free tier).
 MODEL = CFG.get("caption_model", "gemini-3.7-flash")
+# Same resilience as autopost.caption_for: walk primary + fallbacks (model retirements, 503s).
+CAPTION_MODELS = [MODEL] + [m for m in CFG.get(
+    "caption_model_fallbacks", ["gemini-3.5-flash", "gemini-3.1-flash-lite"]) if m != MODEL]
 MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
 CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or GH_TOKEN
 
@@ -151,25 +154,29 @@ def draft_reply(text, kind):
         "for a human to decide (so an automatic thank-you is clearly fine), else false,\n"
         '  "reply": the one-sentence reply in the brand voice, in the writer\'s language.'
     )
-    payload = {"model": MODEL, "temperature": 0.5,
-               "messages": [{"role": "system", "content": REPLY_SYSTEM},
-                            {"role": "user", "content": user}]}
-    req = urllib.request.Request(
-        MODELS_URL, data=json.dumps(payload).encode(),
-        headers={"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
-                 "Accept": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=90) as r:
-            raw = json.loads(r.read().decode())["choices"][0]["message"]["content"].strip()
-        raw = raw.replace("```json", "").replace("```", "").strip()
-        d = json.loads(raw)
-        d["safe"] = bool(d.get("safe")) and d.get("intent") == "appreciation" \
-            and d.get("sentiment") in ("positive", "neutral") and "?" not in text
-        d["reply"] = (d.get("reply") or "").strip()
-        return d
-    except Exception as e:
-        return {"reply": "", "intent": "other", "sentiment": "neutral",
-                "safe": False, "note": f"draft error: {e}"}
+    last_err = None
+    for m in CAPTION_MODELS:
+        payload = {"model": m, "temperature": 0.5,
+                   "messages": [{"role": "system", "content": REPLY_SYSTEM},
+                                {"role": "user", "content": user}]}
+        req = urllib.request.Request(
+            MODELS_URL, data=json.dumps(payload).encode(),
+            headers={"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
+                     "Accept": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                raw = json.loads(r.read().decode())["choices"][0]["message"]["content"].strip()
+            raw = raw.replace("```json", "").replace("```", "").strip()
+            d = json.loads(raw)
+            d["safe"] = bool(d.get("safe")) and d.get("intent") == "appreciation" \
+                and d.get("sentiment") in ("positive", "neutral") and "?" not in text
+            d["reply"] = (d.get("reply") or "").strip()
+            return d
+        except Exception as e:
+            last_err = e                    # 503/404/bad JSON — try the next model
+            continue
+    return {"reply": "", "intent": "other", "sentiment": "neutral",
+            "safe": False, "note": f"draft error: {last_err}"}
 
 
 def me_username():
