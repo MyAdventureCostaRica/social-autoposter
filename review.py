@@ -21,7 +21,7 @@ REPO = os.environ.get("GITHUB_REPOSITORY", "")          # owner/repo
 # GitHub Models retired 2026-07-30 -> Gemini OpenAI-compatible endpoint. GITHUB_TOKEN
 # (TOKEN) still powers the Issue; CAPTION_KEY powers the narrative.
 CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or TOKEN
-MODEL = os.environ.get("CAPTION_MODEL", "gemini-2.5-flash")
+MODEL = os.environ.get("CAPTION_MODEL", "gemini-3.5-flash")
 MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
 REACH_FLOOR = 50
 HALFLIFE = 90              # ~2x weight each 3 months — favor current trends (June 2026 review)
