@@ -1,6 +1,6 @@
 {
  "stats": {
-  "generated": "2026-08-01",
+  "generated": "2026-08-15",
   "current_learner_thresholds": {
    "REACH_FLOOR": 50,
    "HALFLIFE_DAYS": 90,
@@ -29,7 +29,7 @@
    },
    {
     "format": "carousel",
-    "avg_eng_rate": 0.0905,
+    "avg_eng_rate": 0.0895,
     "n": 2
    },
    {
@@ -39,7 +39,7 @@
    },
    {
     "format": "reel",
-    "avg_eng_rate": 0.0532,
+    "avg_eng_rate": 0.0528,
     "n": 28
    }
   ],
@@ -51,19 +51,19 @@
    },
    {
     "pillar": "ROUTE",
-    "avg_eng_rate": 0.0562,
+    "avg_eng_rate": 0.0557,
     "n": 15
    }
   ],
   "category_leaderboard": [
    {
     "category": "RUNNING",
-    "avg_eng_rate": 0.066,
+    "avg_eng_rate": 0.0655,
     "n": 5
    },
    {
     "category": "CYCLING",
-    "avg_eng_rate": 0.0584,
+    "avg_eng_rate": 0.0581,
     "n": 5
    },
    {
@@ -73,7 +73,7 @@
    },
    {
     "category": "COSTA RICA",
-    "avg_eng_rate": 0.0496,
+    "avg_eng_rate": 0.0491,
     "n": 7
    }
   ],
@@ -83,11 +83,11 @@
     "date": "2026-07-23",
     "format": "reel",
     "pillar": "ROUTE",
-    "reach": 235,
+    "reach": 238,
     "interactions": 29,
     "shares": 1,
     "saved": 1,
-    "eng_rate": 0.1234,
+    "eng_rate": 0.1218,
     "caption": "Some roads feel like they lead nowhere, and yet they take you everywhere. Misty mornings like these are what make road r"
    },
    {
@@ -105,23 +105,12 @@
     "date": "2026-07-15",
     "format": "carousel",
     "pillar": "ROUTE",
-    "reach": 75,
+    "reach": 76,
     "interactions": 7,
     "shares": 1,
     "saved": 0,
-    "eng_rate": 0.0933,
+    "eng_rate": 0.0921,
     "caption": "A still moment beneath the towering volcano, where the clouds linger and the earth feels alive. This is Costa Rica, wher"
-   },
-   {
-    "date": "2026-07-22",
-    "format": "reel",
-    "pillar": "ROUTE",
-    "reach": 80,
-    "interactions": 6,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.075,
-    "caption": "Dawn on the shore, where the waves meet the stillness of untouched sands. This is Costa Rica at its most tranquil. A pla"
    },
    {
     "date": "2026-06-24",
@@ -135,14 +124,25 @@
     "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
    },
    {
+    "date": "2026-07-22",
+    "format": "reel",
+    "pillar": "ROUTE",
+    "reach": 82,
+    "interactions": 6,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0732,
+    "caption": "Dawn on the shore, where the waves meet the stillness of untouched sands. This is Costa Rica at its most tranquil. A pla"
+   },
+   {
     "date": "2026-07-08",
     "format": "reel",
     "pillar": "ROUTE",
-    "reach": 211,
+    "reach": 212,
     "interactions": 15,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.0711,
+    "eng_rate": 0.0708,
     "caption": "A pause by the river, where the ride slows and the landscape takes over. Mountain biking here is as much about the quiet"
    },
    {
@@ -168,8 +168,8 @@
     "caption": "In the embrace of nature, the trail winds its way through mist-laden greenery. This is the kind of run that clears the m"
    }
   ],
-  "photo_queue": 151,
+  "photo_queue": 147,
   "errored_posts_90d": 11
  },
- "markdown": "_Automated narrative unavailable (HTTP Error 410: Gone). The data table is in metrics/review-latest.json._"
+ "markdown": "_Automated narrative unavailable (HTTP Error 503: Service Unavailable). The data table is in metrics/review-latest.json._"
 }

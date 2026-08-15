@@ -1,3 +1,3 @@
-# Latest review — 2026-08-01
+# Latest review — 2026-08-15
 
-_Automated narrative unavailable (HTTP Error 410: Gone). The data table is in metrics/review-latest.json._
+_Automated narrative unavailable (HTTP Error 503: Service Unavailable). The data table is in metrics/review-latest.json._
