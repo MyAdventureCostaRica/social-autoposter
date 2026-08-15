@@ -38,7 +38,7 @@ REPO = os.environ.get("GITHUB_REPOSITORY", "")
 V = CFG.get("graph_version", "v23.0")
 IG = CFG["ig_user_id"]
 # GitHub Models retired 2026-07-30 -> Gemini OpenAI-compatible endpoint (free tier).
-MODEL = CFG.get("caption_model", "gemini-3.5-flash")
+MODEL = CFG.get("caption_model", "gemini-3.7-flash")
 MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
 CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or GH_TOKEN
 

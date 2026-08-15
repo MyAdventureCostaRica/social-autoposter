@@ -7,7 +7,7 @@
     "fb"
   ],
   "also_story": true,
-  "caption_model": "gemini-3.5-flash",
+  "caption_model": "gemini-3.7-flash",
   "caption_langs": [
     "en"
   ],
@@ -28,5 +28,9 @@
   "plan_window": 14,
   "plan_scan": 8,
   "reel_min_seconds": 7,
-  "burn_text": false
+  "burn_text": false,
+  "caption_model_fallbacks": [
+    "gemini-3.5-flash",
+    "gemini-3.1-flash-lite"
+  ]
 }

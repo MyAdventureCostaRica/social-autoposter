@@ -96,7 +96,12 @@ def wa_notify(text):
 # GitHub Models retired 2026-07-30 (410 Gone) -> Gemini OpenAI-compatible endpoint
 # (free tier, vision). Endpoint/model/key are env- and config-overridable.
 MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
-MODEL = CFG.get("caption_model", "gemini-3.5-flash")
+MODEL = CFG.get("caption_model", "gemini-3.7-flash")
+# Google retires/renames models often (2.5-flash died with a 404 within weeks of the
+# migration) and free-tier capacity comes and goes (503s). Every caption call walks
+# this chain — primary first, then fallbacks — retrying transient errors once each.
+CAPTION_MODELS = [MODEL] + [m for m in CFG.get(
+    "caption_model_fallbacks", ["gemini-3.5-flash", "gemini-3.1-flash-lite"]) if m != MODEL]
 CAPTION_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("CAPTION_API_KEY") or GH_TOKEN
 
 # Which caption languages actually get POSTED. Instagram reads caption language as an
@@ -243,12 +248,30 @@ def caption_for(jpeg_bytes, note="", tags_known=None, learn=""):
     }
     headers = {"Authorization": f"Bearer {CAPTION_KEY}", "Content-Type": "application/json",
                "Accept": "application/json"}
-    res = http_json(MODELS_URL, headers, payload)
-    txt = res["choices"][0]["message"]["content"].strip()
-    if txt.startswith("```"):
-        txt = txt.strip("`")
-        txt = txt[txt.find("{"):txt.rfind("}") + 1]
-    return json.loads(txt)
+    errs = []
+    for m in CAPTION_MODELS:
+        payload["model"] = m
+        for attempt in (1, 2):
+            try:
+                res = http_json(MODELS_URL, headers, payload)
+                if m != MODEL:
+                    print("caption model fallback ->", m)
+                txt = res["choices"][0]["message"]["content"].strip()
+                if txt.startswith("```"):
+                    txt = txt.strip("`")
+                    txt = txt[txt.find("{"):txt.rfind("}") + 1]
+                return json.loads(txt)
+            except urllib.error.HTTPError as e:
+                errs.append(f"{m}: HTTP {e.code}")
+                if e.code == 404:
+                    break                       # model gone — next model immediately
+                if e.code in (429, 500, 502, 503, 504) and attempt == 1:
+                    time.sleep(6); continue     # transient — one retry, then next model
+                break
+            except Exception as e:              # bad JSON, timeout, etc. — try next model
+                errs.append(f"{m}: {e}")
+                break
+    raise RuntimeError("all caption models failed: " + "; ".join(errs))
 
 
 # ---------- rendering ----------
