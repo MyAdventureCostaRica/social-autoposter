@@ -10241,7 +10241,7 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 5,
+  "reach": 7,
   "likes": 4,
   "comments": 0,
   "saved": 0,
@@ -10251,7 +10251,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.8
+  "eng_rate": 0.5714
  },
  {
   "id": "18063109535774510",
@@ -10270,5 +10270,22 @@
   "navigation": 6,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "18057446129547198",
+  "date": "2026-08-16",
+  "base": "IMG_0968_koiazt",
+  "format": "reel",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "reach": 0,
+  "likes": 1,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 1,
+  "views": 11,
+  "interactions": 1,
+  "eng_rate": null
  }
 ]
