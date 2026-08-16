@@ -7676,5 +7676,25 @@
   "category": "RUNNING",
   "pillar": "ROUTE",
   "caption": "The routes that stay with you the longest are rarely the ones with trail markers. Scouting across these high, open pastu"
+ },
+ {
+  "id": "17905315545307262",
+  "date": "2026-08-16",
+  "ts": "2026-08-16T16:06:52",
+  "base": "IMG_2242",
+  "format": "carousel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "There is a quiet that only exists when you are mountain biking in Costa Rica above the cloud line. I designed this route"
+ },
+ {
+  "id": "18063109535774510",
+  "date": "2026-08-16",
+  "ts": "2026-08-16T16:06:52",
+  "base": "IMG_2242-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "There is a quiet that only exists when you are mountain biking in Costa Rica above the cloud line. I designed this route"
  }
 ]
