@@ -10241,17 +10241,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 0,
-  "likes": 2,
+  "reach": 5,
+  "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 2,
-  "views": 4,
+  "total_interactions": 4,
+  "views": 14,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 2,
-  "eng_rate": null
+  "interactions": 4,
+  "eng_rate": 0.8
  },
  {
   "id": "18063109535774510",
@@ -10260,8 +10260,15 @@
   "format": "story",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "error": "(#10) Not enough viewers for the media to show insights",
+  "reach": 6,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 0,
+  "views": 15,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 6,
   "interactions": 0,
-  "eng_rate": null
+  "eng_rate": 0.0
  }
 ]
