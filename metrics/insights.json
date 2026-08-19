@@ -10128,17 +10128,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 41,
+  "reach": 42,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 120,
+  "views": 122,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 8,
-  "eng_rate": 0.1951
+  "eng_rate": 0.1905
  },
  {
   "id": "18199814560375637",
@@ -10176,15 +10176,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 126,
+  "reach": 127,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 155,
+  "views": 156,
   "interactions": 5,
-  "eng_rate": 0.0397
+  "eng_rate": 0.0394
  },
  {
   "id": "18161737966462033",
@@ -10204,17 +10204,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 53,
+  "reach": 55,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 148,
+  "views": 154,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.1321
+  "eng_rate": 0.1273
  },
  {
   "id": "18125944846707420",
@@ -10241,17 +10241,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 37,
+  "reach": 40,
   "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 9,
-  "views": 99,
+  "views": 104,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 9,
-  "eng_rate": 0.2432
+  "eng_rate": 0.225
  },
  {
   "id": "18063109535774510",
@@ -10278,15 +10278,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 150,
+  "reach": 153,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 180,
+  "views": 183,
   "interactions": 8,
-  "eng_rate": 0.0533
+  "eng_rate": 0.0523
  },
  {
   "id": "17974924590095768",
@@ -10295,14 +10295,14 @@
   "format": "reel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "ROUTE",
-  "reach": 61,
-  "likes": 4,
+  "reach": 93,
+  "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 4,
-  "views": 81,
-  "interactions": 4,
-  "eng_rate": 0.0656
+  "total_interactions": 6,
+  "views": 116,
+  "interactions": 6,
+  "eng_rate": 0.0645
  }
 ]
