@@ -9824,7 +9824,7 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 27,
+  "reach": 28,
   "likes": 4,
   "comments": 0,
   "saved": 0,
@@ -9834,7 +9834,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1481
+  "eng_rate": 0.1429
  },
  {
   "id": "18086081369646206",
@@ -10176,15 +10176,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 128,
+  "reach": 129,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 157,
+  "views": 158,
   "interactions": 5,
-  "eng_rate": 0.0391
+  "eng_rate": 0.0388
  },
  {
   "id": "18161737966462033",
@@ -10247,7 +10247,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 9,
-  "views": 108,
+  "views": 109,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 9,
