@@ -10128,17 +10128,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 43,
+  "reach": 46,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 125,
+  "views": 128,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 8,
-  "eng_rate": 0.186
+  "eng_rate": 0.1739
  },
  {
   "id": "18199814560375637",
@@ -10176,15 +10176,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 129,
+  "reach": 131,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 158,
+  "views": 161,
   "interactions": 5,
-  "eng_rate": 0.0388
+  "eng_rate": 0.0382
  },
  {
   "id": "18161737966462033",
@@ -10295,14 +10295,14 @@
   "format": "reel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "ROUTE",
-  "reach": 96,
+  "reach": 97,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 121,
+  "views": 122,
   "interactions": 6,
-  "eng_rate": 0.0625
+  "eng_rate": 0.0619
  }
 ]
