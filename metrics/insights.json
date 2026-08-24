@@ -10128,17 +10128,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 50,
+  "reach": 51,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 141,
+  "views": 146,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 8,
-  "eng_rate": 0.16
+  "eng_rate": 0.1569
  },
  {
   "id": "18199814560375637",
@@ -10176,15 +10176,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 132,
+  "reach": 133,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 163,
+  "views": 164,
   "interactions": 5,
-  "eng_rate": 0.0379
+  "eng_rate": 0.0376
  },
  {
   "id": "18161737966462033",
@@ -10204,17 +10204,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 59,
+  "reach": 61,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 160,
+  "views": 162,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.1186
+  "eng_rate": 0.1148
  },
  {
   "id": "18125944846707420",
@@ -10241,17 +10241,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 44,
+  "reach": 46,
   "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 9,
-  "views": 112,
-  "profile_visits": 0,
+  "views": 116,
+  "profile_visits": 1,
   "follows": 0,
   "interactions": 9,
-  "eng_rate": 0.2045
+  "eng_rate": 0.1957
  },
  {
   "id": "18063109535774510",
