@@ -171,7 +171,10 @@ def main():
     print("Clip:", pid)
 
     learn = ap.performance_brief()
-    meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn)
+    meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
+                          hint="This caption is for a REEL. Keep it SHORT — 1-3 sentences, "
+                               "under 400 characters (long reel captions reduce reach). "
+                               "Same voice, just compact.")
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()
@@ -261,7 +264,10 @@ def stage_reel():
     note = ((clip.get("context") or {}).get("custom") or {}).get("note", "")
     print("Clip:", pid, f"({dur:.1f}s)")
     learn = ap.performance_brief()
-    meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn)
+    meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
+                          hint="This caption is for a REEL. Keep it SHORT — 1-3 sentences, "
+                               "under 400 characters (long reel captions reduce reach). "
+                               "Same voice, just compact.")
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()
