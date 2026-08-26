@@ -10128,17 +10128,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 52,
+  "reach": 53,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 148,
+  "views": 149,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 8,
-  "eng_rate": 0.1538
+  "eng_rate": 0.1509
  },
  {
   "id": "18199814560375637",
@@ -10312,7 +10312,7 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 30,
+  "reach": 31,
   "likes": 4,
   "comments": 0,
   "saved": 0,
@@ -10322,7 +10322,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1333
+  "eng_rate": 0.129
  },
  {
   "id": "18124260928770148",
