@@ -10278,15 +10278,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 156,
+  "reach": 157,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 189,
+  "views": 190,
   "interactions": 8,
-  "eng_rate": 0.0513
+  "eng_rate": 0.051
  },
  {
   "id": "17974924590095768",
@@ -10295,15 +10295,15 @@
   "format": "reel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "ROUTE",
-  "reach": 98,
+  "reach": 99,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 125,
+  "views": 126,
   "interactions": 6,
-  "eng_rate": 0.0612
+  "eng_rate": 0.0606
  },
  {
   "id": "18616479508024429",
@@ -10312,17 +10312,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 25,
+  "reach": 30,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 53,
+  "views": 63,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.16
+  "eng_rate": 0.1333
  },
  {
   "id": "18124260928770148",
@@ -10349,14 +10349,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 26,
+  "reach": 28,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 43,
+  "views": 45,
   "interactions": 2,
-  "eng_rate": 0.0769
+  "eng_rate": 0.0714
  }
 ]
