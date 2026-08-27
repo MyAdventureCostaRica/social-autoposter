@@ -9898,7 +9898,7 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "error": "Unsupported get request. Object with ID '18128226154634893' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "error": "(#100) Tried accessing nonexisting field (insights)",
   "interactions": 0,
   "eng_rate": null
  },
@@ -10312,17 +10312,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 31,
+  "reach": 32,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 63,
+  "views": 65,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.129
+  "eng_rate": 0.125
  },
  {
   "id": "18124260928770148",
@@ -10349,14 +10349,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 28,
+  "reach": 29,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 45,
+  "views": 46,
   "interactions": 2,
-  "eng_rate": 0.0714
+  "eng_rate": 0.069
  }
 ]
