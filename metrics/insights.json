@@ -10204,17 +10204,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 62,
+  "reach": 63,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 163,
+  "views": 164,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.1129
+  "eng_rate": 0.1111
  },
  {
   "id": "18125944846707420",
@@ -10312,17 +10312,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 35,
+  "reach": 37,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 69,
+  "views": 73,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1143
+  "eng_rate": 0.1081
  },
  {
   "id": "18124260928770148",
@@ -10349,14 +10349,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 30,
+  "reach": 32,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 51,
+  "views": 55,
   "interactions": 2,
-  "eng_rate": 0.0667
+  "eng_rate": 0.0625
  }
 ]

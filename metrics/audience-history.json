@@ -2414,12 +2414,12 @@
  {
   "date": "2026-08-28",
   "metric": "followers",
-  "total": 664,
+  "total": 663,
   "countries": [
    {
     "code": "CR",
-    "pct": 54.2,
-    "value": 360
+    "pct": 54.1,
+    "value": 359
    },
    {
     "code": "US",
