@@ -1,36 +1,31 @@
 {
  "stats": {
-  "generated": "2026-08-15",
+  "generated": "2026-09-01",
   "current_learner_thresholds": {
    "REACH_FLOOR": 50,
    "HALFLIFE_DAYS": 90,
    "SAVES_DEAD": 0.05
   },
   "min_age_days": 2,
-  "total_posts": 831,
-  "with_insights": 148,
-  "eligible": 39,
-  "eligible_recent_12mo": 34,
+  "total_posts": 845,
+  "with_insights": 160,
+  "eligible": 46,
+  "eligible_recent_12mo": 41,
   "date_range": [
    "2017-07-23",
-   "2026-07-30"
+   "2026-08-25"
   ],
   "interaction_mix_pct": {
    "saved": 0.8,
-   "shares": 6.9,
-   "likes": 84.3,
-   "comments": 3.8
+   "shares": 6.5,
+   "likes": 84.1,
+   "comments": 3.5
   },
   "format_leaderboard": [
    {
-    "format": "story",
-    "avg_eng_rate": 0.0926,
-    "n": 1
-   },
-   {
     "format": "carousel",
-    "avg_eng_rate": 0.0895,
-    "n": 2
+    "avg_eng_rate": 0.1179,
+    "n": 4
    },
    {
     "format": "single",
@@ -39,32 +34,52 @@
    },
    {
     "format": "reel",
-    "avg_eng_rate": 0.0528,
-    "n": 28
+    "avg_eng_rate": 0.0521,
+    "n": 31
+   },
+   {
+    "format": "story",
+    "avg_eng_rate": 0.0506,
+    "n": 3
    }
   ],
   "pillar_leaderboard": [
+   {
+    "pillar": "ROUTE",
+    "avg_eng_rate": 0.0658,
+    "n": 19
+   },
    {
     "pillar": "EXPERIENCE",
     "avg_eng_rate": 0.0612,
     "n": 3
    },
    {
-    "pillar": "ROUTE",
-    "avg_eng_rate": 0.0557,
-    "n": 15
+    "pillar": "FOUNDER",
+    "avg_eng_rate": 0.051,
+    "n": 1
+   },
+   {
+    "pillar": "KNOWLEDGE",
+    "avg_eng_rate": 0.0153,
+    "n": 1
    }
   ],
   "category_leaderboard": [
    {
     "category": "RUNNING",
-    "avg_eng_rate": 0.0655,
-    "n": 5
+    "avg_eng_rate": 0.0706,
+    "n": 7
    },
    {
     "category": "CYCLING",
-    "avg_eng_rate": 0.0581,
-    "n": 5
+    "avg_eng_rate": 0.0653,
+    "n": 8
+   },
+   {
+    "category": "BESPOKE JOURNEYS",
+    "avg_eng_rate": 0.0606,
+    "n": 1
    },
    {
     "category": "WATER SPORTS",
@@ -73,21 +88,43 @@
    },
    {
     "category": "COSTA RICA",
-    "avg_eng_rate": 0.0491,
+    "avg_eng_rate": 0.0487,
     "n": 7
    }
   ],
-  "unlabeled_history_n": 21,
+  "unlabeled_history_n": 22,
   "top_posts": [
+   {
+    "date": "2026-08-15",
+    "format": "carousel",
+    "pillar": "ROUTE",
+    "reach": 53,
+    "interactions": 8,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.1509,
+    "caption": "Cycling in Costa Rica is at its best when the road climbs out of the valley and lets the wind take over. I look for rout"
+   },
+   {
+    "date": "2026-08-15",
+    "format": "carousel",
+    "pillar": "ROUTE",
+    "reach": 63,
+    "interactions": 7,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.1111,
+    "caption": "The routes that stay with you the longest are rarely the ones with trail markers. Scouting across these high, open pastu"
+   },
    {
     "date": "2026-07-23",
     "format": "reel",
     "pillar": "ROUTE",
-    "reach": 238,
+    "reach": 239,
     "interactions": 29,
     "shares": 1,
     "saved": 1,
-    "eng_rate": 0.1218,
+    "eng_rate": 0.1213,
     "caption": "Some roads feel like they lead nowhere, and yet they take you everywhere. Misty mornings like these are what make road r"
    },
    {
@@ -105,11 +142,11 @@
     "date": "2026-07-15",
     "format": "carousel",
     "pillar": "ROUTE",
-    "reach": 76,
+    "reach": 77,
     "interactions": 7,
     "shares": 1,
     "saved": 0,
-    "eng_rate": 0.0921,
+    "eng_rate": 0.0909,
     "caption": "A still moment beneath the towering volcano, where the clouds linger and the earth feels alive. This is Costa Rica, wher"
    },
    {
@@ -124,6 +161,17 @@
     "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
    },
    {
+    "date": "2026-08-18",
+    "format": "reel",
+    "pillar": "ROUTE",
+    "reach": 99,
+    "interactions": 6,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.0606,
+    "caption": "Suspended between the forest floor and the mist, the trail becomes entirely quiet. Moments like this last a lifetime —th"
+   },
+   {
     "date": "2026-07-22",
     "format": "reel",
     "pillar": "ROUTE",
@@ -133,43 +181,10 @@
     "saved": 0,
     "eng_rate": 0.0732,
     "caption": "Dawn on the shore, where the waves meet the stillness of untouched sands. This is Costa Rica at its most tranquil. A pla"
-   },
-   {
-    "date": "2026-07-08",
-    "format": "reel",
-    "pillar": "ROUTE",
-    "reach": 212,
-    "interactions": 15,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0708,
-    "caption": "A pause by the river, where the ride slows and the landscape takes over. Mountain biking here is as much about the quiet"
-   },
-   {
-    "date": "2026-07-24",
-    "format": "reel",
-    "pillar": "ROUTE",
-    "reach": 56,
-    "interactions": 3,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0536,
-    "caption": "In the canopy above, the howler monkeys move with quiet purpose, their calls echoing through the forest. A moment to wit"
-   },
-   {
-    "date": "2026-06-30",
-    "format": "reel",
-    "pillar": "ROUTE",
-    "reach": 166,
-    "interactions": 10,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0602,
-    "caption": "In the embrace of nature, the trail winds its way through mist-laden greenery. This is the kind of run that clears the m"
    }
   ],
-  "photo_queue": 147,
-  "errored_posts_90d": 11
+  "photo_queue": 129,
+  "errored_posts_90d": 13
  },
- "markdown": "### 1. Readout\n\nBy today's standards, our signal pool comprises 39 eligible posts (34 within the last 12 months out of 148 tracked with insights). The live currency for the account is overwhelming **likes (84.3%)** followed distantly by **shares (6.9%)**, while **saves remain near non-existent at 0.8%** and comments sit at 3.8%. High-reach distribution is dominated by video: Reels represent 28 of our 39 eligible posts and power the highest raw reach numbers (e.g., Reach: 238 with 12.18% engagement on 2026-07-23; Reach: 212 on 2026-07-08). Thematically, contemplative journeys that pair endurance with quiet immersion outperform purely descriptive scenes—exemplified by top-performing lines such as *\"Some roads feel like they lead nowhere, and yet they take you everywhere\"* (2026-07-23) and *\"Some trails demand more than just endurance — they ask for resilience, focus...\"* (2026-06-19).\n\n---\n\n### 2. Proposed Changes\n\nGiven our modest sample size ($n=39$ eligible, 21 unlabeled historical posts), we remain humble and avoid over-fitting.\n\n1. **Retain Learner Thresholds (`REACH_FLOOR: 50`, `HALFLIFE_DAYS: 90`, `SAVES_DEAD: 0.05`):**\n   * *Data Justification:* The current `REACH_FLOOR` of 50 captures high-signal posts cleanly (e.g., 2026-07-24 cleared floor at 56 reach; 2026-06-24 at 54 reach). With saves accounting for only 0.8% of total interactions, saves remain well beneath the `SAVES_DEAD` 0.05 (5%) threshold, correctly signaling that saves are not currently a viable optimization target. No threshold delta is required.\n2. **Update Captioner Brief Hook Guidance (`BRAND_PROMPT`):**\n   * *Data Justification:* Top performers consistently lead with introspective, perspective-shifting observations rather than pure geography. Posts opening with mindset-driven hooks achieved our highest engagement rates: *\"Some roads feel like they lead nowhere, and yet they take you everywhere\"* (12.18% eng, 238 reach) and *\"Some trails demand more than just endurance...\"* (13.46% eng, 104 reach).\n   * *Proposed Brief Edit:* Instruct the writer to favor reflective, evocative opening hooks focused on the internal journey and elements before grounding the reader in the Costa Rican landscape, maintaining our formal *usted* voice and full brand name, *My Adventure Costa Rica*.\n3. **Investigate 90-Day Insight Errors:**\n   * *Data Justification:* `errored_posts_90d` currently sits at 11 posts (representing ~7.4% of tracked posts). We should verify media-type permissions and Graph API endpoint handling for non-standard formats to ensure no reach data is dropped.\n\n---\n\n### 3. 3 Experiments (Next 30 Days)\n\n1. **The Introspective Hook in Video Reels (ROUTE & RUNNING / CYCLING)**\n   * **Hypothesis:** Opening Reels with a philosophical reflection on movement and nature (e.g., endurance, quiet mornings, solitude) will yield higher shares and double-digit engagement compared to purely descriptive scene openers.\n   * **Metric:** Engagement Rate (Total Interactions / Reach) targeting $>8.0\\%$, and raw Share count ($>1$ share/post).\n   * **Duration:** 30 days.\n\n2. **Multi-Discipline Elevation via 'RUNNING' & 'CYCLING' Pillars**\n   * **Hypothesis:** Actively alternating between Cycling ($n=5$, avg eng 5.81%) and Running ($n=5$, avg eng 6.55%) under the *ROUTE* pillar will sustain higher average reach ($>150$) over generic scenic content (*COSTA RICA* category: 4.91% avg eng over $n=7$).\n   * **Metric:** Average Reach per post across athletic categories vs. generic landscape posts.\n   * **Duration:** 30 days.\n\n3. **Share-Driven Closing Invocations**\n   * **Hypothesis:** Since shares represent 6.9% of interactions while saves represent only 0.8%, concluding captions with an evocative, shareable invitation (e.g., invoking the feeling of sharing a quiet dawn or remote ascent with a companion) will lift overall share distribution without compromising our luxury-editorial restraint.\n   * **Metric:** Share mix percentage (tracking movement from 6.9% toward $>10.0\\%$).\n   * **Duration:** 30 days."
+ "markdown": "### 1. Readout: Performance by Today's Standards\n\nWith a highly focused signal pool of 46 eligible posts (41 within the last 12 months), our data signals are directional but clear. \n\n*   **The Live Currency:** Likes dominate raw volume at 84.1% of the interaction mix, but **shares (6.5%)** represent our primary organic distribution currency. **Saves are exceptionally quiet at 0.8%**, indicating that our audience prefers immediate social sharing over archiving.\n*   **Format Performance:** Carousels are our most engaging format at an **11.79% average engagement rate**, though the sample size is small (n=4). Singles follow at **7.69% (n=8)**. Reels remain our operational workhorse with **5.21% (n=31)**, proving they are reliable for consistent reach (e.g., a July 23 Reel reached 239 accounts with a 12.13% engagement rate).\n*   **Pillar & Category Leaders:** **ROUTE** is our undisputed champion pillar at **6.58% engagement rate (n=19)**. Within categories, **RUNNING (7.06% ER, n=7)** and **CYCLING (6.53% ER, n=8)** lead the portfolio, while general COSTA RICA content trails at **4.87% ER (n=7)**.\n*   **Creative Themes:** Our top-performing posts lean heavily into sensory, atmospheric, and quiet luxury. Captions that evoke solitude and nature—such as *\"misty mornings,\"* *\"high, open pastures,\"* *\"a still moment beneath the towering volcano,\"* and *\"suspended between the forest floor and the mist\"*—consistently outperform purely athletic or promotional copy.\n\n---\n\n### 2. Proposed Changes\n\nGiven the thin but highly consistent nature of our recent data, we propose the following adjustments to the learner thresholds and the captioner brief to better align with what is resonating:\n\n#### Learner Threshold Adjustments (Proposed as Deltas)\n1.  **SAVES_DEAD: Decrease by -0.03 (New Value: 0.02)**\n    *   *Justification:* Saves represent only 0.8% of our interaction mix. The current threshold of 0.05 is too high and risks penalizing high-performing posts that simply reflect our audience's natural aversion to saving content.\n2.  **HALFLIFE_DAYS: Increase by +30 days (New Value: 120 days)**\n    *   *Justification:* With only 41 eligible posts in the last 12 months, our dataset is sparse. Extending the half-life ensures the learner retains memory of our high-performing summer carousels and reels for a slightly longer period, preventing premature degradation of successful signals.\n3.  **REACH_FLOOR: No change (Keep at 50)**\n    *   *Justification:* Our top-performing carousels from August 15 had reaches of 53 and 63. Raising this floor would exclude these highly engaging posts (15.09% and 11.11% engagement rates, respectively) from our learning pool.\n\n#### Captioner Brief (`BRAND_PROMPT`) Refinements\n*   **Double down on \"Quiet Luxury\" and Sensory Openings:** Instruct the writer to open captions with atmospheric, sensory imagery rather than action-oriented hooks. Use the top-performing posts as stylistic benchmarks (e.g., referencing the stillness of the dawn, the mist of the cloud forest, or the high pastures).\n*   **Optimize for Shares over Saves:** Since shares (6.5%) vastly outpace saves (0.8%), adjust the call-to-value. Instead of prompting users to \"save this route,\" invite them to share the feeling of the journey with someone who appreciates the quiet corners of the world.\n*   **Maintain Brand Standards:** Reinforce that all copy must be in elegant Spanish using the formal *usted* voice, and always use the full brand name, **My Adventure Costa Rica**, never an acronym.\n\n---\n\n### 3. Three Experiments for the Next 30 Days\n\nTo safely test these insights without disrupting our core consistency, we propose the following three experiments:\n\n#### Experiment 1: The \"Atmospheric Carousel\" Format Test\n*   **Concept:** Post two multi-slide carousels focusing on the **ROUTE** pillar (specifically CYCLING or RUNNING), utilizing misty, high-altitude imagery. The copy will focus entirely on the sensory experience of the terrain rather than technical route details.\n*   **Metric of Success:** Engagement Rate (targeting >10.0%) and Reach.\n*   **Duration:** 30 days.\n\n#### Experiment 2: Share-Optimized \"Usted\" Closings\n*   **Concept:** In our next four Reels, replace any passive endings with a soft, elegant invitation to share, written in formal Spanish. For example: *\"Comparta este rincón de paz con quien comparta su pasión por el camino.\"*\n*   **Metric of Success:** Share Rate (Shares / Total Interactions, targeting >8.0%).\n*   **Duration:** 30 days.\n\n#### Experiment 3: Technical Health Restoration\n*   **Concept:** Investigate and resolve the 13 errored posts from the last 90 days. This is a high priority to ensure our publishing pipeline is clean and that we are not losing valuable engagement data due to API or media formatting errors.\n*   **Metric of Success:** Zero errored posts in the next 30-day window.\n*   **Duration:** Immediate / 14 days."
 }

@@ -1,38 +1,50 @@
-# Latest review — 2026-08-15
+# Latest review — 2026-09-01
 
-### 1. Readout
+### 1. Readout: Performance by Today's Standards
 
-By today's standards, our signal pool comprises 39 eligible posts (34 within the last 12 months out of 148 tracked with insights). The live currency for the account is overwhelming **likes (84.3%)** followed distantly by **shares (6.9%)**, while **saves remain near non-existent at 0.8%** and comments sit at 3.8%. High-reach distribution is dominated by video: Reels represent 28 of our 39 eligible posts and power the highest raw reach numbers (e.g., Reach: 238 with 12.18% engagement on 2026-07-23; Reach: 212 on 2026-07-08). Thematically, contemplative journeys that pair endurance with quiet immersion outperform purely descriptive scenes—exemplified by top-performing lines such as *"Some roads feel like they lead nowhere, and yet they take you everywhere"* (2026-07-23) and *"Some trails demand more than just endurance — they ask for resilience, focus..."* (2026-06-19).
+With a highly focused signal pool of 46 eligible posts (41 within the last 12 months), our data signals are directional but clear. 
+
+*   **The Live Currency:** Likes dominate raw volume at 84.1% of the interaction mix, but **shares (6.5%)** represent our primary organic distribution currency. **Saves are exceptionally quiet at 0.8%**, indicating that our audience prefers immediate social sharing over archiving.
+*   **Format Performance:** Carousels are our most engaging format at an **11.79% average engagement rate**, though the sample size is small (n=4). Singles follow at **7.69% (n=8)**. Reels remain our operational workhorse with **5.21% (n=31)**, proving they are reliable for consistent reach (e.g., a July 23 Reel reached 239 accounts with a 12.13% engagement rate).
+*   **Pillar & Category Leaders:** **ROUTE** is our undisputed champion pillar at **6.58% engagement rate (n=19)**. Within categories, **RUNNING (7.06% ER, n=7)** and **CYCLING (6.53% ER, n=8)** lead the portfolio, while general COSTA RICA content trails at **4.87% ER (n=7)**.
+*   **Creative Themes:** Our top-performing posts lean heavily into sensory, atmospheric, and quiet luxury. Captions that evoke solitude and nature—such as *"misty mornings,"* *"high, open pastures,"* *"a still moment beneath the towering volcano,"* and *"suspended between the forest floor and the mist"*—consistently outperform purely athletic or promotional copy.
 
 ---
 
 ### 2. Proposed Changes
 
-Given our modest sample size ($n=39$ eligible, 21 unlabeled historical posts), we remain humble and avoid over-fitting.
+Given the thin but highly consistent nature of our recent data, we propose the following adjustments to the learner thresholds and the captioner brief to better align with what is resonating:
 
-1. **Retain Learner Thresholds (`REACH_FLOOR: 50`, `HALFLIFE_DAYS: 90`, `SAVES_DEAD: 0.05`):**
-   * *Data Justification:* The current `REACH_FLOOR` of 50 captures high-signal posts cleanly (e.g., 2026-07-24 cleared floor at 56 reach; 2026-06-24 at 54 reach). With saves accounting for only 0.8% of total interactions, saves remain well beneath the `SAVES_DEAD` 0.05 (5%) threshold, correctly signaling that saves are not currently a viable optimization target. No threshold delta is required.
-2. **Update Captioner Brief Hook Guidance (`BRAND_PROMPT`):**
-   * *Data Justification:* Top performers consistently lead with introspective, perspective-shifting observations rather than pure geography. Posts opening with mindset-driven hooks achieved our highest engagement rates: *"Some roads feel like they lead nowhere, and yet they take you everywhere"* (12.18% eng, 238 reach) and *"Some trails demand more than just endurance..."* (13.46% eng, 104 reach).
-   * *Proposed Brief Edit:* Instruct the writer to favor reflective, evocative opening hooks focused on the internal journey and elements before grounding the reader in the Costa Rican landscape, maintaining our formal *usted* voice and full brand name, *My Adventure Costa Rica*.
-3. **Investigate 90-Day Insight Errors:**
-   * *Data Justification:* `errored_posts_90d` currently sits at 11 posts (representing ~7.4% of tracked posts). We should verify media-type permissions and Graph API endpoint handling for non-standard formats to ensure no reach data is dropped.
+#### Learner Threshold Adjustments (Proposed as Deltas)
+1.  **SAVES_DEAD: Decrease by -0.03 (New Value: 0.02)**
+    *   *Justification:* Saves represent only 0.8% of our interaction mix. The current threshold of 0.05 is too high and risks penalizing high-performing posts that simply reflect our audience's natural aversion to saving content.
+2.  **HALFLIFE_DAYS: Increase by +30 days (New Value: 120 days)**
+    *   *Justification:* With only 41 eligible posts in the last 12 months, our dataset is sparse. Extending the half-life ensures the learner retains memory of our high-performing summer carousels and reels for a slightly longer period, preventing premature degradation of successful signals.
+3.  **REACH_FLOOR: No change (Keep at 50)**
+    *   *Justification:* Our top-performing carousels from August 15 had reaches of 53 and 63. Raising this floor would exclude these highly engaging posts (15.09% and 11.11% engagement rates, respectively) from our learning pool.
+
+#### Captioner Brief (`BRAND_PROMPT`) Refinements
+*   **Double down on "Quiet Luxury" and Sensory Openings:** Instruct the writer to open captions with atmospheric, sensory imagery rather than action-oriented hooks. Use the top-performing posts as stylistic benchmarks (e.g., referencing the stillness of the dawn, the mist of the cloud forest, or the high pastures).
+*   **Optimize for Shares over Saves:** Since shares (6.5%) vastly outpace saves (0.8%), adjust the call-to-value. Instead of prompting users to "save this route," invite them to share the feeling of the journey with someone who appreciates the quiet corners of the world.
+*   **Maintain Brand Standards:** Reinforce that all copy must be in elegant Spanish using the formal *usted* voice, and always use the full brand name, **My Adventure Costa Rica**, never an acronym.
 
 ---
 
-### 3. 3 Experiments (Next 30 Days)
+### 3. Three Experiments for the Next 30 Days
 
-1. **The Introspective Hook in Video Reels (ROUTE & RUNNING / CYCLING)**
-   * **Hypothesis:** Opening Reels with a philosophical reflection on movement and nature (e.g., endurance, quiet mornings, solitude) will yield higher shares and double-digit engagement compared to purely descriptive scene openers.
-   * **Metric:** Engagement Rate (Total Interactions / Reach) targeting $>8.0\%$, and raw Share count ($>1$ share/post).
-   * **Duration:** 30 days.
+To safely test these insights without disrupting our core consistency, we propose the following three experiments:
 
-2. **Multi-Discipline Elevation via 'RUNNING' & 'CYCLING' Pillars**
-   * **Hypothesis:** Actively alternating between Cycling ($n=5$, avg eng 5.81%) and Running ($n=5$, avg eng 6.55%) under the *ROUTE* pillar will sustain higher average reach ($>150$) over generic scenic content (*COSTA RICA* category: 4.91% avg eng over $n=7$).
-   * **Metric:** Average Reach per post across athletic categories vs. generic landscape posts.
-   * **Duration:** 30 days.
+#### Experiment 1: The "Atmospheric Carousel" Format Test
+*   **Concept:** Post two multi-slide carousels focusing on the **ROUTE** pillar (specifically CYCLING or RUNNING), utilizing misty, high-altitude imagery. The copy will focus entirely on the sensory experience of the terrain rather than technical route details.
+*   **Metric of Success:** Engagement Rate (targeting >10.0%) and Reach.
+*   **Duration:** 30 days.
 
-3. **Share-Driven Closing Invocations**
-   * **Hypothesis:** Since shares represent 6.9% of interactions while saves represent only 0.8%, concluding captions with an evocative, shareable invitation (e.g., invoking the feeling of sharing a quiet dawn or remote ascent with a companion) will lift overall share distribution without compromising our luxury-editorial restraint.
-   * **Metric:** Share mix percentage (tracking movement from 6.9% toward $>10.0\%$).
-   * **Duration:** 30 days.
+#### Experiment 2: Share-Optimized "Usted" Closings
+*   **Concept:** In our next four Reels, replace any passive endings with a soft, elegant invitation to share, written in formal Spanish. For example: *"Comparta este rincón de paz con quien comparta su pasión por el camino."*
+*   **Metric of Success:** Share Rate (Shares / Total Interactions, targeting >8.0%).
+*   **Duration:** 30 days.
+
+#### Experiment 3: Technical Health Restoration
+*   **Concept:** Investigate and resolve the 13 errored posts from the last 90 days. This is a high priority to ensure our publishing pipeline is clean and that we are not losing valuable engagement data due to API or media formatting errors.
+*   **Metric of Success:** Zero errored posts in the next 30-day window.
+*   **Duration:** Immediate / 14 days.
