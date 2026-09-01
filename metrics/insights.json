@@ -10312,17 +10312,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 40,
+  "reach": 41,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 78,
+  "views": 79,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1
+  "eng_rate": 0.0976
  },
  {
   "id": "18124260928770148",
@@ -10349,14 +10349,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 35,
+  "reach": 36,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 59,
+  "views": 60,
   "interactions": 2,
-  "eng_rate": 0.0571
+  "eng_rate": 0.0556
  }
 ]
