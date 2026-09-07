@@ -9434,15 +9434,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 260,
+  "reach": 261,
   "likes": 12,
   "comments": 0,
   "saved": 0,
   "shares": 1,
   "total_interactions": 13,
-  "views": 355,
+  "views": 356,
   "interactions": 13,
-  "eng_rate": 0.05
+  "eng_rate": 0.0498
  },
  {
   "id": "18426420415134715",
@@ -10037,15 +10037,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 137,
+  "reach": 138,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 178,
+  "views": 179,
   "interactions": 5,
-  "eng_rate": 0.0365
+  "eng_rate": 0.0362
  },
  {
   "id": "18065808002725206",
@@ -10312,17 +10312,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 45,
+  "reach": 46,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 85,
+  "views": 86,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.1111
+  "eng_rate": 0.1087
  },
  {
   "id": "18124260928770148",
@@ -10349,14 +10349,14 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 37,
+  "reach": 38,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 61,
+  "views": 62,
   "interactions": 2,
-  "eng_rate": 0.0541
+  "eng_rate": 0.0526
  }
 ]
