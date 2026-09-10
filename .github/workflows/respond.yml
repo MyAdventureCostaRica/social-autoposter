@@ -2,13 +2,13 @@ name: Engagement responder
 
 on:
   schedule:
-    # Comments + DMs are PRIORITY — they need a human, so the goal is to reach you
-    # the soonest possible. Sweep at GitHub's floor of every 5 min. If a slot is
-    # skipped (GitHub throttles high-frequency crons), the next slot catches it —
-    # nothing is ever lost (idempotent via handled.json), so latency only ever
-    # rounds up to the next run. Empty sweeps cost nothing (zero model calls when
-    # there's nothing new), and a public repo has unlimited free minutes.
-    - cron: "*/5 * * * *"     # every 5 minutes, around the clock
+    # Comments + DMs are PRIORITY — they need a human. The Vercel cron is the
+    # primary hourly sweep; this workflow is the backup in case that one is down.
+    # If a slot is skipped, the next one catches it — nothing is ever lost
+    # (idempotent via handled.json), so latency only rounds up to the next run.
+    # Empty sweeps cost nothing (zero model calls when there's nothing new),
+    # and a public repo has unlimited free minutes.
+    - cron: "7 * * * *"     # hourly at :07, around the clock
   workflow_dispatch:
     inputs:
       test_notify:
