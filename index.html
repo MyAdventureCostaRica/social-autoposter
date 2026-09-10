@@ -425,6 +425,25 @@ async function compressVideo(file, onProg){
     return new File([blob], nm+'-web.'+ext, {type:blob.type||('video/'+ext)});
   } finally { cleanup(); }
 }
+async function shrinkImage(file, maxDim, maxBytes){
+  // Downscale + re-encode an oversized photo client-side. Returns the original
+  // file untouched if it's already small enough or the browser can't decode it.
+  if(file.size<=maxBytes) return file;
+  let bmp=null;
+  try{ bmp=await createImageBitmap(file); }catch(e){ return file; }
+  try{
+    const s=Math.min(1, maxDim/Math.max(bmp.width,bmp.height));
+    const w=Math.max(1,Math.round(bmp.width*s)), h=Math.max(1,Math.round(bmp.height*s));
+    const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+    cv.getContext('2d').drawImage(bmp,0,0,w,h);
+    const nm=file.name.replace(/\.[^.]+$/,'')+'-web.jpg';
+    for(const q of [0.9,0.85,0.78,0.7,0.6]){
+      const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',q));
+      if(blob&&blob.size<=maxBytes) return new File([blob],nm,{type:'image/jpeg'});
+    }
+    return file;                                   // pathological case — let the size guard catch it
+  }finally{ try{bmp.close();}catch(e){} }
+}
 function cloudUpload(file, cfg2, isVid, onProg){
   return new Promise((resolve,reject)=>{
     const fd=new FormData();
@@ -450,7 +469,17 @@ async function doUpload(files){
   if(vids.length&&imgs.length){ uiToast('Upload either ONE video or photos \u2014 not both at once.'); return; }
   if(vids.length>1){ uiToast('One video at a time, please.'); return; }
   const MAXV=100*1024*1024, MAXI=10*1024*1024;
-  for(const f of imgs){ if(f.size>MAXI){ uiToast(f.name+' is '+Math.round(f.size/1048576)+' MB \u2014 the max is 10 MB per photo.'); return; } }
+  // Oversized photos are auto-resized in the browser (like big videos are auto-
+  // compressed) \u2014 Instagram renders ~1080px, so nothing visible is lost. Only a
+  // file the browser can't even decode (rare huge HEIC/RAW) still gets refused.
+  for(let i=0;i<imgs.length;i++){
+    if(imgs[i].size>MAXI){
+      const st2=()=>document.getElementById('upStat');
+      if(st2()) st2().textContent='Optimizing '+imgs[i].name+' ('+Math.round(imgs[i].size/1048576)+' MB)\u2026';
+      imgs[i]=await shrinkImage(imgs[i], 3000, 9.5*1024*1024);
+      if(imgs[i].size>MAXI){ uiToast(imgs[i].name+' can\u2019t be read by this browser to resize it \u2014 export it as JPG under 10 MB and retry.'); if(st2())st2().textContent=''; return; }
+    }
+  }
   if(st()) st().textContent='Preparing upload\u2026';
   let cfg2=null; try{ const r=await ctrl('upload_config',{}); if(r&&r.ok) cfg2=r; }catch(e){}
   if(!cfg2||!cfg2.cloudName||!cfg2.preset){ uiToast('Upload isn\u2019t set up yet \u2014 add the Cloudinary preset (I\u2019ll guide you).'); if(st())st().textContent=''; return; }
