@@ -7780,5 +7780,25 @@
   "category": "RUNNING",
   "pillar": "ROUTE",
   "caption": "In the Talamanca highlands, the line between a mountain trail and a seasonal river often disappears. You learn to carry "
+ },
+ {
+  "id": "18099380114052514",
+  "date": "2026-09-10",
+  "ts": "2026-09-10T02:22:23",
+  "base": "upload-20260910-022011",
+  "format": "carousel",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "Wildlife rehabilitation in Costa Rica relies on sanctuaries that act as bridges between the wild and the recovered. Las "
+ },
+ {
+  "id": "17905035159507680",
+  "date": "2026-09-10",
+  "ts": "2026-09-10T02:22:23",
+  "base": "upload-20260910-022011-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "Wildlife rehabilitation in Costa Rica relies on sanctuaries that act as bridges between the wild and the recovered. Las "
  }
 ]
