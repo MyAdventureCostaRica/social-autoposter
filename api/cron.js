@@ -56,7 +56,8 @@ module.exports = async function handler(req, res) {
   const m = now.getUTCMinutes();
   const inSlot = (hr, mn) => h === hr && m >= mn && m < mn + 5;  // the 5-min window
 
-  const due = ["respond.yml"];                                    // responder: every tick
+  const due = [];
+  if (m < 5) due.push("respond.yml");                             // responder: HOURLY (owner's call, Sep 10 2026 — every 5 min burned Actions minutes for nothing)
   if (inSlot(15, 15)) due.push("daily-post.yml");                 // 09:15 CR
   if (inSlot(16, 20)) due.push("insights.yml");                   // 10:20 CR
   if ((day === 2 || day === 5) && inSlot(18, 15)) due.push("reel-post.yml"); // Tue/Fri 12:15 CR

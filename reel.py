@@ -284,6 +284,15 @@ def stage_reel():
         _do_publish_reel(state)
         ap.rdel("pending_reel")
     else:
+        # Owner's queue rule (Sep 10 2026, "reel, carousel, post, any type"): staging a
+        # new reel never discards an unapproved one — it joins pending_reel_queue (FIFO, 5).
+        prev = ap.rget("pending_reel")
+        if prev and prev.get("status") == "pending" and prev.get("base") != state.get("base"):
+            q = ap.rget("pending_reel_queue", []) or []
+            if not any((p or {}).get("base") == prev.get("base") for p in q):
+                q.append(prev)
+                ap.rset("pending_reel_queue", q[-5:])
+                print("Queued the previous unapproved reel:", prev.get("base"))
         ap.rset("pending_reel", state)
         ap.git_setup()
         open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(today)  # don't double-stage
@@ -304,6 +313,18 @@ def publish_pending_reel():
                 "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
     ap.rset("post_decisions", dec[-200:])
     ap.rdel("pending_reel")
+    q = ap.rget("pending_reel_queue", []) or []       # next queued reel takes the slot
+    while q:
+        nxt = q.pop(0)
+        ap.rset("pending_reel_queue", q)
+        if nxt:
+            nxt["status"] = "pending"
+            ap.rset("pending_reel", nxt)
+            ap.wa_notify("Next queued reel is waiting for your approval: " + ap.DASHBOARD_URL)
+            print("Promoted queued reel:", nxt.get("base"))
+            break
+    else:
+        ap.rset("pending_reel_queue", q)
     print("Published approved reel:", state.get("base"))
 
 

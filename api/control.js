@@ -250,6 +250,18 @@ async function rejectPost({ reason }) {
              reason: reason || "", ts: new Date().toISOString() });
   await rset("post_decisions", dec.slice(-200));
   await redis(["DEL", "pending_post"]);
+  // Owner's queue rule: a rejected slot is refilled from the pending queue first;
+  // only when the queue is empty do we stage a brand-new candidate.
+  const q = await rget("pending_queue", []);
+  if (q && q.length) {
+    const nxt = q.shift();
+    await rset("pending_queue", q);
+    if (nxt && !nxt.skip) {
+      nxt.status = "pending";
+      await rset("pending_post", nxt);
+      return { ok: true, status: "rejected", promoted: nxt.base || true };
+    }
+  }
   await dispatchWf("daily-post.yml", { force: "true" }); // stage the next candidate now
   return { ok: true, status: "rejected" };
 }
@@ -283,6 +295,17 @@ async function rejectReel({ reason }) {
              reason: reason || "", ts: new Date().toISOString() });
   await rset("post_decisions", dec.slice(-200));
   await redis(["DEL", "pending_reel"]);
+  // Queue rule: refill the reel slot from pending_reel_queue before staging anew.
+  const rq = await rget("pending_reel_queue", []);
+  if (rq && rq.length) {
+    const nxt = rq.shift();
+    await rset("pending_reel_queue", rq);
+    if (nxt) {
+      nxt.status = "pending";
+      await rset("pending_reel", nxt);
+      return { ok: true, status: "rejected", promoted: nxt.base || true };
+    }
+  }
   await dispatchWf("reel-post.yml", { force: "true" });   // stage the next clip now
   return { ok: true, status: "rejected" };
 }

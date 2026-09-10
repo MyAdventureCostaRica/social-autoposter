@@ -811,6 +811,7 @@ def ingest_image(url, note=""):
     if (rget("settings", {}) or {}).get("auto_approve"):
         print("Auto-approve ON — publishing uploaded post now."); publish(state); rdel("pending_post")
     else:
+        requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
         wa_notify(f"Uploaded post ready to approve. Review & approve: {DASHBOARD_URL}")
     summary(f"## Uploaded post — review before it goes live\n\n![preview]({image_urls[0]})\n\n"
@@ -1065,6 +1066,7 @@ def prepare():
         publish(state)
         rdel("pending_post")
     else:                                             # human review: stage + ping for approval
+        requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
         wa_notify(f"Post ready to approve — {(meta.get('pillar') or 'post').title()}, "
                   f"{'carousel ' + str(len(image_urls)) if len(image_urls) > 1 else 'single'}"
@@ -1217,6 +1219,35 @@ def publish(st=None):
     print("Done.")
 
 
+def requeue_prev_pending(state):
+    """Owner's rule (Sep 10 2026): staging a NEW post never discards an unapproved
+    one — the previous pending joins a FIFO queue (pending_queue, capped at 5) and
+    comes back as the pending card once the current one is approved or rejected."""
+    prev = rget("pending_post")
+    if prev and not prev.get("skip") and prev.get("status") == "pending" \
+            and prev.get("base") != (state or {}).get("base"):
+        q = rget("pending_queue", []) or []
+        if not any((p or {}).get("base") == prev.get("base") for p in q):
+            q.append(prev)
+            rset("pending_queue", q[-5:])
+            print("Queued the previous unapproved post:", prev.get("base"))
+
+
+def promote_queued_pending():
+    """Move the oldest queued post into the pending slot (after approve/reject)."""
+    q = rget("pending_queue", []) or []
+    while q:
+        nxt = q.pop(0)
+        rset("pending_queue", q)
+        if nxt and not nxt.get("skip"):
+            nxt["status"] = "pending"
+            rset("pending_post", nxt)
+            wa_notify("Next queued post is waiting for your approval: " + DASHBOARD_URL)
+            print("Promoted queued post:", nxt.get("base"))
+            return
+    rset("pending_queue", q)
+
+
 def publish_pending():
     """Publish the post the owner APPROVED on the dashboard (read from Upstash)."""
     st = rget("pending_post")
@@ -1232,6 +1263,7 @@ def publish_pending():
                       "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
     rset("post_decisions", decisions[-200:])
     rdel("pending_post")                               # clear the slot
+    promote_queued_pending()                           # next queued post takes the slot
     print("Published approved post:", st.get("base"))
 
 
