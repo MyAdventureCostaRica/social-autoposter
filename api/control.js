@@ -230,11 +230,14 @@ async function approvePost({ caption }) {
     p.caption = String(caption).trim();
   }
   p.status = "approved";
+  const hold = holdUntilMorning();
+  if (hold) p.hold_until = hold; else delete p.hold_until;
   await rset("pending_post", p);
   const dec = await rget("post_decisions", []);
   dec.push({ base: p.base, pillar: p.pillar, decision: "approved",
              edited: !!p.edited, ts: new Date().toISOString() });
   await rset("post_decisions", dec.slice(-200));
+  if (hold) return { ok: true, status: "approved", held: true };   // 08:00-CR cron releases it
   const ok = await dispatchWf("publish.yml");           // publish it now
   return { ok, status: "approved" };
 }
@@ -275,11 +278,14 @@ async function approveReel({ caption }) {
     p.caption = String(caption).trim();
   }
   p.status = "approved";
+  const hold = holdUntilMorning();
+  if (hold) p.hold_until = hold; else delete p.hold_until;
   await rset("pending_reel", p);
   const dec = await rget("post_decisions", []);
   dec.push({ base: p.base, pillar: p.pillar, format: "reel", decision: "approved",
              edited: !!p.edited, ts: new Date().toISOString() });
   await rset("post_decisions", dec.slice(-200));
+  if (hold) return { ok: true, status: "approved", held: true };   // 08:00-CR cron releases it
   const ok = await dispatchWf("publish.yml");
   return { ok, status: "approved" };
 }
@@ -324,6 +330,19 @@ async function setSetting({ key, value }) {
 }
 
 // --- Trigger any of our workflows (workflow_dispatch) --------------------------
+// --- Morning publish window (data: every strong result publishes 08:00–15:00 CR; ---
+// --- everything after 16:00 is weak). Approvals outside the window are HELD and ---
+// --- released by the Vercel cron's 08:00-CR publish slot. CR is UTC-6, no DST.  ---
+function holdUntilMorning() {
+  const now = new Date();
+  const crHour = (now.getUTCHours() + 24 - 6) % 24;
+  if (crHour >= 8 && crHour < 15) return null;          // inside the good window — publish now
+  const rel = new Date(now);
+  rel.setUTCHours(14, 5, 0, 0);                          // 14:05 UTC = 08:05 CR
+  if (rel <= now) rel.setUTCDate(rel.getUTCDate() + 1);  // evening → tomorrow morning
+  return rel.toISOString();
+}
+
 // "New caption" on the pending-post card: flag Upstash, then run the post workflow —
 // prepare() sees the flag and rewrites ONLY the caption of the already-staged photo.
 async function recaptionPost() {

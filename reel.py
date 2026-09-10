@@ -306,6 +306,14 @@ def publish_pending_reel():
     state = ap.rget("pending_reel")
     if not state or state.get("status") != "approved":
         print("No approved reel to publish."); return
+    hu = state.get("hold_until")
+    if hu:
+        try:
+            import datetime as _dt
+            if time.time() < _dt.datetime.fromisoformat(hu.replace("Z", "+00:00")).timestamp():
+                print(f"Approved reel held for the morning window (until {hu}) — skipping."); return
+        except Exception:
+            pass
     _do_publish_reel(state)
     dec = ap.rget("post_decisions", []) or []
     dec.append({"base": state.get("base"), "pillar": state.get("pillar"), "format": "reel",

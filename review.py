@@ -121,6 +121,25 @@ def analyze():
                             key=lambda x: -x[1])
     pillars, cats = rank(byp), rank(byc)
 
+    # Posting-time leaderboards (CR = UTC-6, no DST): publish HOUR and WEEKDAY vs
+    # average reach — the clearest operational lever in the data (Sep 2026 analysis:
+    # 08:00–15:00 CR publishes strong, 16:00+ uniformly weak, Saturday best day).
+    byh = collections.defaultdict(lambda: [0, 0, 0])
+    byd = collections.defaultdict(lambda: [0, 0, 0])
+    for r in elig:
+        ts = (posts.get(r["id"], {}) or {}).get("ts") or ""
+        try:
+            dt = (datetime.datetime.fromisoformat(ts.replace("+0000", "+00:00"))
+                  .replace(tzinfo=None) - datetime.timedelta(hours=6))
+        except Exception:
+            continue
+        for key, b in ((dt.hour, byh), (dt.strftime("%a"), byd)):
+            b[key][0] += 1; b[key][1] += (r.get("reach") or 0); b[key][2] += (r.get("shares") or 0)
+    hour_board = sorted(({"hour_cr": h, "n": n, "avg_reach": round(s / n), "shares": sh}
+                         for h, (n, s, sh) in byh.items() if n), key=lambda x: -x["avg_reach"])
+    day_board = sorted(({"weekday": d, "n": n, "avg_reach": round(s / n), "shares": sh}
+                        for d, (n, s, sh) in byd.items() if n), key=lambda x: -x["avg_reach"])
+
     dates = sorted(r["date"] for r in rows if r.get("date"))
     queue = len([f for f in glob.glob(os.path.join(SRC, "*"))
                  if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif"))])
@@ -136,6 +155,14 @@ def analyze():
         "pillar_leaderboard": [{"pillar": p, "avg_eng_rate": rt, "n": c} for p, rt, c in pillars],
         "category_leaderboard": [{"category": k, "avg_eng_rate": rt, "n": c} for k, rt, c in cats],
         "unlabeled_history_n": unlabeled,
+        "publish_hour_leaderboard_cr": hour_board,
+        "publish_weekday_leaderboard": day_board,
+        "posting_time_policy": ("Live policy since Sep 2026: manual approvals outside "
+                                "08:00-15:00 CR are held and published at 08:05 CR; "
+                                "reels run Fri 12:15 + Sat 09:00 CR. Judge these hour/"
+                                "weekday boards against that policy; n per bucket is "
+                                "small, so propose timing changes only on clear, "
+                                "repeated patterns."),
         "top_posts": top,
         "photo_queue": queue,
         # only recent failures are actionable — the ~679 pre-2020 media that

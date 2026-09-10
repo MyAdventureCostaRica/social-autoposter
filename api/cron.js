@@ -58,9 +58,11 @@ module.exports = async function handler(req, res) {
 
   const due = [];
   if (m < 5) due.push("respond.yml");                             // responder: HOURLY (owner's call, Sep 10 2026 — every 5 min burned Actions minutes for nothing)
+  if (inSlot(14, 5)) due.push("publish.yml");                     // 08:05 CR — release posts approved after hours (morning window)
   if (inSlot(15, 15)) due.push("daily-post.yml");                 // 09:15 CR
   if (inSlot(16, 20)) due.push("insights.yml");                   // 10:20 CR
-  if ((day === 2 || day === 5) && inSlot(18, 15)) due.push("reel-post.yml"); // Tue/Fri 12:15 CR
+  if (day === 5 && inSlot(18, 15)) due.push("reel-post.yml");     // Fri 12:15 CR
+  if (day === 6 && inSlot(15, 0)) due.push("reel-post.yml");      // Sat 09:00 CR — the data's best day (avg reach 717, n=7)
   if (date === 1 && inSlot(15, 20)) due.push("review.yml");       // 1st of month
 
   const results = [];

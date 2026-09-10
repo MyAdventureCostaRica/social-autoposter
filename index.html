@@ -755,7 +755,8 @@ function approveReelBtn(btn){
   const stat=card.querySelector('.ic-stat'); stat.textContent='Publishing…';
   card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
   ctrl('approve_reel',{caption:cap}).then(r=>{
-    if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Reel approved — publishing now'); setTimeout(()=>card.remove(),1000); }
+    if(r&&r.ok&&r.held){ stat.textContent='Approved ✓ — publishes at 8:00 AM (best-hours window)'; uiToast('Reel approved — it publishes tomorrow at 8:00 AM, when posts perform best'); setTimeout(()=>card.remove(),2200); }
+    else if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Reel approved — publishing now'); setTimeout(()=>card.remove(),1000); }
     else { stat.textContent='Failed: '+((r&&r.error)||'error'); card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }
   });
 }
@@ -842,7 +843,9 @@ function approvePending(btn){
   const stat=card.querySelector('.ic-stat'); stat.textContent='Publishing…';
   card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
   ctrl('approve_post',{caption:cap}).then(r=>{
-    if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Approved — publishing now');
+    if(r&&r.ok&&r.held){ stat.textContent='Approved ✓ — publishes at 8:00 AM (best-hours window)'; uiToast('Approved — it publishes tomorrow at 8:00 AM, when posts perform best');
+      setTimeout(()=>{card.remove();},2200);
+    } else if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Approved — publishing now');
       setTimeout(()=>{card.remove();},1000);
     } else { stat.textContent='Failed: '+((r&&r.error)||'error'); uiToast('Failed: '+((r&&r.error)||'error'));
       card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }
