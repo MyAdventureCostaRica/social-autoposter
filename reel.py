@@ -280,6 +280,16 @@ def stage_reel():
              "base": pid.split("/")[-1], "status": "pending",
              "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "_caption_en": meta.get("caption_en", "")}
     if (ap.rget("settings", {}) or {}).get("auto_approve"):
+        hold = ap.morning_hold_iso()
+        if hold:
+            state["status"] = "approved"; state["hold_until"] = hold
+            ap.rset("pending_reel", state)
+            ap.git_setup()
+            open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(today)
+            ap.commit_push("Stage reel (auto-approved, held for morning) [skip ci]")
+            ap.wa_notify("Reel auto-approved — publishes at 8:00 AM (best-hours window). " + ap.DASHBOARD_URL)
+            print("Auto-approve ON but outside the 08–15 CR window — reel held until", hold)
+            return
         print("Auto-approve ON — publishing reel now.")
         _do_publish_reel(state)
         ap.rdel("pending_reel")

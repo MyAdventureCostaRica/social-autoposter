@@ -123,6 +123,21 @@ def wa_notify(text):
 
 # GitHub Models retired 2026-07-30 (410 Gone) -> Gemini OpenAI-compatible endpoint
 # (free tier, vision). Endpoint/model/key are env- and config-overridable.
+def morning_hold_iso():
+    """08:00–15:00 CR is the strong publish window (Sep 2026 analysis: 16:00+ publishes
+    are uniformly weak). Outside the window, auto-approved content is stored as
+    approved+held; the Vercel cron's 08:05-CR publish slot releases it."""
+    import datetime as _dt
+    now = _dt.datetime.utcnow()
+    cr_hour = (now.hour + 24 - 6) % 24
+    if 8 <= cr_hour < 15:
+        return None
+    rel = now.replace(hour=14, minute=5, second=0, microsecond=0)
+    if rel <= now:
+        rel += _dt.timedelta(days=1)
+    return rel.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
 MODEL = CFG.get("caption_model", "gemini-3.7-flash")
 # Google retires/renames models often (2.5-flash died with a 404 within weeks of the
@@ -800,7 +815,15 @@ def ingest_image(url, note=""):
     json.dump(state, open(STATE, "w"))
     commit_push(f"Stage {base} (upload) for review [skip ci]")
     if (rget("settings", {}) or {}).get("auto_approve"):
-        print("Auto-approve ON — publishing uploaded post now."); publish(state); rdel("pending_post")
+        hold = morning_hold_iso()
+        if hold:
+            state["status"] = "approved"; state["hold_until"] = hold
+            requeue_prev_pending(state)
+            rset("pending_post", state)
+            wa_notify("Upload auto-approved — publishes at 8:00 AM (best-hours window). " + DASHBOARD_URL)
+            print("Auto-approve ON but outside the 08–15 CR window — upload held until", hold)
+        else:
+            print("Auto-approve ON — publishing uploaded post now."); publish(state); rdel("pending_post")
     else:
         requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
@@ -1053,9 +1076,17 @@ def prepare():
     json.dump(state, open(STATE, "w"))
     commit_push(f"Stage {base} for review [skip ci]")
     if (rget("settings", {}) or {}).get("auto_approve"):
-        print("Auto-approve is ON — publishing immediately.")
-        publish(state)
-        rdel("pending_post")
+        hold = morning_hold_iso()
+        if hold:
+            state["status"] = "approved"; state["hold_until"] = hold
+            requeue_prev_pending(state)
+            rset("pending_post", state)
+            wa_notify("Auto-approved — publishes at 8:00 AM (best-hours window). " + DASHBOARD_URL)
+            print("Auto-approve ON but outside the 08–15 CR window — held until", hold)
+        else:
+            print("Auto-approve is ON — publishing immediately.")
+            publish(state)
+            rdel("pending_post")
     else:                                             # human review: stage + ping for approval
         requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
