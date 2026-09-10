@@ -85,13 +85,41 @@ def rdel(key):
 
 
 def wa_notify(text):
-    if not (WA_PHONE and WA_KEY):
-        return
-    try:
-        q = urllib.parse.urlencode({"phone": WA_PHONE, "text": text, "apikey": WA_KEY})
-        urllib.request.urlopen(f"https://api.callmebot.com/whatsapp.php?{q}", timeout=20).read()
-    except Exception as e:
-        print("WhatsApp notify failed:", e)
+    """Owner ping — WhatsApp (CallMeBot) + ntfy backup, each independent.
+
+    CallMeBot answers HTTP 200 even when delivery fails (expired/invalid apikey,
+    lapsed opt-in), putting the error in the response BODY — which is how pings
+    died silently for 16 days (Aug 25–Sep 10 2026) while every run looked green.
+    So: read the body, log it loudly, and always also try ntfy if configured.
+    """
+    if WA_PHONE and WA_KEY:
+        try:
+            q = urllib.parse.urlencode({"phone": WA_PHONE, "text": text, "apikey": WA_KEY})
+            body = urllib.request.urlopen(
+                f"https://api.callmebot.com/whatsapp.php?{q}", timeout=20).read()
+            snip = " ".join(body.decode(errors="replace").split())[:300]
+            if any(w in snip.lower() for w in
+                   ("error", "invalid", "not subscribed", "expired", "not allowed", "blocked")):
+                print("WhatsApp notify PROBLEM — CallMeBot said:", snip)
+            else:
+                print("WhatsApp notify OK — CallMeBot said:", snip[:120])
+        except Exception as e:
+            print("WhatsApp notify failed:", e)
+    ntfy_topic = os.environ.get("NTFY_TOPIC")
+    if ntfy_topic:
+        try:
+            base = (os.environ.get("NTFY_BASE") or "https://ntfy.sh").rstrip("/")
+            req = urllib.request.Request(
+                f"{base}/{ntfy_topic}", data=text.encode("utf-8"),
+                # ASCII-only Title (HTTP headers are latin-1); bell emoji via Tags.
+                headers={"Title": "My Adventure Costa Rica auto-poster", "Tags": "bell"})
+            tok = os.environ.get("NTFY_TOKEN")
+            if tok:
+                req.add_header("Authorization", f"Bearer {tok}")
+            urllib.request.urlopen(req, timeout=20).read()
+            print("ntfy notify OK")
+        except Exception as e:
+            print("ntfy notify failed:", e)
 
 # GitHub Models retired 2026-07-30 (410 Gone) -> Gemini OpenAI-compatible endpoint
 # (free tier, vision). Endpoint/model/key are env- and config-overridable.
