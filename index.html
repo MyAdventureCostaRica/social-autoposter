@@ -1059,6 +1059,10 @@ async function load(isRefresh){
     inboxEl.innerHTML='<p class="muted" style="margin-top:8px">Connect mission control (above) to view and reply to your inbox.</p>';
   }
   const queue=(counts&&counts.queued)||0;
+  // The video half of "what's in the tank": clips waiting in Cloudinary's Reels folder,
+  // counted by the daily insights job with reel.py's own eligibility rules (long enough,
+  // not posted, not rejected). Absent = unknown -> a dash, never a misleading zero.
+  const reelQ=(counts&&typeof counts.reels_queued==='number')?counts.reels_queued:null;
   // Posts published = real posts on the account (feed + reels + carousels, excluding
   // ephemeral stories), from the feed the dashboard already loads — matches the
   // Instagram profile grid. The old counts.posted only counted image files in the
@@ -1093,7 +1097,10 @@ async function load(isRefresh){
     {n: reach30.toLocaleString(), l:'Reach · 30d'},
     {n: reelReach!=null?reelReach.toLocaleString():'—', l:'Avg reel reach'},
     {n: totalShares||'—', l:'Total shares'},
-    {n: queue.toLocaleString(), l:'Photos queued'},
+    {n: queue.toLocaleString(), l:'Photos queued',
+     sub: queue===0?'empty — add photos':(queue<=7?'running low':''), up:false},
+    {n: reelQ!=null?reelQ.toLocaleString():'—', l:'Reels queued',
+     sub: reelQ==null?'':(reelQ===0?'empty — add clips':(reelQ<=2?'running low':'')), up:false},
   ];
   document.getElementById('stats').innerHTML=tiles.map(t=>
     `<div class="stat"><div class="n">${t.n}</div><div class="l">${t.l}</div>`

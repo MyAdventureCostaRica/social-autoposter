@@ -230,6 +230,82 @@ def pull_profile():
     print(f"Profile: followers={fc} media={mc}")
 
 
+def _rejected_clips():
+    """Clips rejected from the dashboard live in Upstash (private). Best-effort."""
+    url = os.environ.get("UPSTASH_REDIS_REST_URL")
+    tok = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+    if not (url and tok):
+        return []
+    try:
+        req = urllib.request.Request(url.rstrip("/") + "/get/rejected_clips",
+                                     headers={"Authorization": "Bearer " + tok})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            j = json.loads(r.read().decode())
+        return json.loads(j.get("result") or "[]") or []
+    except Exception as e:
+        print("rejected-clips lookup skipped:", e)
+        return []
+
+
+def count_reels():
+    """How many CLIPS are waiting in Cloudinary — the video half of "what's in the
+    tank" (source-photos/ is the photo half, counted in discover_media).
+
+    Eligibility mirrors reel.py's next_clip() exactly: in the Reels folder, not yet
+    tagged 'posted', at least reel_min_seconds long, and not rejected from the
+    dashboard — so the number on the dashboard is what will actually post, not a raw
+    file count. Writes reels_queued (+ reels_too_short) into counts.json.
+
+    Best-effort by design: with no Cloudinary credentials or library the keys are
+    left ABSENT and the dashboard shows a dash — never a wrong number."""
+    try:
+        import cloudinary, cloudinary.search
+    except Exception:
+        print("Reels count skipped: cloudinary library not installed."); return
+    if os.environ.get("CLOUDINARY_API_KEY"):
+        cloudinary.config(
+            cloud_name=(os.environ.get("CLOUDINARY_CLOUD_NAME") or "").strip(),
+            api_key=(os.environ.get("CLOUDINARY_API_KEY") or "").strip(),
+            api_secret=(os.environ.get("CLOUDINARY_API_SECRET") or "").strip(),
+            secure=True)
+    elif os.environ.get("CLOUDINARY_URL"):
+        v = os.environ["CLOUDINARY_URL"].strip().strip('"').strip("'")
+        if "cloudinary://" in v:
+            v = v[v.index("cloudinary://"):]
+        os.environ["CLOUDINARY_URL"] = v
+        cloudinary.config()
+    else:
+        print("Reels count skipped: no Cloudinary credentials in this job."); return
+    min_s = float(CFG.get("reel_min_seconds", 5))
+    rejected = set(_rejected_clips())
+    try:
+        r = (cloudinary.search.Search()
+             .expression("resource_type:video AND (folder:Reels OR folder:reels) AND -tags:posted")
+             .sort_by("created_at", "asc").max_results(100).execute())
+    except Exception as e:
+        print("Reels count skipped (Cloudinary search):", e); return
+    ready = short = 0
+    for v in r.get("resources", []):
+        if v.get("public_id") in rejected:
+            continue
+        dur = float(v.get("duration") or 0)
+        if dur and dur < min_s:
+            short += 1                       # too short to reach — reel.py evicts these
+        else:
+            ready += 1
+    cp = os.path.join(MET, "counts.json")
+    try:
+        c = json.load(open(cp))
+    except Exception:
+        c = {}
+    c["reels_queued"] = ready
+    c["reels_too_short"] = short
+    os.makedirs(MET, exist_ok=True)
+    json.dump(c, open(cp, "w"))
+    print(f"Reels waiting in Cloudinary: {ready} ready"
+          + (f", {short} too short (<{min_s:g}s)" if short else ""))
+
+
 def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
@@ -271,6 +347,10 @@ def main():
         pull_audience()
     except Exception as e:
         print("audience err:", e)
+    try:
+        count_reels()                        # how many clips are left to post
+    except Exception as e:
+        print("reels count err:", e)
 
     ranked = sorted([x for x in rows if isinstance(x.get("eng_rate"), float)],
                     key=lambda x: -x["eng_rate"])[:5]
