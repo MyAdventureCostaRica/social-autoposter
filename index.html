@@ -363,7 +363,8 @@ function pickUpload(){
   if(!inp){
     inp=document.createElement('input'); inp.type='file'; inp.id='upFile';
     inp.accept='image/*,video/*'; inp.style.display='none';
-    inp.onchange=()=>{ if(inp.files&&inp.files[0]) doUpload(inp.files[0]); };
+    inp.multiple=true;    // several photos selected together = staged as ONE carousel
+    inp.onchange=()=>{ if(inp.files&&inp.files.length) doUpload(Array.from(inp.files)); };
     document.body.appendChild(inp);
   }
   inp.value=''; inp.click();
@@ -424,41 +425,68 @@ async function compressVideo(file, onProg){
     return new File([blob], nm+'-web.'+ext, {type:blob.type||('video/'+ext)});
   } finally { cleanup(); }
 }
-async function doUpload(file){
+function cloudUpload(file, cfg2, isVid, onProg){
+  return new Promise((resolve,reject)=>{
+    const fd=new FormData();
+    fd.append('file',file);
+    fd.append('upload_preset',cfg2.preset);
+    if(isVid) fd.append('folder','Reels');
+    const ep=`https://api.cloudinary.com/v1_1/${cfg2.cloudName}/${isVid?'video':'image'}/upload`;
+    const xhr=new XMLHttpRequest(); xhr.open('POST',ep);
+    xhr.upload.onprogress=e=>{ if(e.lengthComputable&&onProg) onProg(e.loaded/e.total); };
+    xhr.onload=()=>{
+      if(xhr.status>=200&&xhr.status<300){ let j={}; try{ j=JSON.parse(xhr.responseText); }catch(e){} resolve(j); }
+      else reject(new Error('Upload failed ('+xhr.status+')'));
+    };
+    xhr.onerror=()=>reject(new Error('Upload error \u2014 check your connection'));
+    xhr.send(fd);
+  });
+}
+async function doUpload(files){
+  if(!Array.isArray(files)) files=[files];
   const st=()=>document.getElementById('upStat');
-  const isVid=/^video\//.test(file.type)|| /\.(mp4|mov|m4v|webm)$/i.test(file.name);
-  const MAXV=100*1024*1024, MAXI=10*1024*1024, mb=Math.round(file.size/1048576);
-  if(!isVid && file.size>MAXI){ uiToast('Image is '+mb+' MB \u2014 the max is 10 MB. Export a smaller version and try again.'); return; }
-  if(isVid && file.size>95*1024*1024){
-    if(st()) st().textContent='Compressing video\u2026 (takes about the length of the clip \u2014 keep this tab open)';
-    try{ file = await compressVideo(file, r=>{ if(st()) st().textContent='Compressing video\u2026 '+Math.round(r*100)+'% (keep this tab open)'; }); }
-    catch(e){ console.error(e); uiToast('Couldn\u2019t auto-compress this video \u2014 trim/export it under 100 MB and retry.'); if(st())st().textContent=''; return; }
-    if(file.size>MAXV){ uiToast('Still over 100 MB after compressing \u2014 it is a very long clip; trim it and retry.'); if(st())st().textContent=''; return; }
-  }
+  const isV=f=>/^video\//.test(f.type)|| /\.(mp4|mov|m4v|webm)$/i.test(f.name);
+  const vids=files.filter(isV), imgs=files.filter(f=>!isV(f));
+  if(vids.length&&imgs.length){ uiToast('Upload either ONE video or photos \u2014 not both at once.'); return; }
+  if(vids.length>1){ uiToast('One video at a time, please.'); return; }
+  const MAXV=100*1024*1024, MAXI=10*1024*1024;
+  for(const f of imgs){ if(f.size>MAXI){ uiToast(f.name+' is '+Math.round(f.size/1048576)+' MB \u2014 the max is 10 MB per photo.'); return; } }
   if(st()) st().textContent='Preparing upload\u2026';
   let cfg2=null; try{ const r=await ctrl('upload_config',{}); if(r&&r.ok) cfg2=r; }catch(e){}
   if(!cfg2||!cfg2.cloudName||!cfg2.preset){ uiToast('Upload isn\u2019t set up yet \u2014 add the Cloudinary preset (I\u2019ll guide you).'); if(st())st().textContent=''; return; }
-  const fd=new FormData();
-  fd.append('file',file);
-  fd.append('upload_preset',cfg2.preset);
-  if(isVid) fd.append('folder','Reels');
-  const ep=`https://api.cloudinary.com/v1_1/${cfg2.cloudName}/${isVid?'video':'image'}/upload`;
-  const xhr=new XMLHttpRequest(); xhr.open('POST',ep);
-  xhr.upload.onprogress=e=>{ if(e.lengthComputable&&st()) st().textContent='Uploading '+(isVid?'video':'photo')+'\u2026 '+Math.round(e.loaded/e.total*100)+'%'; };
-  xhr.onload=async()=>{
-    if(xhr.status>=200&&xhr.status<300){
-      let j={}; try{ j=JSON.parse(xhr.responseText); }catch(e){}
+  try{
+    if(vids.length){
+      let file=vids[0];
+      if(file.size>95*1024*1024){
+        if(st()) st().textContent='Compressing video\u2026 (takes about the length of the clip \u2014 keep this tab open)';
+        try{ file = await compressVideo(file, r=>{ if(st()) st().textContent='Compressing video\u2026 '+Math.round(r*100)+'% (keep this tab open)'; }); }
+        catch(e){ console.error(e); uiToast('Couldn\u2019t auto-compress this video \u2014 trim/export it under 100 MB and retry.'); if(st())st().textContent=''; return; }
+        if(file.size>MAXV){ uiToast('Still over 100 MB after compressing \u2014 it is a very long clip; trim it and retry.'); if(st())st().textContent=''; return; }
+      }
+      const j=await cloudUpload(file,cfg2,true,r=>{ if(st()) st().textContent='Uploading video\u2026 '+Math.round(r*100)+'%'; });
       if(st()) st().textContent='Uploaded \u2014 captioning & rendering\u2026';
-      const r=await ctrl('ingest',{resource_type:j.resource_type||(isVid?'video':'image'),secure_url:j.secure_url,public_id:j.public_id});
-      if(r&&r.ok){
-        uiToast((isVid?'Video':'Photo')+' uploaded \u2713 \u2014 it\u2019ll appear below to approve in ~1 min');
+      const r=await ctrl('ingest',{resource_type:j.resource_type||'video',secure_url:j.secure_url,public_id:j.public_id});
+      if(r&&r.ok){ uiToast('Video uploaded \u2713 \u2014 it\u2019ll appear below to approve in ~1 min');
         if(st()) setTimeout(()=>{ if(st()) st().textContent=''; },8000);
         setTimeout(()=>{ if(connected()) renderLive(true); }, 45000);
       } else { uiToast('Ingest failed: '+((r&&r.error)||'error')); if(st())st().textContent=''; }
-    } else { uiToast('Upload failed ('+xhr.status+')'); if(st())st().textContent=''; }
-  };
-  xhr.onerror=()=>{ uiToast('Upload error \u2014 check your connection'); if(st())st().textContent=''; };
-  xhr.send(fd);
+    } else {
+      const urls=[];
+      for(let i=0;i<imgs.length;i++){
+        const j=await cloudUpload(imgs[i],cfg2,false,r=>{ if(st()) st().textContent=(imgs.length>1?('Uploading photo '+(i+1)+' of '+imgs.length):'Uploading photo')+'\u2026 '+Math.round(r*100)+'%'; });
+        if(!j.secure_url) throw new Error('Cloudinary returned no URL for '+imgs[i].name);
+        urls.push(j.secure_url);
+      }
+      if(st()) st().textContent='Uploaded \u2014 captioning & rendering\u2026';
+      const payload=urls.length>1?{resource_type:'image',urls:urls}:{resource_type:'image',secure_url:urls[0]};
+      const r=await ctrl('ingest',payload);
+      if(r&&r.ok){
+        uiToast(urls.length>1?('Photos uploaded \u2713 \u2014 staging as ONE carousel of '+urls.length+', ~1 min'):'Photo uploaded \u2713 \u2014 it\u2019ll appear below to approve in ~1 min');
+        if(st()) setTimeout(()=>{ if(st()) st().textContent=''; },8000);
+        setTimeout(()=>{ if(connected()) renderLive(true); }, 45000);
+      } else { uiToast('Ingest failed: '+((r&&r.error)||'error')); if(st())st().textContent=''; }
+    }
+  }catch(e){ uiToast(String((e&&e.message)||e)); if(st())st().textContent=''; }
 }
 // Order MATCHES the Mission-control button row (Run review, Refresh insights,
 // Check messages, Prepare a post, Prepare a reel), so the status list below reads
@@ -688,6 +716,7 @@ function renderReelCard(p, announce){
     +`<textarea class="pp-edit" rows="6">${esc(p.caption||'')}</textarea>`
     +`<div class="ic-actions">`
     +`<button class="mc-btn send" onclick="approveReelBtn(this)">Approve &amp; post</button>`
+    +`<button class="mc-btn" onclick="recaptionReelBtn(this)">↻ New caption</button>`
     +`<button class="mc-btn" onclick="rejectReelBtn(this)">Reject &amp; pick another</button>`
     +`<span class="ic-stat muted" style="font-size:13px"></span></div></div>`;
   if(announce){ uiToast('🎬 A reel is ready to approve'); if(!/^●/.test(document.title)) document.title='● '+document.title; }
@@ -699,6 +728,15 @@ function approveReelBtn(btn){
   ctrl('approve_reel',{caption:cap}).then(r=>{
     if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Reel approved — publishing now'); setTimeout(()=>card.remove(),1000); }
     else { stat.textContent='Failed: '+((r&&r.error)||'error'); card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }
+  });
+}
+function recaptionReelBtn(btn){
+  const card=btn.closest('.pending-card'); const stat=card.querySelector('.ic-stat');
+  stat.textContent='Writing a new caption…'; card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
+  ctrl('recaption_reel',{}).then(r=>{
+    if(r&&r.ok){ stat.textContent='New caption on its way — the card refreshes in ~1 min ✓'; uiToast('Writing a new caption for the same clip'); }
+    else { stat.textContent='Failed: '+((r&&r.error)||'error'); }
+    card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false);
   });
 }
 function rejectReelBtn(btn){
@@ -730,6 +768,7 @@ function renderPendingCard(p, announce){
     +`<textarea class="pp-edit" rows="6">${esc(p.caption||'')}</textarea>`
     +`<div class="ic-actions">`
     +`<button class="mc-btn send" onclick="approvePending(this)">Approve &amp; post</button>`
+    +`<button class="mc-btn" onclick="recaptionPending(this)">↻ New caption</button>`
     +`<button class="mc-btn" onclick="rejectPending(this)">Reject &amp; pick another</button>`
     +`<span class="ic-stat muted" style="font-size:13px"></span></div></div>`;
   if(announce){ uiToast('📸 A post is ready to approve'); if(!/^●/.test(document.title)) document.title='● '+document.title; }
@@ -778,6 +817,15 @@ function approvePending(btn){
       setTimeout(()=>{card.remove();},1000);
     } else { stat.textContent='Failed: '+((r&&r.error)||'error'); uiToast('Failed: '+((r&&r.error)||'error'));
       card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }
+  });
+}
+function recaptionPending(btn){
+  const card=btn.closest('.pending-card'); const stat=card.querySelector('.ic-stat');
+  stat.textContent='Writing a new caption…'; card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
+  ctrl('recaption_post',{}).then(r=>{
+    if(r&&r.ok){ stat.textContent='New caption on its way — the card refreshes in ~1 min ✓'; uiToast('Writing a new caption for the same photo'); }
+    else { stat.textContent='Failed: '+((r&&r.error)||'error'); }
+    card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false);
   });
 }
 function rejectPending(btn){

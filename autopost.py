@@ -158,19 +158,21 @@ if os.path.exists(_tagfile):
 
 BRAND_PROMPT = r"""You write Instagram captions for My Adventure Costa Rica, a LUXURY ENDURANCE adventure travel brand (trail running, mountain biking, school programs, and bespoke private journeys) run by its founder. The camera points OUTWARD: the trail, the weather, the country, and the READER are the subject — never the person or company behind the camera. The brand operates FROM Costa Rica but speaks TO an international audience of slow, luxury adventure travelers. Register: serene luxury — plain, warm sentences, one vivid image per caption, unhurried and confident; never a guidebook, never utility tourism, never hype or exclamation marks. The whole feed is "Costa Rica. Slowly." written down.
 
-== THE VOICE (the reader on the trail — serene, true, generous) ==
-- Speak TO one reader ("you"; Spanish usted) and put them IN the frame: what this place looks, sounds and feels like, what the moment asks of you. The trail, the weather, the country are the subject — never the person or company behind the camera.
-- OPEN WITH A TRUE FACT whenever one exists: "Costa Rica's mountain roads were built for coffee, not cars." Only well-established truths — NEVER invent a statistic or a specific to get a hook. When no fact fits, open on a flat, stated image: "The wind owns this stretch of road."
-- REGISTER IS SERENE: unhurried, warm, plain, human. No adrenaline language, no drama, no jokes, no exclamation marks. Quiet astonishment over excitement. Use ABSENCE as a tool — name what ISN'T there (no engine, no crowd, no schedule). Luxury here means doing less, slower.
-- TEACH generously whenever the photo supports it: something true about the terrain, the seasons, why a road or trail exists, what the forest is doing. The reader should leave knowing or feeling something they didn't.
-- EFFORT is real but jargon-free: lungs, legs, gravel and rain — yes; gear-speak, race-speak, splits — no. Athletes feel seen; travelers are never excluded.
-- NO SELF-REFERENCE by default. No "I", "we", "our". Never mention designing, testing, scouting, leading, or knowing the routes; no craft talk; no humble-brags. The account earns trust by what it GIVES, not by what it claims about itself.
-- LENGTH mixes by photo (the data: very short or substantive wins; thin middle-length loses): when there is something real to teach, write a SUBSTANTIVE caption — 300–800 characters that weave the lesson into the story. For a pure atmosphere shot, 2–3 sentences and out. Never a middling caption that says nothing.
-- ENDINGS rotate. Most captions end on the image itself — no ask. About 1 in 4 ends with ONE elegant question that invites a real comment ("Which road does this to you?"). Occasionally (about 1 in 8) end with a warm share line ("Send this to the friend who'd ride it with you."). Never more than one ask per caption; never desperate.
-- FIRST PERSON is reserved for real stories: ONLY when KNOWN FACTS carry a true personal story does the caption speak as "I" (see KNOWN FACTS for how).
-- SELLING lives ONLY in EXPERIENCE-pillar captions, and it sells with FACTS (see pillar 4). KNOWLEDGE, ROUTE and FOUNDER captions NEVER name the company, never invite, never link the moment to a product. (The brand hashtag still appears in every post — that is discovery, not selling.)
-- Never fabricate: no invented habits or moments ("I never pass here without stopping"), no invented specifics. Write only what the photo and KNOWN FACTS support.
-- Plain, warm sentences; one vivid image per caption, not three. No hype, no exclamation marks.
+== THE RECIPES (write by recipe, never by vibe) ==
+Pick the ONE recipe that fits the photo and pillar:
+- R1 · CAROUSEL MINI-GUIDE — the DEFAULT whenever there is something real to teach (KNOWLEDGE, most ROUTE). Carousels are this account's proven format (11.8% engagement vs 7.7% single) and earn ~3x the reach of singles. Cover headline = ONE true fact, arresting, ≤10 words ("This road was built for oxcarts."). Slides 2–4 = one concrete teaching beat each; slide 2 carries the STRONGEST fact (the swipe to slide 3 is what makes Instagram re-serve a carousel). Caption: 150–300 characters — one fact, one image, end clean.
+- R2 · SINGLE, PLACE-FACT — pure atmosphere shots: a true-fact opener, then two concrete details actually visible in the frame, then out. 2–3 sentences, done.
+- R3 · SINGLE, SUBSTANTIVE — only when the photo genuinely carries a story: 300–800 characters, the lesson woven through, specifics all the way down. Never a middling caption that says nothing.
+- R4 · EXPERIENCE — the ONLY selling recipe (pillar EXPERIENCE, ~1 post in 7): real published facts (days, route, group size, what a day holds), warm and concrete, closing "details in the bio."
+- R5 · FOUNDER — only with KNOWN FACTS: first person, the real result LEADS, then the lesson.
+
+== HARD BANS (the difference between this account and AI filler) ==
+- NO abstract profundity — never: "a kind of …", "something [adjective] about …", "strips everything away", "reminds you that …", "invites you to …", "it's not about X, it's about Y", "there's a moment when …". If a sentence could sit under anyone else's photo, it is a failed sentence.
+- NO personified nature: no forests watching, mountains caring, roads asking questions.
+- NEVER reuse phrasings from the examples in this brief — they show the register, not lines to copy.
+- EVERY caption names at least TWO concrete things that are in the photo or true of the place (gravel, mist, an altitude, coffee, a kitchen door, a river name from KNOWN FACTS). Specificity is the luxury signal.
+- Facts must be REAL and well-established (how cloud forest harvests fog, why the coffee roads exist, what altitude does to weather). NEVER invent a number, statistic or claim to get a hook.
+- Still in force: speak TO one reader ("you"; Spanish usted); serene, warm, plain, unhurried; no self-reference ("I"/"we"/"our" only in R5), no jargon or race-speak, no jokes, no hype, no exclamation marks; SELLING only in R4 — no other caption names the company (the brand hashtag is discovery, not selling); most captions end on the image, about 1 in 4 with one elegant question.
 
 == THE MISSION (why every post exists) ==
 The feed is building My Adventure Costa Rica into THE trusted source for adventure knowledge and all things Costa Rica. Authority and authenticity come first; bookings follow trust. So we POST WITH INTENT, never just to post. We do NOT hard sell. About 6 posts in 7 give pure value (teach, show, tell a true story) and never sell at all; only the EXPERIENCE pillar invites — concretely, factually, without pressure. Never urgency or discounts — restraint IS the brand, and it is also what converts a high-trust, high-price decision.
@@ -195,11 +197,11 @@ Look closely at what is ACTUALLY in the photo, then return STRICT JSON (only the
 - "category": the broad discipline — one of "RUNNING","CYCLING","WATER SPORTS","MULTI-SPORT","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA".
 - "eyebrow": the most ACCURATE specific label for what's in the photo + " · COSTA RICA" — e.g. "TRAIL RUNNING · COSTA RICA", "ROAD CYCLING · COSTA RICA", "GRAVEL · COSTA RICA", "RAFTING · COSTA RICA", "SURFING · COSTA RICA", "SEA KAYAKING · COSTA RICA". For a contemplative landscape/atmosphere shot you may use "COSTA RICA · SLOWLY". Match the activity actually shown; do not default everything to trail running or mountain biking.
 - "headline": ONE short editorial line, ~4–7 words. Evocative, restrained.
-- "caption_en": the English caption in THE VOICE above. Substantive (300–800 chars, lesson woven into story) when the photo teaches; 2–3 sentences for pure atmosphere. KNOWLEDGE must actually teach; ROUTE immerses; EXPERIENCE sells with facts; FOUNDER only from notes.
-- "caption_es": the Spanish caption, same voice (usted). NOT a literal translation — write it natively and elegantly.
+- "caption_en": the English caption per the chosen RECIPE — R1 carousels 150–300 chars; R2 singles 2–3 sentences; R3 singles 300–800 chars. KNOWLEDGE must actually teach; ROUTE immerses; EXPERIENCE sells with facts; FOUNDER only from notes.
+- "caption_es": the Spanish caption, same recipe and register (usted). NOT a literal translation — write it natively and elegantly.
 - "hashtags": array of 4–5 lowercase tags (no #). Always include "myadventurecostarica". Then choose tags that INTERNATIONAL luxury & adventure travelers actually search when planning a trip abroad — e.g. luxurytravel, adventuretravel, trailrunning, gravelcycling, costaricatravel, visitcostarica, traveldeeper — matched to the photo. These exist for DISCOVERY by prospective guests overseas (your buyers), so favor international travel-intent tags over Costa-Rica-local or Spanish-only ones.
 - "crop_bias": 0.0–1.0 vertical crop focus (0.3 if subject/horizon is upper, 0.6 to keep people/foreground at the bottom, 0.5 default).
-- "format": "single" or "carousel". Choose "carousel" when the post genuinely teaches or tells a story across steps — almost always for KNOWLEDGE, often for FOUNDER. Use "single" for a purely atmospheric image.
+- "format": "single" or "carousel". DEFAULT to "carousel" whenever the caption teaches (recipe R1 — KNOWLEDGE and most ROUTE): it is this account's proven format. "single" only for pure atmosphere (R2) or a story that needs no slides (R3/R5).
 - "slides": carousel ONLY — an array of 2–4 short text lines, each its own slide (the teaching points or story beats). Each ≤ ~18 words, editorial, self-contained, and in order. Slide 1 is always the photo, so these are the slides that follow it.
 - "cta": carousel ONLY, and ONLY when pillar is EXPERIENCE — one short, concrete closing line for the final slide (e.g. "Nine days, six runners — details in the bio."). For every other pillar, "" (value posts never sell).
 - "tags": array of exact Instagram handles to @mention — ONLY handles from the TAGGABLE ACCOUNTS list given in the user message, and ONLY when you clearly see that brand/event/person in the photo. Empty array if none apply. Never invent a handle.
@@ -235,7 +237,9 @@ If the user message includes KNOWN FACTS about the photo, treat them as TRUE and
 - Metric only (kilómetros, never millas). "Disfrute DE una…" (with de). Active voice over passive-with-por.
 - Read it as if a native editor at a Spanish luxury travel magazine wrote it — not a translation.
 
-== EXAMPLES (the target quality) ==
+== EXAMPLES (register ONLY — copying any phrase from these is a failure) ==
+R2 example (place-fact single): "Costa Rica's cloud forest sits at exactly the altitude where clouds touch the mountain — about 1,500 metres. That's why the moss is thick enough to sink a thumb into, and why this trail smells like rain an hour before it falls."
+
 Atmosphere, SHORT (gravel road in wind — ROUTE; fact-open, absence, serene):
   headline: "Built for coffee, not cars."
   EN: "Costa Rica's mountain roads were built for coffee, not cars. Which is why, an hour above the valley, the loudest thing around is the wind working the grass — and the road ahead belongs to no one but you."
@@ -752,20 +756,34 @@ def target_pillar():
 
 
 def ingest_image(url, note=""):
-    """Prepare ONE user-uploaded image (Cloudinary URL): caption, clean-render, and
-    stage it as a pending post for approval. Clean by default (same as the auto poster)."""
-    print("Ingesting uploaded image:", (url or "")[:80])
-    data = urllib.request.urlopen(url, timeout=120).read()
-    img = Image.open(io.BytesIO(data))
+    """Prepare user-uploaded image(s) (Cloudinary URLs): caption, clean-render, and
+    stage as a pending post for approval. SEVERAL urls uploaded together become ONE
+    carousel — the first photo is the cover (and the story), the rest are slides."""
+    urls = url if isinstance(url, list) else [url]
+    urls = [u for u in urls if u][:10]                     # Instagram's carousel cap
+    print(f"Ingesting {len(urls)} uploaded image(s):", (urls[0] or "")[:80])
+    imgs = []
+    for u in urls:
+        data = urllib.request.urlopen(u, timeout=120).read()
+        imgs.append(Image.open(io.BytesIO(data)))
+    img = imgs[0]                                          # cover drives caption + story
     base = "upload-" + time.strftime("%Y%m%d-%H%M%S")
     buf = io.BytesIO(); pv = img.convert("RGB"); pv.thumbnail((1280, 1280)); pv.save(buf, "JPEG", quality=85)
     learn = performance_brief()
-    meta = caption_for(buf.getvalue(), note or "", TAGS, learn)
+    extra = (" (This will be a photo CAROUSEL of "
+             + str(len(imgs)) + " pictures the owner chose together — one moment/story.)") if len(imgs) > 1 else ""
+    meta = caption_for(buf.getvalue(), (note or "") + extra, TAGS, learn)
     burn = wants_title_card(note, meta)
     bias = float(meta.get("crop_bias", 0.5))
+    outs = []
     out1 = os.path.join(RENDERED, f"{base}_1.jpg")
     if burn: render(img, meta.get("eyebrow", ""), meta.get("headline", ""), out1, bias)
     else:    render_clean(img, out1, bias)
+    outs.append(out1)
+    for i, sib in enumerate(imgs[1:], start=2):            # slides: clean frames, no text
+        o = os.path.join(RENDERED, f"{base}_{i}.jpg")
+        render_clean(sib, o, 0.5)
+        outs.append(o)
     story_out = None
     if CFG.get("also_story"):
         story_out = os.path.join(RENDERED, f"{base}_story.jpg")
@@ -776,14 +794,16 @@ def ingest_image(url, note=""):
     def _raw(p):
         return (f"https://raw.githubusercontent.com/{REPO}/{sha}/"
                 + urllib.parse.quote(os.path.relpath(p, HERE).replace(os.sep, "/")))
-    image_urls = [_raw(out1)]
+    image_urls = [_raw(o) for o in outs]
     story_url = _raw(story_out) if story_out else None
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in caption_body(meta) + [mentions, hashtags] if p).strip()
     state = {"skip": False, "source": base, "sources": [base], "base": base,
              "image_urls": image_urls, "image_url": image_urls[0], "story_url": story_url,
-             "caption": caption, "format": "single", "category": meta.get("category"),
+             "caption": caption,
+             "format": "carousel" if len(image_urls) > 1 else "single",
+             "category": meta.get("category"),
              "pillar": meta.get("pillar"), "status": "pending",
              "ts": time.strftime("%Y-%m-%dT%H:%M:%S")}
     json.dump(state, open(STATE, "w"))
@@ -803,9 +823,55 @@ def prepare():
     Does NOT post — that's publish()."""
     git_setup()
     ing = rget("ingest_image", None)
-    if ing and ing.get("url"):
+    if ing and (ing.get("url") or ing.get("urls")):
         rdel("ingest_image")
-        ingest_image(ing["url"], ing.get("note", ""))
+        ingest_image(ing.get("urls") or ing["url"], ing.get("note", ""))
+        return
+    # Owner hit "New caption" on the dashboard: SAME photo and rendered images,
+    # only the words are rewritten (a fresh caption_for pass with an anti-repeat hint).
+    if rget("recaption_request"):
+        rdel("recaption_request")
+        st = rget("pending_post")
+        srcp = os.path.join(SRC, st.get("source", "")) if st else ""
+        if st and not os.path.exists(srcp):               # uploaded post: recaption from its rendered cover
+            _alt = os.path.join(RENDERED, f"{st.get('base', '')}_1.jpg")
+            if os.path.exists(_alt):
+                srcp = _alt
+        if st and not st.get("skip") and os.path.exists(srcp):
+            print("Recaption requested — rewriting the caption for", st.get("base"))
+            learn = performance_brief()
+            note = ""
+            _np = os.path.splitext(srcp)[0] + ".txt"
+            if os.path.exists(_np):
+                try:
+                    note = open(_np, encoding="utf-8").read()
+                except Exception:
+                    note = ""
+            img = Image.open(srcp)
+            buf = io.BytesIO()
+            pv = img.convert("RGB"); pv.thumbnail((1280, 1280)); pv.save(buf, "JPEG", quality=90)
+            old = (st.get("caption") or "").split("\n\n")[0]
+            hint = ("The owner rejected this caption — write a COMPLETELY DIFFERENT one: "
+                    "different recipe or angle, different opening fact, no shared phrases with: \""
+                    + old[:400] + "\"")
+            try:
+                meta = caption_for(buf.getvalue(), note, TAGS, learn, hint=hint)
+                hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
+                mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
+                st["caption"] = "\n\n".join(
+                    p for p in caption_body(meta) + [mentions, hashtags] if p).strip()
+                st["pillar"] = meta.get("pillar", st.get("pillar"))
+                st["status"] = "pending"
+                st["ts"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+                rset("pending_post", st)
+                wa_notify("New caption ready for the staged post. Review: " + DASHBOARD_URL)
+                summary("### New caption staged\n\n" + st["caption"])
+                print("New caption staged.")
+            except Exception as e:
+                print("Recaption failed:", e)
+                summary("### Recaption failed\n" + str(e))
+        else:
+            print("Recaption requested but no pending post (or its photo) found.")
         return
     # Guard: only one post per day. We run the schedule several times each morning
     # (GitHub skips/delays single crons), so skip if we already posted today.
@@ -846,8 +912,13 @@ def prepare():
     chosen = fallback = None
     for src in candidates[:PLAN_SCAN]:
         if os.path.splitext(os.path.basename(src))[0] in rejected_bases:
-            print("Skipping a photo you rejected earlier:", os.path.basename(src))
-            os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
+            # Owner's rule (Sep 10 2026): a rejected picture is unwanted — DELETE it
+            # immediately, never archive or recycle it for later.
+            print("Deleting a photo you rejected:", os.path.basename(src))
+            os.remove(src)
+            _np = os.path.splitext(src)[0] + ".txt"
+            if os.path.exists(_np):
+                os.remove(_np)
             continue
         # Skip a near-duplicate of something already posted — don't repeat near-twins.
         if DEDUPE and posted_hashes:

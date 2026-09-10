@@ -69,6 +69,8 @@ module.exports = async function handler(req, res) {
     if (action === "get_settings") return res.json(await getSettings());
     if (action === "set_setting") return res.json(await setSetting(body));
     if (action === "dispatch") return res.json(await dispatch(body.workflow));
+    if (action === "recaption_post") return res.json(await recaptionPost());
+    if (action === "recaption_reel") return res.json(await dispatch("reel"));
     return res.status(404).json({ ok: false, error: "unknown action" });
   } catch (e) {
     console.error("control error:", e);                  // detail stays server-side
@@ -147,9 +149,11 @@ async function ingest(body) {
     await rset("ingest_video", { public_id: pid, ts: new Date().toISOString() });
     return { ok: await dispatchWf("reel-post.yml", { force: "true" }), kind: "video" };
   }
-  if (!url) return { ok: false, error: "missing url" };
-  await rset("ingest_image", { url, note: String(body.note || ""), ts: new Date().toISOString() });
-  return { ok: await dispatchWf("daily-post.yml", { force: "true" }), kind: "photo" };
+  const urls = Array.isArray(body.urls) ? body.urls.filter(u => typeof u === "string" && u) : null;
+  if (!url && !(urls && urls.length)) return { ok: false, error: "missing url" };
+  // Several photos uploaded together = the owner wants them staged as ONE carousel.
+  await rset("ingest_image", { url, urls, note: String(body.note || ""), ts: new Date().toISOString() });
+  return { ok: await dispatchWf("daily-post.yml", { force: "true" }), kind: urls && urls.length > 1 ? "carousel" : "photo" };
 }
 
 // --- Send a reply (comment or DM) via the Graph API, then mark it resolved -----
@@ -297,6 +301,13 @@ async function setSetting({ key, value }) {
 }
 
 // --- Trigger any of our workflows (workflow_dispatch) --------------------------
+// "New caption" on the pending-post card: flag Upstash, then run the post workflow —
+// prepare() sees the flag and rewrites ONLY the caption of the already-staged photo.
+async function recaptionPost() {
+  await rset("recaption_request", true);
+  return { ok: await dispatchWf(WORKFLOWS.post, { force: "true" }), workflow: WORKFLOWS.post };
+}
+
 async function dispatch(key) {
   const wf = WORKFLOWS[key];
   if (!wf) return { ok: false, error: "unknown workflow: " + key };
