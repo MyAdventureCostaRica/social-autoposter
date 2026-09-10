@@ -257,6 +257,7 @@ def stage_reel():
         print("Ingesting uploaded reel:", ing["public_id"])
     else:
         clip = next_clip()
+    manual = bool(ing and ing.get("public_id"))   # the owner uploaded this clip himself
     if not clip:
         print("No eligible clips (none long enough, or all posted/rejected)."); return
     pid = clip["public_id"]
@@ -280,7 +281,9 @@ def stage_reel():
              "base": pid.split("/")[-1], "status": "pending",
              "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "_caption_en": meta.get("caption_en", "")}
     if (ap.rget("settings", {}) or {}).get("auto_approve"):
-        hold = ap.morning_hold_iso()
+        # Owner's rule (Sep 10 2026): a clip he uploaded HIMSELF posts immediately —
+        # the morning hold applies only to clips the system picked from the folder.
+        hold = None if manual else ap.morning_hold_iso()
         if hold:
             state["status"] = "approved"; state["hold_until"] = hold
             ap.rset("pending_reel", state)

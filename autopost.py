@@ -125,8 +125,10 @@ def wa_notify(text):
 # (free tier, vision). Endpoint/model/key are env- and config-overridable.
 def morning_hold_iso():
     """08:00–15:00 CR is the strong publish window (Sep 2026 analysis: 16:00+ publishes
-    are uniformly weak). Outside the window, auto-approved content is stored as
-    approved+held; the Vercel cron's 08:05-CR publish slot releases it."""
+    are uniformly weak). Outside the window, auto-approved SYSTEM-PICKED content is
+    stored as approved+held; the Vercel cron's 08:05-CR publish slot releases it.
+    Owner's rule (Sep 10 2026): a MANUAL upload under auto-approve is never held —
+    he uploaded it himself, so it means "post it now"."""
     import datetime as _dt
     now = _dt.datetime.utcnow()
     cr_hour = (now.hour + 24 - 6) % 24
@@ -815,15 +817,10 @@ def ingest_image(url, note=""):
     json.dump(state, open(STATE, "w"))
     commit_push(f"Stage {base} (upload) for review [skip ci]")
     if (rget("settings", {}) or {}).get("auto_approve"):
-        hold = morning_hold_iso()
-        if hold:
-            state["status"] = "approved"; state["hold_until"] = hold
-            requeue_prev_pending(state)
-            rset("pending_post", state)
-            wa_notify("Upload auto-approved — publishes at 8:00 AM (best-hours window). " + DASHBOARD_URL)
-            print("Auto-approve ON but outside the 08–15 CR window — upload held until", hold)
-        else:
-            print("Auto-approve ON — publishing uploaded post now."); publish(state); rdel("pending_post")
+        # Owner's rule (Sep 10 2026): he uploaded this HIMSELF, so under auto-approve it
+        # posts IMMEDIATELY — no morning hold. The best-hours hold applies only to posts
+        # the system picked on its own (see prepare()).
+        print("Auto-approve ON — publishing uploaded post now."); publish(state); rdel("pending_post")
     else:
         requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
