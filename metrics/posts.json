@@ -7878,5 +7878,25 @@
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
   "caption": "Gravel cycling in Costa Rica means climbing through cloud and dense canopy on packed volcanic stone. Up here, every swit"
+ },
+ {
+  "id": "17901147666362304",
+  "date": "2026-09-13",
+  "ts": "2026-09-13T15:20:05",
+  "base": "IMG_2535",
+  "format": "carousel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "Mountain biking in Costa Rica means accepting that the trail eventually meets the water. When the road ends at a flowing"
+ },
+ {
+  "id": "18101388665013264",
+  "date": "2026-09-13",
+  "ts": "2026-09-13T15:20:05",
+  "base": "IMG_2535-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "Mountain biking in Costa Rica means accepting that the trail eventually meets the water. When the road ends at a flowing"
  }
 ]
