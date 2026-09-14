@@ -17,7 +17,7 @@ Optional: give a clip a caption hint by setting a Cloudinary context field
 `note` on the asset (Media Library → asset → Context). Otherwise it captions from
 the frame alone.
 """
-import os, json, time, urllib.request, urllib.parse
+import os, json, time, urllib.request, urllib.parse, urllib.error
 import autopost as ap                       # caption_for, performance_brief, meta_post, CFG, TAGS
 
 HERE = ap.HERE
@@ -94,23 +94,68 @@ def thumb_bytes(public_id):
         return r.read()
 
 
-def publish_reel(video_url, caption):
-    cont = ap.meta_post(f"{IG}/media",
-                        {"media_type": "REELS", "video_url": video_url,
-                         "caption": caption, "share_to_feed": "true",
-                         "access_token": TOKEN})
-    cid = cont["id"]
-    for _ in range(36):                       # reels transcode async; poll up to ~6 min
-        time.sleep(10)
-        st = get(cid, {"fields": "status_code,status", "access_token": TOKEN})
-        code = st.get("status_code")
-        if code == "FINISHED":
-            break
-        if code == "ERROR":
-            raise RuntimeError(f"Reel processing failed: {st.get('status')}")
-    pub = ap.meta_post(f"{IG}/media_publish",
-                       {"creation_id": cid, "access_token": TOKEN})
-    return pub.get("id")
+def wait_until_ready(url, tries=12, wait=15):
+    """Cloudinary builds the H.264 mp4 on the FIRST request for that delivery URL. Until
+    it is done the URL answers 423/5xx — and Instagram, which fetches it exactly once,
+    reports "Media upload has failed with error code 2207076" (Sep 11–12 2026, same clip
+    two mornings running). So we ask for the first byte ourselves and only hand the URL
+    to Instagram once it is actually servable."""
+    last = None
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"Range": "bytes=0-0"})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                if r.status in (200, 206):
+                    if i:
+                        print(f"Video URL ready after ~{i * wait}s")
+                    return True
+                last = r.status
+        except urllib.error.HTTPError as e:
+            last = e.code
+            if e.code not in (423, 425, 429, 500, 502, 503, 504):
+                print(f"Video URL answered HTTP {e.code} — not a transcode wait, giving up")
+                return False
+        except Exception as e:
+            last = str(e)[:80]
+        print(f"Video not servable yet ({last}) — waiting {wait}s…")
+        time.sleep(wait)
+    return False
+
+
+def publish_reel(video_url, caption, attempts=3):
+    """Create the reel container, wait for Instagram to process it, publish. Retries the
+    whole thing (a fresh container) on an upload/processing error — those are usually
+    transient on Meta's side or a not-yet-transcoded delivery URL."""
+    if not wait_until_ready(video_url):
+        raise RuntimeError("video URL never became servable (Cloudinary transcode?) — "
+                           "not handing it to Instagram")
+    last_err = None
+    for attempt in range(1, attempts + 1):
+        try:
+            cont = ap.meta_post(f"{IG}/media",
+                                {"media_type": "REELS", "video_url": video_url,
+                                 "caption": caption, "share_to_feed": "true",
+                                 "access_token": TOKEN})
+            cid = cont["id"]
+            code, status = None, ""
+            for _ in range(36):                   # reels transcode async; poll up to ~6 min
+                time.sleep(10)
+                st = get(cid, {"fields": "status_code,status", "access_token": TOKEN})
+                code, status = st.get("status_code"), st.get("status")
+                if code in ("FINISHED", "ERROR"):
+                    break
+            if code != "FINISHED":                # ERROR, or still processing after 6 min
+                raise RuntimeError(f"Reel processing {'failed' if code == 'ERROR' else 'timed out'}: "
+                                   f"{status or code}")
+            pub = ap.meta_post(f"{IG}/media_publish",
+                               {"creation_id": cid, "access_token": TOKEN})
+            return pub.get("id")
+        except Exception as e:
+            last_err = e
+            print(f"Reel publish attempt {attempt}/{attempts} failed: {e}")
+            if attempt < attempts:
+                time.sleep(45 * attempt)          # 45 s, then 90 s
+    raise RuntimeError(f"Reel publish failed after {attempts} attempts: {last_err}")
 
 
 def publish_fb_reel(video_url, caption):
@@ -201,6 +246,7 @@ def _do_publish_reel(state):
     video_url, caption, pid = state["video_url"], state["caption"], state["public_id"]
     print("Publishing reel…")
     mid = publish_reel(video_url, caption)
+    state["_ig_media_id"] = mid                       # marker: Instagram has it from here on
     print("Reel published:", mid)
     publish_fb_reel(video_url, caption)                # cross-post to Facebook Reels
     try:
@@ -281,11 +327,14 @@ def stage_reel():
              "base": pid.split("/")[-1], "status": "pending",
              "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "_caption_en": meta.get("caption_en", "")}
     if (ap.rget("settings", {}) or {}).get("auto_approve"):
-        # Owner's rule (Sep 10 2026): a clip he uploaded HIMSELF posts immediately —
-        # the morning hold applies only to clips the system picked from the folder.
-        hold = None if manual else ap.morning_hold_iso()
+        # Owner's rule (Sep 10/14 2026): a clip he uploaded himself, OR a "Prepare a reel"
+        # button press (FORCE_POST), is HIM asking — it posts now. The morning hold applies
+        # only to clips the scheduler picked on its own.
+        human = manual or os.environ.get("FORCE_POST") == "1"
+        hold = None if human else ap.morning_hold_iso()
         if hold:
             state["status"] = "approved"; state["hold_until"] = hold
+            _requeue_prev_reel(state)                 # never discard what's already waiting
             ap.rset("pending_reel", state)
             ap.git_setup()
             open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(today)
@@ -295,17 +344,10 @@ def stage_reel():
             return
         print("Auto-approve ON — publishing reel now.")
         _do_publish_reel(state)
-        ap.rdel("pending_reel")
+        # (this reel was never stored in the slot — an older undecided reel may still be
+        #  waiting there; never wipe it)
     else:
-        # Owner's queue rule (Sep 10 2026, "reel, carousel, post, any type"): staging a
-        # new reel never discards an unapproved one — it joins pending_reel_queue (FIFO, 5).
-        prev = ap.rget("pending_reel")
-        if prev and prev.get("status") == "pending" and prev.get("base") != state.get("base"):
-            q = ap.rget("pending_reel_queue", []) or []
-            if not any((p or {}).get("base") == prev.get("base") for p in q):
-                q.append(prev)
-                ap.rset("pending_reel_queue", q[-5:])
-                print("Queued the previous unapproved reel:", prev.get("base"))
+        _requeue_prev_reel(state)                     # owner's queue rule
         ap.rset("pending_reel", state)
         ap.git_setup()
         open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(today)  # don't double-stage
@@ -327,26 +369,63 @@ def publish_pending_reel():
                 print(f"Approved reel held for the morning window (until {hu}) — skipping."); return
         except Exception:
             pass
-    _do_publish_reel(state)
+    try:
+        _do_publish_reel(state)
+    except Exception as e:
+        err = str(e)[:300]
+        if state.get("_ig_media_id"):
+            # Instagram already has the reel — only the follow-up failed. Never retry
+            # (double post); free the slot and say what happened.
+            ap.wa_notify(f"⚠️ Reel {state.get('base')} is live on Instagram but the follow-up "
+                         f"failed ({err}). Check the run: {ap.DASHBOARD_URL}")
+            ap.rdel("pending_reel"); _promote_next_reel()
+        else:
+            # Nothing posted. Hand it back to the owner WITH the reason — the card reappears
+            # (Approve = retry, Reject, ↻ New caption) instead of failing silently at 08:05
+            # every morning, which is what happened on Sep 11–12 2026.
+            state["status"] = "pending"; state.pop("hold_until", None); state["last_error"] = err
+            ap.rset("pending_reel", state)
+            ap.wa_notify(f"❌ Reel {state.get('base')} could not be published: {err}. "
+                         f"It's back on the dashboard — approve again to retry, or reject it. "
+                         f"{ap.DASHBOARD_URL}")
+        raise SystemExit(1)                       # keep the run red so the alert step fires too
     dec = ap.rget("post_decisions", []) or []
     dec.append({"base": state.get("base"), "pillar": state.get("pillar"), "format": "reel",
                 "decision": "approved", "edited": bool(state.get("edited")),
                 "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
     ap.rset("post_decisions", dec[-200:])
     ap.rdel("pending_reel")
-    q = ap.rget("pending_reel_queue", []) or []       # next queued reel takes the slot
+    _promote_next_reel()                              # next queued reel takes the slot
+    print("Published approved reel:", state.get("base"))
+
+
+def _promote_next_reel():
+    q = ap.rget("pending_reel_queue", []) or []
     while q:
         nxt = q.pop(0)
         ap.rset("pending_reel_queue", q)
         if nxt:
-            nxt["status"] = "pending"
+            nxt["status"] = "pending"; nxt.pop("hold_until", None)
             ap.rset("pending_reel", nxt)
             ap.wa_notify("Next queued reel is waiting for your approval: " + ap.DASHBOARD_URL)
             print("Promoted queued reel:", nxt.get("base"))
-            break
-    else:
-        ap.rset("pending_reel_queue", q)
-    print("Published approved reel:", state.get("base"))
+            return
+    ap.rset("pending_reel_queue", q)
+
+
+def _requeue_prev_reel(state):
+    """Owner's queue rule ("reel, carousel, post, any type — you queue"): staging a new
+    reel never discards the one already in the slot — pending OR approved-and-held — it
+    joins pending_reel_queue (FIFO, 5). The held path used to overwrite it: on Sep 10–11
+    2026 three evening reels were staged and two vanished."""
+    prev = ap.rget("pending_reel")
+    if prev and prev.get("status") in ("pending", "approved") and prev.get("base") != state.get("base"):
+        q = ap.rget("pending_reel_queue", []) or []
+        if not any((p or {}).get("base") == prev.get("base") for p in q):
+            prev = dict(prev); prev["status"] = "pending"; prev.pop("hold_until", None)
+            q.append(prev)
+            ap.rset("pending_reel_queue", q[-5:])
+            print("Queued the previous reel:", prev.get("base"))
 
 
 if __name__ == "__main__":

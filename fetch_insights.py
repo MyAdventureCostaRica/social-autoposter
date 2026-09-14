@@ -306,6 +306,31 @@ def count_reels():
           + (f", {short} too short (<{min_s:g}s)" if short else ""))
 
 
+def supply_ping():
+    """Owner's ask (Sep 10 2026): he could only learn the tank was empty by looking.
+    Now: an immediate warning the day a tank runs low (≤7 photos or ≤2 clips), plus a
+    plain weekly stock note every Monday. Uses notify.py (WhatsApp + ntfy)."""
+    try:
+        c = json.load(open(os.path.join(MET, "counts.json")))
+    except Exception:
+        return
+    photos, clips = c.get("queued"), c.get("reels_queued")
+    low_p = isinstance(photos, int) and photos <= 7
+    low_c = isinstance(clips, int) and clips <= 2
+    monday = time.strftime("%a") == "Mon"
+    if not (low_p or low_c or monday):
+        return
+    stock = (f"{photos if photos is not None else '?'} photos, "
+             f"{clips if clips is not None else '?'} reel clips ready")
+    if low_p or low_c:
+        need = " and ".join(x for x, on in (("clips", low_c), ("photos", low_p)) if on)
+        msg = f"⚠️ Running low — {stock}. Add {need} so the next slot doesn't skip."
+    else:
+        msg = f"Weekly stock: {stock}."
+    import notify
+    notify.send(msg)
+
+
 def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
@@ -351,6 +376,10 @@ def main():
         count_reels()                        # how many clips are left to post
     except Exception as e:
         print("reels count err:", e)
+    try:
+        supply_ping()                        # tell the owner BEFORE a slot skips for lack of material
+    except Exception as e:
+        print("supply ping err:", e)
 
     ranked = sorted([x for x in rows if isinstance(x.get("eng_rate"), float)],
                     key=lambda x: -x["eng_rate"])[:5]

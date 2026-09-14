@@ -85,41 +85,73 @@ def rdel(key):
 
 
 def wa_notify(text):
-    """Owner ping — WhatsApp (CallMeBot) + ntfy backup, each independent.
+    """Owner ping — WhatsApp (CallMeBot) + ntfy. The implementation lives in notify.py
+    (standard library only) so the workflows' failure-alert step can use the very same
+    code: `python notify.py "..."`. See notify.py for the CallMeBot 200-with-error trap
+    that hid a 16-day outage."""
+    try:
+        import notify
+        return notify.send(text)
+    except Exception as e:
+        print("notify failed:", e)
+        return False
 
-    CallMeBot answers HTTP 200 even when delivery fails (expired/invalid apikey,
-    lapsed opt-in), putting the error in the response BODY — which is how pings
-    died silently for 16 days (Aug 25–Sep 10 2026) while every run looked green.
-    So: read the body, log it loudly, and always also try ntfy if configured.
-    """
-    if WA_PHONE and WA_KEY:
-        try:
-            q = urllib.parse.urlencode({"phone": WA_PHONE, "text": text, "apikey": WA_KEY})
-            body = urllib.request.urlopen(
-                f"https://api.callmebot.com/whatsapp.php?{q}", timeout=20).read()
-            snip = " ".join(body.decode(errors="replace").split())[:300]
-            if any(w in snip.lower() for w in
-                   ("error", "invalid", "not subscribed", "expired", "not allowed", "blocked")):
-                print("WhatsApp notify PROBLEM — CallMeBot said:", snip)
-            else:
-                print("WhatsApp notify OK — CallMeBot said:", snip[:120])
-        except Exception as e:
-            print("WhatsApp notify failed:", e)
-    ntfy_topic = os.environ.get("NTFY_TOPIC")
-    if ntfy_topic:
-        try:
-            base = (os.environ.get("NTFY_BASE") or "https://ntfy.sh").rstrip("/")
-            req = urllib.request.Request(
-                f"{base}/{ntfy_topic}", data=text.encode("utf-8"),
-                # ASCII-only Title (HTTP headers are latin-1); bell emoji via Tags.
-                headers={"Title": "My Adventure Costa Rica auto-poster", "Tags": "bell"})
-            tok = os.environ.get("NTFY_TOKEN")
-            if tok:
-                req.add_header("Authorization", f"Bearer {tok}")
-            urllib.request.urlopen(req, timeout=20).read()
-            print("ntfy notify OK")
-        except Exception as e:
-            print("ntfy notify failed:", e)
+
+def strip_location_metadata(keep=()):
+    """Public repo + phone photos = GPS coordinates for anyone who clones. The Sep 10 2026
+    audit found 111 of 125 source photos carried them (42 within 15 km of home). Published
+    renders were always clean (Pillow drops EXIF on save); this cleans the ORIGINALS that
+    live in git — source-photos/ and posted/:
+      • JPEG/PNG: the GPS block is removed, everything else in EXIF stays (capture time
+        drives burst detection, orientation keeps photos upright, camera make is harmless)
+      • HEIC: converted to a clean JPEG (Pillow can't rewrite HEIC), longest side capped at
+        3000 px like the dashboard uploader already does — plenty for 1080 px renders
+      • DNG raws: deleted — the pipeline never reads them, they were pure weight + exposure
+    `keep` = file names that are referenced by a staged/pending post and must not change.
+    Runs at the start of every prepare(); after the first pass it finds nothing."""
+    GPS_IFD, ORIENT, EXIF_IFD, INTEROP = 0x8825, 0x0112, 0x8769, 0xA005
+    changed, removed = [], []
+    for d in (SRC, POSTED):
+        for path in sorted(glob.glob(os.path.join(d, "*"))):
+            name = os.path.basename(path); low = name.lower()
+            if os.path.isdir(path) or name in keep:
+                continue
+            if low.endswith(".dng"):
+                os.remove(path); removed.append(name); continue
+            if not low.endswith((".jpg", ".jpeg", ".png", ".heic", ".heif")):
+                continue
+            try:
+                im = Image.open(path)
+                ex = im.getexif()
+                if GPS_IFD not in ex and not low.endswith((".heic", ".heif")):
+                    continue                                   # nothing to strip
+                im.load()
+                for tag in (EXIF_IFD, GPS_IFD, INTEROP):       # load sub-IFDs so tobytes() keeps them
+                    try: ex.get_ifd(tag)
+                    except Exception: pass
+                if GPS_IFD in ex:
+                    del ex[GPS_IFD]
+                if low.endswith((".heic", ".heif")):
+                    out = os.path.splitext(path)[0] + ".jpg"
+                    if os.path.exists(out):                    # a same-named .jpg twin exists
+                        out = os.path.splitext(path)[0] + "-heic.jpg"
+                    ex[ORIENT] = 1                             # libheif already applied the rotation
+                    rgb = im.convert("RGB"); rgb.thumbnail((3000, 3000))
+                    rgb.save(out, "JPEG", quality=92, exif=ex.tobytes())
+                    os.remove(path); changed.append(f"{name} -> {os.path.basename(out)}")
+                elif low.endswith(".png"):
+                    im.save(path, "PNG"); changed.append(name)
+                else:
+                    im.save(path, "JPEG", quality="keep", exif=ex.tobytes()); changed.append(name)
+            except Exception as e:
+                print("metadata strip skipped for", name, "->", e)
+    if changed or removed:
+        print(f"Location metadata stripped from {len(changed)} photo(s); {len(removed)} DNG raw(s) deleted.")
+        for c in changed[:20]: print("   ", c)
+        commit_push(f"Strip location metadata from {len(changed)} photos"
+                    + (f", drop {len(removed)} unused DNG raws" if removed else "") + " [skip ci]")
+    return changed, removed
+
 
 # GitHub Models retired 2026-07-30 (410 Gone) -> Gemini OpenAI-compatible endpoint
 # (free tier, vision). Endpoint/model/key are env- and config-overridable.
@@ -820,7 +852,9 @@ def ingest_image(url, note=""):
         # Owner's rule (Sep 10 2026): he uploaded this HIMSELF, so under auto-approve it
         # posts IMMEDIATELY — no morning hold. The best-hours hold applies only to posts
         # the system picked on its own (see prepare()).
-        print("Auto-approve ON — publishing uploaded post now."); publish(state); rdel("pending_post")
+        print("Auto-approve ON — publishing uploaded post now."); publish(state)
+        # (never rdel pending_post here: this upload was never stored in the slot, and an
+        #  older undecided post may still be waiting there — owner's queue rule)
     else:
         requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
@@ -834,6 +868,21 @@ def prepare():
     """Pick a photo, caption it, render it, push it, and stage state.json.
     Does NOT post — that's publish()."""
     git_setup()
+    # Privacy pass first (no-op after the first run): never leave GPS in the public repo.
+    try:
+        _keep = set()
+        for _st in [rget("pending_post")] + (rget("pending_queue", []) or []):
+            for _n in ((_st or {}).get("sources") or [(_st or {}).get("source")]):
+                if _n: _keep.add(_n)
+        try:
+            _lst = json.load(open(STATE))
+            for _n in (_lst.get("sources") or [_lst.get("source")]):
+                if _n: _keep.add(_n)
+        except Exception:
+            pass
+        strip_location_metadata(keep=_keep)
+    except Exception as e:
+        print("metadata strip pass skipped:", e)
     ing = rget("ingest_image", None)
     if ing and (ing.get("url") or ing.get("urls")):
         rdel("ingest_image")
@@ -1073,7 +1122,11 @@ def prepare():
     json.dump(state, open(STATE, "w"))
     commit_push(f"Stage {base} for review [skip ci]")
     if (rget("settings", {}) or {}).get("auto_approve"):
-        hold = morning_hold_iso()
+        # Owner's rule (Sep 14 2026): a dashboard button press (FORCE_POST) is HIM asking —
+        # it posts now, like a manual upload. The morning hold is only for the scheduler's
+        # own picks. (Sep 10–11: three evening "Prepare" clicks were silently held.)
+        human = os.environ.get("FORCE_POST") == "1"
+        hold = None if human else morning_hold_iso()
         if hold:
             state["status"] = "approved"; state["hold_until"] = hold
             requeue_prev_pending(state)
@@ -1082,8 +1135,8 @@ def prepare():
             print("Auto-approve ON but outside the 08–15 CR window — held until", hold)
         else:
             print("Auto-approve is ON — publishing immediately.")
-            publish(state)
-            rdel("pending_post")
+            publish(state)      # the new post was never stored as pending_post — leave the
+                                # slot alone (an older undecided post may still be in it)
     else:                                             # human review: stage + ping for approval
         requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
@@ -1145,14 +1198,14 @@ def publish(st=None):
             time.sleep(8)
             pub = meta_post(f"{ig}/media_publish",
                             {"creation_id": car["id"], "access_token": META_TOKEN})
-            print("Instagram carousel OK:", pub.get("id"))
+            print("Instagram carousel OK:", pub.get("id")); st["_ig_media_id"] = pub.get("id")
         else:                                        # single image
             cont = meta_post(f"{ig}/media",
                              {"image_url": image_urls[0], "caption": caption, "access_token": META_TOKEN})
             time.sleep(8)
             pub = meta_post(f"{ig}/media_publish",
                             {"creation_id": cont["id"], "access_token": META_TOKEN})
-            print("Instagram OK:", pub.get("id"))
+            print("Instagram OK:", pub.get("id")); st["_ig_media_id"] = pub.get("id")
         story_id = None
         if st.get("story_url"):                      # branded vertical Story (drives feed reach)
             try:
@@ -1283,7 +1336,25 @@ def publish_pending():
         except Exception:
             pass
     git_setup()
-    publish(st)                                        # reuse the full publish path
+    try:
+        publish(st)                                    # reuse the full publish path
+    except Exception as e:
+        err = str(e)[:300]
+        if st.get("_ig_media_id"):
+            # Instagram already took it — only the post-processing failed. Don't retry
+            # (that would post it twice); clear the slot and say what happened.
+            wa_notify(f"⚠️ Post {st.get('base')} went live on Instagram but the follow-up "
+                      f"failed ({err}). Check the run: {DASHBOARD_URL}")
+            rdel("pending_post"); promote_queued_pending()
+        else:
+            # Nothing was posted. Put it back in front of the owner with the reason, so the
+            # card reappears (Approve = retry, Reject, ↻ New caption) instead of silently
+            # retrying every morning.
+            st["status"] = "pending"; st.pop("hold_until", None); st["last_error"] = err
+            rset("pending_post", st)
+            wa_notify(f"❌ Post {st.get('base')} could not be published: {err}. "
+                      f"It's back on the dashboard — approve again to retry, or reject it. {DASHBOARD_URL}")
+        raise SystemExit(1)                            # keep the run red for the alert step
     decisions = rget("post_decisions", []) or []       # learning: log the approval
     decisions.append({"base": st.get("base"), "pillar": st.get("pillar"),
                       "decision": "approved", "edited": bool(st.get("edited")),

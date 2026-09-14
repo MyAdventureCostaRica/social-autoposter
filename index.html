@@ -740,6 +740,7 @@ function renderReelCard(p, announce){
     +`<span class="eyebrow">Reel awaiting your approval</span>`
     +`<span class="chip">${esc((p.pillar||'').toString())}</span>`
     +`<span class="chip">${esc((p.duration||'')+'s')}</span></div>`
+    +(p.last_error?`<div style="margin:6px 0 8px;padding:8px 10px;border-radius:8px;background:rgba(184,90,32,.10);color:var(--terracotta);font-size:13px"><b>Last publish attempt failed:</b> ${esc(p.last_error)} — Approve again to retry, or reject it.</div>`:'')
     +`<div class="pp-imgs">${media}</div>`
     +`<span class="muted" style="font-size:12px">Caption — edit before approving</span>`
     +`<textarea class="pp-edit" rows="6">${esc(p.caption||'')}</textarea>`
@@ -793,6 +794,7 @@ function renderPendingCard(p, announce){
     +`<span class="eyebrow">Post awaiting your approval</span>`
     +`<span class="chip">${esc((p.pillar||'').toString())}</span>`
     +`<span class="chip">${esc(p.format||'single')}</span></div>`
+    +(p.last_error?`<div style="margin:6px 0 8px;padding:8px 10px;border-radius:8px;background:rgba(184,90,32,.10);color:var(--terracotta);font-size:13px"><b>Last publish attempt failed:</b> ${esc(p.last_error)} — Approve again to retry, or reject it.</div>`:'')
     +`<div class="pp-imgs">${thumbs}</div>`
     +`<span class="muted" style="font-size:12px">Caption — edit before approving; your edits teach the voice</span>`
     +`<textarea class="pp-edit" rows="6">${esc(p.caption||'')}</textarea>`
