@@ -10054,17 +10054,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 33,
+  "reach": 34,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 58,
+  "views": 59,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0303
+  "eng_rate": 0.0294
  },
  {
   "id": "18098194889611015",
@@ -10091,17 +10091,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 31,
+  "reach": 32,
   "likes": 4,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 58,
+  "views": 59,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.1935
+  "eng_rate": 0.1875
  },
  {
   "id": "17884595940454510",
@@ -10128,17 +10128,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 54,
+  "reach": 55,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 152,
+  "views": 153,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 8,
-  "eng_rate": 0.1481
+  "eng_rate": 0.1455
  },
  {
   "id": "18199814560375637",
@@ -10366,17 +10366,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 38,
+  "reach": 39,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 69,
+  "views": 70,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.0789
+  "eng_rate": 0.0769
  },
  {
   "id": "18135288508559311",
@@ -10403,15 +10403,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 276,
+  "reach": 277,
   "likes": 11,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 13,
-  "views": 364,
+  "views": 367,
   "interactions": 13,
-  "eng_rate": 0.0471
+  "eng_rate": 0.0469
  },
  {
   "id": "18099380114052514",
@@ -10420,17 +10420,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 30,
+  "reach": 31,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 96,
+  "views": 98,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.2
+  "eng_rate": 0.1935
  },
  {
   "id": "17905035159507680",
@@ -10457,17 +10457,17 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 50,
+  "reach": 52,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 104,
+  "views": 111,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.08
+  "eng_rate": 0.0769
  },
  {
   "id": "18404123095091978",
@@ -10494,17 +10494,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 42,
+  "reach": 43,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 105,
+  "views": 106,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 8,
-  "eng_rate": 0.1905
+  "eng_rate": 0.186
  },
  {
   "id": "17911585938530706",
@@ -10622,17 +10622,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "KNOWLEDGE",
-  "reach": 17,
+  "reach": 18,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 51,
+  "views": 58,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.2941
+  "eng_rate": 0.2778
  },
  {
   "id": "18106096618935901",
@@ -10659,14 +10659,14 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 28,
-  "likes": 6,
-  "comments": 0,
+  "reach": 44,
+  "likes": 9,
+  "comments": 2,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 7,
-  "views": 55,
-  "interactions": 7,
-  "eng_rate": 0.25
+  "total_interactions": 12,
+  "views": 82,
+  "interactions": 12,
+  "eng_rate": 0.2727
  }
 ]
