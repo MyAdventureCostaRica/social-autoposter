@@ -10659,15 +10659,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 66,
+  "reach": 68,
   "likes": 9,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
-  "views": 117,
+  "views": 122,
   "interactions": 12,
-  "eng_rate": 0.1818
+  "eng_rate": 0.1765
  },
  {
   "id": "18121286624303316",
@@ -10676,17 +10676,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 2,
-  "likes": 0,
+  "reach": 11,
+  "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 0,
-  "views": 12,
+  "total_interactions": 2,
+  "views": 28,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 0,
-  "eng_rate": 0.0
+  "interactions": 2,
+  "eng_rate": 0.1818
  },
  {
   "id": "18109702906885203",
@@ -10695,8 +10695,15 @@
   "format": "story",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "error": "(#10) Not enough viewers for the media to show insights",
-  "interactions": 0,
-  "eng_rate": null
+  "reach": 16,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 2,
+  "views": 18,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 17,
+  "interactions": 2,
+  "eng_rate": 0.125
  }
 ]
