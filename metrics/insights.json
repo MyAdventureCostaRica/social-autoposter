@@ -10659,15 +10659,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 71,
+  "reach": 72,
   "likes": 9,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
-  "views": 128,
+  "views": 129,
   "interactions": 12,
-  "eng_rate": 0.169
+  "eng_rate": 0.1667
  },
  {
   "id": "18121286624303316",
@@ -10676,17 +10676,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 18,
+  "reach": 19,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 45,
+  "views": 47,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1667
+  "eng_rate": 0.1579
  },
  {
   "id": "18109702906885203",
@@ -10713,17 +10713,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 30,
+  "reach": 31,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 63,
+  "views": 64,
   "profile_visits": 2,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0333
+  "eng_rate": 0.0323
  },
  {
   "id": "18128118553795076",
