@@ -8013,5 +8013,25 @@
   "category": "CYCLING",
   "pillar": "ROUTE",
   "caption": "Highland cycling in Costa Rica often means trading asphalt for the quiet of rural farm roads. Above 1,500 metres, the tr"
+ },
+ {
+  "id": "17917337064242504",
+  "date": "2026-09-18",
+  "ts": "2026-09-18T15:23:55",
+  "base": "IMG_2552",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE/DESTINATION",
+  "caption": "The bright red of a crown-of-thorns bloom stands out against dusty green leaves and the dark timber of a mountain lodge."
+ },
+ {
+  "id": "17989328169049465",
+  "date": "2026-09-18",
+  "ts": "2026-09-18T15:23:55",
+  "base": "IMG_2552-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE/DESTINATION",
+  "caption": "The bright red of a crown-of-thorns bloom stands out against dusty green leaves and the dark timber of a mountain lodge."
  }
 ]
