@@ -10676,7 +10676,7 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 23,
+  "reach": 24,
   "likes": 3,
   "comments": 0,
   "saved": 0,
@@ -10686,7 +10686,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1304
+  "eng_rate": 0.125
  },
  {
   "id": "18109702906885203",
@@ -10861,7 +10861,7 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 33,
+  "reach": 34,
   "likes": 2,
   "comments": 0,
   "saved": 0,
@@ -10869,7 +10869,7 @@
   "total_interactions": 2,
   "views": 49,
   "interactions": 2,
-  "eng_rate": 0.0606
+  "eng_rate": 0.0588
  },
  {
   "id": "18058580696563306",
@@ -10895,7 +10895,7 @@
   "format": "reel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 9,
+  "reach": 10,
   "likes": 0,
   "comments": 0,
   "saved": 0,
@@ -10918,7 +10918,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 37,
+  "views": 40,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
