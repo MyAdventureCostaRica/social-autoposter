@@ -10295,7 +10295,7 @@
   "format": "reel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "ROUTE",
-  "reach": 102,
+  "reach": 103,
   "likes": 6,
   "comments": 0,
   "saved": 0,
@@ -10303,7 +10303,7 @@
   "total_interactions": 6,
   "views": 130,
   "interactions": 6,
-  "eng_rate": 0.0588
+  "eng_rate": 0.0583
  },
  {
   "id": "18616479508024429",
@@ -10659,15 +10659,15 @@
   "format": "reel",
   "category": null,
   "pillar": null,
-  "reach": 77,
+  "reach": 78,
   "likes": 9,
   "comments": 2,
   "saved": 0,
   "shares": 0,
   "total_interactions": 12,
-  "views": 138,
+  "views": 139,
   "interactions": 12,
-  "eng_rate": 0.1558
+  "eng_rate": 0.1538
  },
  {
   "id": "18121286624303316",
@@ -10901,7 +10901,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 72,
+  "views": 73,
   "interactions": 1,
   "eng_rate": 0.0161
  },
@@ -10918,7 +10918,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 75,
+  "views": 76,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 6,
@@ -10949,17 +10949,17 @@
   "format": "carousel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "ROUTE/DESTINATION",
-  "reach": 7,
-  "likes": 1,
+  "reach": 23,
+  "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 1,
-  "views": 25,
-  "profile_visits": 0,
+  "total_interactions": 4,
+  "views": 64,
+  "profile_visits": 2,
   "follows": 0,
-  "interactions": 1,
-  "eng_rate": 0.1429
+  "interactions": 4,
+  "eng_rate": 0.1739
  },
  {
   "id": "17881231185526268",
