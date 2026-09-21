@@ -10986,17 +10986,17 @@
   "format": "single",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "reach": 5,
-  "likes": 0,
+  "reach": 23,
+  "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 0,
-  "views": 10,
+  "total_interactions": 2,
+  "views": 42,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 0,
-  "eng_rate": 0.0
+  "interactions": 2,
+  "eng_rate": 0.087
  },
  {
   "id": "18002175830996479",
@@ -11005,8 +11005,15 @@
   "format": "story",
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
-  "error": "(#10) Not enough viewers for the media to show insights",
+  "reach": 27,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 0,
+  "views": 30,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 25,
   "interactions": 0,
-  "eng_rate": null
+  "eng_rate": 0.0
  }
 ]
