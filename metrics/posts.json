@@ -8151,5 +8151,25 @@
   "category": "BESPOKE JOURNEYS",
   "pillar": "KNOWLEDGE",
   "caption": "Deep in the cloud forests of Costa Rica, the largest trees begin in the air. A strangler fig starts life as a seed in th"
+ },
+ {
+  "id": "18011255852967210",
+  "date": "2026-09-23",
+  "ts": "2026-09-23T15:27:04",
+  "base": "IMG_2789",
+  "format": "carousel",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "Costa Rica is home to over 1,400 orchid species, most of which live entirely in the air. These epiphytes cling to tree b"
+ },
+ {
+  "id": "18144567964576030",
+  "date": "2026-09-23",
+  "ts": "2026-09-23T15:27:04",
+  "base": "IMG_2789-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "Costa Rica is home to over 1,400 orchid species, most of which live entirely in the air. These epiphytes cling to tree b"
  }
 ]
