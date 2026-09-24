@@ -10500,7 +10500,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 112,
+  "views": 114,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 8,
@@ -10750,7 +10750,7 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 31,
+  "reach": 32,
   "likes": 4,
   "comments": 0,
   "saved": 0,
@@ -10760,7 +10760,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.129
+  "eng_rate": 0.125
  },
  {
   "id": "17907579396473656",
@@ -11097,17 +11097,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 6,
+  "reach": 11,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 9,
+  "views": 27,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.1667
+  "eng_rate": 0.0909
  },
  {
   "id": "18064211630610119",
@@ -11116,8 +11116,15 @@
   "format": "story",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "error": "(#10) Not enough viewers for the media to show insights",
-  "interactions": 0,
-  "eng_rate": null
+  "reach": 14,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 1,
+  "views": 15,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 13,
+  "interactions": 1,
+  "eng_rate": 0.0714
  }
 ]
