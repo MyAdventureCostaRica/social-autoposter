@@ -10949,7 +10949,7 @@
   "format": "carousel",
   "category": "BESPOKE JOURNEYS",
   "pillar": "ROUTE/DESTINATION",
-  "reach": 37,
+  "reach": 0,
   "likes": 6,
   "comments": 0,
   "saved": 0,
@@ -10959,7 +10959,7 @@
   "profile_visits": 2,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.1622
+  "eng_rate": null
  },
  {
   "id": "17881231185526268",
@@ -11135,16 +11135,16 @@
   "category": "CYCLING",
   "pillar": "FOUNDER",
   "reach": 19,
-  "likes": 5,
+  "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 5,
-  "views": 59,
+  "total_interactions": 6,
+  "views": 65,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 5,
-  "eng_rate": 0.2632
+  "interactions": 6,
+  "eng_rate": 0.3158
  },
  {
   "id": "18061158533527548",
