@@ -11171,15 +11171,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 22,
+  "reach": 25,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 53,
+  "views": 57,
   "interactions": 6,
-  "eng_rate": 0.2727
+  "eng_rate": 0.24
  },
  {
   "id": "18000335390801625",
@@ -11189,16 +11189,16 @@
   "category": "CYCLING",
   "pillar": "ROUTE",
   "reach": 11,
-  "likes": 4,
+  "likes": 5,
   "comments": 1,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 5,
-  "views": 18,
+  "total_interactions": 6,
+  "views": 27,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 5,
-  "eng_rate": 0.4545
+  "interactions": 6,
+  "eng_rate": 0.5455
  },
  {
   "id": "18008370002770966",
