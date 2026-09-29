@@ -201,7 +201,7 @@ def main():
         raise SystemExit("Missing META_ACCESS_TOKEN.")
     # Guard: one reel per day. We schedule a backup attempt, so skip if already done.
     lr = os.path.join(HERE, "metrics", "last_reel.txt")
-    today = time.strftime("%Y-%m-%d")
+    today = ap.cr_today()
     if os.path.exists(lr) and open(lr).read().strip() == today:
         print("Already posted a reel today; skipping."); return
     import cloudinary, cloudinary.uploader
@@ -257,7 +257,7 @@ def _do_publish_reel(state):
     log_post(mid, base, {"category": state.get("category"), "pillar": state.get("pillar"),
                          "caption_en": state.get("_caption_en", "")})
     os.makedirs(os.path.join(HERE, "metrics"), exist_ok=True)
-    open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(time.strftime("%Y-%m-%d"))
+    open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(ap.cr_today())
     perm = ""
     try:
         with urllib.request.urlopen(
@@ -282,7 +282,7 @@ def stage_reel():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
     lr = os.path.join(HERE, "metrics", "last_reel.txt")
-    today = time.strftime("%Y-%m-%d")
+    today = ap.cr_today()                          # Costa Rica date, not the runner's UTC
     force = os.environ.get("FORCE_POST") == "1"
     if not force and os.path.exists(lr) and open(lr).read().strip() == today:
         print("Already staged/posted a reel today; skipping."); return
@@ -327,21 +327,8 @@ def stage_reel():
              "base": pid.split("/")[-1], "status": "pending",
              "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "_caption_en": meta.get("caption_en", "")}
     if (ap.rget("settings", {}) or {}).get("auto_approve"):
-        # Owner's rule (Sep 10/14 2026): a clip he uploaded himself, OR a "Prepare a reel"
-        # button press (FORCE_POST), is HIM asking — it posts now. The morning hold applies
-        # only to clips the scheduler picked on its own.
-        human = manual or os.environ.get("FORCE_POST") == "1"
-        hold = None if human else ap.morning_hold_iso()
-        if hold:
-            state["status"] = "approved"; state["hold_until"] = hold
-            _requeue_prev_reel(state)                 # never discard what's already waiting
-            ap.rset("pending_reel", state)
-            ap.git_setup()
-            open(os.path.join(HERE, "metrics", "last_reel.txt"), "w").write(today)
-            ap.commit_push("Stage reel (auto-approved, held for morning) [skip ci]")
-            ap.wa_notify("Reel auto-approved — publishes at 8:00 AM (best-hours window). " + ap.DASHBOARD_URL)
-            print("Auto-approve ON but outside the 08–15 CR window — reel held until", hold)
-            return
+        # Owner's rule (Sep 28 2026): with auto-approve ON a reel goes out the moment there
+        # is one — no morning hold, never left for the next day.
         print("Auto-approve ON — publishing reel now.")
         _do_publish_reel(state)
         # (this reel was never stored in the slot — an older undecided reel may still be
@@ -361,15 +348,7 @@ def publish_pending_reel():
     state = ap.rget("pending_reel")
     if not state or state.get("status") != "approved":
         print("No approved reel to publish."); return
-    hu = state.get("hold_until")
-    if hu:
-        try:
-            import datetime as _dt
-            if time.time() < _dt.datetime.fromisoformat(hu.replace("Z", "+00:00")).timestamp():
-                print(f"Approved reel held for the morning window (until {hu}) — skipping."); return
-        except Exception:
-            pass
-    try:
+    try:                                              # (morning hold removed Sep 28 2026 — owner's rule)
         _do_publish_reel(state)
     except Exception as e:
         err = str(e)[:300]

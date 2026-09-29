@@ -70,6 +70,8 @@ module.exports = async function handler(req, res) {
     if (action === "set_setting") return res.json(await setSetting(body));
     if (action === "dispatch") return res.json(await dispatch(body.workflow));
     if (action === "recaption_post") return res.json(await recaptionPost());
+    if (action === "queue_post_now") return res.json(await queuePostNow(body));
+    if (action === "queue_reject") return res.json(await queueReject(body));
     if (action === "recaption_reel") return res.json(await dispatch("reel"));
     return res.status(404).json({ ok: false, error: "unknown action" });
   } catch (e) {
@@ -200,8 +202,9 @@ async function getReview() {
 
 // One call for the live dashboard poll: what's awaiting approval + what just went live.
 async function getStatus() {
-  const [p, reel, pubRaw] = await Promise.all([
-    rget("pending_post", null), rget("pending_reel", null), rget("last_published", null)]);
+  const [p, reel, pubRaw, q, rq] = await Promise.all([
+    rget("pending_post", null), rget("pending_reel", null), rget("last_published", null),
+    rget("pending_queue", []), rget("pending_reel_queue", [])]);
   let published = pubRaw || null;
   // Always have a preview: if the saved record has no image but knows its Instagram
   // media id, pull the post's thumbnail straight from Instagram (once) and cache it.
@@ -218,6 +221,9 @@ async function getStatus() {
     ok: true,
     pending: p && !p.skip && p.status !== "approved" ? p : null,
     pendingReel: reel && reel.status !== "approved" ? reel : null,
+    // Queued items (owner's rule: never in the background where he "cannot do a thing")
+    queue: (Array.isArray(q) ? q : []).filter(x => x && !x.skip && x.base),
+    reelQueue: (Array.isArray(rq) ? rq : []).filter(x => x && x.base),
     published,
   };
 }
@@ -229,15 +235,12 @@ async function approvePost({ caption }) {
     p.edited = p.caption !== String(caption).trim();
     p.caption = String(caption).trim();
   }
-  p.status = "approved";
-  const hold = holdUntilMorning();
-  if (hold) p.hold_until = hold; else delete p.hold_until;
+  p.status = "approved"; delete p.hold_until; delete p.last_error;   // owner's rule Sep 28 2026: approve = post now
   await rset("pending_post", p);
   const dec = await rget("post_decisions", []);
   dec.push({ base: p.base, pillar: p.pillar, decision: "approved",
              edited: !!p.edited, ts: new Date().toISOString() });
   await rset("post_decisions", dec.slice(-200));
-  if (hold) return { ok: true, status: "approved", held: true };   // 08:00-CR cron releases it
   const ok = await dispatchWf("publish.yml");           // publish it now
   return { ok, status: "approved" };
 }
@@ -277,15 +280,12 @@ async function approveReel({ caption }) {
     p.edited = p.caption !== String(caption).trim();
     p.caption = String(caption).trim();
   }
-  p.status = "approved";
-  const hold = holdUntilMorning();
-  if (hold) p.hold_until = hold; else delete p.hold_until;
+  p.status = "approved"; delete p.hold_until; delete p.last_error;   // owner's rule Sep 28 2026: approve = post now
   await rset("pending_reel", p);
   const dec = await rget("post_decisions", []);
   dec.push({ base: p.base, pillar: p.pillar, format: "reel", decision: "approved",
              edited: !!p.edited, ts: new Date().toISOString() });
   await rset("post_decisions", dec.slice(-200));
-  if (hold) return { ok: true, status: "approved", held: true };   // 08:00-CR cron releases it
   const ok = await dispatchWf("publish.yml");
   return { ok, status: "approved" };
 }
@@ -330,17 +330,55 @@ async function setSetting({ key, value }) {
 }
 
 // --- Trigger any of our workflows (workflow_dispatch) --------------------------
-// --- Morning publish window (data: every strong result publishes 08:00–15:00 CR; ---
-// --- everything after 16:00 is weak). Approvals outside the window are HELD and ---
-// --- released by the Vercel cron's 08:00-CR publish slot. CR is UTC-6, no DST.  ---
-function holdUntilMorning() {
-  const now = new Date();
-  const crHour = (now.getUTCHours() + 24 - 6) % 24;
-  if (crHour >= 8 && crHour < 15) return null;          // inside the good window — publish now
-  const rel = new Date(now);
-  rel.setUTCHours(14, 5, 0, 0);                          // 14:05 UTC = 08:05 CR
-  if (rel <= now) rel.setUTCDate(rel.getUTCDate() + 1);  // evening → tomorrow morning
-  return rel.toISOString();
+// --- Queue controls (owner's ask, Sep 28 2026): a queued post/reel can be sent live or ---
+// --- rejected straight from the dashboard. kind = "post" | "reel", base identifies it. ---
+async function queuePostNow({ kind, base }) {
+  const isReel = kind === "reel";
+  const qKey = isReel ? "pending_reel_queue" : "pending_queue";
+  const slotKey = isReel ? "pending_reel" : "pending_post";
+  const q = (await rget(qKey, [])) || [];
+  const idx = q.findIndex(x => x && x.base === base);
+  if (idx < 0) return { ok: false, error: "not in the queue any more" };
+  const slot = await rget(slotKey, null);
+  if (slot && !slot.skip && slot.status === "approved")
+    return { ok: false, error: "a " + (isReel ? "reel" : "post") + " is publishing right now — try again in a minute" };
+  const [item] = q.splice(idx, 1);
+  // whatever undecided item sits in the slot goes to the FRONT of the queue, never lost
+  if (slot && !slot.skip && slot.status === "pending" && slot.base !== item.base
+      && !q.some(x => x && x.base === slot.base)) q.unshift(slot);
+  await rset(qKey, q.slice(0, 5));
+  item.status = "approved"; delete item.hold_until; delete item.last_error;
+  await rset(slotKey, item);
+  const dec = await rget("post_decisions", []);
+  dec.push({ base: item.base, pillar: item.pillar, format: isReel ? "reel" : item.format,
+             decision: "approved", from_queue: true, ts: new Date().toISOString() });
+  await rset("post_decisions", dec.slice(-200));
+  const ok = await dispatchWf("publish.yml");
+  return { ok, status: "approved", base: item.base };
+}
+
+async function queueReject({ kind, base }) {
+  const isReel = kind === "reel";
+  const qKey = isReel ? "pending_reel_queue" : "pending_queue";
+  const q = (await rget(qKey, [])) || [];
+  const idx = q.findIndex(x => x && x.base === base);
+  if (idx < 0) return { ok: false, error: "not in the queue any more" };
+  const [item] = q.splice(idx, 1);
+  await rset(qKey, q);
+  if (isReel) {
+    const rc = await rget("rejected_clips", []);
+    if (item.public_id && !rc.includes(item.public_id)) rc.push(item.public_id);
+    await rset("rejected_clips", rc.slice(-500));
+  } else {
+    const rb = await rget("rejected_bases", []);   // the daily job deletes the photo (owner's rule)
+    if (item.base && !rb.includes(item.base)) rb.push(item.base);
+    await rset("rejected_bases", rb.slice(-500));
+  }
+  const dec = await rget("post_decisions", []);
+  dec.push({ base: item.base, pillar: item.pillar, format: isReel ? "reel" : item.format,
+             decision: "rejected", from_queue: true, ts: new Date().toISOString() });
+  await rset("post_decisions", dec.slice(-200));
+  return { ok: true, status: "rejected", base: item.base };
 }
 
 // "New caption" on the pending-post card: flag Upstash, then run the post workflow —

@@ -193,6 +193,7 @@
   <div id="controls"></div>
   <div id="pending"></div>
   <div id="pendingReel"></div>
+  <div id="queue"></div>
   <div id="published"></div>
   <div id="review-top"></div>
   <div id="inbox"></div>
@@ -707,7 +708,7 @@ function setMcStatus(state, msg){
 async function renderLive(announce){
   const pe=document.getElementById('pending'), pre=document.getElementById('pendingReel'), pubEl=document.getElementById('published');
   if(!connected()){
-    if(pe)pe.innerHTML=''; if(pre)pre.innerHTML=''; if(pubEl)pubEl.innerHTML='';
+    if(pe)pe.innerHTML=''; if(pre)pre.innerHTML=''; if(pubEl)pubEl.innerHTML=''; const qe=document.getElementById('queue'); if(qe)qe.innerHTML='';
     setMcStatus(false,'not connected'); return;
   }
   let r=null; try{ r=await ctrl('status',{}); }catch(e){}
@@ -726,7 +727,43 @@ async function renderLive(announce){
   setMcStatus(true,'connected');
   renderPendingCard(r.pending, announce);
   renderReelCard(r.pendingReel, announce);
+  renderQueue(r.queue||[], r.reelQueue||[]);
   renderPublishedBanner(r.published, announce);
+}
+// Queued posts/reels — the owner's rule (Sep 28 2026): never in the background where he
+// "cannot do a thing". Each row can be sent live or rejected right here.
+function renderQueue(q, rq){
+  const el=document.getElementById('queue'); if(!el) return;
+  const items=[...q.map(x=>({kind:'post',x})), ...rq.map(x=>({kind:'reel',x}))];
+  const key=items.map(i=>i.kind+':'+(i.x.base||'')+':'+(i.x.ts||'')).join('|');
+  if(!items.length){ el.innerHTML=''; el.dataset.key=''; return; }
+  if(el.dataset.key===key && el.querySelector('.pending-card')) return;   // no flicker while polling
+  el.dataset.key=key;
+  const rows=items.map(({kind,x})=>{
+    const img=kind==='reel'?(x.thumb_url||''):((x.image_urls&&x.image_urls[0])||x.image_url||'');
+    const cap=(x.caption||'').split('\n')[0].slice(0,160);
+    return `<div class="q-row" data-kind="${kind}" data-base="${escA(x.base||'')}" style="display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-top:1px solid rgba(92,69,32,.15)">`
+      +(img?`<img class="pp-thumb" style="width:84px;height:84px" src="${escA(img)}" onerror="imgFail(this,'${kind==='reel'?'REEL':'IMG'}')">`:'')
+      +`<div style="flex:1;min-width:0"><div style="margin-bottom:6px"><span class="chip">${kind==='reel'?'Reel':esc(x.format||'post')}</span> <span class="chip">${esc((x.pillar||'').toString())}</span>`
+      +(x.last_error?` <span class="chip" style="background:rgba(184,90,32,.12);color:var(--terracotta)">last attempt failed</span>`:'')+`</div>`
+      +`<div class="muted" style="font-size:13px;line-height:1.4">${esc(cap)}${(x.caption||'').length>160?'…':''}</div>`
+      +`<div class="ic-actions" style="margin-top:8px"><button class="mc-btn send" onclick="queueAct(this,'now')">Post now</button>`
+      +`<button class="mc-btn" onclick="queueAct(this,'reject')">Reject</button><span class="ic-stat muted" style="font-size:13px"></span></div></div></div>`;
+  }).join('');
+  el.innerHTML=`<div class="pending-card" style="border-left-color:var(--clay-soft)"><div class="ic-head"><span class="eyebrow">Queued — waiting for your decision</span><span class="chip">${items.length}</span></div>`
+    +`<div class="muted" style="font-size:12px;margin:4px 0 2px">Nothing here publishes on its own. Post now sends it live immediately; Reject deletes the photo.</div>${rows}</div>`;
+}
+function queueAct(btn, what){
+  const row=btn.closest('.q-row'); const stat=row.querySelector('.ic-stat');
+  const kind=row.dataset.kind, base=row.dataset.base;
+  const go=()=>{
+    row.querySelectorAll('button').forEach(b=>b.disabled=true); stat.textContent=what==='now'?'Publishing…':'Rejecting…';
+    ctrl(what==='now'?'queue_post_now':'queue_reject',{kind,base}).then(r=>{
+      if(r&&r.ok){ stat.textContent=what==='now'?'Posting now ✓':'Rejected ✓'; uiToast(what==='now'?'Publishing now':'Rejected'); document.getElementById('queue').dataset.key=''; setTimeout(()=>renderLive(false),1500); }
+      else { stat.textContent='Failed: '+((r&&r.error)||'error'); row.querySelectorAll('button').forEach(b=>b.disabled=false); }
+    }).catch(e=>{ stat.textContent='Failed: '+e; row.querySelectorAll('button').forEach(b=>b.disabled=false); });
+  };
+  if(what==='reject') uiConfirm('Reject this one? The photo will be deleted.','Reject').then(ok=>{ if(ok) go(); }); else go();
 }
 function renderReelCard(p, announce){
   const el=document.getElementById('pendingReel'); if(!el) return;
@@ -756,8 +793,7 @@ function approveReelBtn(btn){
   const stat=card.querySelector('.ic-stat'); stat.textContent='Publishing…';
   card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
   ctrl('approve_reel',{caption:cap}).then(r=>{
-    if(r&&r.ok&&r.held){ stat.textContent='Approved ✓ — publishes at 8:00 AM (best-hours window)'; uiToast('Reel approved — it publishes tomorrow at 8:00 AM, when posts perform best'); setTimeout(()=>card.remove(),2200); }
-    else if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Reel approved — publishing now'); setTimeout(()=>card.remove(),1000); }
+    if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Reel approved — publishing now'); setTimeout(()=>card.remove(),1000); }
     else { stat.textContent='Failed: '+((r&&r.error)||'error'); card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }
   });
 }
@@ -845,9 +881,7 @@ function approvePending(btn){
   const stat=card.querySelector('.ic-stat'); stat.textContent='Publishing…';
   card.querySelectorAll('button,textarea').forEach(b=>b.disabled=true);
   ctrl('approve_post',{caption:cap}).then(r=>{
-    if(r&&r.ok&&r.held){ stat.textContent='Approved ✓ — publishes at 8:00 AM (best-hours window)'; uiToast('Approved — it publishes tomorrow at 8:00 AM, when posts perform best');
-      setTimeout(()=>{card.remove();},2200);
-    } else if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Approved — publishing now');
+    if(r&&r.ok){ stat.textContent='Approved — posting ✓'; uiToast('Approved — publishing now');
       setTimeout(()=>{card.remove();},1000);
     } else { stat.textContent='Failed: '+((r&&r.error)||'error'); uiToast('Failed: '+((r&&r.error)||'error'));
       card.querySelectorAll('button,textarea').forEach(b=>b.disabled=false); }

@@ -11,7 +11,7 @@
  *
  * Costa Rica is UTC-6 (no DST). Times below are UTC.
  *   responder   every 5 min          (engagement: comments + DMs)
- *   daily post  15:15 UTC = 09:15 CR  (+ backups 11:15 / 13:15 CR, no-ops once posted)
+ *   daily post  15:15 UTC = 09:15 CR  (+ backups 11:15 / 13:15 / 15:15 / 17:15 / 19:15 CR, no-ops once posted)
  *   insights    16:20 UTC = 10:20 CR
  *   reels       Tue & Fri 18:15 UTC = 12:15 CR
  *   review      1st of month 15:20 UTC
@@ -58,7 +58,7 @@ module.exports = async function handler(req, res) {
 
   const due = [];
   if (m < 5) due.push("respond.yml");                             // responder: HOURLY (owner's call, Sep 10 2026 — every 5 min burned Actions minutes for nothing)
-  if (inSlot(14, 5)) due.push("publish.yml");                     // 08:05 CR — release posts approved after hours (morning window)
+  if (inSlot(14, 5)) due.push("publish.yml");                     // 08:05 CR — safety sweep: publishes anything approved that a failed dispatch left behind (no-op otherwise)
   if (inSlot(15, 15)) due.push("daily-post.yml");                 // 09:15 CR
   // Backup slots inside the best-hours window. autopost.py's "already posted today"
   // guard makes them no-ops on a normal day; they matter when 09:15 hit a caption
@@ -66,9 +66,14 @@ module.exports = async function handler(req, res) {
   // late, after the window, and the day's post was lost).
   if (inSlot(17, 15)) due.push("daily-post.yml");                 // 11:15 CR (backup)
   if (inSlot(19, 15)) due.push("daily-post.yml");                 // 13:15 CR (backup)
+  if (inSlot(21, 15)) due.push("daily-post.yml");                 // 15:15 CR (backup)
+  if (inSlot(23, 15)) due.push("daily-post.yml");                 // 17:15 CR (backup)
+  if (inSlot(1, 15))  due.push("daily-post.yml");                 // 19:15 CR (last try of the CR day — owner: "post when possible, never leave it for the next day")
   if (inSlot(16, 20)) due.push("insights.yml");                   // 10:20 CR
   if (day === 5 && inSlot(18, 15)) due.push("reel-post.yml");     // Fri 12:15 CR
+  if (day === 5 && inSlot(21, 15)) due.push("reel-post.yml");     // Fri 15:15 CR (backup, no-op once a reel is out)
   if (day === 6 && inSlot(15, 0)) due.push("reel-post.yml");      // Sat 09:00 CR — the data's best day (avg reach 717, n=7)
+  if (day === 6 && inSlot(18, 0)) due.push("reel-post.yml");      // Sat 12:00 CR (backup)
   if (date === 1 && inSlot(15, 20)) due.push("review.yml");       // 1st of month
 
   const results = [];

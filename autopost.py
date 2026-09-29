@@ -155,21 +155,14 @@ def strip_location_metadata(keep=()):
 
 # GitHub Models retired 2026-07-30 (410 Gone) -> Gemini OpenAI-compatible endpoint
 # (free tier, vision). Endpoint/model/key are env- and config-overridable.
-def morning_hold_iso():
-    """08:00–15:00 CR is the strong publish window (Sep 2026 analysis: 16:00+ publishes
-    are uniformly weak). Outside the window, auto-approved SYSTEM-PICKED content is
-    stored as approved+held; the Vercel cron's 08:05-CR publish slot releases it.
-    Owner's rule (Sep 10 2026): a MANUAL upload under auto-approve is never held —
-    he uploaded it himself, so it means "post it now"."""
+def cr_today():
+    """Today's date in Costa Rica (UTC-6, no DST). The runner's clock is UTC, so an
+    evening post stamped with UTC would land on TOMORROW's date and silently cancel
+    tomorrow's post ("Already posted today"). Owner's rule (Sep 28 2026): a missed post
+    goes out whenever the system can, never left for the next day, and the next day
+    still gets its own post."""
     import datetime as _dt
-    now = _dt.datetime.utcnow()
-    cr_hour = (now.hour + 24 - 6) % 24
-    if 8 <= cr_hour < 15:
-        return None
-    rel = now.replace(hour=14, minute=5, second=0, microsecond=0)
-    if rel <= now:
-        rel += _dt.timedelta(days=1)
-    return rel.strftime("%Y-%m-%dT%H:%M:%SZ")
+    return (_dt.datetime.utcnow() - _dt.timedelta(hours=6)).strftime("%Y-%m-%d")
 
 
 MODELS_URL = os.environ.get("CAPTION_API_URL", "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions")
@@ -937,13 +930,13 @@ def prepare():
     # Guard: only one post per day. We run the schedule several times each morning
     # (GitHub skips/delays single crons), so skip if we already posted today.
     lp = os.path.join(HERE, "metrics", "last_posted.txt")
-    today = time.strftime("%Y-%m-%d")
+    today = cr_today()
     forced = os.environ.get("FORCE_POST") == "1"   # manual "Force" run overrides the guard
     if forced:
         print("FORCE_POST set — bypassing the once-per-day guard.")
     if not forced and os.path.exists(lp) and open(lp).read().strip() == today:
         json.dump({"skip": True, "why": "already posted today"}, open(STATE, "w"))
-        commit_push("Already posted today [skip ci]")
+        # no commit here: backup slots run several times a day and this is the normal no-op
         summary("### Already posted today\nA post already went out today — skipping.")
         print("Already posted today; skipping."); return
     learn = performance_brief()          # what our own analytics say is working now
@@ -1151,20 +1144,11 @@ def prepare():
     json.dump(state, open(STATE, "w"))
     commit_push(f"Stage {base} for review [skip ci]")
     if (rget("settings", {}) or {}).get("auto_approve"):
-        # Owner's rule (Sep 14 2026): a dashboard button press (FORCE_POST) is HIM asking —
-        # it posts now, like a manual upload. The morning hold is only for the scheduler's
-        # own picks. (Sep 10–11: three evening "Prepare" clicks were silently held.)
-        human = os.environ.get("FORCE_POST") == "1"
-        hold = None if human else morning_hold_iso()
-        if hold:
-            state["status"] = "approved"; state["hold_until"] = hold
-            requeue_prev_pending(state)
-            rset("pending_post", state)
-            wa_notify("Auto-approved — publishes at 8:00 AM (best-hours window). " + DASHBOARD_URL)
-            print("Auto-approve ON but outside the 08–15 CR window — held until", hold)
-        else:
-            print("Auto-approve is ON — publishing immediately.")
-            publish(state)      # the new post was never stored as pending_post — leave the
+        # Owner's rule (Sep 28 2026): with auto-approve ON a post goes out the moment there
+        # is one — no morning hold, no waiting for the next day. The scheduler's slots
+        # already sit in the best hours; a late recovery post is better than none.
+        print("Auto-approve is ON — publishing immediately.")
+        publish(state)          # the new post was never stored as pending_post — leave the
                                 # slot alone (an older undecided post may still be in it)
     else:                                             # human review: stage + ping for approval
         requeue_prev_pending(state)                   # never discard an unapproved pending
@@ -1253,7 +1237,7 @@ def publish(st=None):
             mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
             pj = os.path.join(mdir, "posts.json")
             posts = json.load(open(pj)) if os.path.exists(pj) else []
-            today = time.strftime("%Y-%m-%d")
+            today = cr_today()
             now = time.strftime("%Y-%m-%dT%H:%M:%S")
             posts.append({"id": pub.get("id"), "date": today, "ts": now, "base": st["base"],
                           "format": st.get("format") or ("carousel" if len(image_urls) > 1 else "single"),
@@ -1298,7 +1282,7 @@ def publish(st=None):
     if os.path.exists(STATE):
         os.remove(STATE)
     mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
-    open(os.path.join(mdir, "last_posted.txt"), "w").write(time.strftime("%Y-%m-%d"))
+    open(os.path.join(mdir, "last_posted.txt"), "w").write(cr_today())
     # Announce it's LIVE — to the dashboard (Upstash) and WhatsApp, with a direct link.
     permalink = ""
     try:
@@ -1359,15 +1343,7 @@ def publish_pending():
         print("No pending post to publish."); return
     if st.get("status") != "approved":
         print("Pending post not approved yet (status:", st.get("status"), ") — skipping."); return
-    hu = st.get("hold_until")
-    if hu:
-        try:
-            import datetime as _dt
-            if time.time() < _dt.datetime.fromisoformat(hu.replace("Z", "+00:00")).timestamp():
-                print(f"Approved post held for the morning window (until {hu}) — skipping."); return
-        except Exception:
-            pass
-    git_setup()
+    git_setup()                                        # (morning hold removed Sep 28 2026 — owner's rule)
     try:
         publish(st)                                    # reuse the full publish path
     except Exception as e:
