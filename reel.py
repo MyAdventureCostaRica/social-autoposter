@@ -217,9 +217,8 @@ def main():
 
     learn = ap.performance_brief()
     meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
-                          hint="This caption is for a REEL. Keep it SHORT — 1-3 sentences, "
-                               "under 400 characters (long reel captions reduce reach). "
-                               "Same voice, just compact.")
+                          hint="This caption is for a REEL: use the SHORT length only (8 to 30 words, "
+                               "long reel captions reduce reach). Same rules, one beat.")
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()
@@ -303,7 +302,6 @@ def stage_reel():
         print("Ingesting uploaded reel:", ing["public_id"])
     else:
         clip = next_clip()
-    manual = bool(ing and ing.get("public_id"))   # the owner uploaded this clip himself
     if not clip:
         print("No eligible clips (none long enough, or all posted/rejected)."); return
     pid = clip["public_id"]
@@ -312,9 +310,8 @@ def stage_reel():
     print("Clip:", pid, f"({dur:.1f}s)")
     learn = ap.performance_brief()
     meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
-                          hint="This caption is for a REEL. Keep it SHORT — 1-3 sentences, "
-                               "under 400 characters (long reel captions reduce reach). "
-                               "Same voice, just compact.")
+                          hint="This caption is for a REEL: use the SHORT length only (8 to 30 words, "
+                               "long reel captions reduce reach). Same rules, one beat.")
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()
@@ -330,9 +327,32 @@ def stage_reel():
         # Owner's rule (Sep 28 2026): with auto-approve ON a reel goes out the moment there
         # is one — no morning hold, never left for the next day.
         print("Auto-approve ON — publishing reel now.")
-        _do_publish_reel(state)
-        # (this reel was never stored in the slot — an older undecided reel may still be
-        #  waiting there; never wipe it)
+        try:
+            _do_publish_reel(state)
+            # (this reel was never stored in the slot — an older undecided reel may still be
+            #  waiting there; never wipe it)
+        except Exception as e:
+            err = str(e)[:300]
+            if state.get("_ig_media_id"):
+                # Instagram has it; only a follow-up step failed. Finish the bookkeeping so
+                # the next reel slot cannot pick the same clip again (never post twice).
+                print("Reel is live on Instagram; a follow-up step failed:", err)
+                try:
+                    import cloudinary.uploader
+                    cloudinary.uploader.add_tag("posted", pid, resource_type="video")
+                except Exception as e2:
+                    print("tag 'posted' skipped again:", e2)
+                os.makedirs(os.path.join(HERE, "metrics"), exist_ok=True)
+                open(lr, "w").write(today)
+                ap.git_setup()
+                ap.commit_push(f"Posted reel {state.get('base') or pid} [skip ci]")
+                ap.wa_notify(f"⚠️ Reel {state.get('base') or pid} is live on Instagram, but a "
+                             f"follow-up step failed ({err}). Bookkeeping was completed, it "
+                             f"will not be posted twice.")
+            else:
+                ap.wa_notify(f"❌ Today's reel ({state.get('base') or pid}) could not be "
+                             f"published: {err}. The next reel slot retries automatically.")
+                raise
     else:
         _requeue_prev_reel(state)                     # owner's queue rule
         ap.rset("pending_reel", state)

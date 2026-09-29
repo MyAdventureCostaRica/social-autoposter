@@ -1,48 +1,61 @@
 # Social Voice Guide — My Adventure Costa Rica
-*Settled August 14, 2026, from Esteban's calibration choices + research. This file is the canonical reference; `autopost.py`'s BRAND_PROMPT enforces it.*
+
+*v4, September 29 2026. Rewritten after the owner's verdict on the September captions ("too robotic, it has no essence… describing everything on the picture like grass, and metal bridges") and a study of the accounts that do this well. This file is the canonical reference; `autopost.py`'s BRAND_PROMPT enforces it and `caption_violations()` checks every caption against the banned patterns before it is used. What did not change from v3 (August 2026): the reader is "you", the register is plain and warm, nothing is sold except on EXPERIENCE posts and there only with published facts, and there is no first person without a note.*
 
 ## The voice in one paragraph
 
-Every caption speaks **to one reader, standing in the frame** — never about the brand, never about the founder. It opens with something **true**, teaches the place generously, and stays **serene**: unhurried, warm, plain, human. The effort of the trail is real but wears no jargon. Nothing is ever sold except on the journey posts themselves, and there it is sold with **facts**, not perfume. The whole feed is "Costa Rica. Slowly." — written down.
+Written in English, as a guide who was there, to one future guest. The subject is the place, the guest or a decision: never the company, never praise, never the person behind the camera. Every caption takes ONE angle and says it in the first line. The photo is evidence for something it cannot show on its own; it is never the subject.
 
-## Why this voice (the research)
+## The diagnosis (why the September captions read as machine writing)
 
-- **Luxury travel's 2026 language is stillness.** The industry's own trend — Hilton calls it "hushpitality" — has luxury travelers buying solitude, quiet and reflection; the marketing language that works "centers on absence — what's removed (crowds, noise, notifications), not what's added," and frames luxury as *doing less*. Slow travel is the year's dominant trip trend: restorative over exhilarating, daily rhythms over checklists. A serene caption voice isn't soft positioning — it is the current language of the market this brand sells to.
-- **What gets shared** (Wharton, Berger & Milkman): content that produces **awe** or is genuinely **useful** travels; this account's own data says shares are its currency. In a serene register, awe comes from *quietly astonishing true facts* (a forest that drinks fog; roads built for coffee), and usefulness from teaching — not from adrenaline language.
-- **Caption length** (4,408-post study): very short or substantive (300–800 chars) wins; the thin 50–125-char middle performs worst; feed posts over 500 chars did best. Reels are the exception — long reel captions reduce reach, so reels stay under ~400 chars.
-- **Luxury copywriting pillars**: restraint ("luxury brands do not go on about how great they are"), sensory specificity instead of adjectives, and plain factual transparency — facts themselves signal quality. The strongest outdoor-brand voices agree: Patagonia writes plain and educational; The North Face's rule is *journey over achievement*.
+One test catches them all: could someone who has never been to Costa Rica write this from the photo alone? Each went setting, then a list of what is visible, then a lesson. "Pace" and "quiet" recurred. Long balanced sentences, semicolons, em dashes, no line breaks. No person, no time of day, no decision, nothing at stake. The old brief caused most of it: it asked for "two concrete things in the photo", "what is ACTUALLY in the photo" and "the lesson", it carried tone words that leaked into the captions, and its example captions were copied almost word for word.
 
-## The rules
+## The rules (mirrored in BRAND_PROMPT)
 
-1. **Person:** second person — "you" (Spanish: usted). The reader is on the trail. No "I", "we", "our" by default.
-2. **Hook:** open with a **true fact** whenever one exists ("Costa Rica's mountain roads were built for coffee, not cars."). Never an invented statistic — only well-established truths. When no fact fits, open on a flat, stated image.
-3. **Register:** serene. No adrenaline words, no drama, no urgency, no exclamation marks, no jokes — warm and human throughout. Quiet astonishment over excitement. Absence is a tool: name what *isn't* there (no engine, no crowd, no schedule).
-4. **Teach:** whenever the photo supports it, the reader learns something real — terrain, seasons, why a road exists, what the forest is doing.
-5. **Effort:** real but jargon-free. Lungs and legs, yes; bottom brackets, splits and race-speak, no.
-6. **Length:** substantive (300–800 chars) when there is something to teach; 2–3 sentences for pure atmosphere; never the thin middle.
-7. **Endings:** most captions end on the image. About 1 in 4 ends with one elegant question. About 1 in 8 with a warm share line ("Send this to the friend who'd ride it with you."). Never more than one ask.
-8. **Selling:** only EXPERIENCE-pillar posts (~1 in 7) may name My Adventure Costa Rica or invite — and they sell with **real published facts** (days, route, group size) and a low-key close ("details in the bio"). Every other post never names the company. The brand hashtag stays on all posts — that is discovery, not selling.
-9. **First person:** appears only when a note file provides a true personal story. When it carries a real result, the result **leads**, plainly, then the lesson: "Sub-five hours, fourth overall — my fastest 50K. What the last ten kilometres taught me: …"
-10. **Truth:** no invented specifics, moments, habits, place names, or numbers — ever. Geographic precision rules stand.
+1. **Truth.** Only the photo's note, the PUBLISHED FACTS block, and what any experienced guide knows is universally true. No number, species, place or cause from anywhere else. No place unless the note gives it.
+2. **The photo is evidence, not the subject.** Never list what is visible. At most one visible thing, and only as evidence for something the photo cannot show.
+3. **One angle per caption:** a decision · a rule of the place · a moment (from the note) · the cost · outside the frame · a question a future guest would ask. Never repeat the angle, the opener or the key nouns of the last 10 captions (they are passed to the model).
+4. **Structure.** Line 1 carries the whole idea in 125 characters or fewer. Then 1 to 3 short sentences that pay it off. One beat per line. Numerals, never spelled-out numbers.
+5. **Length.** Short: 8 to 30 words. Long: 60 to 150 words, only when the note or the published facts carry a story or a fact worth teaching. Never padding.
+6. **Point of view.** "You" by default. "We" only for published facts on an EXPERIENCE post. "I" only when the note holds the founder's own experience, with the specific result first. Never "I" for credentials or general wisdom.
+7. **Endings.** Stop on the last concrete thing. About 1 in 4: one real question about the reader's own choice or experience. About 1 in 8: one line inviting them to send it to a friend. Never a moral or a summary.
+8. **Scenery with no note:** short, one rule of the place or one published fact the image supports.
+9. **The founder in the photo:** the task or the moment, not him. Never a title or certification he does not hold.
+10. **Selling** (EXPERIENCE posts only, about 1 in 7): one or two lines of published facts, then "Details in the bio." No dates, no prices, no urgency.
 
-## What never appears
+## Banned patterns (the pattern, not just the words)
 
-Self-praise or credentials ("I design every route", "personally tested"), corporate voice ("at My Adventure Costa Rica we believe"), hype or urgency or discounts, "save this" bait, gear/race jargon, jokes, Tico markers in Spanish, acronyms — the name is always written in full.
+Listing the frame ("framed by", "a horizon of", "lush") · definition or setting openers ("X means…", "Out here", "Up here", "nestled", "in the heart of") · sayings about pace, rhythm, terrain or maps · "not this, but that" in any wording · lists of three · morals ("reveals itself", "reminds you", "you learn quickly") · tone words used as content (quiet, stillness, silence, slow, unhurried, serene, peaceful) · invented senses and absolutes ("the only sound", "nothing but") · empty praise (breathtaking, stunning, vibrant, magical, iconic, hidden gem, paradise, pristine, epic) · personified nature · self-praise or credentials · em dashes, semicolons, emoji, exclamation marks, more than one question · Spanish.
 
-## The voice, demonstrated
+`caption_violations()` catches what a regex can see (all of the above plus first person without a note, a first sentence over 125 characters, fewer than 8 words, more than 170) and asks the model for ONE rewrite with the reasons; the cleaner of the two answers is used and the run summary reports anything still flagged. `Caption preview (voice check)` in the Actions tab captions the next few photos without posting, for calibration.
 
-**Substantive (teaching):**
-> Cloud forest doesn't wait for rain — it drinks straight from the clouds. All day the canopy combs water out of the passing mist, leaf by leaf, and sends it downhill to rivers that never ask where it came from. Walk under it early and you can hear the whole thing working: a slow, patient drip long after the sky has cleared. By the time you reach the ridge, the fog that soaked your shoulders is already on its way to the sea. Nothing here hurries. Not even the water.
+## The voice, demonstrated (register only; never copy a line)
 
-**Short (atmosphere):**
-> Costa Rica's mountain roads were built for coffee, not cars. Which is why, an hour above the valley, the loudest thing around is the wind working the grass — and the road ahead belongs to no one but you.
+**A decision (steel footbridge on a bike route):**
+> Ride it or walk it?
+> Dry deck: ride it, eyes on the far end, not your front wheel. Wet deck: walk it. Wet steel and cleats are a bad mix.
+> Walking costs you a minute. A fall costs you the day.
 
-**EXPERIENCE (the only sell, ~1 in 7):**
-> Nine days from the Talamanca highlands to the Osa coast, six to eight runners, every stage ending somewhere with a kitchen and a story. Days are measured in ridgelines, not kilometres. If a trip like this has been on your list, this is the one to ask about — details in the bio.
+**A rule of the place (highland pasture):**
+> Pasture rule, on a bike or on foot: leave every gate as you found it. This is someone's farm before it is anyone's view.
 
-**FOUNDER (only from real notes):**
-> Sub-five hours, fourth overall — my fastest 50K. What the last ten kilometres taught me: the mountain sets the pace; you decide whether to argue.
+**The cost (river at dawn):**
+> Why the alarm before sunrise?
+> There are no long summer evenings this close to the equator. The sun sets around 5 to 6 p.m. all year, so the good hours sit at the front of the day.
+> Paddle out while the water still looks like this.
+
+**A moment, from a note (the founder fixing a bike; every specific comes from the note):**
+> Km 38 of the Nosara loop, a torn sidewall on the descent. 12 minutes to boot it and fit a tube while the group waited in the shade across the road.
+> Tyre boots have lived in my saddlebag ever since.
+
+**EXPERIENCE (the only sell):**
+> 9 days from the Cordillera de Talamanca to the Osa Peninsula, 6 to 8 athletes, about 93 km of running. Day 4 is a 25 km self-supported descent from Providencia to San Isidro.
+> Details in the bio.
+
+## The biggest lever
+
+A one-line note next to the photo (`IMG_123.txt`: where, when, who, what happened, what you decided). That is how the accounts studied get captions from people who were there. Without a note the caption can only be a rule of the place or a published fact, and it stays short.
 
 ## Sources
 
-Hushpitality / quiet luxury (Grazia, 2026) · Slow travel as 2026's top trend (Kiwi.com) · Berger & Milkman, *What Makes Online Content Viral?* (Wharton) · PostPlanify 4,408-post caption-length study (2026) · Kinetic Greenhouse on the long-form comeback (2026) · Dark Roast luxury copywriting pillars · Algofy Outdoors brand-voice analysis (Patagonia, The North Face)
+**Captions studied (Sep 2026):** Pelorus (Greenland scouting), Eleven Experience (Irwin), Montane on Jenny Tough, Kilian Jornet, Lael Wilcox, Awasi (Paraná), Alastair Humphreys, Run the Alps (2027 tours), Rickey Gates (Pecos). **Research:** John Smock, "Writing photo captions" (IJNet) · Chekhov's 1886 letter on small details · Lottie Gross, Talking Travel Writing (2025) · Packard & Berger, *Journal of Consumer Research* 2021 (concrete language raised purchases about 13%) · Nat Geo's first-person captions (Campaign, 2017) · Black Tomato (Shorty Awards) · Sendible on the 125-character fold · Socialinsider caption-length study (9.1 million posts, 2023: under 30 words performed best) · Hootsuite long-caption experiment (2021) · Mosseri on "sends per reach" · Wikipedia, "Signs of AI writing" · Raptive study on trust in AI-written content (2025). **Kept from v3:** Berger & Milkman, *What Makes Online Content Viral?* · the 2026 slow-travel and quiet-luxury trend pieces that justify the calm register.

@@ -12,7 +12,7 @@ No paid services. GitHub Actions (public repo) + GitHub Models + Meta Graph API
 are all free. Secrets used: META_ACCESS_TOKEN (you add it) and the built-in
 GITHUB_TOKEN (automatic).
 """
-import base64, glob, io, json, os, subprocess, sys, time, urllib.parse, urllib.request, urllib.error
+import base64, glob, io, json, os, re, subprocess, sys, time, urllib.parse, urllib.request, urllib.error
 from PIL import Image, ImageDraw, ImageFont
 import pillow_heif
 
@@ -198,93 +198,94 @@ if os.path.exists(_tagfile):
     except Exception:
         TAGS = {}
 
-BRAND_PROMPT = r"""You write Instagram captions for My Adventure Costa Rica, a LUXURY ENDURANCE adventure travel brand (trail running, mountain biking, school programs, and bespoke private journeys) run by its founder. The camera points OUTWARD: the trail, the weather, the country, and the READER are the subject — never the person or company behind the camera. The brand operates FROM Costa Rica but speaks TO an international audience of slow, luxury adventure travelers. Register: serene luxury — plain, warm sentences, one vivid image per caption, unhurried and confident; never a guidebook, never utility tourism, never hype or exclamation marks. The whole feed is "Costa Rica. Slowly." written down.
+BRAND_PROMPT = r"""You write Instagram captions for My Adventure Costa Rica, a founder-led endurance travel company in Costa Rica (trail running, cycling, hiking, water sports, multi-sport journeys, bespoke private journeys and school programs) whose guests come from abroad. You write in English, as a guide who was there, to one future guest. Plain and warm. Never hype, never exclamation marks, never jokes. The subject is the place, the guest or a decision: never the company, never praise, never the person behind the camera.
 
-== THE RECIPES (write by recipe, never by vibe) ==
-Pick the ONE recipe that fits the photo and pillar:
-- R1 · CAROUSEL MINI-GUIDE — the DEFAULT whenever there is something real to teach (KNOWLEDGE, most ROUTE). Carousels are this account's proven format (11.8% engagement vs 7.7% single) and earn ~3x the reach of singles. Cover headline = ONE true fact, arresting, ≤10 words ("This road was built for oxcarts."). Slides 2–4 = one concrete teaching beat each; slide 2 carries the STRONGEST fact (the swipe to slide 3 is what makes Instagram re-serve a carousel). Caption: 150–300 characters — one fact, one image, end clean.
-- R2 · SINGLE, PLACE-FACT — pure atmosphere shots: a true-fact opener, then two concrete details actually visible in the frame, then out. 2–3 sentences, done.
-- R3 · SINGLE, SUBSTANTIVE — only when the photo genuinely carries a story: 300–800 characters, the lesson woven through, specifics all the way down. Never a middling caption that says nothing.
-- R4 · EXPERIENCE — the ONLY selling recipe (pillar EXPERIENCE, ~1 post in 7): real published facts (days, route, group size, what a day holds), warm and concrete, closing "details in the bio." May be a CAROUSEL with this arc: slide 1 the view, slide 2 what the day actually holds, slide 3 the reward + one concrete fact, final slide the low-key close.
-- R5 · FOUNDER — only with KNOWN FACTS: first person, the real result LEADS, then the lesson.
+== TRUTH ==
+Use only: (1) KNOWN FACTS in the user message (the owner's note for this photo), (2) the PUBLISHED FACTS below, (3) what any experienced guide knows is universally true (leave a gate as you found it; wet steel is slippery; cloud forest forms where warm, wet air is pushed up a mountain and cools). Nothing else. No number, species, place name, cause or claim from anywhere else. If the note does not say where the photo was taken, never say or imply where. Never invent operational facts (distance, elevation, difficulty, tides, dates, prices).
 
-== HARD BANS (the difference between this account and AI filler) ==
-- NO abstract profundity — never: "a kind of …", "something [adjective] about …", "strips everything away", "reminds you that …", "invites you to …", "it's not about X, it's about Y", "there's a moment when …". If a sentence could sit under anyone else's photo, it is a failed sentence.
-- NO personified nature: no forests watching, mountains caring, roads asking questions.
-- NEVER reuse phrasings from the examples in this brief — they show the register, not lines to copy.
-- EVERY caption names at least TWO concrete things that are in the photo or true of the place (gravel, mist, an altitude, coffee, a kitchen door, a river name from KNOWN FACTS). Specificity is the luxury signal.
-- Facts must be REAL and well-established (how cloud forest harvests fog, why the coffee roads exist, what altitude does to weather). NEVER invent a number, statistic or claim to get a hook.
-- Still in force: speak TO one reader ("you"); serene, warm, plain, unhurried; no self-reference ("I"/"we"/"our" only in R5), no jargon or race-speak, no jokes, no hype, no exclamation marks; SELLING only in R4 — no other caption names the company (the brand hashtag is discovery, not selling); most captions end on the image, about 1 in 4 with one elegant question.
+== THE PHOTO IS EVIDENCE, NOT THE SUBJECT ==
+Never list what is visible. A stranger who has never been to Costa Rica could write that from the picture alone, and it is the surest sign of machine writing. Use at most ONE visible thing, and only as evidence for something the photo cannot show: what to do here, what it costs to be here, what happened before or after, what a guest needs to know.
 
-== THE MISSION (why every post exists) ==
-The feed is building My Adventure Costa Rica into THE trusted source for adventure knowledge and all things Costa Rica. Authority and authenticity come first; bookings follow trust. So we POST WITH INTENT, never just to post. We do NOT hard sell. About 6 posts in 7 give pure value (teach, show, tell a true story) and never sell at all; only the EXPERIENCE pillar invites — concretely, factually, without pressure. Never urgency or discounts — restraint IS the brand, and it is also what converts a high-trust, high-price decision.
+== PICK ONE ANGLE (one per caption, never two) ==
+- A decision: what to do at this exact spot and why (ride it or walk it, fill bottles here or not, start before light).
+- A rule of the place: one thing that is true here and what it changes for a runner, rider or walker.
+- A moment, only from KNOWN FACTS: when, where, who, what happened.
+- The cost: the alarm, the climb, the rain, the heat, the wait.
+- Outside the frame: what came before this picture, or after it.
+- A question a future guest would ask, answered plainly.
+Do not repeat the angle, the opening words or the key nouns of the RECENT CAPTIONS listed in the user message.
 
-== BRAND TRUTHS (true; never contradict) ==
-- Founder-led and personally tested — "every kilometre is one we have personally run." Esteban Umaña is the founder, expedition leader, AND a real endurance athlete (e.g. a sub-5-hour 50K, 4th overall). The FOUNDER pillar draws on his genuine racing/scouting. Mario is a programs collaborator on the school side only — never the face of the brand.
-- The signature feeling: small groups (6–8); routes designed from a blank page, tested in person, operated end to end (airport pickup to farewell dinner); real mountain families handing food at their kitchen doors; "people who start as strangers and end as the only ones who understand what just happened." Lodges chosen for character, not star count.
-- Disciplines we run (the FULL range — we are not only trail + MTB): RUNNING of all kinds (trail, road, ultra), CYCLING of all kinds (mountain, road, gravel, e-bike), WATER SPORTS (rafting, kayaking, surfing), MULTI-SPORT combinations of these, plus BESPOKE private journeys and SCHOOL/educational programs. Caption to whatever the photo actually shows — a surfer is surfing, a raft is rafting, a road cyclist is road cycling. ADVENTURE RACING is its own distinct sport — if a photo shows it (teams, navigation, multi-discipline), never call it a triathlon, XTERRA, duathlon, or "stage race."
-- Real regions (name one ONLY if unmistakable or in KNOWN FACTS; never swap them): Cordillera de Talamanca / Dota Valley, the Cerro de la Muerte massif, Manuel Antonio, the Osa Peninsula & Drake Bay, and the Nicoya coast (Santa Teresa, Tamarindo). Mountains, cloud forest, and coast are NOT interchangeable.
-- What we sell (soft mentions only; never invent specs): two flagship published expeditions — the Trail Running Expedition (9 days, Talamanca→Osa, 6–8 athletes) and the Mountain Biking Expedition (9 days, Nicoya) — AND fully custom journeys built around any discipline above (running, cycling, water sports, multi-sport), plus School/educational programs. So we can credibly invite a viewer toward whatever the photo's activity is — never imply trail-running and MTB are the only things we do.
+== STRUCTURE ==
+Line 1 carries the whole idea in 125 characters or fewer: a fact, a decision, a moment or a plain admission. Then 1 to 3 short sentences that pay it off. Stop. One beat per line, with a line break between beats; no long paragraphs. Numbers as numerals (9 days, 25 km, 3,000 m), never spelled out.
 
-== THE FOUR CONTENT PILLARS (pick the ONE that best fits the photo) ==
-1. KNOWLEDGE — teach something real about Costa Rica or endurance adventure (terrain, seasons, what makes a route special, training, what to expect). Lead with usefulness; the reader should learn something. Positions us as the authority.
-2. FOUNDER/ATHLETE — a true personal story, ONLY when KNOWN FACTS provide one (a race, a result, a scouting day). First person. When the facts include a real result, LEAD with it — plainly — then the lesson it taught. Real numbers are welcome; vague or invented self-praise is not. If no such facts exist, do NOT choose this pillar.
-3. ROUTE/DESTINATION — put the reader on that exact trail; make them want to stand there. Immersion over information.
-4. EXPERIENCE/TOURS — the ONE pillar that sells, and it sells with FACTS, not perfume: real published details (days, route, group size, what a day actually holds), warm and concrete, closing with a low-key pointer like "details in the bio" or "ask about the next departure". This is the only pillar that may name My Adventure Costa Rica. Never pressure, urgency, or discounts.
+== LENGTH ==
+Short: 8 to 30 words. Long: 60 to 150 words, only when KNOWN FACTS or PUBLISHED FACTS carry a story or a fact worth teaching. Nothing in between. Never pad.
 
-Look closely at what is ACTUALLY in the photo, then return STRICT JSON (only the object, no prose, no code fences) with:
-- "post_worthy": boolean. false if blurry, cluttered (power lines, signage, parked cars, trash, busy backgrounds), a screenshot, a duplicate-feeling snapshot, or below a luxury feed's bar.
+== POINT OF VIEW ==
+Default to "you". "We" only when stating PUBLISHED FACTS on an EXPERIENCE post. "I" only when KNOWN FACTS hold the founder's own experience, with the specific result first. Never "I" for credentials, years of experience or general wisdom.
+
+== ENDINGS ==
+Stop on the last concrete thing. About 1 caption in 4: one real question about the reader's own choice or experience. About 1 in 8: one line inviting them to send it to the friend who would do this with them. Never a moral, a summary or a saying.
+
+== SCENERY WITH NO NOTE ==
+Keep it short (8 to 30 words): one rule of the place, or one PUBLISHED FACT the image supports.
+
+== THE FOUNDER IN THE PHOTO ==
+Write about the task or the moment, not about him. With a note: first person, the specifics, what changed afterwards. Without a note: no "I", one factual line. Never imply a certification or a title he does not hold.
+
+== SELLING (EXPERIENCE posts only, about 1 in 7) ==
+One or two lines of PUBLISHED FACTS (route, days, group size, what a day holds), then "Details in the bio." No selling adjectives, no urgency, no prices, no discounts, no dates. No other post names the company.
+
+== PUBLISHED FACTS (the only product facts you may state) ==
+- The Trail Running Expedition: 9 days, from the Cordillera de Talamanca (3,000 m) down the Pacific slope through the Dota Valley cloud forest to the central Pacific coast, then south to the Osa Peninsula. 6 to 8 athletes. About 93 km of running and 4,529 m of climbing. Day 2 crosses nine summits above 3,000 m; Day 4 is a 25 km self-supported descent from Providencia to San Isidro; Day 5 is a coastal 10K at Manuel Antonio; Day 6 crosses the Sierpe-Térraba mangroves by boat to Drake Bay; Day 7 runs singletrack on the Osa.
+- The Gravel Expedition: 9 days, coast to coast across the Nicoya Peninsula from Paquera to Tamarindo, about 356 km, from three bases: Santa Teresa, Nosara and Tamarindo. 6 to 8 athletes. Day 1 is the welcome dinner in San José; riding starts on Day 2.
+- Both are led in person by the founder, Esteban Umaña. Departure dates and prices live on the website: write "Details in the bio", never a date or a price.
+- Also offered: hiking, wildlife, water sports (rafting, kayaking, surfing), multi-sport and adventure journeys, bespoke private journeys, and school programs. Caption to what the photo shows: a surfer is surfing, a raft is rafting, a road cyclist is road cycling. Adventure racing is its own sport: never call it a triathlon, XTERRA, duathlon or stage race.
+- Regions (name one ONLY if it is unmistakable in the photo or given in KNOWN FACTS; never swap them): the Cordillera de Talamanca and the Dota Valley, the Cerro de la Muerte massif, Manuel Antonio, the Osa Peninsula and Drake Bay, the Nicoya Peninsula (Santa Teresa, Nosara, Tamarindo), Monteverde. Mountains, cloud forest and coast are not interchangeable.
+
+== BANNED (ban the pattern, not just the exact words; if any appears, rewrite before returning) ==
+- Listing what is in the frame: "framed by", "a horizon of", "lush", lists of colours, textures or plants.
+- Definition or setting openers: "X means…", "X is about…", "In the [region]…", "Out here", "Up here", "nestled", "in the heart of".
+- Sayings about pace, rhythm, terrain, mountains or maps ("the terrain sets the pace", "the map is a suggestion").
+- "Not this, but that" in any wording: "not X, it's Y", "no longer X; it is Y", "not just… but".
+- Lists of three: three adjectives, three nouns, three clauses, a three-beat ending.
+- Morals and lessons: "when you slow down…", "you learn quickly…", "reveals itself", "reminds you", "teaches you", "invites you".
+- Tone words used as content: quiet, stillness, silence, slow, unhurried, serene, peaceful, calm.
+- Invented senses and absolutes: sounds, smells or temperatures not in the note; "the only", "nothing but", "always", "every".
+- Empty praise: breathtaking, stunning, vibrant, magical, iconic, hidden gem, paradise, pristine, epic, tapestry, symphony, testament, "journey" as a metaphor.
+- Personified nature (forests watching, mountains deciding, roads asking).
+- Self-praise or credentials ("personally tested", "years of experience", "we design every route"), corporate voice ("at My Adventure Costa Rica we believe").
+- Em dashes, semicolons, emoji, exclamation marks, more than one question, hashtags inside the text.
+- Spanish of any kind. ENGLISH ONLY: the account posts no Spanish (a Spanish-caption era grew a Costa Rican audience that does not buy these journeys, and Instagram reads caption language as an audience signal).
+
+== BEFORE YOU RETURN, REWRITE IF ==
+- a stranger could have written it from the photo alone;
+- line 1 holds no fact, decision or moment;
+- a name, number or cause is not in KNOWN FACTS or PUBLISHED FACTS;
+- any sentence describes what is visible;
+- a banned pattern appears, in any wording;
+- a future guest would not send it to a friend.
+
+== PHOTOS OF EVENTS (bibs, podiums, finish lines, medals, sponsor logos) ==
+A bib means a real event; a podium or medal means a result; logos mean partners were present. Use these ONLY with KNOWN FACTS. Never invent the event, distance, time or placing. Without facts, write about the moment without specifics and set needs_note to true. Tag only handles from the taggable list, and only the event and real partners.
+
+Look at the photo, then return STRICT JSON (only the object, no prose, no code fences) with:
+- "post_worthy": boolean. false if blurry, cluttered (power lines, signage, parked cars, trash, busy backgrounds), a screenshot, a duplicate-feeling snapshot, or below the bar of a premium feed.
 - "reason": one short sentence explaining the worthiness call.
-- "pillar": one of "KNOWLEDGE","FOUNDER","ROUTE","EXPERIENCE" — the intent of this post.
-- "category": the broad discipline — one of "RUNNING","CYCLING","WATER SPORTS","MULTI-SPORT","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA".
-- "eyebrow": the most ACCURATE specific label for what's in the photo + " · COSTA RICA" — e.g. "TRAIL RUNNING · COSTA RICA", "ROAD CYCLING · COSTA RICA", "GRAVEL · COSTA RICA", "RAFTING · COSTA RICA", "SURFING · COSTA RICA", "SEA KAYAKING · COSTA RICA". For a contemplative landscape/atmosphere shot you may use "COSTA RICA · SLOWLY". Match the activity actually shown; do not default everything to trail running or mountain biking.
-- "headline": ONE short editorial line, ~4–7 words. Evocative, restrained.
-- "caption_en": the caption (ENGLISH ONLY — the account posts no Spanish; a Spanish-caption era grew a mostly Costa Rican audience that does not buy these journeys) per the chosen RECIPE — R1 carousels 150–300 chars; R2 singles 2–3 sentences; R3 singles 300–800 chars. KNOWLEDGE must actually teach; ROUTE immerses; EXPERIENCE sells with facts; FOUNDER only from notes.
-- "hashtags": array of 4–5 lowercase tags (no #). Always include "myadventurecostarica". Then choose tags that INTERNATIONAL luxury & adventure travelers actually search when planning a trip abroad — e.g. luxurytravel, adventuretravel, trailrunning, gravelcycling, costaricatravel, visitcostarica, traveldeeper — matched to the photo. These exist for DISCOVERY by prospective guests overseas (your buyers), so favor international travel-intent tags over Costa-Rica-local or Spanish-only ones.
-- "crop_bias": 0.0–1.0 vertical crop focus (0.3 if subject/horizon is upper, 0.6 to keep people/foreground at the bottom, 0.5 default).
-- "format": "single" or "carousel". DEFAULT to "carousel" whenever the caption teaches (recipe R1 — KNOWLEDGE and most ROUTE): it is this account's proven format. "single" only for pure atmosphere (R2) or a story that needs no slides (R3/R5). EXPERIENCE (R4) may also be a carousel using its slide arc.
-- "slides": carousel ONLY — an array of 2–4 short text lines, each its own slide (the teaching points or story beats). Each ≤ ~18 words, editorial, self-contained, and in order. Slide 1 is always the photo, so these are the slides that follow it.
-- "cta": carousel ONLY, and ONLY when pillar is EXPERIENCE — one short, concrete closing line for the final slide (e.g. "Nine days, six runners — details in the bio."). For every other pillar, "" (value posts never sell).
-- "tags": array of exact Instagram handles to @mention — ONLY handles from the TAGGABLE ACCOUNTS list given in the user message, and ONLY when you clearly see that brand/event/person in the photo. Empty array if none apply. Never invent a handle.
-- "tag_suggestions": array of brand/event/person NAMES you can see in the photo (sponsor logos, race/event names on bibs or banners) that are NOT in the taggable list — so the owner can add them later. Names only, no @.
-- "needs_note": boolean — true if the photo shows clear signs of a real event or achievement (a race bib/number, a podium, a finish line, a medal, a timing arch) but NO known facts were provided. These posts are far better with the true story.
-- "note_hint": short string — if needs_note is true, what to add (e.g. "Race bib visible — add the event name and your result").
-
-== READING THE TELL-TALES (sports/racing photos) ==
-Look for signal: a race BIB/number means a real event happened; a PODIUM, medal, or finish arch means a RESULT; visible SPONSOR/BRAND logos mean partners were present. Use these to enrich a FOUNDER/athlete story — but NEVER invent the event name, distance, time, or placing. State only what's given in KNOWN FACTS; otherwise imply the moment without specifics and set needs_note=true. Tag brands/events only via the taggable list. Tag selectively and tastefully — the event and real partners, not every logo; tag-stuffing is off-brand.
-
-== KNOWN FACTS (per-photo notes) ==
-If the user message includes KNOWN FACTS about the photo, treat them as TRUE and build the caption around them — this is the real story and takes priority over generic description. If the facts indicate the founder (e.g. "me", "my race"), write that caption in FIRST PERSON; when the facts include a real result, LEAD with it, then the lesson — the target shape: "Sub-five hours, fourth overall — my fastest 50K. What the last ten kilometres taught me: the mountain sets the pace; you decide whether to argue." If NO known facts are given, there is no first person and no personal story — the caption stays about the place and the reader.
-
-== ENGAGEMENT & DISCOVERY (2026 algorithm) ==
-- HOOK FIRST: the FIRST sentence of caption_en must be a genuine hook — the most arresting line — because only ~125 characters show before "More". Make someone want to expand it. Editorial, never clickbait.
-- KEYWORD SEO: Instagram now ranks on keywords, not hashtags. Work the natural primary keyword into the first one or two sentences — e.g. "trail running in Costa Rica", "mountain biking the Nicoya coast", "luxury adventure in Costa Rica" — however it fits the photo. Do this gracefully, never keyword-stuff.
-- OPTIMISE FOR SHARES above all (this account's live currency), then comments:
-  • Every caption should contain at least ONE line worth sending to a friend — specific, human, true.
-  • Follow the ENDINGS rotation in THE VOICE: most posts end on the image; ~1 in 4 with one elegant question; ~1 in 8 with a warm share line. Never more than one ask per caption.
-- Keep hashtags to 4–5 highly relevant ones (already specified). Quality over quantity.
-
-== HARD RULES ==
-1. Write the brand name in FULL every time: "My Adventure Costa Rica". NEVER an acronym.
-2. GEOGRAPHIC PRECISION: never name a specific place, peak, volcano, river, lake, beach, park, town, or wildlife species UNLESS it is unmistakable in the photo OR given in KNOWN FACTS. Mountains, cloud forests, beaches, and macaws are NOT interchangeable.
-3. Never invent operational facts (distances, elevation, difficulty, tides, dates, prices) unless provided in KNOWN FACTS.
-4. Describe only what is in the frame (plus any KNOWN FACTS). A bike photo is about riding; a runner about running; a landscape about stillness. Don't introduce subjects that aren't there.
-
-== LANGUAGE ==
-ENGLISH ONLY. The account deliberately posts no Spanish: a Spanish-caption era grew a mostly Costa Rican audience that does not buy these journeys, and Instagram reads caption language as an audience signal. Never write, propose, or experiment with Spanish captions, closers, or invitations.
-
-== EXAMPLES (register ONLY — copying any phrase from these is a failure) ==
-R2 example (place-fact single): "Costa Rica's cloud forest sits at exactly the altitude where clouds touch the mountain — about 1,500 metres. That's why the moss is thick enough to sink a thumb into, and why this trail smells like rain an hour before it falls."
-
-Atmosphere, SHORT (gravel road in wind — ROUTE; fact-open, absence, serene):
-  headline: "Built for coffee, not cars."
-  EN: "Costa Rica's mountain roads were built for coffee, not cars. Which is why, an hour above the valley, the loudest thing around is the wind working the grass — and the road ahead belongs to no one but you."
-Teaching, SUBSTANTIVE (misty forest trail — KNOWLEDGE; fact-open, serene, ends on the image):
-  headline: "The forest that drinks the sky."
-  EN: "Cloud forest doesn't wait for rain — it drinks straight from the clouds. All day the canopy combs water out of the passing mist, leaf by leaf, and sends it downhill to rivers that never ask where it came from. Walk under it early and you can hear the whole thing working: a slow, patient drip long after the sky has cleared. By the time you reach the ridge, the fog that soaked your shoulders is already on its way to the sea. Nothing here hurries. Not even the water."
-Selling with facts (group at a mountain kitchen — EXPERIENCE, the only pillar that sells):
-  headline: "Nine days, one long story."
-  EN: "Nine days from the Talamanca highlands to the Osa coast, six to eight runners, every stage ending somewhere with a kitchen and a story. Days are measured in ridgelines, not kilometres. If a trip like this has been on your list, this is the one to ask about — details in the bio."
+- "pillar": one of "KNOWLEDGE" (a rule of the place, or a guest's question answered), "FOUNDER" (only when KNOWN FACTS hold the founder's own story), "ROUTE" (a decision, a cost, or outside-the-frame on a trail, road or river), "EXPERIENCE" (the selling post, about 1 in 7, only when the photo shows something a published journey actually holds).
+- "category": the broad discipline, one of "RUNNING","CYCLING","WATER SPORTS","MULTI-SPORT","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA".
+- "eyebrow": the most accurate label for what the photo shows + " · COSTA RICA", e.g. "TRAIL RUNNING · COSTA RICA", "GRAVEL · COSTA RICA", "RAFTING · COSTA RICA", "SEA KAYAKING · COSTA RICA"; for a landscape with no activity, "COSTA RICA · SLOWLY". Match the activity actually shown.
+- "headline": 3 to 7 words printed on the image: a true fact, the decision, or the moment. Never a tone word, never scenery, never a saying.
+- "caption_en": the caption, English only, per every rule above, with line breaks between beats.
+- "hashtags": array of 3 to 5 lowercase tags (no #). Always "myadventurecostarica". The rest specific to the activity, the region when it is known, and international travel intent (trailrunning, gravelcycling, costaricatravel, adventuretravel). Never generic ones (nature, love, travel).
+- "crop_bias": 0.0 to 1.0 vertical crop focus (0.3 if the subject or horizon sits high, 0.6 to keep people or foreground at the bottom, 0.5 default).
+- "format": "single" or "carousel". "carousel" when there are 2 to 4 real beats worth their own slide (a decision with its reasons, a rule and what it changes, a published journey's day). "single" when one line says it all.
+- "slides": carousel ONLY: an array of 2 to 4 lines, one per slide, each 18 words or fewer, each a fact, a decision or a step; never scenery, never a moral. Slide 1 is always the photo, so these follow it.
+- "cta": carousel ONLY, and ONLY when pillar is EXPERIENCE: one closing line of published fact ("9 days, 6 to 8 athletes. Details in the bio."). Otherwise "".
+- "tags": array of exact Instagram handles to @mention, ONLY from the TAGGABLE ACCOUNTS list in the user message, and ONLY when that brand, event or person is clearly in the photo. Empty array if none. Never invent a handle.
+- "tag_suggestions": array of brand, event or person NAMES visible in the photo (sponsor logos, race names on bibs or banners) that are NOT in the taggable list, so the owner can add them later. Names only, no @.
+- "needs_note": boolean. true if the photo shows a real event or achievement (a bib, a podium, a finish line, a medal, a timing arch) but no KNOWN FACTS were given.
+- "note_hint": short string. If needs_note is true, what to add (e.g. "Race bib visible: add the event name and your result").
 
 Return ONLY the JSON object."""
 
@@ -296,22 +297,94 @@ def http_json(url, headers, payload):
         return json.loads(r.read().decode())
 
 
-def caption_for(jpeg_bytes, note="", tags_known=None, learn="", hint=""):
-    b64 = base64.b64encode(jpeg_bytes).decode()
-    system = BRAND_PROMPT
-    if learn and learn.strip():
-        system += ("\n\n--- WHAT'S RESONATING ON OUR OWN ACCOUNT, BY TODAY'S STANDARDS "
-                   "(real but small analytics — a gentle steer, never a formula) ---\n"
-                   + learn.strip())
-    user_text = "Caption this photo as JSON."
-    if note.strip():
-        user_text += "\n\nKNOWN FACTS about this photo (true — build the caption around these): " + note.strip()
-    if tags_known:
-        user_text += ("\n\nTAGGABLE ACCOUNTS (only @mention these exact handles, and only "
-                      "if you clearly see that brand/event/person in the photo): "
-                      + json.dumps(tags_known))
-    if hint:
-        user_text += "\n\nFORMAT NOTE: " + hint
+# ---------- the voice guard (Sep 29 2026) ----------
+# The owner's verdict on the old captions: "too robotic, it has no essence … describing
+# everything on the picture like grass, and metal bridges". Research on the accounts that
+# do this well (Pelorus, Eleven Experience, Kilian Jornet, Lael Wilcox, Awasi, Run the Alps)
+# says: the photo is evidence, not the subject; one angle; a first line that carries the
+# idea; and a list of patterns that mark machine writing. The brief bans them; this check
+# catches the ones a regex can see and asks for ONE rewrite before the caption is used.
+_BANNED = [
+    ("a list of what is in the frame",
+     r"\b(?:framed by|a horizon of|in the (?:foreground|background)|dotted with|carpeted (?:in|with)|"
+     r"lush|verdant|rolling hills)\b"),
+    ("a definition or setting opener",
+     r"^\W*(?:(?:in|at|up|out) (?:the heart of|here)|out here|up here|nestled|deep in the|high in the|"
+     r"[A-Za-z' ]{2,40}?\b(?:means|is about|is all about)\b)"),
+    ("a saying about pace, rhythm, terrain or the map",
+     r"\b(?:pace|rhythm|the map is|terrain (?:sets|dictates|decides)|the mountain (?:sets|decides|dictates))\b"),
+    ("'not this, but that'",
+     r"\b(?:not (?:just|only|merely)\b[^.\n]{1,60}\bbut\b|"
+     r"(?:not|isn'?t|isn’t|no longer|never)\b[^.\n,;:]{1,60}[,;:]\s*(?:but|it'?s|it’s|it is)\b)"),
+    ("a moral or a lesson",
+     r"\b(?:reminds? (?:you|us)|reveals itself|you learn (?:quickly|fast|that)|when you slow down|"
+     r"teaches you|invites you|strips (?:everything|it all) away|there'?s a moment when|"
+     r"something [a-z]+ about|a kind of)\b"),
+    ("a tone word used as content",
+     r"\b(?:quiet(?:ly|ness)?|stillness|silen(?:ce|t)|unhurried|serene(?:ly)?|serenity|peaceful(?:ly)?|"
+     r"tranquil(?:ity)?|hush(?:ed)?)\b"),
+    ("an invented sense or an absolute",
+     r"\b(?:the only (?:sound|sounds|thing|things|noise|company)|nothing but|the loudest thing)\b"),
+    ("empty praise",
+     r"\b(?:breathtaking|stunning|vibrant|magical|iconic|hidden gem|paradise|pristine|majestic|"
+     r"awe-inspiring|unforgettable|epic|tapestry|symphony|testament)\b"),
+    ("self-praise or credentials",
+     r"\b(?:personally tested|years of (?:experience|scouting|guiding)|I have spent years|"
+     r"every kilomet(?:re|er)|we design every|we believe)\b"),
+    ("an em dash or a semicolon", r"[—–;]"),
+    ("an exclamation mark", r"!"),
+    ("an emoji", r"[\U0001F300-\U0001FAFF☀-➿]"),
+]
+
+
+def caption_violations(meta, note=""):
+    """Names of the banned patterns present in a caption (and its headline, slides and
+    cta). Empty list = clean. `note` empty + first person = a made-up founder story."""
+    parts = [meta.get("caption_en") or "", meta.get("headline") or "", meta.get("cta") or ""]
+    parts += list(meta.get("slides") or [])
+    text = "\n".join(p for p in parts if isinstance(p, str))
+    found = []
+    for name, rx in _BANNED:
+        if re.search(rx, text, flags=re.I | re.M):
+            found.append(name)
+    if text.count("?") > 1:
+        found.append("more than one question")
+    if not (note or "").strip() and re.search(r"\b(?:I|I'?m|I'?ve|I'?d|my|me|mine)\b", text):
+        found.append("first person with no note to back it")
+    cap = meta.get("caption_en") or ""
+    first = re.split(r"(?<=[.?])\s|\n", cap.strip(), maxsplit=1)[0]
+    if len(first) > 125:
+        found.append("first sentence longer than 125 characters (it must carry the idea on its own)")
+    words = len(re.findall(r"[A-Za-z0-9'’]+", cap))
+    if cap and words < 8:
+        found.append(f"too short ({words} words)")
+    if words > 170:
+        found.append(f"too long ({words} words: 150 is the ceiling)")
+    if re.search(r"[¿¡]|\b(?:el|la|los|las|una|para|con|que)\b [a-záéíóú]", cap, flags=re.I):
+        found.append("Spanish")
+    return found
+
+
+def recent_captions(n=10):
+    """The last n feed captions' opening lines (from metrics/posts.json), so the model can
+    avoid repeating an angle, an opener or the same nouns day after day."""
+    try:
+        posts = json.load(open(POSTS_LOG))
+    except Exception:
+        return []
+    out = []
+    for p in reversed(posts):
+        if str(p.get("base", "")).endswith("-story") or p.get("format") == "story":
+            continue
+        c = (p.get("caption") or "").strip().replace("\n", " ")
+        if c:
+            out.append(c[:120])
+        if len(out) >= n:
+            break
+    return out
+
+
+def _caption_call(system, user_text, b64):
     payload = {
         "model": MODEL,
         "temperature": 0.7,
@@ -349,6 +422,53 @@ def caption_for(jpeg_bytes, note="", tags_known=None, learn="", hint=""):
                 errs.append(f"{m}: {e}")
                 break
     raise RuntimeError("all caption models failed: " + "; ".join(errs))
+
+
+def caption_for(jpeg_bytes, note="", tags_known=None, learn="", hint=""):
+    b64 = base64.b64encode(jpeg_bytes).decode()
+    system = BRAND_PROMPT
+    if learn and learn.strip():
+        system += ("\n\n--- WHAT'S RESONATING ON OUR OWN ACCOUNT, BY TODAY'S STANDARDS "
+                   "(real but small analytics — a gentle steer, never a formula) ---\n"
+                   + learn.strip())
+    user_text = "Caption this photo as JSON."
+    if note.strip():
+        user_text += "\n\nKNOWN FACTS about this photo (true — build the caption around these): " + note.strip()
+    else:
+        user_text += ("\n\nKNOWN FACTS: none. So: no first person, no place name, no event, "
+                      "no number that is not in PUBLISHED FACTS.")
+    recent = recent_captions()
+    if recent:
+        user_text += ("\n\nRECENT CAPTIONS on this account (do not repeat their angle, opening "
+                      "words or key nouns):\n" + "\n".join("- " + c for c in recent))
+    if tags_known:
+        user_text += ("\n\nTAGGABLE ACCOUNTS (only @mention these exact handles, and only "
+                      "if you clearly see that brand/event/person in the photo): "
+                      + json.dumps(tags_known))
+    if hint:
+        user_text += "\n\nFORMAT NOTE: " + hint
+    meta = _caption_call(system, user_text, b64)
+    if not isinstance(meta, dict):
+        raise RuntimeError("caption model returned no JSON object")
+    bad = caption_violations(meta, note) if meta.get("post_worthy") else []
+    if bad:
+        # One rewrite, with the exact reasons. The second answer wins only if it is cleaner.
+        print("caption check failed:", "; ".join(bad), "— asking for a rewrite")
+        redo = (user_text + "\n\nYOUR PREVIOUS CAPTION BROKE THESE RULES: " + "; ".join(bad)
+                + ". Write the caption, headline and slides again from scratch for the same "
+                  "photo and the same facts, fixing every one of them. Previous caption: \""
+                + (meta.get("caption_en") or "")[:500] + "\"")
+        try:
+            meta2 = _caption_call(system, redo, b64)
+            bad2 = caption_violations(meta2, note) if isinstance(meta2, dict) else bad
+            if isinstance(meta2, dict) and len(bad2) <= len(bad):
+                meta, bad = meta2, bad2
+        except Exception as e:
+            print("rewrite call failed, keeping the first caption:", e)
+        if bad:
+            print("caption still flags:", "; ".join(bad))
+    meta["_violations"] = bad
+    return meta
 
 
 # ---------- rendering ----------
@@ -905,8 +1025,8 @@ def prepare():
             buf = io.BytesIO()
             pv = img.convert("RGB"); pv.thumbnail((1280, 1280)); pv.save(buf, "JPEG", quality=90)
             old = (st.get("caption") or "").split("\n\n")[0]
-            hint = ("The owner rejected this caption — write a COMPLETELY DIFFERENT one: "
-                    "different recipe or angle, different opening fact, no shared phrases with: \""
+            hint = ("The owner rejected this caption. Write a COMPLETELY DIFFERENT one: "
+                    "a different angle, a different first line, no shared phrases with: \""
                     + old[:400] + "\"")
             try:
                 meta = caption_for(buf.getvalue(), note, TAGS, learn, hint=hint)
@@ -1148,8 +1268,26 @@ def prepare():
         # is one — no morning hold, no waiting for the next day. The scheduler's slots
         # already sit in the best hours; a late recovery post is better than none.
         print("Auto-approve is ON — publishing immediately.")
-        publish(state)          # the new post was never stored as pending_post — leave the
+        try:
+            publish(state)      # the new post was never stored as pending_post — leave the
                                 # slot alone (an older undecided post may still be in it)
+        except Exception as e:
+            err = str(e)[:300]
+            if state.get("_ig_media_id"):
+                # Instagram already has it and only a follow-up step failed. Finish the
+                # bookkeeping HERE so the next slot cannot post the same photo again.
+                print("Post is live on Instagram; a follow-up step failed:", err)
+                _archive_and_stamp(state)
+                commit_push(f"Posted {base} [skip ci]")
+                wa_notify(f"⚠️ Post {base} is live on Instagram, but a follow-up step failed "
+                          f"({err}). Bookkeeping was completed, it will not be posted twice.")
+            else:
+                # Nothing went out. The photo stays in source-photos and the day is not
+                # stamped, so the next scheduled slot retries automatically (owner's rule:
+                # the post of the day never waits for the next day).
+                wa_notify(f"❌ Today's post ({base}) could not be published: {err}. "
+                          f"The next slot retries automatically.")
+                raise
     else:                                             # human review: stage + ping for approval
         requeue_prev_pending(state)                   # never discard an unapproved pending
         rset("pending_post", state)
@@ -1173,6 +1311,9 @@ def prepare():
     if meta.get("tag_suggestions"):
         notes_md += ("\n\n> 🔖 **Spotted, could tag** (add handles to `tags.json`): "
                      + ", ".join(meta["tag_suggestions"]))
+    if meta.get("_violations"):
+        notes_md += ("\n\n> ✍️ **Voice check still flags:** " + "; ".join(meta["_violations"])
+                     + " (the model was asked once to rewrite; this is the cleaner of the two).")
     learn_md = ("\n\n**What your data says (today's standards):**\n\n> "
                 + learn.replace("\n", "\n> ")) if learn else ""
     summary(f"## Today's post — review before it goes live\n\n_{kind}_\n\n{previews}\n\n"
@@ -1268,22 +1409,10 @@ def publish(st=None):
             except Exception as e:
                 print("Facebook Story skipped:", e)
 
-    for sname in (st.get("sources") or [st.get("source")]):   # archive every burst photo used
-        if not sname:
-            continue
-        sp = os.path.join(SRC, sname)
-        if os.path.exists(sp):
-            os.replace(sp, os.path.join(POSTED, sname))
-        note_p = os.path.join(SRC, os.path.splitext(sname)[0] + ".txt")  # its companion note
-        if os.path.exists(note_p):
-            os.remove(note_p)
-    with open(os.path.join(POSTED, st["base"] + ".txt"), "w", encoding="utf-8") as f:
-        f.write(caption)
-    if os.path.exists(STATE):
-        os.remove(STATE)
-    mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
-    open(os.path.join(mdir, "last_posted.txt"), "w").write(cr_today())
+    _archive_and_stamp(st)
     # Announce it's LIVE — to the dashboard (Upstash) and WhatsApp, with a direct link.
+    # Best-effort: a hiccup here must never stop the archive commit below, because an
+    # archive that is not pushed means the next slot would post the same photo again.
     permalink = ""
     try:
         if "ig" in targets and pub.get("id"):
@@ -1294,14 +1423,41 @@ def publish(st=None):
                 permalink = (json.loads(r.read().decode()) or {}).get("permalink", "")
     except Exception as e:
         print("permalink fetch skipped:", e)
-    rset("last_published", {"base": st.get("base"), "pillar": st.get("pillar"),
-                            "image": image_urls[0] if image_urls else "",
-                            "media_id": pub.get("id"),
-                            "permalink": permalink, "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    try:
+        rset("last_published", {"base": st.get("base"), "pillar": st.get("pillar"),
+                                "image": image_urls[0] if image_urls else "",
+                                "media_id": pub.get("id"),
+                                "permalink": permalink, "ts": time.strftime("%Y-%m-%dT%H:%M:%S")})
+    except Exception as e:
+        print("last_published not recorded:", e)
     wa_notify(f"✅ Posted live — {(st.get('pillar') or 'post').title()}. "
               + (f"View: {permalink}" if permalink else "Check Instagram."))
     commit_push(f"Posted {st['base']} [skip ci]")
     print("Done.")
+
+
+def _archive_and_stamp(st):
+    """Bookkeeping once Instagram has the post: move the photo(s) to posted/, keep the
+    caption next to them, drop state.json, stamp the Costa Rica day. Idempotent, so the
+    auto-approve path can call it again after a failure that happened AFTER the post
+    went live (owner's rule: a post never goes out twice)."""
+    caption = st.get("caption") or ""
+    for sname in (st.get("sources") or [st.get("source")]):   # archive every burst photo used
+        if not sname:
+            continue
+        sp = os.path.join(SRC, sname)
+        if os.path.exists(sp):
+            os.replace(sp, os.path.join(POSTED, sname))
+        note_p = os.path.join(SRC, os.path.splitext(sname)[0] + ".txt")  # its companion note
+        if os.path.exists(note_p):
+            os.remove(note_p)
+    if st.get("base"):
+        with open(os.path.join(POSTED, st["base"] + ".txt"), "w", encoding="utf-8") as f:
+            f.write(caption)
+    if os.path.exists(STATE):
+        os.remove(STATE)
+    mdir = os.path.join(HERE, "metrics"); os.makedirs(mdir, exist_ok=True)
+    open(os.path.join(mdir, "last_posted.txt"), "w").write(cr_today())
 
 
 def requeue_prev_pending(state):
@@ -1373,6 +1529,73 @@ def publish_pending():
     print("Published approved post:", st.get("base"))
 
 
+def caption_preview(n=3):
+    """Voice calibration (Sep 29 2026): caption the next n candidate photos with the
+    current brief and print them to the run summary. Nothing is staged, rendered, posted
+    or committed, and the photos are not touched (no rejects, no deletes, no GPS pass)."""
+    learn = performance_brief()
+    rejected = set(rget("rejected_bases", []) or [])
+    cands = [f for f in sorted(glob.glob(os.path.join(SRC, "*")))
+             if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif"))
+             and os.path.splitext(os.path.basename(f))[0] not in rejected]
+    try:
+        sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=HERE).decode().strip()
+    except Exception:
+        sha = "main"
+    md = [f"## Caption preview — the next {min(n, len(cands))} photos, current brief "
+          f"(nothing was posted)\n"]
+    for src in cands[:n]:
+        name = os.path.basename(src)
+        note = ""
+        np_ = os.path.splitext(src)[0] + ".txt"
+        if os.path.exists(np_):
+            try:
+                note = open(np_, encoding="utf-8").read()
+            except Exception:
+                note = ""
+        try:
+            img = Image.open(src)
+            buf = io.BytesIO()
+            pv = img.convert("RGB"); pv.thumbnail((1280, 1280)); pv.save(buf, "JPEG", quality=85)
+            meta = caption_for(buf.getvalue(), note, TAGS, learn)
+        except Exception as e:
+            md.append(f"### {name}\n\nCaption error: {e}\n"); continue
+        img_md = ""
+        if REPO and name.lower().endswith((".jpg", ".jpeg", ".png")):
+            img_md = (f"![{name}](https://raw.githubusercontent.com/{REPO}/{sha}/source-photos/"
+                      f"{urllib.parse.quote(name)})\n\n")
+        md.append(f"### {name}\n\n{img_md}"
+                  f"_{'post-worthy' if meta.get('post_worthy') else 'NOT post-worthy'}: "
+                  f"{meta.get('reason', '')}_  \n"
+                  f"_{meta.get('pillar')} · {meta.get('format')} · headline: "
+                  f"**{meta.get('headline', '')}**"
+                  + (f" · note: {note.strip()[:120]}" if note.strip() else " · no note") + "_\n\n"
+                  + (meta.get("caption_en") or "").strip() + "\n"
+                  + ("\n" + "\n".join(f"- slide {i + 2}: {s}" for i, s in enumerate(meta.get("slides") or []))
+                     if meta.get("slides") else "")
+                  + (f"\n- closing line: {meta['cta']}" if meta.get("cta") else "")
+                  + "\n\n" + " ".join("#" + t for t in meta.get("hashtags", []))
+                  + (f"\n\n> ✍️ Voice check still flags: {'; '.join(meta['_violations'])}"
+                     if meta.get("_violations") else "\n\n> ✍️ Voice check: clean")
+                  + "\n")
+        print(f"\n=== {name} ===\n{(meta.get('caption_en') or '').strip()}\n")
+    # What the account has been posting (the old brief), for the side-by-side.
+    try:
+        posts = [p for p in json.load(open(POSTS_LOG))
+                 if p.get("format") not in ("story", "reel") and not str(p.get("base", "")).endswith("-story")]
+        md.append("\n## For comparison — the last 3 captions the account actually posted\n")
+        for p in posts[-3:]:
+            full = ""
+            cp = os.path.join(POSTED, str(p.get("base", "")) + ".txt")
+            if os.path.exists(cp):
+                full = open(cp, encoding="utf-8").read().split("\n\n#")[0].strip()
+            md.append(f"### {p.get('base')} · {p.get('date')}\n\n{full or p.get('caption', '')}\n")
+    except Exception as e:
+        md.append(f"\n(previous captions not listed: {e})\n")
+    summary("\n".join(md))
+    print("Preview done.")
+
+
 if __name__ == "__main__":
     phase = sys.argv[1] if len(sys.argv) > 1 else "all"
     if phase == "prepare":
@@ -1381,6 +1604,8 @@ if __name__ == "__main__":
         publish()
     elif phase == "publish_pending":
         publish_pending()
+    elif phase == "preview":
+        caption_preview(int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2].strip().isdigit() else 3)
     else:  # "all" = legacy immediate post (no approval gate)
         prepare()
         publish()

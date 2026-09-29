@@ -1,3 +1,7 @@
 
 # local audit notes — do not publish
 SECURITY_AUDIT_PROMPT.md
+
+# Python bytecode (the Actions runner creates it when reel.py imports autopost.py)
+__pycache__/
+*.pyc
