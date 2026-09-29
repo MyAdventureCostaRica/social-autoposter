@@ -11,7 +11,7 @@
  *
  * Costa Rica is UTC-6 (no DST). Times below are UTC.
  *   responder   every 5 min          (engagement: comments + DMs)
- *   daily post  15:15 UTC = 09:15 CR
+ *   daily post  15:15 UTC = 09:15 CR  (+ backups 11:15 / 13:15 CR, no-ops once posted)
  *   insights    16:20 UTC = 10:20 CR
  *   reels       Tue & Fri 18:15 UTC = 12:15 CR
  *   review      1st of month 15:20 UTC
@@ -60,6 +60,12 @@ module.exports = async function handler(req, res) {
   if (m < 5) due.push("respond.yml");                             // responder: HOURLY (owner's call, Sep 10 2026 — every 5 min burned Actions minutes for nothing)
   if (inSlot(14, 5)) due.push("publish.yml");                     // 08:05 CR — release posts approved after hours (morning window)
   if (inSlot(15, 15)) due.push("daily-post.yml");                 // 09:15 CR
+  // Backup slots inside the best-hours window. autopost.py's "already posted today"
+  // guard makes them no-ops on a normal day; they matter when 09:15 hit a caption
+  // outage (Sep 28 2026: Gemini 503 on every model, GitHub's own backup crons ran 6 h
+  // late, after the window, and the day's post was lost).
+  if (inSlot(17, 15)) due.push("daily-post.yml");                 // 11:15 CR (backup)
+  if (inSlot(19, 15)) due.push("daily-post.yml");                 // 13:15 CR (backup)
   if (inSlot(16, 20)) due.push("insights.yml");                   // 10:20 CR
   if (day === 5 && inSlot(18, 15)) due.push("reel-post.yml");     // Fri 12:15 CR
   if (day === 6 && inSlot(15, 0)) due.push("reel-post.yml");      // Sat 09:00 CR — the data's best day (avg reach 717, n=7)

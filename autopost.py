@@ -970,58 +970,87 @@ def prepare():
     rejected_bases = set(rget("rejected_bases", []) or [])   # photos you rejected — never re-pick
     target = target_pillar()
     print(f"Content plan — today's target pillar: {target} | recent mix: {_recent_pillars()}")
-    chosen = fallback = None
-    for src in candidates[:PLAN_SCAN]:
-        if os.path.splitext(os.path.basename(src))[0] in rejected_bases:
-            # Owner's rule (Sep 10 2026): a rejected picture is unwanted — DELETE it
-            # immediately, never archive or recycle it for later.
-            print("Deleting a photo you rejected:", os.path.basename(src))
-            os.remove(src)
-            _np = os.path.splitext(src)[0] + ".txt"
-            if os.path.exists(_np):
-                os.remove(_np)
-            continue
-        # Skip a near-duplicate of something already posted — don't repeat near-twins.
-        if DEDUPE and posted_hashes:
-            cs = open_sig(src)
-            if cs and any(hamming(cs[1], ph) <= DEDUPE_HASH for ph in posted_hashes):
-                print("Skipping near-duplicate of an already-posted photo:", os.path.basename(src))
+
+    def _scan(candidates):
+        """Walk the candidates once. Returns (chosen, judged, api_errors): `judged` counts
+        photos the captioner actually assessed, `api_errors` the ones it could not reach.
+        The two must never be confused — on Sep 28 2026 Gemini answered 503 for all
+        eight candidates and the run reported "No post-worthy photo" in green."""
+        chosen = fallback = None
+        judged = api_errors = 0
+        for src in candidates[:PLAN_SCAN]:
+            if os.path.splitext(os.path.basename(src))[0] in rejected_bases:
+                # Owner's rule (Sep 10 2026): a rejected picture is unwanted — DELETE it
+                # immediately, never archive or recycle it for later.
+                print("Deleting a photo you rejected:", os.path.basename(src))
+                os.remove(src)
+                _np = os.path.splitext(src)[0] + ".txt"
+                if os.path.exists(_np):
+                    os.remove(_np)
+                continue
+            # Skip a near-duplicate of something already posted — don't repeat near-twins.
+            if DEDUPE and posted_hashes:
+                cs = open_sig(src)
+                if cs and any(hamming(cs[1], ph) <= DEDUPE_HASH for ph in posted_hashes):
+                    print("Skipping near-duplicate of an already-posted photo:", os.path.basename(src))
+                    os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
+                    continue
+            note = ""
+            note_path = os.path.splitext(src)[0] + ".txt"   # optional companion note: IMG_123.txt
+            if os.path.exists(note_path):
+                try:
+                    with open(note_path, encoding="utf-8") as nf:
+                        note = nf.read()
+                except Exception:
+                    note = ""
+            try:
+                img = Image.open(src)
+                buf = io.BytesIO()
+                pv = img.convert("RGB"); pv.thumbnail((1280, 1280))
+                pv.save(buf, format="JPEG", quality=85)
+                meta = caption_for(buf.getvalue(), note, TAGS, learn)
+            except Exception as e:
+                print("Caption error on", os.path.basename(src), "->", e)
+                if "caption models failed" in str(e):
+                    api_errors += 1                  # the service, not the photo
+                continue
+            judged += 1
+            if not meta.get("post_worthy"):
+                print("Not post-worthy:", os.path.basename(src), "-", meta.get("reason"))
                 os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
                 continue
-        note = ""
-        note_path = os.path.splitext(src)[0] + ".txt"   # optional companion note: IMG_123.txt
-        if os.path.exists(note_path):
-            try:
-                with open(note_path, encoding="utf-8") as nf:
-                    note = nf.read()
-            except Exception:
-                note = ""
-        try:
-            img = Image.open(src)
-            buf = io.BytesIO()
-            pv = img.convert("RGB"); pv.thumbnail((1280, 1280))
-            pv.save(buf, format="JPEG", quality=85)
-            meta = caption_for(buf.getvalue(), note, TAGS, learn)
-        except Exception as e:
-            print("Caption error on", os.path.basename(src), "->", e)
-            continue
-        if not meta.get("post_worthy"):
-            print("Not post-worthy:", os.path.basename(src), "-", meta.get("reason"))
-            os.replace(src, os.path.join(REJECTED, os.path.basename(src)))
-            continue
-        if fallback is None:
-            fallback = (src, img, meta)                  # first post-worthy = safety net
-        if (meta.get("pillar") or "").upper() == target:
-            chosen = (src, img, meta)                    # fills today's plan slot — take it
-            print(f"Picked for plan pillar {target}: {os.path.basename(src)}")
-            break
-        # post-worthy but wrong pillar for today — leave it in the queue for a future day
-        print(f"Post-worthy but pillar {meta.get('pillar')} ≠ target {target} — keeping:",
-              os.path.basename(src))
+            if fallback is None:
+                fallback = (src, img, meta)                  # first post-worthy = safety net
+            if (meta.get("pillar") or "").upper() == target:
+                chosen = (src, img, meta)                    # fills today's plan slot — take it
+                print(f"Picked for plan pillar {target}: {os.path.basename(src)}")
+                break
+            # post-worthy but wrong pillar for today — leave it in the queue for a future day
+            print(f"Post-worthy but pillar {meta.get('pillar')} ≠ target {target} — keeping:",
+                  os.path.basename(src))
 
-    if not chosen:
-        chosen = fallback                                # no target match found in the scan
-    if not chosen:
+        return chosen or fallback, judged, api_errors
+
+    chosen, judged, api_errors = _scan(candidates)
+    if not chosen and judged == 0 and api_errors:
+        # Every candidate hit a service error — Gemini is down, not the photos. Wait once
+        # and try again; 503s are often minutes long.
+        print(f"Caption service unavailable for all {api_errors} candidates — waiting 4 min and retrying once.")
+        time.sleep(240)
+        candidates = sorted(f for f in glob.glob(os.path.join(SRC, "*"))
+                            if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif")))
+        chosen, judged, api_errors = _scan(candidates)
+    if not chosen and judged == 0 and api_errors:
+        json.dump({"skip": True, "why": "captioner unavailable"}, open(STATE, "w"))
+        commit_push("Caption service unavailable — no post staged [skip ci]")
+        summary("### Nothing staged — caption service unavailable\n"
+                f"Gemini returned errors for all {api_errors} candidate photos (twice, 4 min apart). "
+                "The next daily slot retries automatically; the photos are untouched.")
+        wa_notify(f"⚠️ No post staged: the caption service (Gemini) returned errors for all "
+                  f"{api_errors} photos, even after a 4-minute retry. The next slot retries "
+                  f"automatically — nothing to do unless it keeps happening.")
+        raise SystemExit(1)                          # red run: this is an outage, not a quiet day
+    if not chosen:                                   # genuinely nothing post-worthy this time
         json.dump({"skip": True, "why": "none post-worthy"}, open(STATE, "w"))
         commit_push("No post-worthy photo [skip ci]")
         summary("### Nothing to post\nNo post-worthy photo this run.")
@@ -1296,13 +1325,16 @@ def requeue_prev_pending(state):
     one — the previous pending joins a FIFO queue (pending_queue, capped at 5) and
     comes back as the pending card once the current one is approved or rejected."""
     prev = rget("pending_post")
-    if prev and not prev.get("skip") and prev.get("status") == "pending" \
+    # pending OR approved-and-held: on Sep 28 2026 three late runs each overwrote the
+    # previous held post, after telling the owner each one "publishes at 8:00 AM".
+    if prev and not prev.get("skip") and prev.get("status") in ("pending", "approved") \
             and prev.get("base") != (state or {}).get("base"):
         q = rget("pending_queue", []) or []
         if not any((p or {}).get("base") == prev.get("base") for p in q):
+            prev = dict(prev); prev["status"] = "pending"; prev.pop("hold_until", None)
             q.append(prev)
             rset("pending_queue", q[-5:])
-            print("Queued the previous unapproved post:", prev.get("base"))
+            print("Queued the previous post:", prev.get("base"))
 
 
 def promote_queued_pending():
