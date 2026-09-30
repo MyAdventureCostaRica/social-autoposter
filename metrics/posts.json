@@ -8288,5 +8288,25 @@
   "category": "CYCLING",
   "pillar": "ROUTE",
   "caption": "Mountain biking in Costa Rica often means riding at the edge of the landscape. Here, the track narrows through the tall,"
+ },
+ {
+  "id": "18121376317723731",
+  "date": "2026-09-30",
+  "ts": "2026-09-30T15:23:45",
+  "base": "IMG_2906",
+  "format": "single",
+  "category": "MULTI-SPORT",
+  "pillar": "EXPERIENCE",
+  "caption": "Crossing the water is where you stop to look back at the peaks.\n\nOn a multi-sport journey, it connects the forest trails"
+ },
+ {
+  "id": "18100138523544657",
+  "date": "2026-09-30",
+  "ts": "2026-09-30T15:23:45",
+  "base": "IMG_2906-story",
+  "format": "story",
+  "category": "MULTI-SPORT",
+  "pillar": "EXPERIENCE",
+  "caption": "Crossing the water is where you stop to look back at the peaks.\n\nOn a multi-sport journey, it connects the forest trails"
  }
 ]
