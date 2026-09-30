@@ -11171,15 +11171,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 322,
+  "reach": 323,
   "likes": 14,
   "comments": 0,
   "saved": 1,
   "shares": 0,
   "total_interactions": 15,
-  "views": 497,
+  "views": 500,
   "interactions": 15,
-  "eng_rate": 0.0466
+  "eng_rate": 0.0464
  },
  {
   "id": "18000335390801625",
@@ -11299,17 +11299,17 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "EXPERIENCE",
-  "reach": 12,
-  "likes": 2,
+  "reach": 32,
+  "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 2,
-  "views": 38,
+  "total_interactions": 4,
+  "views": 66,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 2,
-  "eng_rate": 0.1667
+  "interactions": 4,
+  "eng_rate": 0.125
  },
  {
   "id": "18100138523544657",
