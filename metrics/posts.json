@@ -8309,5 +8309,25 @@
   "category": "MULTI-SPORT",
   "pillar": "EXPERIENCE",
   "caption": "Crossing the water is where you stop to look back at the peaks.\n\nOn a multi-sport journey, it connects the forest trails"
+ },
+ {
+  "id": "18106670126349195",
+  "date": "2026-10-01",
+  "ts": "2026-10-01T15:20:11",
+  "base": "IMG_2871",
+  "format": "single",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "The humidity climbs the moment the trail drops toward water.\n\nKeep your breathing deep and steady before the next steep "
+ },
+ {
+  "id": "18356106760218338",
+  "date": "2026-10-01",
+  "ts": "2026-10-01T15:20:11",
+  "base": "IMG_2871-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "The humidity climbs the moment the trail drops toward water.\n\nKeep your breathing deep and steady before the next steep "
  }
 ]
