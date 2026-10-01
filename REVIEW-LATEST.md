@@ -1,28 +1,45 @@
-# Latest review — 2026-09-10
+# Latest review — 2026-10-01
 
-### 1. Readout
-The data reveals a clear shift in performance: **Carousels** are currently our most potent format, commanding an engagement rate of 11.79% (n=4) compared to Reels at 5.21% (n=31). While Reels drive higher absolute reach (e.g., 239), the **live currency is Engagement Rate via Carousel storytelling**. Our audience is currently signaling a preference for "ROUTE" content (19 posts, 6.57% eng. rate) that focuses on the sensory experience of the landscape—specifically the "misty mornings" and "high, open pastures" identified in our top-performing captions. We are currently under-indexing on "KNOWLEDGE" content, which requires a pivot to ensure we remain the authority on Costa Rica, not just a gallery of its views.
+### 1. Data Readout (October 2026)
 
-### 2. Proposed Changes
-Given the thin data on non-Reel formats (n=4 for carousels), we should remain humble and avoid aggressive re-tuning.
+* **The Live Currency:** Shares (5.8% of the interaction mix) are our primary organic growth driver, while Saves (0.8%) are practically dormant. Likes remain the baseline interaction at 84.5%.
+* **Format Performance:** Carousels are our clear editorial leader with a **13.16% average engagement rate** ($n=6$), while Reels act as our primary reach vehicle, pulling in our peak reach of 240 on 2026-07-23 despite a lower average engagement rate of 5.41% ($n=36$).
+* **Pillar & Category Strength:** The **ROUTE** pillar is our most reliable asset with a **6.26% average engagement rate** across a robust sample size ($n=24$). **CYCLING** (8.81% ER, $n=10$) and **RUNNING** (7.05% ER, $n=10$) heavily outperform general **COSTA RICA** travel content (3.86% ER, $n=10$).
+* **Narrative Themes:** Our top-performing posts are deeply personal, reflective, and visceral. Captions focusing on physical resilience (e.g., racing after a heart attack, pushing through the last 10km of a 50K) and the philosophy of exploration (e.g., "the mountain sets the pace," "scouting unmarked routes") consistently generate engagement rates between 10.9% and 16.3%.
+* **Timing Patterns:** Saturday is our premier publishing day, averaging **548 reach and 11 shares** ($n=10$). Mondays are exceptionally weak, averaging just 93 reach ($n=4$). The midday window between 11:00 and 15:00 CR time yields the highest concentration of shares.
 
-1.  **Learner Thresholds:** 
-    *   **Keep `REACH_FLOOR` at 50:** While we have some high-performers, our average reach is still volatile; maintaining this floor ensures we only learn from posts that have cleared the "noise" threshold.
-    *   **Keep `HALFLIFE_DAYS` at 90:** With only 41 eligible posts in the last 12 months, we need a longer window to ensure seasonal or evergreen content isn't prematurely discarded.
-    *   **Keep `SAVES_DEAD` at 0.05:** Our current interaction mix is heavily skewed toward Likes (84.1%). Until we see a consistent rise in Saves (currently 0.8%), this metric is too thin to serve as a primary filter.
-2.  **Captioner Brief (`BRAND_PROMPT`):**
-    *   **Adjustment:** Explicitly instruct the writer to favor the "Carousel" format for "ROUTE" and "EXPERIENCE" pillars. 
-    *   **Justification:** The 11.79% engagement rate for carousels significantly outperforms the 5.21% for reels. The brief should encourage a "narrative arc" across the slides (e.g., Slide 1: The Hook/View, Slide 2: The Technical Challenge, Slide 3: The Reward/Knowledge).
+---
 
-### 3. 3 Experiments (Next 30 Days)
+### 2. Proposed System Adjustments
 
-1.  **The "Carousel Narrative" Test:** Convert 3 upcoming "ROUTE" posts from single/reel format into 4-slide carousels. Use the first slide for a high-impact visual and the final slide for a specific, actionable piece of "KNOWLEDGE" about the route.
-    *   *Success Metric:* Compare the engagement rate of these carousels against our current 11.79% benchmark.
-2.  **The "Knowledge-First" Hook:** In the next 5 posts, start the caption with a specific, non-obvious fact about Costa Rica (e.g., "The reason the mist clings to this specific valley is..."). 
-    *   *Success Metric:* Monitor for an increase in "Shares" (currently 6.5%) as a proxy for value-add content.
-3.  **The "Usted" Invitation:** In the final sentence of every caption, include a soft, formal invitation in Spanish: *"¿Le gustaría explorar esta ruta con nosotros?"* (Would you like to explore this route with us?).
-    *   *Success Metric:* Track profile visits/follows per post to see if this formal, editorial tone drives higher conversion than our previous, more passive captions.
+#### A. Learner Threshold Updates (`autopost.py`)
+1. **Lower `SAVES_DEAD` from `0.05` to `0.01` (1%):** 
+   * *Justification:* Saves represent only 0.8% of our total interaction mix. The current 5% threshold is too punitive for highly successful posts that simply do not generate saves. Lowering this to 1% prevents the algorithm from discarding high-reach, highly shared posts.
+2. **Maintain `REACH_FLOOR` at `50` and `HALFLIFE_DAYS` at `90`:**
+   * *Justification:* Our top-performing recent posts (such as the 2026-09-25 carousel at 55 reach and the 2026-09-13 carousel at 52 reach) sit just above the floor of 50. Raising it would starve the learner of our best qualitative data, while lowering it would introduce too much low-engagement noise. A 90-day halflife remains perfectly balanced for our current volume of 51 eligible posts over the last 12 months.
 
-***
+#### B. Captioner Brief Updates (`BRAND_PROMPT`)
+To align our automated writer with what actually resonates, we propose updating the `BRAND_PROMPT` instructions:
 
-*Note: These proposals are for your review and approval. No automated changes have been applied to the system.*
+* **Incorporate Visceral Philosophy:** Shift the tone from descriptive luxury travel to a more reflective, poetic, and athletic perspective. The terrain of Costa Rica should not merely be described; it should be treated as an active participant that "sets the pace" (*la montaña impone el ritmo*).
+* **Elevate the Founder's Voice:** When writing under the **FOUNDER** or **ROUTE** pillars, use a tone of humble expertise. Frame challenges not as conquests, but as lessons in resilience, patience, and respect for the natural world.
+* **Strict Brand & Language Guardrails:** Re-emphasize that the brand must always be referred to as **My Adventure Costa Rica** (never abbreviated). All Spanish copy must strictly use the formal *usted* to maintain an elegant, respectful, and high-end editorial distance.
+
+---
+
+### 3. Three Experiments for the Next 30 Days
+
+#### Experiment 1: The "Visceral Hook" Format
+* **Hypothesis:** Opening captions with a short, poetic, single-sentence philosophical statement in formal Spanish (inspired by our top-performing "the mountain sets the pace" posts) will increase carousel swipe-through rates and engagement.
+* **Execution:** For the next 4 carousel posts, structure the caption to begin with a bold, italicized, one-line reflection on endurance or nature before introducing the specific route.
+* **Metric of Success:** Engagement Rate (Target: >12%).
+
+#### Experiment 2: Saturday Morning Route Showcases
+* **Hypothesis:** Since Saturdays yield our highest average reach (548, $n=10$) and shares, publishing our highest-quality **ROUTE** carousels during this window will maximize organic distribution.
+* **Execution:** Schedule our premier cycling or running ROUTE carousel specifically for Saturday mornings at 08:00 CR time.
+* **Metric of Success:** Reach (Target: >400) and Shares per post.
+
+#### Experiment 3: The "Resilience" Narrative (FOUNDER Pillar)
+* **Hypothesis:** Audiences connect deeply with raw, human vulnerability over polished marketing. Introducing a post that touches on overcoming physical adversity or the mental battle of endurance will drive higher sharing.
+* **Execution:** Generate a post under the FOUNDER pillar focusing on the quiet, demanding moments of trail preparation or recovery, emphasizing the mental discipline required by the Costa Rican topography.
+* **Metric of Success:** Shares and Comments (Target: >8% combined interaction share).

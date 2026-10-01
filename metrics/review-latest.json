@@ -1,85 +1,85 @@
 {
  "stats": {
-  "generated": "2026-09-10",
+  "generated": "2026-10-01",
   "current_learner_thresholds": {
    "REACH_FLOOR": 50,
    "HALFLIFE_DAYS": 90,
    "SAVES_DEAD": 0.05
   },
   "min_age_days": 2,
-  "total_posts": 845,
-  "with_insights": 160,
-  "eligible": 46,
-  "eligible_recent_12mo": 41,
+  "total_posts": 898,
+  "with_insights": 213,
+  "eligible": 56,
+  "eligible_recent_12mo": 51,
   "date_range": [
    "2017-07-23",
-   "2026-08-25"
+   "2026-09-30"
   ],
   "interaction_mix_pct": {
    "saved": 0.8,
-   "shares": 6.5,
-   "likes": 84.1,
-   "comments": 3.5
+   "shares": 5.8,
+   "likes": 84.5,
+   "comments": 4.0
   },
   "format_leaderboard": [
    {
     "format": "carousel",
-    "avg_eng_rate": 0.1179,
-    "n": 4
+    "avg_eng_rate": 0.1316,
+    "n": 6
    },
    {
     "format": "single",
-    "avg_eng_rate": 0.0769,
-    "n": 8
+    "avg_eng_rate": 0.0825,
+    "n": 10
    },
    {
     "format": "reel",
-    "avg_eng_rate": 0.0521,
-    "n": 31
+    "avg_eng_rate": 0.0541,
+    "n": 36
    },
    {
     "format": "story",
-    "avg_eng_rate": 0.0506,
-    "n": 3
+    "avg_eng_rate": 0.0389,
+    "n": 4
    }
   ],
   "pillar_leaderboard": [
    {
-    "pillar": "ROUTE",
-    "avg_eng_rate": 0.0657,
-    "n": 19
-   },
-   {
-    "pillar": "EXPERIENCE",
-    "avg_eng_rate": 0.0612,
+    "pillar": "FOUNDER",
+    "avg_eng_rate": 0.1189,
     "n": 3
    },
    {
-    "pillar": "FOUNDER",
-    "avg_eng_rate": 0.051,
-    "n": 1
+    "pillar": "ROUTE",
+    "avg_eng_rate": 0.0626,
+    "n": 24
+   },
+   {
+    "pillar": "EXPERIENCE",
+    "avg_eng_rate": 0.0575,
+    "n": 4
    },
    {
     "pillar": "KNOWLEDGE",
-    "avg_eng_rate": 0.0153,
-    "n": 1
+    "avg_eng_rate": 0.0138,
+    "n": 2
    }
   ],
   "category_leaderboard": [
    {
-    "category": "RUNNING",
-    "avg_eng_rate": 0.0705,
-    "n": 7
+    "category": "CYCLING",
+    "avg_eng_rate": 0.0881,
+    "n": 10
    },
    {
-    "category": "CYCLING",
-    "avg_eng_rate": 0.0652,
-    "n": 8
+    "category": "RUNNING",
+    "avg_eng_rate": 0.0705,
+    "n": 10
    },
    {
     "category": "BESPOKE JOURNEYS",
-    "avg_eng_rate": 0.0606,
-    "n": 1
+    "avg_eng_rate": 0.0546,
+    "n": 2
    },
    {
     "category": "WATER SPORTS",
@@ -88,43 +88,224 @@
    },
    {
     "category": "COSTA RICA",
-    "avg_eng_rate": 0.0487,
-    "n": 7
+    "avg_eng_rate": 0.0386,
+    "n": 10
    }
   ],
-  "unlabeled_history_n": 22,
+  "unlabeled_history_n": 23,
+  "publish_hour_leaderboard_cr": [
+   {
+    "hour_cr": 14,
+    "n": 2,
+    "avg_reach": 1510,
+    "shares": 5
+   },
+   {
+    "hour_cr": 13,
+    "n": 1,
+    "avg_reach": 459,
+    "shares": 2
+   },
+   {
+    "hour_cr": 8,
+    "n": 4,
+    "avg_reach": 402,
+    "shares": 4
+   },
+   {
+    "hour_cr": 11,
+    "n": 7,
+    "avg_reach": 280,
+    "shares": 6
+   },
+   {
+    "hour_cr": 15,
+    "n": 4,
+    "avg_reach": 276,
+    "shares": 10
+   },
+   {
+    "hour_cr": 10,
+    "n": 5,
+    "avg_reach": 266,
+    "shares": 2
+   },
+   {
+    "hour_cr": 19,
+    "n": 3,
+    "avg_reach": 243,
+    "shares": 2
+   },
+   {
+    "hour_cr": 12,
+    "n": 6,
+    "avg_reach": 218,
+    "shares": 6
+   },
+   {
+    "hour_cr": 21,
+    "n": 2,
+    "avg_reach": 170,
+    "shares": 2
+   },
+   {
+    "hour_cr": 16,
+    "n": 2,
+    "avg_reach": 138,
+    "shares": 0
+   },
+   {
+    "hour_cr": 17,
+    "n": 2,
+    "avg_reach": 132,
+    "shares": 0
+   },
+   {
+    "hour_cr": 7,
+    "n": 3,
+    "avg_reach": 124,
+    "shares": 2
+   },
+   {
+    "hour_cr": 20,
+    "n": 3,
+    "avg_reach": 105,
+    "shares": 0
+   },
+   {
+    "hour_cr": 18,
+    "n": 6,
+    "avg_reach": 102,
+    "shares": 0
+   },
+   {
+    "hour_cr": 9,
+    "n": 6,
+    "avg_reach": 86,
+    "shares": 1
+   }
+  ],
+  "publish_weekday_leaderboard": [
+   {
+    "weekday": "Sat",
+    "n": 10,
+    "avg_reach": 548,
+    "shares": 11
+   },
+   {
+    "weekday": "Tue",
+    "n": 8,
+    "avg_reach": 220,
+    "shares": 8
+   },
+   {
+    "weekday": "Thu",
+    "n": 7,
+    "avg_reach": 210,
+    "shares": 5
+   },
+   {
+    "weekday": "Fri",
+    "n": 14,
+    "avg_reach": 207,
+    "shares": 11
+   },
+   {
+    "weekday": "Wed",
+    "n": 7,
+    "avg_reach": 173,
+    "shares": 5
+   },
+   {
+    "weekday": "Sun",
+    "n": 6,
+    "avg_reach": 170,
+    "shares": 2
+   },
+   {
+    "weekday": "Mon",
+    "n": 4,
+    "avg_reach": 93,
+    "shares": 0
+   }
+  ],
+  "posting_time_policy": "Live policy since Sep 2026: manual approvals outside 08:00-15:00 CR are held and published at 08:05 CR; reels run Fri 12:15 + Sat 09:00 CR. Judge these hour/weekday boards against that policy; n per bucket is small, so propose timing changes only on clear, repeated patterns.",
   "top_posts": [
+   {
+    "date": "2026-09-25",
+    "format": "carousel",
+    "pillar": "FOUNDER",
+    "reach": 55,
+    "interactions": 9,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.1636,
+    "caption": "I have spent years scouting the ridges of Costa Rica, and I have learned one thing: the mountain sets the pace. You can "
+   },
+   {
+    "date": "2026-09-14",
+    "format": "reel",
+    "pillar": null,
+    "reach": 81,
+    "interactions": 12,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.1481,
+    "caption": "Saturday I pinned on a race number for the first time since my heart attack.\n\n2026 Moon Run Arenal. 14 km of trail, 416 "
+   },
+   {
+    "date": "2026-09-13",
+    "format": "carousel",
+    "pillar": "ROUTE",
+    "reach": 52,
+    "interactions": 7,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.1346,
+    "caption": "Mountain biking in Costa Rica means accepting that the trail eventually meets the water. When the road ends at a flowing"
+   },
+   {
+    "date": "2026-09-10",
+    "format": "single",
+    "pillar": "FOUNDER",
+    "reach": 56,
+    "interactions": 7,
+    "shares": 0,
+    "saved": 0,
+    "eng_rate": 0.125,
+    "caption": "Sub-five hours, fourth overall — my fastest 50K. What the last ten kilometres taught me: the mountain sets the pace, and"
+   },
    {
     "date": "2026-08-15",
     "format": "carousel",
     "pillar": "ROUTE",
-    "reach": 53,
+    "reach": 55,
     "interactions": 8,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.1509,
+    "eng_rate": 0.1455,
     "caption": "Cycling in Costa Rica is at its best when the road climbs out of the valley and lets the wind take over. I look for rout"
    },
    {
     "date": "2026-08-15",
     "format": "carousel",
     "pillar": "ROUTE",
-    "reach": 63,
+    "reach": 64,
     "interactions": 7,
     "shares": 0,
     "saved": 0,
-    "eng_rate": 0.1111,
+    "eng_rate": 0.1094,
     "caption": "The routes that stay with you the longest are rarely the ones with trail markers. Scouting across these high, open pastu"
    },
    {
     "date": "2026-07-23",
     "format": "reel",
     "pillar": "ROUTE",
-    "reach": 239,
+    "reach": 240,
     "interactions": 29,
     "shares": 1,
     "saved": 1,
-    "eng_rate": 0.1213,
+    "eng_rate": 0.1208,
     "caption": "Some roads feel like they lead nowhere, and yet they take you everywhere. Misty mornings like these are what make road r"
    },
    {
@@ -137,54 +318,10 @@
     "saved": 0,
     "eng_rate": 0.1346,
     "caption": "Some trails demand more than just endurance — they ask for resilience, focus, and a willingness to embrace the elements."
-   },
-   {
-    "date": "2026-07-15",
-    "format": "carousel",
-    "pillar": "ROUTE",
-    "reach": 77,
-    "interactions": 7,
-    "shares": 1,
-    "saved": 0,
-    "eng_rate": 0.0909,
-    "caption": "A still moment beneath the towering volcano, where the clouds linger and the earth feels alive. This is Costa Rica, wher"
-   },
-   {
-    "date": "2026-06-24",
-    "format": "story",
-    "pillar": "EXPERIENCE",
-    "reach": 54,
-    "interactions": 5,
-    "shares": 0,
-    "saved": null,
-    "eng_rate": 0.0926,
-    "caption": "A quiet moment before the ride begins — adjusting, preparing, focusing. Mountain biking isn't just about the trails; it'"
-   },
-   {
-    "date": "2026-08-18",
-    "format": "reel",
-    "pillar": "ROUTE",
-    "reach": 99,
-    "interactions": 6,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0606,
-    "caption": "Suspended between the forest floor and the mist, the trail becomes entirely quiet. Moments like this last a lifetime —th"
-   },
-   {
-    "date": "2026-07-22",
-    "format": "reel",
-    "pillar": "ROUTE",
-    "reach": 82,
-    "interactions": 6,
-    "shares": 0,
-    "saved": 0,
-    "eng_rate": 0.0732,
-    "caption": "Dawn on the shore, where the waves meet the stillness of untouched sands. This is Costa Rica at its most tranquil. A pla"
    }
   ],
-  "photo_queue": 119,
-  "errored_posts_90d": 13
+  "photo_queue": 75,
+  "errored_posts_90d": 6
  },
- "markdown": "### 1. Readout\nThe data reveals a clear shift in performance: **Carousels** are currently our most potent format, commanding an engagement rate of 11.79% (n=4) compared to Reels at 5.21% (n=31). While Reels drive higher absolute reach (e.g., 239), the **live currency is Engagement Rate via Carousel storytelling**. Our audience is currently signaling a preference for \"ROUTE\" content (19 posts, 6.57% eng. rate) that focuses on the sensory experience of the landscape—specifically the \"misty mornings\" and \"high, open pastures\" identified in our top-performing captions. We are currently under-indexing on \"KNOWLEDGE\" content, which requires a pivot to ensure we remain the authority on Costa Rica, not just a gallery of its views.\n\n### 2. Proposed Changes\nGiven the thin data on non-Reel formats (n=4 for carousels), we should remain humble and avoid aggressive re-tuning.\n\n1.  **Learner Thresholds:** \n    *   **Keep `REACH_FLOOR` at 50:** While we have some high-performers, our average reach is still volatile; maintaining this floor ensures we only learn from posts that have cleared the \"noise\" threshold.\n    *   **Keep `HALFLIFE_DAYS` at 90:** With only 41 eligible posts in the last 12 months, we need a longer window to ensure seasonal or evergreen content isn't prematurely discarded.\n    *   **Keep `SAVES_DEAD` at 0.05:** Our current interaction mix is heavily skewed toward Likes (84.1%). Until we see a consistent rise in Saves (currently 0.8%), this metric is too thin to serve as a primary filter.\n2.  **Captioner Brief (`BRAND_PROMPT`):**\n    *   **Adjustment:** Explicitly instruct the writer to favor the \"Carousel\" format for \"ROUTE\" and \"EXPERIENCE\" pillars. \n    *   **Justification:** The 11.79% engagement rate for carousels significantly outperforms the 5.21% for reels. The brief should encourage a \"narrative arc\" across the slides (e.g., Slide 1: The Hook/View, Slide 2: The Technical Challenge, Slide 3: The Reward/Knowledge).\n\n### 3. 3 Experiments (Next 30 Days)\n\n1.  **The \"Carousel Narrative\" Test:** Convert 3 upcoming \"ROUTE\" posts from single/reel format into 4-slide carousels. Use the first slide for a high-impact visual and the final slide for a specific, actionable piece of \"KNOWLEDGE\" about the route.\n    *   *Success Metric:* Compare the engagement rate of these carousels against our current 11.79% benchmark.\n2.  **The \"Knowledge-First\" Hook:** In the next 5 posts, start the caption with a specific, non-obvious fact about Costa Rica (e.g., \"The reason the mist clings to this specific valley is...\"). \n    *   *Success Metric:* Monitor for an increase in \"Shares\" (currently 6.5%) as a proxy for value-add content.\n3.  **The \"Usted\" Invitation:** In the final sentence of every caption, include a soft, formal invitation in Spanish: *\"¿Le gustaría explorar esta ruta con nosotros?\"* (Would you like to explore this route with us?).\n    *   *Success Metric:* Track profile visits/follows per post to see if this formal, editorial tone drives higher conversion than our previous, more passive captions.\n\n***\n\n*Note: These proposals are for your review and approval. No automated changes have been applied to the system.*"
+ "markdown": "### 1. Data Readout (October 2026)\n\n* **The Live Currency:** Shares (5.8% of the interaction mix) are our primary organic growth driver, while Saves (0.8%) are practically dormant. Likes remain the baseline interaction at 84.5%.\n* **Format Performance:** Carousels are our clear editorial leader with a **13.16% average engagement rate** ($n=6$), while Reels act as our primary reach vehicle, pulling in our peak reach of 240 on 2026-07-23 despite a lower average engagement rate of 5.41% ($n=36$).\n* **Pillar & Category Strength:** The **ROUTE** pillar is our most reliable asset with a **6.26% average engagement rate** across a robust sample size ($n=24$). **CYCLING** (8.81% ER, $n=10$) and **RUNNING** (7.05% ER, $n=10$) heavily outperform general **COSTA RICA** travel content (3.86% ER, $n=10$).\n* **Narrative Themes:** Our top-performing posts are deeply personal, reflective, and visceral. Captions focusing on physical resilience (e.g., racing after a heart attack, pushing through the last 10km of a 50K) and the philosophy of exploration (e.g., \"the mountain sets the pace,\" \"scouting unmarked routes\") consistently generate engagement rates between 10.9% and 16.3%.\n* **Timing Patterns:** Saturday is our premier publishing day, averaging **548 reach and 11 shares** ($n=10$). Mondays are exceptionally weak, averaging just 93 reach ($n=4$). The midday window between 11:00 and 15:00 CR time yields the highest concentration of shares.\n\n---\n\n### 2. Proposed System Adjustments\n\n#### A. Learner Threshold Updates (`autopost.py`)\n1. **Lower `SAVES_DEAD` from `0.05` to `0.01` (1%):** \n   * *Justification:* Saves represent only 0.8% of our total interaction mix. The current 5% threshold is too punitive for highly successful posts that simply do not generate saves. Lowering this to 1% prevents the algorithm from discarding high-reach, highly shared posts.\n2. **Maintain `REACH_FLOOR` at `50` and `HALFLIFE_DAYS` at `90`:**\n   * *Justification:* Our top-performing recent posts (such as the 2026-09-25 carousel at 55 reach and the 2026-09-13 carousel at 52 reach) sit just above the floor of 50. Raising it would starve the learner of our best qualitative data, while lowering it would introduce too much low-engagement noise. A 90-day halflife remains perfectly balanced for our current volume of 51 eligible posts over the last 12 months.\n\n#### B. Captioner Brief Updates (`BRAND_PROMPT`)\nTo align our automated writer with what actually resonates, we propose updating the `BRAND_PROMPT` instructions:\n\n* **Incorporate Visceral Philosophy:** Shift the tone from descriptive luxury travel to a more reflective, poetic, and athletic perspective. The terrain of Costa Rica should not merely be described; it should be treated as an active participant that \"sets the pace\" (*la montaña impone el ritmo*).\n* **Elevate the Founder's Voice:** When writing under the **FOUNDER** or **ROUTE** pillars, use a tone of humble expertise. Frame challenges not as conquests, but as lessons in resilience, patience, and respect for the natural world.\n* **Strict Brand & Language Guardrails:** Re-emphasize that the brand must always be referred to as **My Adventure Costa Rica** (never abbreviated). All Spanish copy must strictly use the formal *usted* to maintain an elegant, respectful, and high-end editorial distance.\n\n---\n\n### 3. Three Experiments for the Next 30 Days\n\n#### Experiment 1: The \"Visceral Hook\" Format\n* **Hypothesis:** Opening captions with a short, poetic, single-sentence philosophical statement in formal Spanish (inspired by our top-performing \"the mountain sets the pace\" posts) will increase carousel swipe-through rates and engagement.\n* **Execution:** For the next 4 carousel posts, structure the caption to begin with a bold, italicized, one-line reflection on endurance or nature before introducing the specific route.\n* **Metric of Success:** Engagement Rate (Target: >12%).\n\n#### Experiment 2: Saturday Morning Route Showcases\n* **Hypothesis:** Since Saturdays yield our highest average reach (548, $n=10$) and shares, publishing our highest-quality **ROUTE** carousels during this window will maximize organic distribution.\n* **Execution:** Schedule our premier cycling or running ROUTE carousel specifically for Saturday mornings at 08:00 CR time.\n* **Metric of Success:** Reach (Target: >400) and Shares per post.\n\n#### Experiment 3: The \"Resilience\" Narrative (FOUNDER Pillar)\n* **Hypothesis:** Audiences connect deeply with raw, human vulnerability over polished marketing. Introducing a post that touches on overcoming physical adversity or the mental battle of endurance will drive higher sharing.\n* **Execution:** Generate a post under the FOUNDER pillar focusing on the quiet, demanding moments of trail preparation or recovery, emphasizing the mental discipline required by the Costa Rican topography.\n* **Metric of Success:** Shares and Comments (Target: >8% combined interaction share)."
 }
