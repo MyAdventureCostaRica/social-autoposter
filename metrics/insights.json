@@ -11365,7 +11365,7 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 10,
+  "reach": 11,
   "likes": 1,
   "comments": 0,
   "saved": 0,
@@ -11375,7 +11375,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.1
+  "eng_rate": 0.0909
  },
  {
   "id": "18500182018098645",
@@ -11402,14 +11402,14 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 21,
+  "reach": 27,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 48,
+  "views": 57,
   "interactions": 6,
-  "eng_rate": 0.2857
+  "eng_rate": 0.2222
  }
 ]
