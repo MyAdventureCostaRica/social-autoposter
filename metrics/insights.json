@@ -11299,17 +11299,17 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "EXPERIENCE",
-  "reach": 50,
+  "reach": 51,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 107,
+  "views": 108,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.1
+  "eng_rate": 0.098
  },
  {
   "id": "18100138523544657",
@@ -11365,17 +11365,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 5,
-  "likes": 0,
+  "reach": 10,
+  "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 0,
-  "views": 15,
+  "total_interactions": 1,
+  "views": 28,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 0,
-  "eng_rate": 0.0
+  "interactions": 1,
+  "eng_rate": 0.1
  },
  {
   "id": "18500182018098645",
@@ -11394,5 +11394,22 @@
   "navigation": 8,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "17950529499299114",
+  "date": "2026-10-02",
+  "base": "B778B147-B730-4B0B-9F19-BF374A39AEC9_z7aif5",
+  "format": "reel",
+  "category": "RUNNING",
+  "pillar": "KNOWLEDGE",
+  "reach": 21,
+  "likes": 6,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 6,
+  "views": 48,
+  "interactions": 6,
+  "eng_rate": 0.2857
  }
 ]
