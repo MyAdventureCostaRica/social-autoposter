@@ -11023,7 +11023,7 @@
   "format": "single",
   "category": "BESPOKE JOURNEYS",
   "pillar": "KNOWLEDGE",
-  "reach": 47,
+  "reach": 48,
   "likes": 3,
   "comments": 0,
   "saved": 0,
@@ -11033,7 +11033,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.0638
+  "eng_rate": 0.0625
  },
  {
   "id": "18596049784065541",
@@ -11436,17 +11436,17 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "KNOWLEDGE",
-  "reach": 83,
+  "reach": 85,
   "likes": 16,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 16,
-  "views": 160,
+  "views": 165,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 16,
-  "eng_rate": 0.1928
+  "eng_rate": 0.1882
  },
  {
   "id": "17889974604616055",
@@ -11473,17 +11473,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 37,
+  "reach": 39,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 101,
+  "views": 107,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.1892
+  "eng_rate": 0.1795
  },
  {
   "id": "17912833158495819",
@@ -11510,17 +11510,17 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 9,
-  "likes": 2,
+  "reach": 48,
+  "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 2,
-  "views": 42,
-  "profile_visits": 0,
+  "total_interactions": 4,
+  "views": 109,
+  "profile_visits": 2,
   "follows": 0,
-  "interactions": 2,
-  "eng_rate": 0.2222
+  "interactions": 4,
+  "eng_rate": 0.0833
  },
  {
   "id": "18133126144584373",
