@@ -11097,17 +11097,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 25,
+  "reach": 26,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 52,
+  "views": 53,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.08
+  "eng_rate": 0.0769
  },
  {
   "id": "18064211630610119",
@@ -11188,17 +11188,9 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 35,
-  "likes": 8,
-  "comments": 2,
-  "saved": 0,
-  "shares": 0,
-  "total_interactions": 10,
-  "views": 88,
-  "profile_visits": 0,
-  "follows": 0,
-  "interactions": 10,
-  "eng_rate": 0.2857
+  "error": "Unsupported get request. Object with ID '18000335390801625' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  },
  {
   "id": "18008370002770966",
@@ -11299,17 +11291,17 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "EXPERIENCE",
-  "reach": 63,
+  "reach": 64,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 125,
+  "views": 126,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.0794
+  "eng_rate": 0.0781
  },
  {
   "id": "18100138523544657",
@@ -11402,15 +11394,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 158,
+  "reach": 161,
   "likes": 9,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 9,
-  "views": 229,
+  "views": 232,
   "interactions": 9,
-  "eng_rate": 0.057
+  "eng_rate": 0.0559
  },
  {
   "id": "17935529898390056",
@@ -11419,15 +11411,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 150,
+  "reach": 151,
   "likes": 3,
   "comments": 0,
   "saved": 1,
   "shares": 0,
   "total_interactions": 4,
-  "views": 191,
+  "views": 192,
   "interactions": 4,
-  "eng_rate": 0.0267
+  "eng_rate": 0.0265
  },
  {
   "id": "18128803081766117",
@@ -11436,17 +11428,17 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "KNOWLEDGE",
-  "reach": 87,
+  "reach": 89,
   "likes": 16,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 16,
-  "views": 170,
+  "views": 172,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 16,
-  "eng_rate": 0.1839
+  "eng_rate": 0.1798
  },
  {
   "id": "17889974604616055",
@@ -11510,17 +11502,9 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 74,
-  "likes": 5,
-  "comments": 0,
-  "saved": 0,
-  "shares": 0,
-  "total_interactions": 5,
-  "views": 154,
-  "profile_visits": 2,
-  "follows": 0,
-  "interactions": 5,
-  "eng_rate": 0.0676
+  "error": "Unsupported get request. Object with ID '18343173367281846' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  },
  {
   "id": "18133126144584373",
@@ -11547,17 +11531,9 @@
   "format": "single",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 21,
-  "likes": 3,
-  "comments": 0,
-  "saved": 0,
-  "shares": 0,
-  "total_interactions": 3,
-  "views": 38,
-  "profile_visits": 0,
-  "follows": 0,
-  "interactions": 3,
-  "eng_rate": 0.1429
+  "error": "Unsupported get request. Object with ID '18021237413723246' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api",
+  "interactions": 0,
+  "eng_rate": null
  },
  {
   "id": "18094635611149788",
