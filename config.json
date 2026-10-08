@@ -20,10 +20,10 @@
   "dedupe_posted": true,
   "dedupe_hash_distance": 6,
   "pillar_plan": {
-    "KNOWLEDGE": 2,
-    "ROUTE": 2,
-    "FOUNDER": 2,
-    "EXPERIENCE": 1
+    "ROUTE": 3,
+    "EXPERIENCE": 2,
+    "KNOWLEDGE": 1,
+    "FOUNDER": 1
   },
   "plan_window": 14,
   "plan_scan": 8,

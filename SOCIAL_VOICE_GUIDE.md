@@ -1,5 +1,15 @@
 # Social Voice Guide — My Adventure Costa Rica
 
+*v5, October 8 2026. The owner's verdict on the nine v4 posts (Sep 30 – Oct 8): "no teaching, you never sell tours which is what the website does, it is not lifestyle, it is not travel or adventure, no real human would sound like this". He was right. v4 had banned the model from using any fact that was not in a photo note, so with no notes it could only write safety tips; and the queue was a camera-roll dump. v5 changes the inputs, not just the wording:*
+
+- **The website writes the feed.** `brand/knowledge.md` (the three expedition pages, the company text and the founder's published journal) is in every caption call. Every post tells a real day, highlight, lodge or kitchen of a real expedition, with its numbers and names, and ends with the expedition's name, its departures and "Details in the bio." — the way the site sells.
+- **Esteban's own voice**, learned from his journal: plain declaratives, numbers and names instead of adjectives, honest about cost and reward, never promising what he cannot, "I" for his own experience, "we" for what the expedition does, "you" for the guest's day, and a plain "why" at the end.
+- **The library replaces the camera roll.** Only his own photos from the website project, each with a note that says which day it illustrates; photos of one day post together as a photo carousel (`SET:` in the note).
+- **Hard no:** instructions and safety tips, inventories of the frame, morals, praise words, "send this to" lines, sentences copied from the site, race-issued items, hospital photos, artworks, stock photos. See `brand/README.md`.
+
+The v4 notes below (September 29) stay as history; where they conflict, v5 wins.
+
+---
 *v4, September 29 2026. Rewritten after the owner's verdict on the September captions ("too robotic, it has no essence… describing everything on the picture like grass, and metal bridges") and a study of the accounts that do this well. This file is the canonical reference; `autopost.py`'s BRAND_PROMPT enforces it and `caption_violations()` checks every caption against the banned patterns before it is used. What did not change from v3 (August 2026): the reader is "you", the register is plain and warm, nothing is sold except on EXPERIENCE posts and there only with published facts, and there is no first person without a note.*
 
 ## The voice in one paragraph
