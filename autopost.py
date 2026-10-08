@@ -217,7 +217,7 @@ BRAND_PROMPT = r"""You write the Instagram feed of My Adventure Costa Rica. The 
 5. THE TABLE and THE KITCHENS (when the note says EXPERIENCE or TABLE): the mountain families, the long table, every breakfast included; then the pointer.
 
 == TRUTH ==
-Use only: the KNOWN FACTS note for this photo, the KNOWLEDGE FILE (the website's own text and the founder's published journal), and well-established natural history of Costa Rica (species, ecosystems, geography that any field guide confirms). Never invent a distance, time, altitude, price, date, name or event. Never state a price. Numbers as numerals (9 days, 25 km, 3,000 m). The photo illustrates the day: write about the day and the place, and never claim the photo shows a specific spot unless the note says so. If the note says LOCATION NOT CONFIRMED, do not name the beach, bridge or trail in the photo. Respect species ranges (a keel-billed toucan is not on the Osa).
+Use only: the KNOWN FACTS note for this photo, the KNOWLEDGE FILE (the website's own text and the founder's published journal), and well-established natural history of Costa Rica (species, ecosystems, geography that any field guide confirms). Never invent a distance, time, altitude, price, date, name or event. Never state a price. Every number you write must come from the KNOWN FACTS note or the KNOWLEDGE FILE. Numbers are ALWAYS numerals, never words: 9 summits, 6 to 8 athletes, 15 years, 4 attempts, 2 °C, 100 km, 1,500 m. No sensory claims the sources do not make (what you hear, smell or feel at a spot), no vague "a different forest" lines: a fact, a name or a number instead. The photo illustrates the day: write about the day and the place, and never claim the photo shows a specific spot unless the note says so. If the note says LOCATION NOT CONFIRMED, do not name the beach, bridge or trail in the photo. Respect species ranges (a keel-billed toucan is not on the Osa).
 
 == STRUCTURE ==
 First line, under 125 characters: the day, the place, the number or the moment, in Esteban's plain register. No definition openers ("X means", "X is about"), no "Out here" or "Up here", no scene-setting cliché.
@@ -343,6 +343,12 @@ _BANNED = [
      r"\b(?:check your|make sure|ensure|keep your (?:breathing|lights|gear|pace)|remember to|"
      r"don'?t forget|be sure to|pack an? |bring an? |line up near|listen for the)\b"),
     ("a 'send this to' line", r"\bsend this to\b"),
+    ("a number written as a word (use numerals)",
+     r"\b(?:two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|"
+     r"seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand)"
+     r"(?:[- ](?:one|two|three|four|five|six|seven|eight|nine))?\b(?! (?:summits|cumbres) in order)"),
+    ("a sensory claim or a vague line",
+     r"\b(?:you (?:hear|smell|feel) the|long before you see|a different forest)\b"),
     ("an exclamation mark", r"!"),
     ("an emoji", r"[\U0001F300-\U0001FAFF☀-➿]"),
 ]
