@@ -11254,17 +11254,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 28,
+  "reach": 29,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 74,
+  "views": 75,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1071
+  "eng_rate": 0.1034
  },
  {
   "id": "18130734565815371",
@@ -11357,7 +11357,7 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 26,
+  "reach": 27,
   "likes": 1,
   "comments": 0,
   "saved": 0,
@@ -11367,7 +11367,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.0385
+  "eng_rate": 0.037
  },
  {
   "id": "18500182018098645",
@@ -11417,7 +11417,7 @@
   "saved": 1,
   "shares": 0,
   "total_interactions": 4,
-  "views": 197,
+  "views": 198,
   "interactions": 4,
   "eng_rate": 0.0261
  },
@@ -11428,17 +11428,17 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "KNOWLEDGE",
-  "reach": 91,
+  "reach": 92,
   "likes": 18,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 18,
-  "views": 185,
+  "views": 191,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 18,
-  "eng_rate": 0.1978
+  "eng_rate": 0.1957
  },
  {
   "id": "17889974604616055",
@@ -11465,17 +11465,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 40,
+  "reach": 42,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 111,
+  "views": 116,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.175
+  "eng_rate": 0.1667
  },
  {
   "id": "17912833158495819",
@@ -11610,5 +11610,42 @@
   "navigation": 14,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "17925962058425506",
+  "date": "2026-10-09",
+  "base": "lib-gr-nosara-1",
+  "format": "carousel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "reach": 6,
+  "likes": 4,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 4,
+  "views": 25,
+  "profile_visits": 0,
+  "follows": 0,
+  "interactions": 4,
+  "eng_rate": 0.6667
+ },
+ {
+  "id": "18088553741680063",
+  "date": "2026-10-09",
+  "base": "lib-gr-nosara-1-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "reach": 10,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 1,
+  "views": 15,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 12,
+  "interactions": 1,
+  "eng_rate": 0.1
  }
 ]
