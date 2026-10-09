@@ -8496,5 +8496,25 @@
   "category": "RUNNING",
   "pillar": "ROUTE",
   "caption": "Beginning your run before sunrise keeps you out of the intense afternoon sun.\n\nUse these early hours to find your footin"
+ },
+ {
+  "id": "17925962058425506",
+  "date": "2026-10-09",
+  "ts": "2026-10-09T15:22:58",
+  "base": "lib-gr-nosara-1",
+  "format": "carousel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "101.1 kilometres of dirt and river mouths bring you to the Nosara coast.\n\nWe ride north out of Santa Teresa through Manz"
+ },
+ {
+  "id": "18088553741680063",
+  "date": "2026-10-09",
+  "ts": "2026-10-09T15:22:58",
+  "base": "lib-gr-nosara-1-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "101.1 kilometres of dirt and river mouths bring you to the Nosara coast.\n\nWe ride north out of Santa Teresa through Manz"
  }
 ]
