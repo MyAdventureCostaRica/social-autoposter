@@ -11260,7 +11260,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 75,
+  "views": 76,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
@@ -11357,17 +11357,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 27,
+  "reach": 28,
   "likes": 1,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 1,
-  "views": 55,
+  "views": 56,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 1,
-  "eng_rate": 0.037
+  "eng_rate": 0.0357
  },
  {
   "id": "18500182018098645",
@@ -11411,15 +11411,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 153,
+  "reach": 155,
   "likes": 3,
   "comments": 0,
   "saved": 1,
   "shares": 0,
   "total_interactions": 4,
-  "views": 198,
+  "views": 199,
   "interactions": 4,
-  "eng_rate": 0.0261
+  "eng_rate": 0.0258
  },
  {
   "id": "18128803081766117",
@@ -11428,7 +11428,7 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "KNOWLEDGE",
-  "reach": 92,
+  "reach": 93,
   "likes": 18,
   "comments": 0,
   "saved": 0,
@@ -11438,7 +11438,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 18,
-  "eng_rate": 0.1957
+  "eng_rate": 0.1935
  },
  {
   "id": "17889974604616055",
@@ -11465,7 +11465,7 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 42,
+  "reach": 43,
   "likes": 6,
   "comments": 0,
   "saved": 0,
@@ -11475,7 +11475,7 @@
   "profile_visits": 1,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.1667
+  "eng_rate": 0.1628
  },
  {
   "id": "17912833158495819",
@@ -11618,17 +11618,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 6,
-  "likes": 4,
+  "reach": 21,
+  "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 4,
-  "views": 25,
+  "total_interactions": 7,
+  "views": 54,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 4,
-  "eng_rate": 0.6667
+  "interactions": 7,
+  "eng_rate": 0.3333
  },
  {
   "id": "18088553741680063",
@@ -11647,5 +11647,22 @@
   "navigation": 12,
   "interactions": 1,
   "eng_rate": 0.1
+ },
+ {
+  "id": "18429047140144949",
+  "date": "2026-10-09",
+  "base": "F93A2751-2E0F-4D6F-AB7D-04583797D92A_pebujt",
+  "format": "reel",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "reach": 291,
+  "likes": 8,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 8,
+  "views": 415,
+  "interactions": 8,
+  "eng_rate": 0.0275
  }
 ]
