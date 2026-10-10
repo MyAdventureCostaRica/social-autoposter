@@ -8537,5 +8537,25 @@
   "category": "RUNNING",
   "pillar": "ROUTE",
   "caption": "The Queen Stage covers 25 kilometres from Providencia down to Ranchos Tinam\u00fa. The final 4 kilometres climb an open mount"
+ },
+ {
+  "id": "18097424900387229",
+  "date": "2026-10-10",
+  "ts": "2026-10-10T15:17:05",
+  "base": "lib-bespoke-carreta",
+  "format": "single",
+  "category": "BESPOKE JOURNEYS",
+  "pillar": "EXPERIENCE",
+  "caption": "In 2005, UNESCO added Costa Rica's painted oxcart tradition to its intangible cultural heritage list.\n\nThe carreta is th"
+ },
+ {
+  "id": "17947156287343611",
+  "date": "2026-10-10",
+  "ts": "2026-10-10T15:17:05",
+  "base": "lib-bespoke-carreta-story",
+  "format": "story",
+  "category": "BESPOKE JOURNEYS",
+  "pillar": "EXPERIENCE",
+  "caption": "In 2005, UNESCO added Costa Rica's painted oxcart tradition to its intangible cultural heritage list.\n\nThe carreta is th"
  }
 ]
