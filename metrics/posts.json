@@ -8560,5 +8560,25 @@
   "category": "BESPOKE JOURNEYS",
   "pillar": "EXPERIENCE",
   "caption": "In 2005, UNESCO added Costa Rica's painted oxcart tradition to its intangible cultural heritage list.\n\nThe carreta is th"
+ },
+ {
+  "id": "18081765500709172",
+  "date": "2026-10-11",
+  "ts": "2026-10-11T15:25:11",
+  "base": "lib-cr-toucan",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "The keel-billed toucan lives in the northern Pacific lowlands and the Caribbean slope. We ride through its range on the "
+ },
+ {
+  "id": "18130654552705064",
+  "date": "2026-10-11",
+  "ts": "2026-10-11T15:25:11",
+  "base": "lib-cr-toucan-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "The keel-billed toucan lives in the northern Pacific lowlands and the Caribbean slope. We ride through its range on the "
  }
 ]
