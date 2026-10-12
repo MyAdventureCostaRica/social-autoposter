@@ -8581,5 +8581,25 @@
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
   "caption": "The keel-billed toucan lives in the northern Pacific lowlands and the Caribbean slope. We ride through its range on the "
+ },
+ {
+  "id": "18137467888711563",
+  "date": "2026-10-12",
+  "ts": "2026-10-12T15:21:44",
+  "base": "lib-founder-nine-summits",
+  "format": "single",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "I have spent 15 years learning this massif, and it took 4 scouting trips to piece the ridgeline together.\n\nThe Nueve Cum"
+ },
+ {
+  "id": "17990955012051812",
+  "date": "2026-10-12",
+  "ts": "2026-10-12T15:21:44",
+  "base": "lib-founder-nine-summits-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "I have spent 15 years learning this massif, and it took 4 scouting trips to piece the ridgeline together.\n\nThe Nueve Cum"
  }
 ]
