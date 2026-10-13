@@ -8602,5 +8602,25 @@
   "category": "RUNNING",
   "pillar": "FOUNDER",
   "caption": "I have spent 15 years learning this massif, and it took 4 scouting trips to piece the ridgeline together.\n\nThe Nueve Cum"
+ },
+ {
+  "id": "18088884008270259",
+  "date": "2026-10-13",
+  "ts": "2026-10-13T15:24:42",
+  "base": "lib-gr-guanacaste-tree",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "The Guanacaste tree, Enterolobium cyclocarpum, stands in the open cattle country of the northern Pacific. It is the nati"
+ },
+ {
+  "id": "18109584887615348",
+  "date": "2026-10-13",
+  "ts": "2026-10-13T15:24:42",
+  "base": "lib-gr-guanacaste-tree-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "The Guanacaste tree, Enterolobium cyclocarpum, stands in the open cattle country of the northern Pacific. It is the nati"
  }
 ]
