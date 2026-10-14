@@ -8623,5 +8623,25 @@
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
   "caption": "The Guanacaste tree, Enterolobium cyclocarpum, stands in the open cattle country of the northern Pacific. It is the nati"
+ },
+ {
+  "id": "18152773435533812",
+  "date": "2026-10-14",
+  "ts": "2026-10-14T19:21:25",
+  "base": "lib-gr-santa-teresa",
+  "format": "single",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "The end of the first 2 days of The Gravel Expedition. Whether you roll in from the Paquera ferry or descend the forested"
+ },
+ {
+  "id": "18131816125687885",
+  "date": "2026-10-14",
+  "ts": "2026-10-14T19:21:25",
+  "base": "lib-gr-santa-teresa-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "The end of the first 2 days of The Gravel Expedition. Whether you roll in from the Paquera ferry or descend the forested"
  }
 ]
