@@ -444,6 +444,13 @@ def _caption_call(system, user_text, b64):
                 return json.loads(txt)
             except urllib.error.HTTPError as e:
                 errs.append(f"{m}: HTTP {e.code}")
+                if e.code in (429, 503):        # say WHY: a daily quota reads differently from an outage
+                    try:
+                        why = e.read().decode(errors="replace")
+                        why = (json.loads(why).get("error") or {}).get("message") or why
+                    except Exception:
+                        why = ""
+                    print(f"{m}: HTTP {e.code} — {str(why)[:300]}")
                 if e.code == 404:
                     break                       # model gone — next model immediately
                 if e.code in (429, 500, 502, 503, 504) and attempt == 1:
