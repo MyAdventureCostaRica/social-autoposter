@@ -15,6 +15,7 @@ GITHUB_TOKEN (automatic).
 import base64, glob, io, json, os, re, subprocess, sys, time, urllib.parse, urllib.request, urllib.error
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import pillow_heif
+import meta_token
 
 pillow_heif.register_heif_opener()
 
@@ -692,7 +693,10 @@ def meta_post(path, params):
         with urllib.request.urlopen(req, timeout=120) as r:
             return json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
-        raise RuntimeError(f"Graph API {e.code}: {e.read().decode()}")
+        body = e.read().decode(errors="replace")
+        if meta_token.is_token_error(body):
+            raise meta_token.MetaTokenError(f"Graph API {e.code}: {body}")
+        raise RuntimeError(f"Graph API {e.code}: {body}")
 
 
 STATE = os.path.join(HERE, "state.json")
@@ -1019,6 +1023,7 @@ def prepare():
     """Pick a photo, caption it, render it, push it, and stage state.json.
     Does NOT post — that's publish()."""
     git_setup()
+    meta_token.require("Daily post")        # a dead token stops the run HERE (Oct 15 2026)
     # Privacy pass first (no-op after the first run): never leave GPS in the public repo.
     try:
         _keep = set()
@@ -1556,6 +1561,7 @@ def publish_pending():
         print("No pending post to publish."); return
     if st.get("status") != "approved":
         print("Pending post not approved yet (status:", st.get("status"), ") — skipping."); return
+    meta_token.require("Publish approved post")
     git_setup()                                        # (morning hold removed Sep 28 2026 — owner's rule)
     try:
         publish(st)                                    # reuse the full publish path

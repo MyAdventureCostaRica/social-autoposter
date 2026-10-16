@@ -29,7 +29,10 @@ def send(text, title="My Adventure Costa Rica auto-poster", tags=None):
             body = urllib.request.urlopen(
                 f"https://api.callmebot.com/whatsapp.php?{q}", timeout=20).read()
             snip = " ".join(body.decode(errors="replace").split())[:300]
-            if any(w in snip.lower() for w in _BAD):
+            # CallMeBot echoes the message ("Text to send: …"); judge only ITS words, or a
+            # message that merely mentions an error reads as a delivery failure.
+            own = snip.split("Text to send")[0]
+            if any(w in own.lower() for w in _BAD):
                 print("WhatsApp notify PROBLEM — CallMeBot said:", snip)
             else:
                 print("WhatsApp notify OK — CallMeBot said:", snip[:120]); ok = True

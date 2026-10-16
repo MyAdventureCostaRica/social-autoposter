@@ -44,7 +44,7 @@ jobs:
           CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
         run: python reel.py stage
       - name: Alert the owner if this run failed
-        if: failure()
+        if: failure() && hashFiles('.token_dead') == ''   # a dead token pings on its own, with the fix
         env:
           WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}

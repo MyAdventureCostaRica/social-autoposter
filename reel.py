@@ -18,7 +18,8 @@ Optional: give a clip a caption hint by setting a Cloudinary context field
 the frame alone.
 """
 import os, json, time, urllib.request, urllib.parse, urllib.error
-import autopost as ap                       # caption_for, performance_brief, meta_post, CFG, TAGS
+import autopost as ap
+import meta_token                       # caption_for, performance_brief, meta_post, CFG, TAGS
 
 HERE = ap.HERE
 TOKEN = ap.META_TOKEN
@@ -281,6 +282,7 @@ def stage_reel():
     auto-approve is on). Never posts on its own."""
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
+    meta_token.require("Reel")
     lr = os.path.join(HERE, "metrics", "last_reel.txt")
     today = ap.cr_today()                          # Costa Rica date, not the runner's UTC
     force = os.environ.get("FORCE_POST") == "1"
@@ -367,6 +369,7 @@ def stage_reel():
 
 def publish_pending_reel():
     """Publish the reel the owner APPROVED on the dashboard (read from Upstash)."""
+    meta_token.require("Publish approved reel")
     state = ap.rget("pending_reel")
     if not state or state.get("status") != "approved":
         print("No approved reel to publish."); return

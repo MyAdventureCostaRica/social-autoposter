@@ -5,3 +5,6 @@ SECURITY_AUDIT_PROMPT.md
 # Python bytecode (the Actions runner creates it when reel.py imports autopost.py)
 __pycache__/
 *.pyc
+
+# marker written by meta_token.py when the Meta token is dead (never committed)
+.token_dead

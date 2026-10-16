@@ -43,6 +43,16 @@ Facebook Page 1495946694015283 · Instagram @myadventurecostarica 17841403481255
 1. Repo → **Settings → Secrets and variables → Actions → New repository secret**.
 2. Name `META_ACCESS_TOKEN` · Value = the token from Part 2 · **Add secret**.
 
+## If the token dies (you changed your Facebook password, or Facebook reset the session)
+
+Every job now checks the token first and, when it is dead, pings you once with the fix
+and shows these steps in the run summary (`meta_token.py`). The fix is Part 2 again
+(a new Page token), then **two** places: the GitHub secret `META_ACCESS_TOKEN` (Part 3)
+AND the Vercel environment variable `META_TOKEN` (Settings → Environment Variables,
+then Redeploy) — the dashboard's comment and DM replies use the Vercel copy. A
+system-user token from Meta Business Suite survives password changes; the Explorer
+Page token does not (Oct 15 2026).
+
 ## Part 4 — Turn on the approval "training wheels"
 
 1. Repo → **Settings → Environments → New environment** → name it exactly

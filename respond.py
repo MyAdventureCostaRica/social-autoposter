@@ -22,6 +22,7 @@ DMs are always surfaced for you. Secrets: META_ACCESS_TOKEN (you add it),
 GITHUB_TOKEN (built-in, powers drafting + the issue).
 """
 import json, os, time, datetime, urllib.parse, urllib.request, urllib.error
+import meta_token
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CFG = json.load(open(os.path.join(HERE, "config.json")))
@@ -352,6 +353,8 @@ def open_issue(pending):
 def main():
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
+    if not os.environ.get("TEST_NOTIFY"):
+        meta_token.require("Engagement responder")   # a dead token must not report "0 new" in green
     # On-demand test: fire a sample alert through every configured channel so you can
     # confirm ntfy/WhatsApp/etc. work without waiting for a real comment. Triggered by
     # running the workflow with the "Send a test alert" box checked.

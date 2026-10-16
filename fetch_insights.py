@@ -16,6 +16,7 @@ each run and cache the rest — every post still ends up in insights.json for th
 learner to read. Needs META_ACCESS_TOKEN to carry instagram_manage_insights.
 """
 import json, os, time, urllib.parse, urllib.request, urllib.error
+import meta_token
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CFG = json.load(open(os.path.join(HERE, "config.json")))
@@ -332,6 +333,7 @@ def supply_ping():
 
 
 def main():
+    meta_token.require("Daily insights")
     if not TOKEN:
         raise SystemExit("Missing META_ACCESS_TOKEN.")
     posts = discover_media()

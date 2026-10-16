@@ -48,7 +48,7 @@ jobs:
           TEST_NOTIFY: ${{ inputs.test_notify && '1' || '' }}   # fire a test alert on demand
         run: python respond.py
       - name: Alert the owner if this run failed
-        if: failure()
+        if: failure() && hashFiles('.token_dead') == ''   # a dead token pings on its own, with the fix
         env:
           WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
