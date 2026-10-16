@@ -29,14 +29,21 @@ Facebook Page 1495946694015283 · Instagram @myadventurecostarica 17841403481255
 
 ## Part 2 — Get a non-expiring access token (one time, ~5 min)
 
-1. Go to **developers.facebook.com/tools/explorer**.
+1. Go to **developers.facebook.com/tools/explorer** (signed in to the Facebook
+   account that admins the Page).
 2. Meta App = *My Adventure Costa Rica* → **Generate Access Token** → approve
-   (keep all permissions on; select your Page and Instagram).
+   (keep all permissions on; select your Page and Instagram). This token lives 2 hours.
 3. Click the **ⓘ** next to the token → **Open in Access Token Tool**.
-4. Click **Extend Access Token** (makes it long-lived).
-5. Back in the Explorer, in the **User or Page** dropdown pick your **Page
-   (My Adventure Costa Rica)**. The token shown is now a non-expiring Page token.
-6. Copy it. (Optional: paste into the Access Token Tool — "Expires" should say **Never**.)
+4. Click **Extend Access Token**. The tool shows a NEW token that lasts 60 days
+   ("This new long-lived access token will expire on …").
+5. **Copy that 60-day token and paste it into the Explorer's access-token field**
+   (replace what is there). The Explorer does NOT pick it up by itself: if you skip
+   this, step 6 gives you a Page token that dies in 2 hours (learned Oct 15 2026).
+6. In the **User or Page** dropdown pick your **Page (My Adventure Costa Rica)**.
+   The token shown is now the Page token, and because it came from the 60-day
+   token it never expires.
+7. Check it: **ⓘ → Open in Access Token Tool** — it must say **Type: Page** and
+   **Expires: Never**. Then **Copy Token**.
 
 ## Part 3 — Store the token as a secret (one time, ~2 min)
 
@@ -47,10 +54,13 @@ Facebook Page 1495946694015283 · Instagram @myadventurecostarica 17841403481255
 
 Every job now checks the token first and, when it is dead, pings you once with the fix
 and shows these steps in the run summary (`meta_token.py`). The fix is Part 2 again
-(a new Page token), then **two** places: the GitHub secret `META_ACCESS_TOKEN` (Part 3)
-AND the Vercel environment variable `META_TOKEN` (Settings → Environment Variables,
-then Redeploy) — the dashboard's comment and DM replies use the Vercel copy. A
-system-user token from Meta Business Suite survives password changes; the Explorer
+(a new Page token — do not skip step 5), then **two** places: the GitHub secret
+`META_ACCESS_TOKEN` (Settings → Secrets and variables → Actions → META_ACCESS_TOKEN →
+Update) AND the Vercel environment variable `META_TOKEN` (project → Settings →
+Environment Variables → META_TOKEN → Edit → Save, then Deployments → Redeploy) — the
+dashboard's comment and DM replies use the Vercel copy. Then run "Daily social post"
+once from the Actions tab: its log must say `Meta token: token ok (id <page id>)`.
+A system-user token from Meta Business Suite survives password changes; the Explorer
 Page token does not (Oct 15 2026).
 
 ## Part 4 — Turn on the approval "training wheels"
