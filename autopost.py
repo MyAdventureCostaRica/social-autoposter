@@ -966,6 +966,50 @@ def _recent_pillars():
     return out
 
 
+def read_note(photo_path):
+    """The companion .txt note of a photo, or ""."""
+    np_ = os.path.splitext(photo_path)[0] + ".txt"
+    try:
+        return open(np_, encoding="utf-8").read()
+    except Exception:
+        return ""
+
+
+def likely_pillar(note):
+    """Guess the kind of post a photo supports, from the PHOTO line and the first lines
+    of its note (the site text below them mentions lodges and breakfasts on every day, so
+    it is ignored). Explicit FOUNDER/EXPERIENCE markers win; a lodge, a plate or a table
+    is EXPERIENCE; wildlife, plants and the like KNOWLEDGE; the journal's places (the nine
+    summits, the Queen Stage) FOUNDER; the rest of the library (a day's ground) ROUTE.
+    Used only to ORDER the candidates, so the first caption call is usually the keeper:
+    Gemini's free tier allows 20 requests a day per model (found Oct 15 2026), and a scan
+    that captions 8 photos to find today's kind spends most of it."""
+    n = note or ""
+    m = re.search(r"^PHOTO:(.*)$", n, flags=re.I | re.M)
+    photo = m.group(1) if m else ""
+    head = "\n".join(n.strip().split("\n")[:4])
+    if re.search(r"\bFOUNDER\b", n):
+        return "FOUNDER"
+    if (re.search(r"EXPERIENCE photo|\bTABLE\b|^Lodge on\b", head, flags=re.I | re.M)
+            or re.search(r"breakfast|gallo pinto|\bkitchen\b|\bdinner\b|long table|\blodge\b|\bhotel\b|"
+                         r"\bbespoke\b|\bcarreta\b|\boxcart\b", photo, flags=re.I)):
+        return "EXPERIENCE"
+    if re.search(r"quetzal|macaw|toucan|monkey|capuchin|hummingbird|sparrow|\bbirds?\b|sloth|turtle|"
+                 r"mangrove|\btrees?\b|flower|orchid|canopy|close up|vegetation|lichen|bamboo|\bcoffee\b|"
+                 r"\bdelta\b|\bsunset\b|\bdawn\b|first light|sea of cloud", photo, flags=re.I):
+        return "KNOWLEDGE"
+    if re.search(r"Queen Stage|Nueve Cumbres|nine summits", head, flags=re.I):
+        return "FOUNDER"
+    return "ROUTE"
+
+
+def order_for(candidates, target):
+    """Candidates whose note suggests `target` first (library order kept inside each group)."""
+    want = [c for c in candidates if likely_pillar(read_note(c)) == target]
+    rest = [c for c in candidates if c not in want]
+    return want + rest
+
+
 def target_pillar():
     """Today's slot = the pillar most UNDER its planned share over recent posts. This
     holds the KNOWLEDGE/ROUTE/FOUNDER/EXPERIENCE mix in the traffic-first proportions and
@@ -1163,6 +1207,10 @@ def prepare():
     rejected_bases = set(rget("rejected_bases", []) or [])   # photos you rejected — never re-pick
     target = target_pillar()
     print(f"Content plan — today's target pillar: {target} | recent mix: {_recent_pillars()}")
+    # Ask first about the photos whose notes suit today's kind: one or two caption calls a
+    # day instead of a scan of eight (the free tier is 20 requests a day per model).
+    candidates = order_for(candidates, target)
+    print("Scan order:", ", ".join(os.path.basename(c) for c in candidates[:PLAN_SCAN]))
 
     def _scan(candidates):
         """Walk the candidates once. Returns (chosen, judged, api_errors): `judged` counts
@@ -1230,8 +1278,9 @@ def prepare():
         # and try again; 503s are often minutes long.
         print(f"Caption service unavailable for all {api_errors} candidates — waiting 4 min and retrying once.")
         time.sleep(240)
-        candidates = sorted(f for f in glob.glob(os.path.join(SRC, "*"))
-                            if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif")))
+        candidates = order_for(sorted(f for f in glob.glob(os.path.join(SRC, "*"))
+                                      if f.lower().endswith((".jpg", ".jpeg", ".png", ".heic", ".heif"))),
+                               target)
         chosen, judged, api_errors = _scan(candidates)
     if not chosen and judged == 0 and api_errors:
         json.dump({"skip": True, "why": "captioner unavailable"}, open(STATE, "w"))
@@ -1643,16 +1692,14 @@ def caption_preview(n=3):
     except Exception:
         sha = "main"
     md = [f"## Caption preview — the next {n} posts, current brief (nothing was posted)\n"]
-    seen_sets, picked = set(), []
-    for src in cands:                               # one preview per library set
+    seen_sets, reps = set(), []
+    for src in cands:                               # one representative per library set
         sid = note_set(src)
         if sid and sid in seen_sets:
             continue
         if sid:
             seen_sets.add(sid)
-        picked.append(src)
-        if len(picked) >= n:
-            break
+        reps.append(src)
     # The plan's mix, in the order a week would run it, so the preview shows every kind
     # of post and not only the one the next slot happens to need.
     plan = sorted(((k.upper(), float(v)) for k, v in PILLAR_PLAN.items() if v), key=lambda kv: -kv[1])
@@ -1664,8 +1711,17 @@ def caption_preview(n=3):
         if all(cycle.count(k) >= v for k, v in plan):
             plan_round = list(cycle)
             cycle += plan_round
-    for i, src in enumerate(picked):
+    # For each kind in the cycle take the next photo whose note suits it (else the next
+    # photo at all), so every preview call is likely to be a keeper: the free tier is 20
+    # requests a day per model, and a preview of 5 can spend half of it.
+    picked, wants = [], []
+    for i in range(min(n, len(reps))):
         want = cycle[i % len(cycle)] if cycle else ""
+        pool = [r for r in reps if r not in picked]
+        fit = [r for r in pool if likely_pillar(read_note(r)) == want]
+        src = (fit or pool)[0]
+        picked.append(src); wants.append(want)
+    for src, want in zip(picked, wants):
         name = os.path.basename(src)
         sid = note_set(src)
         mates = [os.path.basename(c) for c in cands if c != src and sid and note_set(c) == sid]
