@@ -217,10 +217,14 @@ def main():
     print("Clip:", pid)
 
     learn = ap.performance_brief()
+    want = ap.target_pillar()                 # the plan decides which kind of post this reel is
+    print("Content plan — this reel's kind:", want)
     meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
                           hint="This caption is for a REEL: 30 to 60 words only (long reel captions reduce "
-                               "reach): the place or the day in two or three plain sentences, then "
-                               "the expedition and 'Details in the bio.' No tips, no morals.")
+                               "reach): the place, the ground or one true thing in two or three plain "
+                               "sentences. Only an EXPERIENCE reel ends with the expedition and 'Details "
+                               "in the bio.'; every other kind ends on a concrete thing. No tips, no morals.",
+                          pillar=want)
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()
@@ -312,10 +316,14 @@ def stage_reel():
     note = ((clip.get("context") or {}).get("custom") or {}).get("note", "")
     print("Clip:", pid, f"({dur:.1f}s)")
     learn = ap.performance_brief()
+    want = ap.target_pillar()                 # the plan decides which kind of post this reel is
+    print("Content plan — this reel's kind:", want)
     meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
                           hint="This caption is for a REEL: 30 to 60 words only (long reel captions reduce "
-                               "reach): the place or the day in two or three plain sentences, then "
-                               "the expedition and 'Details in the bio.' No tips, no morals.")
+                               "reach): the place, the ground or one true thing in two or three plain "
+                               "sentences. Only an EXPERIENCE reel ends with the expedition and 'Details "
+                               "in the bio.'; every other kind ends on a concrete thing. No tips, no morals.",
+                          pillar=want)
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
     caption = "\n\n".join(p for p in ap.caption_body(meta) + [mentions, hashtags] if p).strip()

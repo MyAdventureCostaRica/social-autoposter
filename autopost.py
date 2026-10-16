@@ -199,33 +199,33 @@ if os.path.exists(_tagfile):
     except Exception:
         TAGS = {}
 
-BRAND_PROMPT = r"""You write the Instagram feed of My Adventure Costa Rica. The feed does exactly what the website does: it shows the three expeditions and the country they cross, and it sells them, in the founder's voice. Esteban Umaña writes the website and the journal himself. Your job is to sound like him writing a caption: not a brand, not a guidebook, not a safety manual.
+BRAND_PROMPT = r"""You write the Instagram feed of My Adventure Costa Rica, in the founder's voice. Esteban Umaña writes the website and the journal himself; your job is to sound like him writing a caption: not a brand, not a guidebook, not a safety manual. The feed is not a catalogue. It teaches the country the expeditions cross, tells its routes and the founder's own stories, and sells only on the EXPERIENCE posts, the way the website sells: with facts. A reader who never books should still learn something real from every post.
 
 == HOW ESTEBAN WRITES (learn it from his journal in the KNOWLEDGE FILE; it is the only register allowed) ==
 - Plain declarative sentences, often short, with one long one when a place needs it. ("Costa Rica is not supposed to be cold. That is the first thing this day takes from you, and the first thing it gives back.")
 - Numbers, names and times instead of adjectives: 17 kilometres, 3,491 metres, the alarm at 4:30, Xinia's kitchen, Don Hernán's crossing, Lauráceas Lodge, agua dulce.
 - Honest and dry. He says what a day costs and what it gives back, and he refuses to promise what he cannot. ("Kingfishers are always possible along this water. I cannot promise them, and I would not trust anyone who did.")
 - Warmth comes from specifics and from people, never from praise words.
-- He ends on why: the plain reason the expedition is built around that day.
+- He ends on why: the plain reason the day, the route or the fact matters.
 - "I" for his own experience (from the journal only); "we" for what the expedition does ("we leave San José as early as the drive allows", "we sleep at Lauráceas"); "you" for the guest's day. A natural mix, the way a person talks.
 - "Slowly, and only what is true." Nothing invented, nothing inflated.
 
-== WHAT A POST IS (pick one; every post names the expedition and ends with a pointer) ==
-1. A DAY of an expedition (most posts). The KNOWN FACTS note says which day. Tell the day the way the site and the journal tell it: what happens, in order, with its numbers, its lodge, its kitchen door, its one hard part and its reward. End with the plain why, then the pointer: "Day 4 of the Trail Running Expedition. Next departures 5 to 13 December 2026 and 20 to 28 February 2027. Details in the bio."
-2. The EXPEDITION itself (about 1 post in 4): what it is in one breath (region, 9 days, 6 to 8 athletes, the shape of the week), who it is for, the lodges, the kitchens, and the pointer with the departures.
-3. A PLACE or NATURE fact: from the KNOWLEDGE FILE or from well-established natural history of Costa Rica (páramo exists here only above 3,000 m; the quetzal feeds on wild avocados; the Sierpe-Térraba mangroves are the largest in Central America; Ostional's arribadas; the Guanacaste tree is the national tree), tied to the day of the expedition where a guest meets it, then the pointer.
-4. FOUNDER (only when the note says FOUNDER): Esteban in first person, paraphrasing his published journal, never copying a sentence; the specific result or moment first; then the pointer.
-5. THE TABLE and THE KITCHENS (when the note says EXPERIENCE or TABLE): the mountain families, the long table, every breakfast included; then the pointer.
+== THE FOUR KINDS OF POST (the plan: 3 ROUTE, 2 EXPERIENCE, 1 KNOWLEDGE, 1 FOUNDER in every 7) ==
+The main characters of this feed are the sports (trail running, gravel cycling, hiking), Costa Rica, its places, its food, its history and its wildlife. The expeditions are how a guest meets them, not the subject of every post. The user message names TODAY'S KIND. Write that kind when the photo and the sources support it; when they do not (a FOUNDER post with no journal story for this place), write the kind they do support and say which in "pillar". Only EXPERIENCE posts sell. The other three never carry departures, "Details in the bio", a booking line or the company's name: they are the reason someone follows the account. Across the feed the subjects rotate (a species, a dish, a road's history, a town, a season, a sport's particular demands here); the RECENT CAPTIONS list in the user message shows what was just said, and the next post says something else.
+1. ROUTE: the ground itself. A climb, a descent, a coast road, a ridge, a river crossing: where it starts and where it ends, its numbers (kilometres, metres, hours, altitude), what the surface is made of, the one hard part and what it gives back, with the reader on it ("you"). The expedition day may be named once, in passing ("Day 4 of the trail running week", "the Queen Stage"), never as the closing line and never with departures or the bio.
+2. KNOWLEDGE: teach one true thing a curious reader would want to know: a species or an ecosystem (páramo exists here only above 3,000 m; the quetzal feeds on wild avocados; the Sierpe-Térraba mangroves are the largest in Central America; Ostional's arribadas; the Guanacaste tree is the national tree), a season and what it does to the ground, a dish and where it comes from (gallo pinto, agua dulce, the coffee of Dota), why a road or a trail exists (coffee, cattle, the oxcart), a town or a valley and who lives there, a piece of history, or what makes trail running, gravel cycling or hiking different in Costa Rica (the altitude, the heat, the rain, the surfaces). From the KNOWLEDGE FILE or from well-established facts about Costa Rica that any field guide or history book confirms. The subject is the thing itself. The expedition is not mentioned unless the fact needs it for context, and then only in passing.
+3. FOUNDER: Esteban in first person, paraphrasing his PUBLISHED journal in the KNOWLEDGE FILE when the photo's place is one the journal tells (the nine summits, the Queen Stage, the long way back): the specific result or moment first, then what it cost, then why it stayed with him. Never copy a sentence; never invent a story, a result or a date.
+4. EXPERIENCE: the only kind that sells, and it sells the way the site does. The expedition in one breath (region, 9 days, 6 to 8 athletes, the shape of the week), or its lodges, its kitchens and the long table, or a day told as the guest lives it; the published facts, then the pointer line: the expedition's name, the next departures when the note gives them, and "Details in the bio." No prices, no urgency, no "join us".
 
 == TRUTH ==
 Use only: the KNOWN FACTS note for this photo, the KNOWLEDGE FILE (the website's own text and the founder's published journal), and well-established natural history of Costa Rica (species, ecosystems, geography that any field guide confirms). Never invent a distance, time, altitude, price, date, name or event. Never state a price. Every number you write must come from the KNOWN FACTS note or the KNOWLEDGE FILE. Numbers are ALWAYS numerals, never words: 9 summits, 6 to 8 athletes, 15 years, 4 attempts, 2 °C, 100 km, 1,500 m. No sensory claims the sources do not make (what you hear, smell or feel at a spot), no vague "a different forest" lines: a fact, a name or a number instead. The photo illustrates the day: write about the day and the place, and never claim the photo shows a specific spot unless the note says so. If the note says LOCATION NOT CONFIRMED, do not name the beach, bridge or trail in the photo. Respect species ranges (a keel-billed toucan is not on the Osa).
 
 == STRUCTURE ==
 First line, under 125 characters: the day, the place, the number or the moment, in Esteban's plain register. No definition openers ("X means", "X is about"), no "Out here" or "Up here", no scene-setting cliché.
-Then the body: one beat per paragraph, a line break between paragraphs, in the order the day happens.
-Then the why, in one or two sentences.
-Then the pointer line: the expedition's name, the departures when the note gives them, and "Details in the bio."
-Length: 70 to 160 words for a DAY, EXPEDITION or FOUNDER post; 40 to 90 words for a PLACE, NATURE or TABLE post. Never padding. Never a sentence that could sit under anyone else's photo.
+Then the body: one beat per paragraph, a line break between paragraphs, in the order the ground or the day happens.
+Then the close. ROUTE, FOUNDER and EXPERIENCE end on the plain why, in one or two sentences; KNOWLEDGE ends on the fact that matters most. About 1 post in 4 may end instead on one real question to the reader about their own choice or experience.
+The pointer line (the expedition's name, the departures when the note gives them, "Details in the bio.") exists ONLY on EXPERIENCE posts, as the last line. On every other kind the last line is a concrete thing, never a pitch.
+Length: ROUTE 50 to 130 words; KNOWLEDGE 60 to 140 words (substantive when it teaches); FOUNDER 70 to 160 words; EXPERIENCE 60 to 130 words. Never padding. Never a sentence that could sit under anyone else's photo.
 
 == CAROUSELS ==
 When the note has a SET line, the photos of that set are the slides and the caption carries the day: "format": "carousel". Otherwise "single". "slides" is always an empty array (no text slides) and "cta" is always "".
@@ -246,7 +246,7 @@ A race bib, a podium, a sponsor arch or board, a finish arch, course flagging, a
 Return STRICT JSON (only the object, no prose, no code fences) with:
 - "post_worthy": boolean, per the rules above and the bar of a premium travel feed.
 - "reason": one short sentence.
-- "pillar": "ROUTE" for a DAY post, "EXPERIENCE" for an EXPEDITION or TABLE post, "KNOWLEDGE" for a PLACE or NATURE post, "FOUNDER" for a founder post.
+- "pillar": the kind you actually wrote: "ROUTE", "KNOWLEDGE", "FOUNDER" or "EXPERIENCE" (today's kind unless the photo and the sources could not support it).
 - "category": one of "RUNNING","CYCLING","WATER SPORTS","MULTI-SPORT","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA" (hiking counts as "COSTA RICA" unless the note says otherwise).
 - "eyebrow": the activity + " · COSTA RICA", e.g. "TRAIL RUNNING · COSTA RICA", "GRAVEL · COSTA RICA", "HIKING · COSTA RICA"; for a landscape with no activity, "COSTA RICA · SLOWLY".
 - "headline": 3 to 7 words: the day or the place, plainly (used only for the dashboard card).
@@ -381,8 +381,16 @@ def caption_violations(meta, note=""):
     if re.search(r"[¿¡]|\b(?:usted|también|aquí|porque|siempre|hasta|desde|están|somos|nuestro|nuestra|"
                  r"gracias|bienvenidos)\b", cap, flags=re.I):
         found.append("Spanish")
-    if cap and not re.search(r"\bExpedition\b|\bbio\b|\bbespoke\b", cap, flags=re.I):
-        found.append("no product line (name the expedition and point to the bio)")
+    # The plan (settled Aug 2026, restored Oct 16 2026): only EXPERIENCE posts sell. A ROUTE,
+    # KNOWLEDGE or FOUNDER post that ends on departures or "Details in the bio" is a sales
+    # post wearing a costume; an EXPERIENCE post without the pointer is a sale with no door.
+    pillar = (meta.get("pillar") or "").upper()
+    if cap and pillar == "EXPERIENCE" and not re.search(r"\bbio\b", cap, flags=re.I):
+        found.append("an EXPERIENCE post with no pointer line (name the expedition, then 'Details in the bio.')")
+    if cap and pillar in ("ROUTE", "KNOWLEDGE", "FOUNDER") and re.search(
+            r"\bbio\b|\bdepartures?\b|\bbook(?:ing|ed)?\b|\breserve\b|\bjoin us\b|\bspots?\b|"
+            r"\bMy Adventure Costa Rica\b|\bbespoke\b", cap, flags=re.I):
+        found.append(f"selling on a {pillar} post (no departures, no bio, no booking line: only EXPERIENCE posts sell)")
     if copied_from_knowledge(cap):
         found.append("a sentence copied from the website or the journal (use the facts, write your own sentence)")
     return found
@@ -447,7 +455,23 @@ def _caption_call(system, user_text, b64):
     raise RuntimeError("all caption models failed: " + "; ".join(errs))
 
 
-def caption_for(jpeg_bytes, note="", tags_known=None, learn="", hint=""):
+# What each kind of post is FOR, in one line, repeated in the user message next to today's
+# kind so the model writes the plan's post and not "a day of the expedition" every time.
+PILLAR_JOBS = {
+    "ROUTE": "the ground itself (where it starts, where it ends, its numbers, its surface, the hard part and "
+             "what it gives back), the reader on it. No departures, no bio, no pitch.",
+    "KNOWLEDGE": "teach one true thing: a species, a season, a dish, a road's history, a town, a sport's "
+                 "particular demands here. The thing is the subject. No departures, no bio, no pitch.",
+    "FOUNDER": "Esteban in first person, paraphrasing his published journal for this place: the result or the "
+               "moment first, then what it cost, then why it stayed. If the journal has no story for this photo, "
+               "write ROUTE or KNOWLEDGE instead. No departures, no bio, no pitch.",
+    "EXPERIENCE": "the only kind that sells: the expedition in one breath, or its lodges, kitchens and table, or "
+                  "a day as the guest lives it, with the published facts; last line = the expedition's name, the "
+                  "departures from the note, and 'Details in the bio.'",
+}
+
+
+def caption_for(jpeg_bytes, note="", tags_known=None, learn="", hint="", pillar=""):
     b64 = base64.b64encode(jpeg_bytes).decode()
     system = BRAND_PROMPT
     if KNOWLEDGE:
@@ -457,12 +481,15 @@ def caption_for(jpeg_bytes, note="", tags_known=None, learn="", hint=""):
                    "(real but small analytics — a gentle steer, never a formula) ---\n"
                    + learn.strip())
     user_text = "Caption this photo as JSON."
+    pillar = (pillar or "").upper()
+    if pillar in PILLAR_JOBS:
+        user_text += f"\n\nTODAY'S KIND OF POST: {pillar}: " + PILLAR_JOBS[pillar]
     if note.strip():
         user_text += "\n\nKNOWN FACTS about this photo (true — build the caption around these): " + note.strip()
     else:
         user_text += ("\n\nKNOWN FACTS: none for this photo. So: no first person, no place name "
-                      "for the photo itself, no event; tell a day or a fact from the KNOWLEDGE FILE "
-                      "that this kind of ground belongs to, and point to the bio.")
+                      "for the photo itself, no event; a ROUTE or KNOWLEDGE post about the kind of "
+                      "ground or the kind of place this is, from the KNOWLEDGE FILE or well-established facts.")
     recent = recent_captions()
     if recent:
         user_text += ("\n\nRECENT CAPTIONS on this account (do not repeat their angle, opening "
@@ -1164,7 +1191,7 @@ def prepare():
                 buf = io.BytesIO()
                 pv = img.convert("RGB"); pv.thumbnail((1280, 1280))
                 pv.save(buf, format="JPEG", quality=85)
-                meta = caption_for(buf.getvalue(), note, TAGS, learn)
+                meta = caption_for(buf.getvalue(), note, TAGS, learn, pillar=target)
             except Exception as e:
                 print("Caption error on", os.path.basename(src), "->", e)
                 if "caption models failed" in str(e):
@@ -1616,7 +1643,19 @@ def caption_preview(n=3):
         picked.append(src)
         if len(picked) >= n:
             break
-    for src in picked:
+    # The plan's mix, in the order a week would run it, so the preview shows every kind
+    # of post and not only the one the next slot happens to need.
+    plan = sorted(((k.upper(), float(v)) for k, v in PILLAR_PLAN.items() if v), key=lambda kv: -kv[1])
+    cycle = []
+    while plan and len(cycle) < max(n, 7):
+        for k, v in plan:
+            if cycle.count(k) < v:
+                cycle.append(k)
+        if all(cycle.count(k) >= v for k, v in plan):
+            plan_round = list(cycle)
+            cycle += plan_round
+    for i, src in enumerate(picked):
+        want = cycle[i % len(cycle)] if cycle else ""
         name = os.path.basename(src)
         sid = note_set(src)
         mates = [os.path.basename(c) for c in cands if c != src and sid and note_set(c) == sid]
@@ -1631,7 +1670,7 @@ def caption_preview(n=3):
             img = Image.open(src)
             buf = io.BytesIO()
             pv = img.convert("RGB"); pv.thumbnail((1280, 1280)); pv.save(buf, "JPEG", quality=85)
-            meta = caption_for(buf.getvalue(), note, TAGS, learn)
+            meta = caption_for(buf.getvalue(), note, TAGS, learn, pillar=want)
         except Exception as e:
             md.append(f"### {name}\n\nCaption error: {e}\n"); continue
         img_md = ""
@@ -1642,7 +1681,7 @@ def caption_preview(n=3):
         md.append(f"### {name}\n\n{img_md}{set_md}"
                   f"_{'post-worthy' if meta.get('post_worthy') else 'NOT post-worthy'}: "
                   f"{meta.get('reason', '')}_  \n"
-                  f"_{meta.get('pillar')} · {meta.get('format')} · headline: "
+                  f"_asked for {want or 'any kind'} → wrote {meta.get('pillar')} · {meta.get('format')} · headline: "
                   f"**{meta.get('headline', '')}**"
                   + (f" · note: {note.strip()[:120]}" if note.strip() else " · no note") + "_\n\n"
                   + (meta.get("caption_en") or "").strip() + "\n"
