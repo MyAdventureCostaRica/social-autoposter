@@ -57,34 +57,59 @@ def config_cloudinary():
 def next_clip():
     """Oldest video in the Cloudinary 'reels' folder not yet tagged 'posted', that is
     long enough and hasn't been rejected. Scoped to the folder ON PURPOSE so stock
-    SAMPLE videos can never post. Skips clips shorter than reel_min_seconds (super-short
-    clips were slipping through) and any clip you've rejected from the dashboard."""
+    SAMPLE videos can never post. A clip shorter than reel_min_seconds (7 s, the owner's
+    researched minimum) is DELETED from Cloudinary; a clip you've rejected from the
+    dashboard is skipped."""
     import cloudinary, cloudinary.search
-    min_s = float(ap.CFG.get("reel_min_seconds", 5))
+    min_s = float(ap.CFG.get("reel_min_seconds", 7))   # 7 s: the owner's researched minimum
     rejected = set(ap.rget("rejected_clips", []) or [])
     try:
         r = (cloudinary.search.Search()
-             .expression("resource_type:video AND (folder:Reels OR folder:reels) AND -tags:posted")
+             .expression("resource_type:video AND (folder:Reels OR folder:reels) "
+                         "AND -tags:posted AND -tags:too-short")
              .sort_by("created_at", "asc").max_results(50).execute())
     except Exception as e:
         print("Cloudinary search error (no reel posted):", e)
         return None
     for v in r.get("resources", []):
         dur = float(v.get("duration") or 0)
-        if dur and dur < min_s:                       # too short for good reach — evict it
+        if dur and dur < min_s:
+            # Owner's rule (Oct 16 2026): "If the video is under 7 seconds you erase them,
+            # if it is above you use them." Delete it from Cloudinary. (Renaming the
+            # public_id, the old way, never removed a clip from the folder, so the same
+            # short clips were re-examined on every run.) If the delete fails, tag it so
+            # the search skips it from now on.
             pid = v.get("public_id")
-            print(f"Too-short clip ({dur:.1f}s < {min_s}s) — moving out of the Reels folder:", pid)
+            print(f"Too-short clip ({dur:.1f}s < {min_s}s) — deleting it:", pid)
             try:
                 import cloudinary.uploader
-                cloudinary.uploader.rename(pid, "reels-too-short/" + pid.split("/")[-1],
-                                           resource_type="video")
+                res = cloudinary.uploader.destroy(pid, resource_type="video", invalidate=True)
+                print("deleted:", res.get("result"))
             except Exception as e:
-                print("evict skipped (left in place):", e)
+                print("delete failed, tagging it too-short instead:", e)
+                try:
+                    cloudinary.uploader.add_tag("too-short", [pid], resource_type="video")
+                except Exception as e2:
+                    print("tagging skipped (left in place):", e2)
             continue
         if v.get("public_id") in rejected:
             print("Skipping a rejected clip:", v.get("public_id")); continue
         return v
     return None
+
+
+def caption_with_retry(*args, **kwargs):
+    """ap.caption_for, with ONE 4-minute retry when every Gemini model answers 503/429
+    (Oct 16 2026: a "high demand" spike at 12:16 CR killed the Friday reel slot, and the
+    reel run had no second attempt inside it, unlike the daily post)."""
+    try:
+        return ap.caption_for(*args, **kwargs)
+    except RuntimeError as e:
+        if "caption models failed" not in str(e):
+            raise
+        print("Caption service unavailable — waiting 4 min and trying once more:", e)
+        time.sleep(240)
+        return ap.caption_for(*args, **kwargs)
 
 
 def thumb_bytes(public_id):
@@ -219,7 +244,7 @@ def main():
     learn = ap.performance_brief()
     want = ap.target_pillar()                 # the plan decides which kind of post this reel is
     print("Content plan — this reel's kind:", want)
-    meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
+    meta = caption_with_retry(thumb_bytes(pid), note, ap.TAGS, learn,
                           hint="This caption is for a REEL: 30 to 60 words only (long reel captions reduce "
                                "reach): the place, the ground or one true thing in two or three plain "
                                "sentences. Only an EXPERIENCE reel ends with the expedition and 'Details "
@@ -318,7 +343,7 @@ def stage_reel():
     learn = ap.performance_brief()
     want = ap.target_pillar()                 # the plan decides which kind of post this reel is
     print("Content plan — this reel's kind:", want)
-    meta = ap.caption_for(thumb_bytes(pid), note, ap.TAGS, learn,
+    meta = caption_with_retry(thumb_bytes(pid), note, ap.TAGS, learn,
                           hint="This caption is for a REEL: 30 to 60 words only (long reel captions reduce "
                                "reach): the place, the ground or one true thing in two or three plain "
                                "sentences. Only an EXPERIENCE reel ends with the expedition and 'Details "
