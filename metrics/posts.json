@@ -8644,5 +8644,25 @@
   "category": "CYCLING",
   "pillar": "ROUTE",
   "caption": "The end of the first 2 days of The Gravel Expedition. Whether you roll in from the Paquera ferry or descend the forested"
+ },
+ {
+  "id": "18152171362540525",
+  "date": "2026-10-15",
+  "ts": "2026-10-16T01:46:13",
+  "base": "lib-gr-tamarindo-1",
+  "format": "carousel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "59.2 kilometres north from Nosara bring you to the bay at Tamarindo.\n\nDay 6 runs up the Guanacaste surf coast. From Nosa"
+ },
+ {
+  "id": "18127495456645208",
+  "date": "2026-10-15",
+  "ts": "2026-10-16T01:46:13",
+  "base": "lib-gr-tamarindo-1-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "59.2 kilometres north from Nosara bring you to the bay at Tamarindo.\n\nDay 6 runs up the Guanacaste surf coast. From Nosa"
  }
 ]
