@@ -8686,5 +8686,25 @@
   "category": "COSTA RICA",
   "pillar": "EXPERIENCE",
   "caption": "Laur\u00e1ceas Lodge sits at 2,200 metres in the San Gerardo de Dota valley.\n\nWe sleep here for 2 nights on both our trail ru"
+ },
+ {
+  "id": "18111394835234806",
+  "date": "2026-10-17",
+  "ts": "2026-10-17T15:16:51",
+  "base": "lib-gr-wild-coast",
+  "format": "single",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "Day 4 of the gravel week runs 101.1 km along the undeveloped middle coast of Nicoya.\n\nYou leave Santa Teresa on dirt roa"
+ },
+ {
+  "id": "18113606105116379",
+  "date": "2026-10-17",
+  "ts": "2026-10-17T15:16:51",
+  "base": "lib-gr-wild-coast-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "caption": "Day 4 of the gravel week runs 101.1 km along the undeveloped middle coast of Nicoya.\n\nYou leave Santa Teresa on dirt roa"
  }
 ]
