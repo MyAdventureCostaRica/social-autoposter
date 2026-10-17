@@ -11374,7 +11374,7 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "KNOWLEDGE",
-  "reach": 166,
+  "reach": 167,
   "likes": 9,
   "comments": 0,
   "saved": 0,
@@ -11382,7 +11382,7 @@
   "total_interactions": 9,
   "views": 241,
   "interactions": 9,
-  "eng_rate": 0.0542
+  "eng_rate": 0.0539
  },
  {
   "id": "17935529898390056",
@@ -11635,7 +11635,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 28,
-  "views": 1992,
+  "views": 1993,
   "interactions": 28,
   "eng_rate": 0.0215
  },
@@ -11700,17 +11700,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 21,
+  "reach": 22,
   "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 6,
-  "views": 41,
+  "views": 43,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 6,
-  "eng_rate": 0.2857
+  "eng_rate": 0.2727
  },
  {
   "id": "18130654552705064",
@@ -11866,17 +11866,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 12,
+  "reach": 16,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 34,
+  "views": 46,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.3333
+  "eng_rate": 0.25
  },
  {
   "id": "18116378357103103",
@@ -11885,17 +11885,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "EXPERIENCE",
-  "reach": 7,
+  "reach": 12,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 28,
+  "views": 40,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.4286
+  "eng_rate": 0.25
  },
  {
   "id": "18045623153627643",
@@ -11914,5 +11914,42 @@
   "navigation": 14,
   "interactions": 2,
   "eng_rate": 0.1538
+ },
+ {
+  "id": "18111394835234806",
+  "date": "2026-10-17",
+  "base": "lib-gr-wild-coast",
+  "format": "single",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "reach": 9,
+  "likes": 1,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 1,
+  "views": 20,
+  "profile_visits": 0,
+  "follows": 0,
+  "interactions": 1,
+  "eng_rate": 0.1111
+ },
+ {
+  "id": "18113606105116379",
+  "date": "2026-10-17",
+  "base": "lib-gr-wild-coast-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "reach": 9,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 2,
+  "views": 15,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 9,
+  "interactions": 2,
+  "eng_rate": 0.2222
  }
 ]
