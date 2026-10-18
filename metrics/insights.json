@@ -11811,17 +11811,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 20,
+  "reach": 21,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 37,
+  "views": 40,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.2
+  "eng_rate": 0.1905
  },
  {
   "id": "18131816125687885",
@@ -11922,17 +11922,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 21,
+  "reach": 22,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 41,
+  "views": 42,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1429
+  "eng_rate": 0.1364
  },
  {
   "id": "18113606105116379",
