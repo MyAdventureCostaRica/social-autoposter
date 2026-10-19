@@ -11629,15 +11629,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 1305,
+  "reach": 1311,
   "likes": 28,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 28,
-  "views": 1996,
+  "views": 2002,
   "interactions": 28,
-  "eng_rate": 0.0215
+  "eng_rate": 0.0214
  },
  {
   "id": "18107724263223015",
@@ -11646,15 +11646,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 1364,
+  "reach": 1370,
   "likes": 25,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 25,
-  "views": 2161,
+  "views": 2170,
   "interactions": 25,
-  "eng_rate": 0.0183
+  "eng_rate": 0.0182
  },
  {
   "id": "18097424900387229",
@@ -11866,17 +11866,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 19,
+  "reach": 20,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 51,
+  "views": 53,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.2632
+  "eng_rate": 0.25
  },
  {
   "id": "18116378357103103",
@@ -11885,17 +11885,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "EXPERIENCE",
-  "reach": 17,
+  "reach": 18,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 55,
+  "views": 56,
   "profile_visits": 1,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.2941
+  "eng_rate": 0.2778
  },
  {
   "id": "18045623153627643",
@@ -11922,17 +11922,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 22,
-  "likes": 3,
+  "reach": 27,
+  "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 3,
-  "views": 42,
+  "total_interactions": 4,
+  "views": 48,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 3,
-  "eng_rate": 0.1364
+  "interactions": 4,
+  "eng_rate": 0.1481
  },
  {
   "id": "18113606105116379",
