@@ -8707,5 +8707,25 @@
   "category": "CYCLING",
   "pillar": "ROUTE",
   "caption": "Day 4 of the gravel week runs 101.1 km along the undeveloped middle coast of Nicoya.\n\nYou leave Santa Teresa on dirt roa"
+ },
+ {
+  "id": "18089222693265579",
+  "date": "2026-10-19",
+  "ts": "2026-10-19T19:17:26",
+  "base": "lib-tr-breakfast",
+  "format": "single",
+  "category": "RUNNING",
+  "pillar": "EXPERIENCE",
+  "caption": "Every morning on expedition begins with gallo pinto, fried plantains, avocado, tortillas, and coffee.\n\nBreakfast is incl"
+ },
+ {
+  "id": "18134347888778550",
+  "date": "2026-10-19",
+  "ts": "2026-10-19T19:17:26",
+  "base": "lib-tr-breakfast-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "EXPERIENCE",
+  "caption": "Every morning on expedition begins with gallo pinto, fried plantains, avocado, tortillas, and coffee.\n\nBreakfast is incl"
  }
 ]
