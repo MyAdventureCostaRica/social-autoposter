@@ -8728,5 +8728,25 @@
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
   "caption": "Every morning on expedition begins with gallo pinto, fried plantains, avocado, tortillas, and coffee.\n\nBreakfast is incl"
+ },
+ {
+  "id": "18460793707187667",
+  "date": "2026-10-20",
+  "ts": "2026-10-20T15:19:18",
+  "base": "lib-hk-d2-paramo-2",
+  "format": "carousel",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "The walk begins above the treeline on the Macizo del Cerro de la Muerte, at 3,400 metres.\n\nThe ground underfoot is rough"
+ },
+ {
+  "id": "18096348593671839",
+  "date": "2026-10-20",
+  "ts": "2026-10-20T15:19:18",
+  "base": "lib-hk-d2-paramo-2-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "The walk begins above the treeline on the Macizo del Cerro de la Muerte, at 3,400 metres.\n\nThe ground underfoot is rough"
  }
 ]
