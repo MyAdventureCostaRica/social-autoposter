@@ -8749,5 +8749,25 @@
   "category": "COSTA RICA",
   "pillar": "ROUTE",
   "caption": "The walk begins above the treeline on the Macizo del Cerro de la Muerte, at 3,400 metres.\n\nThe ground underfoot is rough"
+ },
+ {
+  "id": "18152537929527441",
+  "date": "2026-10-21",
+  "ts": "2026-10-21T15:22:41",
+  "base": "lib-tr-d2-ridge-2",
+  "format": "carousel",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "I spent 15 years learning this massif, and it took 4 attempts before I felt the route was ready for anyone else. The Nue"
+ },
+ {
+  "id": "18121972174819983",
+  "date": "2026-10-21",
+  "ts": "2026-10-21T15:22:41",
+  "base": "lib-tr-d2-ridge-2-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "I spent 15 years learning this massif, and it took 4 attempts before I felt the route was ready for anyone else. The Nue"
  }
 ]
