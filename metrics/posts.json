@@ -8770,5 +8770,25 @@
   "category": "RUNNING",
   "pillar": "FOUNDER",
   "caption": "I spent 15 years learning this massif, and it took 4 attempts before I felt the route was ready for anyone else. The Nue"
+ },
+ {
+  "id": "17938666473382883",
+  "date": "2026-10-22",
+  "ts": "2026-10-22T15:17:04",
+  "base": "lib-hk-d6-bridge",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "When the paved road never reached Quebrada Arroyo, the village made a choice about its forest.\n\nInstead of clearing land"
+ },
+ {
+  "id": "17900918694607384",
+  "date": "2026-10-22",
+  "ts": "2026-10-22T15:17:04",
+  "base": "lib-hk-d6-bridge-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "When the paved road never reached Quebrada Arroyo, the village made a choice about its forest.\n\nInstead of clearing land"
  }
 ]
