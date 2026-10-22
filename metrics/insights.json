@@ -11635,7 +11635,7 @@
   "saved": 0,
   "shares": 0,
   "total_interactions": 29,
-  "views": 2031,
+  "views": 2032,
   "interactions": 29,
   "eng_rate": 0.0217
  },
@@ -11646,13 +11646,13 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 1375,
+  "reach": 1376,
   "likes": 26,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 26,
-  "views": 2178,
+  "views": 2179,
   "interactions": 26,
   "eng_rate": 0.0189
  },
@@ -11866,17 +11866,17 @@
   "format": "carousel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 20,
+  "reach": 21,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 53,
+  "views": 54,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.25
+  "eng_rate": 0.2381
  },
  {
   "id": "18116378357103103",
@@ -11885,7 +11885,7 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "EXPERIENCE",
-  "reach": 18,
+  "reach": 19,
   "likes": 5,
   "comments": 0,
   "saved": 0,
@@ -11895,7 +11895,7 @@
   "profile_visits": 1,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.2778
+  "eng_rate": 0.2632
  },
  {
   "id": "18045623153627643",
@@ -11996,17 +11996,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 31,
+  "reach": 32,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 83,
+  "views": 85,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.129
+  "eng_rate": 0.125
  },
  {
   "id": "18096348593671839",
@@ -12033,17 +12033,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 30,
+  "reach": 31,
   "likes": 8,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 8,
-  "views": 78,
+  "views": 79,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 8,
-  "eng_rate": 0.2667
+  "eng_rate": 0.2581
  },
  {
   "id": "18121972174819983",
@@ -12070,17 +12070,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 6,
+  "reach": 11,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 13,
+  "views": 21,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.3333
+  "eng_rate": 0.1818
  },
  {
   "id": "17900918694607384",
