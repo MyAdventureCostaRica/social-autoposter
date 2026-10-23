@@ -8791,5 +8791,25 @@
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
   "caption": "When the paved road never reached Quebrada Arroyo, the village made a choice about its forest.\n\nInstead of clearing land"
+ },
+ {
+  "id": "17950403817313809",
+  "date": "2026-10-23",
+  "ts": "2026-10-23T15:20:46",
+  "base": "lib-hk-d7-playa-el-rey",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "Day 7 of the walking route delivers you from the mountain jungle to the tide line at Playa El Rey.\n\nYou begin the week a"
+ },
+ {
+  "id": "18356413267216709",
+  "date": "2026-10-23",
+  "ts": "2026-10-23T15:20:46",
+  "base": "lib-hk-d7-playa-el-rey-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "ROUTE",
+  "caption": "Day 7 of the walking route delivers you from the mountain jungle to the tide line at Playa El Rey.\n\nYou begin the week a"
  }
 ]
