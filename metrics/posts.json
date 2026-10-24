@@ -8812,5 +8812,25 @@
   "category": "COSTA RICA",
   "pillar": "ROUTE",
   "caption": "Day 7 of the walking route delivers you from the mountain jungle to the tide line at Playa El Rey.\n\nYou begin the week a"
+ },
+ {
+  "id": "18394581697166228",
+  "date": "2026-10-24",
+  "ts": "2026-10-24T15:19:06",
+  "base": "lib-tr-d3-dota-2",
+  "format": "carousel",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "caption": "A 9.2 km loop from Laur\u00e1ceas Lodge climbs 496 metres through the montane oak forest above the Dota Valley.\n\nYou start at"
+ },
+ {
+  "id": "18122154850947967",
+  "date": "2026-10-24",
+  "ts": "2026-10-24T15:19:06",
+  "base": "lib-tr-d3-dota-2-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "caption": "A 9.2 km loop from Laur\u00e1ceas Lodge climbs 496 metres through the montane oak forest above the Dota Valley.\n\nYou start at"
  }
 ]
