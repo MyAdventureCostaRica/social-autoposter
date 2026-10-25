@@ -8833,5 +8833,25 @@
   "category": "RUNNING",
   "pillar": "ROUTE",
   "caption": "A 9.2 km loop from Laur\u00e1ceas Lodge climbs 496 metres through the montane oak forest above the Dota Valley.\n\nYou start at"
+ },
+ {
+  "id": "17942590704378533",
+  "date": "2026-10-25",
+  "ts": "2026-10-25T15:17:12",
+  "base": "lib-tr-d5-manuel-antonio-2",
+  "format": "carousel",
+  "category": "RUNNING",
+  "pillar": "EXPERIENCE",
+  "caption": "Day 5 trades the high cloud forest for 9.5 kilometres of coastal singletrack at Manuel Antonio.\n\nAfter 4 days in the Tal"
+ },
+ {
+  "id": "18098966087451967",
+  "date": "2026-10-25",
+  "ts": "2026-10-25T15:17:12",
+  "base": "lib-tr-d5-manuel-antonio-2-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "EXPERIENCE",
+  "caption": "Day 5 trades the high cloud forest for 9.5 kilometres of coastal singletrack at Manuel Antonio.\n\nAfter 4 days in the Tal"
  }
 ]
