@@ -8854,5 +8854,25 @@
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
   "caption": "Day 5 trades the high cloud forest for 9.5 kilometres of coastal singletrack at Manuel Antonio.\n\nAfter 4 days in the Tal"
+ },
+ {
+  "id": "17955365172266222",
+  "date": "2026-10-26",
+  "ts": "2026-10-26T15:21:01",
+  "base": "lib-tr-d6-drake-3",
+  "format": "carousel",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "caption": "Day 6 runs 16.6 km along the Pacific coastal trail from Agujitas deep into the Osa Peninsula.\n\nYou start after a boat tr"
+ },
+ {
+  "id": "18153765802547254",
+  "date": "2026-10-26",
+  "ts": "2026-10-26T15:21:01",
+  "base": "lib-tr-d6-drake-3-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "caption": "Day 6 runs 16.6 km along the Pacific coastal trail from Agujitas deep into the Osa Peninsula.\n\nYou start after a boat tr"
  }
 ]
