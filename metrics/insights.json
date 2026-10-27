@@ -11629,15 +11629,15 @@
   "format": "reel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 1345,
+  "reach": 1347,
   "likes": 29,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 29,
-  "views": 2046,
+  "views": 2047,
   "interactions": 29,
-  "eng_rate": 0.0216
+  "eng_rate": 0.0215
  },
  {
   "id": "18107724263223015",
@@ -12144,17 +12144,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 31,
+  "reach": 32,
   "likes": 7,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 7,
-  "views": 82,
+  "views": 84,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 7,
-  "eng_rate": 0.2258
+  "eng_rate": 0.2188
  },
  {
   "id": "18122154850947967",
@@ -12255,17 +12255,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 9,
-  "likes": 2,
+  "reach": 21,
+  "likes": 6,
   "comments": 0,
   "saved": 0,
   "shares": 0,
-  "total_interactions": 2,
-  "views": 30,
+  "total_interactions": 6,
+  "views": 58,
   "profile_visits": 0,
   "follows": 0,
-  "interactions": 2,
-  "eng_rate": 0.2222
+  "interactions": 6,
+  "eng_rate": 0.2857
  },
  {
   "id": "18099276638388366",
