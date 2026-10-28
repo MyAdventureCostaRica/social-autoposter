@@ -8896,5 +8896,25 @@
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
   "caption": "Day 2 begins at 3,000 metres on the spine of the Talamanca range.\n\nYou leave the valley in the support van after breakfa"
+ },
+ {
+  "id": "18099615335432920",
+  "date": "2026-10-28",
+  "ts": "2026-10-28T15:19:25",
+  "base": "lib-tr-d7-osa-1",
+  "format": "carousel",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "caption": "Day 7 takes you into the Osa Peninsula for 15.4 kilometres of dense rainforest singletrack. You start in the morning and"
+ },
+ {
+  "id": "18103385441531890",
+  "date": "2026-10-28",
+  "ts": "2026-10-28T15:19:25",
+  "base": "lib-tr-d7-osa-1-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "ROUTE",
+  "caption": "Day 7 takes you into the Osa Peninsula for 15.4 kilometres of dense rainforest singletrack. You start in the morning and"
  }
 ]
