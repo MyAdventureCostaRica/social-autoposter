@@ -8926,5 +8926,25 @@
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
   "caption": "In the cloud forest, hanging bridges cross steep mountain canyons without cutting into the canopy below.\n\nAbove 1,500 me"
+ },
+ {
+  "id": "18569502127077394",
+  "date": "2026-10-29",
+  "ts": "2026-10-29T15:18:01",
+  "base": "lib-tr-d4-queen-1",
+  "format": "carousel",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "This is the 25-kilometre descent I have been coming back to for years.\n\nThe day opens in Providencia at 1,788 metres. Th"
+ },
+ {
+  "id": "17875853931593308",
+  "date": "2026-10-29",
+  "ts": "2026-10-29T15:18:01",
+  "base": "lib-tr-d4-queen-1-story",
+  "format": "story",
+  "category": "RUNNING",
+  "pillar": "FOUNDER",
+  "caption": "This is the 25-kilometre descent I have been coming back to for years.\n\nThe day opens in Providencia at 1,788 metres. Th"
  }
 ]
