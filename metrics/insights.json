@@ -12107,17 +12107,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "ROUTE",
-  "reach": 42,
+  "reach": 43,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 80,
+  "views": 81,
   "profile_visits": 4,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.119
+  "eng_rate": 0.1163
  },
  {
   "id": "18356413267216709",
@@ -12346,17 +12346,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 16,
+  "reach": 17,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 41,
+  "views": 45,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.25
+  "eng_rate": 0.2353
  },
  {
   "id": "17875853931593308",
@@ -12383,17 +12383,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 6,
+  "reach": 9,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 10,
+  "views": 14,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.3333
+  "eng_rate": 0.2222
  },
  {
   "id": "18024229316946246",
@@ -12412,5 +12412,22 @@
   "navigation": 12,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "17944588617091225",
+  "date": "2026-10-30",
+  "base": "lednoyelecrnfhfbxa0i",
+  "format": "reel",
+  "category": "CYCLING",
+  "pillar": "ROUTE",
+  "reach": 7,
+  "likes": 4,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 4,
+  "views": 17,
+  "interactions": 4,
+  "eng_rate": 0.5714
  }
 ]
