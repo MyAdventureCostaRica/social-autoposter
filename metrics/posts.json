@@ -8949,5 +8949,25 @@
   "category": "RUNNING",
   "pillar": "FOUNDER",
   "caption": "This is the 25-kilometre descent I have been coming back to for years.\n\nThe day opens in Providencia at 1,788 metres. Th"
+ },
+ {
+  "id": "18163061860452733",
+  "date": "2026-10-30",
+  "ts": "2026-10-30T15:21:44",
+  "base": "lib-tr-d2-asuncion-sunset",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "In Costa Rica, p\u00e1ramo exists only above 3,000 m elevation.\n\nStunted bamboo, tough shrubs, and alpine grasses replace the"
+ },
+ {
+  "id": "18024229316946246",
+  "date": "2026-10-30",
+  "ts": "2026-10-30T15:21:44",
+  "base": "lib-tr-d2-asuncion-sunset-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "KNOWLEDGE",
+  "caption": "In Costa Rica, p\u00e1ramo exists only above 3,000 m elevation.\n\nStunted bamboo, tough shrubs, and alpine grasses replace the"
  }
 ]
