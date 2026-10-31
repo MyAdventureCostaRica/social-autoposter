@@ -12292,17 +12292,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "ROUTE",
-  "reach": 20,
+  "reach": 21,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 42,
+  "views": 49,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.15
+  "eng_rate": 0.1429
  },
  {
   "id": "18103385441531890",
@@ -12346,17 +12346,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "FOUNDER",
-  "reach": 19,
+  "reach": 21,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 50,
+  "views": 53,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.2105
+  "eng_rate": 0.1905
  },
  {
   "id": "17875853931593308",
@@ -12383,17 +12383,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 12,
+  "reach": 14,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 19,
+  "views": 24,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.1667
+  "eng_rate": 0.1429
  },
  {
   "id": "18024229316946246",
@@ -12420,14 +12420,14 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 31,
+  "reach": 44,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 49,
+  "views": 63,
   "interactions": 5,
-  "eng_rate": 0.1613
+  "eng_rate": 0.1136
  }
 ]
