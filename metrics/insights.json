@@ -12375,17 +12375,17 @@
   "format": "single",
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
-  "reach": 23,
+  "reach": 24,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 41,
+  "views": 42,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1304
+  "eng_rate": 0.125
  },
  {
   "id": "18024229316946246",
@@ -12412,15 +12412,15 @@
   "format": "reel",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 49,
+  "reach": 50,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 70,
+  "views": 71,
   "interactions": 5,
-  "eng_rate": 0.102
+  "eng_rate": 0.1
  },
  {
   "id": "17960370924013849",
