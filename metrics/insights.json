@@ -11811,7 +11811,7 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "ROUTE",
-  "reach": 24,
+  "reach": 25,
   "likes": 4,
   "comments": 0,
   "saved": 0,
@@ -11821,7 +11821,7 @@
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.1667
+  "eng_rate": 0.16
  },
  {
   "id": "18131816125687885",
@@ -12429,17 +12429,17 @@
   "format": "carousel",
   "category": "RUNNING",
   "pillar": "EXPERIENCE",
-  "reach": 38,
+  "reach": 39,
   "likes": 8,
   "comments": 0,
   "saved": 1,
   "shares": 0,
   "total_interactions": 9,
-  "views": 111,
+  "views": 117,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 9,
-  "eng_rate": 0.2368
+  "eng_rate": 0.2308
  },
  {
   "id": "18024707609708518",
