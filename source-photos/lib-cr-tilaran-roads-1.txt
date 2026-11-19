@@ -1,0 +1,4 @@
+SET: tilaran-roads
+PHOTO: A dirt road lined with tall cypress trees at sunset. Esteban's own photo, May 2024.
+PLACE: Back roads of the Cordillera de Tilarán, between Tilarán and Monteverde.
+KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest. The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest, which is why the ridges are so often in fog.

@@ -1,0 +1,4 @@
+SET: sunsets-west
+PHOTO: The sun going down behind a silhouetted tree, orange sky. Esteban's own photo, September 2026.
+PLACE: The Cordillera de Tilarán near Monteverde, looking west.
+KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.

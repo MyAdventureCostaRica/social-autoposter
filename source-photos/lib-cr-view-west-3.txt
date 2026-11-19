@@ -1,0 +1,4 @@
+SET: view-west
+PHOTO: A view west over forested hills toward the coast. Esteban's own photo, May 2026.
+PLACE: The western slope of the Cordillera de Tilarán, looking toward the Gulf of Nicoya.
+KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.

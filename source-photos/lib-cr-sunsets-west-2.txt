@@ -1,0 +1,4 @@
+SET: sunsets-west
+PHOTO: The sun setting into a sea of cloud below the ridge, red sky. Esteban's own photo, September 2026.
+PLACE: The Cordillera de Tilarán near Monteverde, looking west.
+KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.

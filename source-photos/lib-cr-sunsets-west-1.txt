@@ -1,0 +1,4 @@
+SET: sunsets-west
+PHOTO: Sunset over the hills of the Cordillera de Tilarán, layered cloud lit orange. Esteban's own photo, August 2026.
+PLACE: The Cordillera de Tilarán near Monteverde, looking west.
+KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
