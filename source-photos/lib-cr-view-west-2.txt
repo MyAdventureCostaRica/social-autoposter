@@ -1,4 +1,7 @@
 SET: view-west
+SERIES: FIELD
 PHOTO: Pasture and forest falling toward the Gulf of Nicoya under big white clouds. Esteban's own photo, May 2026.
 PLACE: The western slope of the Cordillera de Tilarán, looking toward the Gulf of Nicoya.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- On the Monteverde ridge, moisture from the Caribbean meets the Pacific winds. [source: https://www.discoverwildlife.com/environment/monteverde-cloud-forest-preserve]
+- The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest, which is why the ridge is so often in fog while the Pacific side below stays clearer. [source: earlier library note]

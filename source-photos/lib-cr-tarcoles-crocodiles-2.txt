@@ -1,4 +1,8 @@
 SET: tarcoles-crocodiles
+SERIES: FIELD
 PHOTO: An American crocodile resting on the mud bank of the Río Tárcoles, its reflection in the water. Esteban's own photo, July 2026.
 PLACE: The Río Tárcoles, on the central Pacific coast road.
-KNOWN FACTS: American crocodiles gather on the banks of the Río Tárcoles below the bridge on the coastal highway (Route 34), one of the best-known places in Costa Rica to see them. The Tárcoles carries the water of the Central Valley to the Gulf of Nicoya.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- American crocodiles gather on the banks of the Río Tárcoles below the bridge on the coastal highway (Route 34). [source: earlier library note]
+- About 2,000 American crocodiles live in the Tárcoles, which a National University biologist calls the most polluted river in Costa Rica: it carries San José's sewage and garbage to the Gulf of Nicoya. [source: https://ticotimes.net/2022/11/25/crocodiles-endure-the-most-polluted-river-in-costa-rica ; https://phys.org/news/2022-11-costa-rica-crocodiles-survive-polluted.pdf]
+- They feed on fish that come up the river from the sea, and the country's crocodile population has been recovering since 1980. [source: https://ticotimes.net/2022/11/25/crocodiles-endure-the-most-polluted-river-in-costa-rica ; https://hurriyetdailynews.com/costa-rica-crocodiles-survive-in-most-polluted-river-178936]

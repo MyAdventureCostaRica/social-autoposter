@@ -1,5 +1,9 @@
 SET: guanacaste-coast
+SERIES: FIELD
 PHOTO: A wave-washed beach on the north Guanacaste coast: dark rocks, white surf, rocky islets offshore, framed by a leaning tree. Esteban's own photo, September 2026.
 PLACE: The north Pacific coast of Guanacaste, near Playa Flamingo.
-KNOWN FACTS: Guanacaste's coast is tropical dry forest, where many trees drop their leaves in the dry season.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Guanacaste's coast is tropical dry forest, where many trees drop their leaves in the dry season. [source: earlier library note]
+- Tropical dry forest is the most endangered of the habitats that once covered Mesoamerica: in 1986 only 0.08% of its original 550,000 km2 was protected. [source: https://copa.acguanacaste.ac.cr/handle/11606/338?show=full]
+- From 1985 the biologists Daniel Janzen and Winnie Hallwachs set out to grow it back in the northwest. The Área de Conservación Guanacaste was created in 1989 and became a UNESCO World Heritage Site in 1999. (It lies north of this coast: do not say the photo is in it.) [source: https://www.cambridge.org/core/services/aop-cambridge-core/content/view/960ED00C266A44E62C90A8D90A24145A/S174275840001907Xa.pdf/how-to-grow-a-wildland-the-gardenification-of-nature.pdf ; https://en.wikipedia.org/wiki/Guanacaste_Conservation_Area]
 PHOTO LOCATION NOT CONFIRMED: do not name the beach.

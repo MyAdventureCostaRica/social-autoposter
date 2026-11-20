@@ -1,5 +1,8 @@
 SET: punta-uva
+SERIES: COUNTRY, FIELD
 PHOTO: The Caribbean framed by trees, a wide view of the sea. Esteban's own photo, September 2024.
 PLACE: Near Punta Uva, on the south Caribbean coast between Puerto Viejo and Manzanillo (Talamanca, Limón).
-KNOWN FACTS: The south Caribbean coast of Talamanca is Costa Rica's Afro-Caribbean coast; south of Punta Uva the Gandoca-Manzanillo Wildlife Refuge protects forest, beach and reef to the Panama border. Buttress roots brace tall rainforest trees in thin tropical soil.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- The food of this coast came with the Afro-Caribbean families who settled it: rice and beans cooked in coconut milk, rondón (fish and vegetables slow-cooked in coconut milk) and patí, a spiced pastry. [source: https://ticotravel.com/?p=4369 ; https://www.diarioextra.com/noticia/limon-el-corazon-afro-de-costa-rica-que-desborda-cultura-sabor-y-calipso/]
+- The south Caribbean coast of Talamanca is Costa Rica's Afro-Caribbean coast; south of Punta Uva the Gandoca-Manzanillo Wildlife Refuge protects forest, beach and reef. [source: earlier library note]
 PHOTO LOCATION NOT CONFIRMED: the exact beaches; write about the coast near Punta Uva, do not name a beach.

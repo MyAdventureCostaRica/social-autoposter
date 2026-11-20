@@ -1,4 +1,7 @@
 SET: tilaran-run
+SERIES: SPORT
 PHOTO: Green ridges and valleys of the Cordillera de Tilarán under a grey sky. Esteban's own photo, May 2025.
 PLACE: The Cordillera de Tilarán, Guanacaste.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest. The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest, which is why the ridges are so often in fog.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- In the rainy season the mornings are usually clear and the rain comes in the afternoon. [source: https://www.anywhere.com/costa-rica/travel-guide/weather]
+- The trade winds, the alisios, blow from the northeast for much of the year and drop their moisture on the Caribbean slope. [source: https://jameskaiser.com/costa-rica-guide/weather/]

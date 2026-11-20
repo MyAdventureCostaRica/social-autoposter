@@ -20,12 +20,19 @@
   "dedupe_posted": true,
   "dedupe_hash_distance": 6,
   "pillar_plan": {
-    "ROUTE": 3,
-    "EXPERIENCE": 2,
-    "KNOWLEDGE": 1,
-    "FOUNDER": 1
+    "FIELD": 2,
+    "SPORT": 2,
+    "COUNTRY": 2,
+    "PEOPLE": 1,
+    "EXPEDITION": 1
   },
-  "plan_window": 14,
+  "post_days": [
+    "Sun",
+    "Tue",
+    "Thu",
+    "Sat"
+  ],
+  "plan_window": 16,
   "plan_scan": 8,
   "reel_min_seconds": 7,
   "burn_text": false,

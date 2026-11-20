@@ -246,9 +246,9 @@ def main():
     print("Content plan — this reel's kind:", want)
     meta = caption_with_retry(thumb_bytes(pid), note, ap.TAGS, learn,
                           hint="This caption is for a REEL: 30 to 60 words only (long reel captions reduce "
-                               "reach): the place, the ground or one true thing in two or three plain "
-                               "sentences. Only an EXPERIENCE reel ends with the expedition and 'Details "
-                               "in the bio.'; every other kind ends on a concrete thing. No tips, no morals.",
+                               "reach): one little-known true thing about the place, the wildlife or the sport, in "
+                               "two or three plain sentences. Only an EXPEDITION reel names the expedition and ends "
+                               "with 'Details in the bio.'; every other kind ends on a concrete thing. No tips, no morals.",
                           pillar=want)
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
@@ -345,9 +345,9 @@ def stage_reel():
     print("Content plan — this reel's kind:", want)
     meta = caption_with_retry(thumb_bytes(pid), note, ap.TAGS, learn,
                           hint="This caption is for a REEL: 30 to 60 words only (long reel captions reduce "
-                               "reach): the place, the ground or one true thing in two or three plain "
-                               "sentences. Only an EXPERIENCE reel ends with the expedition and 'Details "
-                               "in the bio.'; every other kind ends on a concrete thing. No tips, no morals.",
+                               "reach): one little-known true thing about the place, the wildlife or the sport, in "
+                               "two or three plain sentences. Only an EXPEDITION reel names the expedition and ends "
+                               "with 'Details in the bio.'; every other kind ends on a concrete thing. No tips, no morals.",
                           pillar=want)
     hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
     mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))

@@ -1,3 +1,7 @@
+SERIES: FIELD
 PHOTO: An orange moth resting on a blue painted bench in Monteverde. Esteban's own photo, August 2026.
 PLACE: Monteverde.
-KNOWN FACTS: The moth's species is not identified: do not name it.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- About 90% of the species in the order Lepidoptera are moths; butterflies are the other 10%. [source: https://handwiki.org/wiki/Biology:Moth]
+- Most moths fly at night, but some fly by day. [source: https://wikwiand-revamp.pages.dev/en/Moth]
+- The moth's species is not identified: do not name it.

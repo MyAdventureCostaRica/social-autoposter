@@ -1,5 +1,8 @@
 SET: arenal-first-light
+SERIES: FIELD, COUNTRY
 PHOTO: A garden path near La Fortuna with Arenal Volcano behind the trees, early morning. Esteban's own photo, September 2025.
 PLACE: Gardens near La Fortuna, at the foot of Arenal Volcano.
-KNOWN FACTS: Lake Arenal is the largest lake in Costa Rica, a reservoir formed by the Arenal dam that feeds hydroelectric plants. Arenal Volcano erupted violently in 1968 and stayed active until 2010.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Arenal is a young volcano, about 7,000 years old. [source: https://ticotimes.net/?p=109247]
+- It lay quiet and forested for centuries, then erupted on 29 July 1968 and stayed active until 2010: one of the 10 longest eruptions on Earth since 1750. It has been at rest since 2010. [source: https://en.wikipedia.org/wiki/Arenal_Volcano]
 PHOTO LOCATION NOT CONFIRMED: do not name the lodge or the garden.

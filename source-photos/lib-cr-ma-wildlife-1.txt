@@ -1,4 +1,9 @@
 SET: ma-wildlife
+SERIES: FIELD
 PHOTO: A sloth hanging in the leaves, seen through a guide's spotting scope, Manuel Antonio. Esteban's own photo, March 2025.
 PLACE: Manuel Antonio National Park, central Pacific.
-KNOWN FACTS: Costa Rica has 4 monkey species: the mantled howler, the white-faced capuchin, the Central American spider monkey and the Central American squirrel monkey. Two sloth species live in Costa Rica: the brown-throated three-toed sloth and Hoffmann's two-toed sloth. The snake's species is not identified: do not name it.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Manuel Antonio has both two-toed and three-toed sloths. [source: https://kaweah.freedombox.rocks/kiwix/wikipedia_en_all_maxi_2023-10/Manuel_Antonio_Beach]
+- Three-toed sloths come down about once a week to defecate at the foot of their tree. Moths that live in their fur lay eggs in the dung, and the algae that grow in the fur are eaten by the sloth (Pauli et al., 2014, research done in Costa Rica). [source: https://pmc.ncbi.nlm.nih.gov/articles/PMC3906947 ; https://www.livescience.com/42744-why-sloths-leave-trees-to-poop.html]
+- The snake's species is not identified: do not name it.
+- The species of the sloth and of the snake in these photos are not identified: do not name them, and do not say the sloth is three-toed.

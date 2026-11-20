@@ -1,4 +1,8 @@
 SET: rio-celeste
+SERIES: FIELD
 PHOTO: The Río Celeste running turquoise over pale boulders, a yellow footbridge across it, forest on both banks. Esteban's own photo, September 2023.
 PLACE: Río Celeste, on the flanks of Tenorio Volcano in northern Costa Rica.
-KNOWN FACTS: The Río Celeste rises in Tenorio Volcano National Park. Its colour begins at Los Teñideros, where two clear streams meet: minerals in the water form fine particles that scatter sunlight and turn the river sky-blue.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- The Río Celeste's colour begins at a point called the Teñidero (the dyeing point), where 2 colourless streams meet: the Río Buenavista and the acidic Quebrada Agria (Sour Creek). [source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3776737/]
+- A 2013 study by University of Costa Rica scientists showed that no dye or dissolved chemical makes the blue: when the acid creek meets the river, aluminosilicate particles of about 566 nanometres form and scatter blue light (Mie scattering). [source: https://doaj.org/article/8cb1bb83cf214c3dac99141100113609 ; https://www.aminer.cn/pub/55a5cfb765ce60f99bf607f0]
+- A 2023 study by the same group found the particles form chemically at the meeting point, helped by microbes. [source: https://kimuk.conare.ac.cr/Record/KUCR_9c75827a89724813c77bb466005c5753]

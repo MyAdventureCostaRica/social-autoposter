@@ -1,4 +1,7 @@
 SET: tilaran-ridge
+SERIES: SPORT, COUNTRY
 PHOTO: A person standing on a grassy ridge looking out over the lowlands, big sky. Esteban's own photo, June 2026.
 PLACE: The western ridges of the Cordillera de Tilarán, Guanacaste.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Costa Ricans call the rainy season, May to November, invierno (winter) and the dry season, December to April, verano (summer): the seasons are named by the rain, not by the temperature. [source: https://ticotimes.net/2011/02/03/it-rains-and-it-doesn-t-costa-rican-seasons ; https://internationalliving.com/countries/costa-rica/climate-in-costa-rica/]
+- In July or August a few dry weeks often interrupt the rains: the veranillo de San Juan, the little summer of Saint John. [source: https://costa-rica-guide.com/travel/weather/why-does-it-rain/]

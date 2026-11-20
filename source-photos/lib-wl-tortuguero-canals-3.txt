@@ -1,7 +1,10 @@
 SET: tortuguero-canals
+SERIES: EXPEDITION
 PHOTO: A canoe crossing the calm Tortuguero lagoon under a big sky. Esteban's own photo, March 2026.
 PLACE: Tortuguero's canals and lagoon, north Caribbean coast.
-KNOWN FACTS: Tortuguero is a village on a strip of sand between the Caribbean and the canals, reached only by boat or by plane.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- In the 1960s an 80-km waterway was dredged from Limón to Tortuguero, joining rivers with canals, so that timber could travel inland instead of by sea. It is still the main route. [source: https://www.coterc.org/blog/blog-post-title-two-287sz-jl5cg-xnwhe-rp3cj-7dm68-krf3r-4jak3-8hn9a-kb5xg-2kf3n-x83f9-jn5d4]
+- Tortuguero is a village on a strip of sand between the Caribbean and the canals, reached only by boat or by plane. [source: earlier library note]
 The Wildlife Expedition · Day 3 · Dawn on the water. (Tortuguero) · lodge: Tortuga Lodge & Gardens, Tortuguero · meals: Breakfast, lunch, dinner
 The water trails open at 6 in the morning, and that is when we are on them: a slow boat on the caños in the hour the forest is loudest, before the heat and before the lodge's breakfast. The rest of the morning is the village — a walk along its one sandy street and the beach the turtles come to.
 The afternoon is yours at the lodge: the gardens, the pool, the river going past. In September a second night walk on the beach is possible, if the programme operates that night.

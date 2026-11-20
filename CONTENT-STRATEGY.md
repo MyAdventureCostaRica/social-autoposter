@@ -1,76 +1,83 @@
-# My Adventure Costa Rica — content strategy
+# My Adventure Costa Rica — content strategy (v6, 19 November 2026)
 
-This is the plan the auto-poster works from. It's documented here so the intent
-is explicit, not accidental. The AI captioner is loaded with these same rules.
+This is the plan the auto-poster works from. The captioner (`autopost.py` BRAND_PROMPT) is loaded
+with the same rules. The research behind it is in the website project:
+`claude/SOCIAL_VOICE_RESEARCH_2026-11-19.md`.
+
+## Why it changed
+
+Esteban, 19 Nov 2026: the feed "feels too selly, you are just describing days, no value content
+seems to come up, there is no real strategy". The numbers agreed: 28 feed posts between 9 Oct and
+7 Nov earned 0 shares, 0 comments, 1 save and 0 follows. 5 of every 7 posts were a tour day, and
+the only facts the writer had were our own tour pages.
+
+## What companies like ours do (read on their own Instagram, 19 Nov 2026)
+
+- **Run the Alps** (founder-led trail running tours): athletes' first-person stories, a founder
+  who writes books and journalism, and plain sell posts that each give a reason. Never day-by-day.
+- **Pelorus**: the team's own field stories, people and culture first.
+- **Black Tomato**: every post starts from a human idea or question; the trip is the answer.
+- **Natural Habitat Adventures**: a wildlife moment plus one fact, guides in first person,
+  travellers' videos credited by name.
+- **Lapa Rios** (the counter-example): rooms, pools and "Book your stay" — the brochure mode.
+- **Instagram (2026)**: ranks on watch time, likes per reach and sends per reach; sends weigh most
+  for reaching new people. Carousels earn saves; reels earn reach. About 2 reels + 3–5 feed posts
+  a week.
 
 ## The mission
 
-Build My Adventure Costa Rica into **the trusted source for adventure knowledge
-and all things Costa Rica.** Authority and authenticity come first; bookings
-follow trust. We post with intent, never just to fill a feed.
+The feed is **a Costa Rican guide's field notebook**: the country's wildlife and land, its sports,
+its people, its food, history and culture, told by someone who knows them first-hand. The
+expeditions appear only where they belong. A reader who never books should learn something true
+in every post and want to send it to a friend. Bookings follow trust.
 
-## The selling philosophy: ~80% value, ~20% gentle invitation
+## The five kinds of post (a cycle of 8 feed posts)
 
-Endurance travel is a high-trust, high-price decision. Nobody books thousands of
-dollars of guided adventure from a hard seller — they book the person they're
-convinced is the real expert and the real deal. So:
+| Kind | Share | What it is | Its job |
+|---|---|---|---|
+| **FIELD** (field notes) | 2 in 8 | One little-known true thing about the living thing or the land in the photo: a habit, a plant, the cloud, the wind, a season, the rock, how the place came to be | Saves and sends |
+| **SPORT** (the sport here) | 2 in 8 | What trail running, gravel and hiking are like in Costa Rica: altitude, heat, rain, surfaces, why the roads and trails exist, the races and people of the sport. Esteban in first person only when his published journal tells the story, each story once | Authority |
+| **COUNTRY** (the country) | 2 in 8 | Food, drink, history, culture: a dish and where it comes from, a festival, a craft, a date or a law that shaped the country, how a town lives | Value |
+| **PEOPLE** | 1 in 8 | A person or family on these routes or in a place's story, only as the note or the journal names them | Trust |
+| **EXPEDITION** | 1 in 8 | The only sell. Opens with a fact, a person or a moment from the expedition's ground, then the expedition with its published facts and one reason to go; last line = name, departures, "Details in the bio." | Bookings |
 
-- **~80%** of posts give value — teach something, show something, tell a true story.
-- **~20%** gently invite — a quiet line at most ("Trail running journeys in Costa
-  Rica, designed slowly" / "Design yours"). Never urgency, never discounts.
-- Restraint *is* the luxury brand, and it's also what converts. Knowledge proves
-  authority; the founder's own racing proves authenticity; the soft invite closes
-  an audience that already believes.
+Reels follow the same plan (mostly field notes): one true thing about a place in motion.
 
-## The four pillars
+## How every caption sounds
 
-The AI picks the ONE that best fits each photo. Over a week, aim for this mix
-(of ~5–7 posts) by feeding the right kinds of photos:
+- Opens with a person, a little-known fact, a date, a question or a moment. **Never "Day N" or a
+  distance** (`caption_violations()` rejects both).
+- One subject. The four non-selling kinds never name an expedition, departures, the bio or the
+  company (enforced).
+- One or two numbers that matter (1955, 98.6%), never a list of kilometres and metres (enforced:
+  more than 2 distances/altitudes, 3 on an expedition post, is rejected).
+- Names people and places; credits photographers and guests.
+- Ends on what the fact means; about 1 in 4 on one real question.
+- Kept from every earlier version: no tips or instructions, no praise words, no "send this to", no
+  emoji, numerals, English only, nothing invented, first person only from his real stories.
 
-1. **KNOWLEDGE (~2/week)** — teach something real: terrain, seasons, what makes a
-   route special, training, what to expect. The reader should *learn* something.
-   This is what makes us the authority. *Feed it:* landscapes, conditions, gear,
-   maps, anything you can attach a fact or insight to (use a note).
+## Where the facts come from
 
-2. **FOUNDER / ATHLETE (~1–2/week)** — your own racing, scouting, training,
-   behind-the-scenes. Authentic proof you live this. *Feed it:* photos of you out
-   there — and add a note with the real facts (e.g. "me, fastest 50K, sub-5h, 4th
-   overall") so it's told in first person and true.
+- Each photo's note: `SERIES:` (the kinds it suits, preferred first), `PHOTO:`, `PLACE:` and
+  `KNOWN FACTS:` — 1 to 3 checked, little-known facts, each with its source in brackets for
+  checking (sources never go into the caption). Esteban strikes anything wrong; his knowledge beats
+  any source.
+- The expedition-day text and the departures are only in the notes of EXPEDITION photos.
+- `brand/knowledge.md` (the site's tour pages, company text and journal) goes only to EXPEDITION
+  posts; SPORT and PEOPLE posts get only the journal; FIELD and COUNTRY get neither.
 
-3. **ROUTE / DESTINATION (~2/week)** — the places themselves, aspirational. Make
-   the reader want to stand there. *Feed it:* your strongest scenery.
+## Cadence
 
-4. **EXPERIENCE / TOURS (~1/week)** — what a journey with us is actually like:
-   intimate groups, lodges, the feeling. The closest-to-sale pillar — kept soft
-   and editorial, never a brochure. *Feed it:* trip moments, lodges, small groups.
+4 photo posts a week (config `post_days`: Sun, Tue, Thu, Sat, Costa Rica time) + 2 reels (Fri and
+Sat slots). Esteban chose this on 19 Nov 2026 over a post every day: fewer, stronger posts, and the
+44 restocked posts last about 11 weeks instead of 6. A forced run, a dashboard upload or "New
+caption" still works any day.
 
-## Formats (post types)
+## How to improve it over time
 
-- **Single image** — one branded photo + caption. The default for atmospheric/route shots.
-- **Carousel** — a photo cover followed by 2–4 editorial text slides (and an optional soft closing slide). The AI chooses this for KNOWLEDGE posts that teach across steps, and often for FOUNDER stories. Slides use the sand/ink/Fraunces house style.
-- **Video / reels** — *(next build)* the system can post finished video you or your editors drop in (drone pan shots, one-take talking clips). It never edits — it captions (from a thumbnail + your note) and posts as a reel. Needs a free video host (Cloudinary) because video files are too large for GitHub; that's its own short setup.
-
-The AI picks single vs carousel per photo based on intent.
-
-## How the system uses this
-
-- The AI looks at each photo, picks the fitting pillar, and writes the caption in
-  that intent — knowledge posts teach, founder posts tell your story, etc.
-- **Notes** (optional `IMG_xxxx.txt` files) give it the true facts for a photo so
-  it doesn't guess — essential for founder/athlete and any named place.
-- It still never invents places, distances, or facts it wasn't given.
-
-## How you improve it over time (three levers)
-
-1. **A note on a photo** — steers *what one post says* (the true story). Optional,
-   only for the photos that need it.
-2. **The brief** — steers the *style of every future post*. Tell Claude "do more
-   X, never Y, push bespoke harder," and it updates the AI's instructions.
-3. **Approve / reject** — your final quality gate on each finished post.
-
-## What to shoot / collect, going forward
-
-To keep all four pillars fed, gather: scenery (route/destination), you in action
-(founder), trip and lodge moments (experience), and anything teachable —
-conditions, terrain, seasonal change — that you can pair with a one-line fact
-(knowledge). Restock the `source-photos` folder before you run low.
+1. **A note on a photo** steers what one post says. A line of your own ("I crossed here on foot in
+   2019 when the bridge was out") is worth more than any researched fact.
+2. **The brief** (this file + `SOCIAL_VOICE_GUIDE.md` + BRAND_PROMPT) steers every post.
+3. **Approve / reject** on the dashboard is the final gate.
+4. **Measure** shares and saves per kind in the monthly review: the kinds that get sent and saved
+   earn more of the cycle.

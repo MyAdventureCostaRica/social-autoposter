@@ -1,8 +1,10 @@
 SET: tortuguero-dawn
+SERIES: PEOPLE, FIELD
 PHOTO: A sea-turtle hatchling on the sand of Tortuguero beach at first light, heading for the water. Esteban's own photo, August 2023.
 PLACE: Tortuguero beach, north Caribbean coast.
-KNOWN FACTS: Tortuguero is the most important nesting beach of the green turtle in the Western Hemisphere; green turtles nest roughly from July to October and the hatchlings run for the sea weeks later. The hatchling's species is not confirmed: call it a sea-turtle hatchling.
-The Wildlife Expedition · Day 2 · Into the canals. (Tortuguero) · lodge: Tortuga Lodge & Gardens, Tortuguero · meals: Breakfast, lunch, dinner
-A morning flight from San José to Tortuguero, a village on a strip of sand between the Caribbean and the canals, reached only by boat or by plane. The lodge's boat meets the flight. Tortuga Lodge & Gardens stands on the river at Tortuguero, with its gardens on the bank and a saltwater pool — 2 nights here.
-In the afternoon, the first boat into Tortuguero National Park: the main canal and the caños that branch off it, a forest that comes down to the water on both sides. In the rainy season the day ends on the beach: the green turtles' nesting walk, between 8 and 10 in the evening, with a licensed local guide, no white light and no cameras — the park's rules, and the right ones.
-Bookable departures: 20 – 28 March 2027; 4 – 12 September 2027. Group: 6 to 8 guests. Details and dates in the bio.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- In 1955 Archie Carr, a zoologist from the University of Florida, began tagging green turtles at Tortuguero. Tagging has continued every year since: the longest continuous sea turtle monitoring programme anywhere. [source: https://conserveturtles.org/?p=418 ; https://springerlink.bibliotecabuap.elogim.com/doi/10.1007/s00227-005-0076-4]
+- Carr wrote about turtle No. 3438, which he named Old Faithful: she was seen on this beach on 26 occasions in 7 nesting seasons between 1965 and 1982. [source: https://conserveturtles.org/?p=11628]
+- The village once lived from turtle meat and eggs. Its guides now say a live green turtle brings in more money through tourism than a hunted one, and green turtle nests here rose 417% between 1971 and 2003. [source: https://conserveturtles.org/?p=11574 ; https://conserveturtles.org/?p=21299]
+- Tortuguero is the most important nesting beach of the green turtle in the Western Hemisphere. [source: earlier library note]
+- The hatchling's species is not confirmed: call it a sea-turtle hatchling.

@@ -1,5 +1,9 @@
 SET: south-caribbean
+SERIES: PEOPLE, COUNTRY
 PHOTO: A river mouth on the Caribbean coast south of Limón: calm water, a sand bar and the sea beyond, framed by leaves. Esteban's own photo, November 2024.
 PLACE: The south Caribbean coast, Limón province.
-KNOWN FACTS: The south Caribbean coast of Talamanca is Costa Rica's Afro-Caribbean coast; south of Punta Uva the Gandoca-Manzanillo Wildlife Refuge protects forest, beach and reef to the Panama border.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- On 20 December 1872 the ship Lizzie docked at Limón with 123 Jamaican workers for the railway to San José. A year later more than 1,000 Jamaicans were working in the port. [source: https://www.doc.surf/wiki/afro-costa-ricans ; https://jamaicans.com/?p=214641]
+- The railway was overseen by Minor Keith, an American who arrived at 23 to help his uncle, Henry Meiggs. [source: https://ticotimes.net/2026/04/19/the-story-of-costa-ricas-famous-railroad-to-limon]
+- Until 1949 most Afro-Costa Ricans lived in Limón and were denied citizenship and the vote; the 1949 constitution gave them full rights. Limón Creole is still spoken on this coast. [source: https://Www.Wikipedia.org/wiki/Afro-Costa_Rican ; https://en.wikipedia.org/wiki/Lim%C3%B3n_Province]
 PHOTO LOCATION NOT CONFIRMED: the first photo's river; do not name it.

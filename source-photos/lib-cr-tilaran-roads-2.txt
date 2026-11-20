@@ -1,4 +1,7 @@
 SET: tilaran-roads
+SERIES: COUNTRY, FIELD
 PHOTO: A gravel road curving through forest. Esteban's own photo, August 2025.
 PLACE: Back roads of the Cordillera de Tilarán, between Tilarán and Monteverde.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest. The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest, which is why the ridges are so often in fog.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- The tall cypress along many roads here, Cupressus lusitanica, is not native: it was brought in and planted as windbreaks around pastures, and such windbreaks are common around Monteverde. [source: https://digitalcommons.usf.edu/tropical_ecology/254 ; https://dialnet.unirioja.es/descarga/articulo/5123208.pdf]
+- The same cypress is the Christmas tree most Costa Ricans buy. [source: https://revistas.tec.ac.cr/index.php/kuru/article/download/478/407/1067]

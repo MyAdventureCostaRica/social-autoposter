@@ -1,3 +1,6 @@
+SERIES: FIELD
 PHOTO: Trees on the ridge at Monteverde bent and stripped by the wind, blue sky. Esteban's own photo, April 2026.
 PLACE: The ridge at Monteverde, on the continental divide.
-KNOWN FACTS: The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest, which is why the ridges are so often in fog. On the exposed ridges the trees grow bent and low.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Up to 40% of the water the Monteverde cloud forest captures comes from mist, not rain: the trees comb it out of the cloud (horizontal precipitation), even on days when no rain falls. [source: https://www.discoverwildlife.com/environment/monteverde-cloud-forest-preserve]
+- The northeast trade winds cross the continental divide at Monteverde, which is why the trees on the ridge grow bent. [source: earlier library note]

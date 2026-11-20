@@ -1,5 +1,9 @@
 SET: squirrel-monkeys
+SERIES: FIELD
 PHOTO: A squirrel monkey walking across the leaf litter. Photo from Esteban's own library, March 2026.
 PLACE: Costa Rica's Pacific lowlands.
-KNOWN FACTS: The Central American squirrel monkey lives only on the Pacific side of Costa Rica and western Panama; Manuel Antonio and the Osa Peninsula are its strongholds. It is the smallest of Costa Rica's 4 monkey species.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- The Central American squirrel monkey is the smallest of Costa Rica's 4 monkeys (adults about 0.7 to 0.8 kg) and lives only on the central and south Pacific side of Costa Rica and the Pacific side of western Panama. [source: https://en.wikipedia.org/wiki/List_of_Costa_Rican_monkey_species]
+- In 1983 Costa Rica's population was estimated at 200,000; a survey in 1996 could confirm at least 1,246. [source: https://www.cambridge.org/core/journals/oryx/article/squirrel-monkeys-in-costa-rica-drifting-to-extinction/BC1D9B29F252E4CD39345DB81EB04FEF]
+- In 2008 the IUCN moved it from Endangered to Vulnerable. [source: https://en.wikipedia.org/wiki/List_of_Costa_Rican_monkey_species]
 PHOTO LOCATION NOT CONFIRMED: do not name the place.

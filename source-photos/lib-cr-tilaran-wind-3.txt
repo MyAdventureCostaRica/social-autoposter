@@ -1,4 +1,9 @@
 SET: tilaran-wind
+SERIES: SPORT, FIELD
 PHOTO: Riders stopped on a gravel road among the wind turbines above Tilarán, the lowlands in the distance. Esteban's own photo, April 2024.
 PLACE: The windy ridges above Tilarán, Guanacaste, where the wind farms stand.
-KNOWN FACTS: The hills around Tilarán are among the windiest places in Costa Rica, and several of the country's wind farms stand on them. Costa Rica generates almost all of its electricity from renewable sources: water, wind, geothermal and sun.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- From November to April the trade winds blow in from the Caribbean, and on the ridges of the canton of Tilarán they are the strongest and most consistent in Costa Rica. [source: https://ticotimes.net/?p=14392 ; https://ticotimes.net/?p=1705]
+- Latin America's first wind farm, Plantas Eólicas (PESA), started turning in Tilarán in 1996. [source: https://www.elfinancierocr.com/economia-y-politica/gerente-de-planta-del-parque-eolico-srl-las/BCBGGMORTZHYDMQAYY2OKK6L2E/story/ ; https://delfino.cr/2023/11/primer-parque-eolico-de-america-latina-reinicia-operaciones-en-tilaran]
+- The same wind makes Lake Arenal, below these hills, one of the best-known windsurfing waters in the world. [source: https://ticotimes.net/?p=1705]
+- Costa Rica made 98.6% of its electricity from renewable sources in 2025: water, geothermal, wind, biomass and sun. [source: https://ticotimes.net/?p=192675]

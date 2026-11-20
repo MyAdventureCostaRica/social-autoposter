@@ -1,4 +1,9 @@
 SET: ma-morning
+SERIES: FIELD
 PHOTO: A Halloween crab with orange legs and purple claws at the mouth of its burrow, Manuel Antonio. Esteban's own photo, August 2026.
 PLACE: Manuel Antonio National Park, central Pacific.
-KNOWN FACTS: Costa Rica has 4 monkey species: the mantled howler, the white-faced capuchin, the Central American spider monkey and the Central American squirrel monkey. The Halloween crab (black shell, orange legs, purple claws) lives in burrows in the coastal forest. The hummingbird's species is not identified: do not name it.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Manuel Antonio is Costa Rica's smallest national park, 1,983 ha of land, yet it holds 109 mammal species and 184 bird species. [source: https://kaweah.freedombox.rocks/kiwix/wikipedia_en_all_maxi_2023-10/Manuel_Antonio_Beach]
+- Costa Rica has about 50 hummingbird species. [source: https://smdp.com/?p=19242 ; https://ticotimes.net/?p=19795]
+- The hummingbird's species is not identified: do not name it.
+- The hummingbird's species is not identified: do not name it.

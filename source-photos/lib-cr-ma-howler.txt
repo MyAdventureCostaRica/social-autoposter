@@ -1,3 +1,8 @@
+SERIES: FIELD
 PHOTO: A mantled howler monkey resting on a branch in Manuel Antonio. Esteban's own photo, April 2024.
 PLACE: Manuel Antonio National Park, central Pacific.
-KNOWN FACTS: Costa Rica has 4 monkey species: the mantled howler, the white-faced capuchin, the Central American spider monkey and the Central American squirrel monkey. The howler's call carries far through the forest, most often at dawn.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Male mantled howlers have an enlarged, hollow hyoid bone near the vocal cords that amplifies their calls. [source: https://wikipedia.com/wiki/Mantled_howler]
+- Howler calls carry about 5 km through rainforest. [source: https://ipfs.ssi.eecc.de/ipns/en.wikipedia-on-ipfs.org/wiki/Howler_monkey]
+- It is the only Central American monkey that eats large quantities of leaves. [source: https://wikipedia.com/wiki/Mantled_howler]
+- Costa Rica has 4 monkey species: the mantled howler, the white-faced capuchin, the Central American spider monkey and the Central American squirrel monkey. [source: earlier library note]

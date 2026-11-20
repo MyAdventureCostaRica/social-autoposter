@@ -1,3 +1,7 @@
+SERIES: SPORT, FIELD
 PHOTO: A rider pushing a mountain bike up a gravel road in thick fog, a barbed-wire fence beside it. Esteban's own photo, May 2024.
 PLACE: The Cordillera de Tilarán near Monteverde.
-KNOWN FACTS: The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest, which is why the ridges are so often in fog.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Many of the fence posts along these roads are alive: posts of poró and madero negro take root and grow into trees. In one study of Costa Rican cattle farms, 87% had living fences. [source: https://dialnet.unirioja.es/descarga/articulo/5104150.pdf]
+- About 92 plant species are used as living fence posts in Costa Rica. [source: https://courses.ecology.uga.edu/tropical-ecology/?p=535]
+- The northeast trade winds cross the continental divide at Monteverde; the cloud they carry is why these ridges are so often in fog. [source: earlier library note]

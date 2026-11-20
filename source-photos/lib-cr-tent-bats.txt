@@ -1,4 +1,9 @@
+SERIES: FIELD
 PHOTO: Tent-making bats roosting under a broad green leaf they have bitten into a tent. Photo from Esteban's own library, March 2026.
 PLACE: Costa Rica's Pacific lowlands.
-KNOWN FACTS: Tent-making bats chew along the midrib of a large leaf until it folds down into a tent, and roost in small groups underneath.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Tent-making bats chew along the midrib of a large leaf until it folds down into a tent, and roost in small groups underneath. [source: earlier library note]
+- One of them, Uroderma bilobatum, bites through the midrib or the veins of a large leaf so that it folds in half into an inverted V. It weighs 13 to 20 g. [source: https://wikipedia.com/wiki/Tent-making_bat]
+- In 1988 biologists studied their tents in coconut palms at Palo Verde National Park, Guanacaste: the bats cut the leaflets in a line, and the leaflets collapsed into a closed tent. [source: https://kuscholarworks.ku.edu/entities/publication/7ca1aea4-3533-4058-a15e-c14bc69db80b]
+- The species of the bats in the photo is not confirmed: call them tent-making bats, and do not say the photo shows Uroderma bilobatum.
 PHOTO LOCATION NOT CONFIRMED: do not name the place.

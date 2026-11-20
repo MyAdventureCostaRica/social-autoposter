@@ -1,3 +1,7 @@
+SERIES: FIELD
 PHOTO: A wild orchid with small orange-red flowers among the grass on a mountain pasture. Esteban's own photo, May 2025.
 PLACE: A mountain pasture in the Cordillera de Tilarán.
-KNOWN FACTS: Costa Rica has one of the richest orchid floras in the world, and its national flower is an orchid, the guaria morada. The orchid in the photo is not identified: do not name its species.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Costa Rica has about 1,400 orchid species, from sea level to the highest peaks. Its national flower is an orchid, the guaria morada. [source: https://ticotimes.net/?p=19795]
+- In Monteverde, epiphytes, the plants that grow on other plants as many orchids do, are about 29% of the flora: 878 species. (The orchid in this photo grows in grass: do not call it an epiphyte.) [source: https://observador.cr/como-puede-secarse-un-bosque-donde-llueven-mas-de-2-500-milimetros-al-ano-esto-esta-pasando-en-monteverde/]
+- The orchid in the photo is not identified: do not name its species.

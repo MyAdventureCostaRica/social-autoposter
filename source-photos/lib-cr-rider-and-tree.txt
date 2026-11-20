@@ -1,3 +1,6 @@
+SERIES: COUNTRY, SPORT
 PHOTO: A rider standing with a mountain bike under a huge spreading tree on a grassy hill, big clouds. Esteban's own photo, August 2024.
 PLACE: The Cordillera de Tilarán, Guanacaste.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- In a study of Costa Rican cattle farms, 95% kept trees standing in their pastures. [source: https://dialnet.unirioja.es/descarga/articulo/5104150.pdf]
+- Farmers keep them for timber, firewood, fodder and shade, and as living fence posts. [source: https://dialnet.unirioja.es/descarga/articulo/6191624.pdf]

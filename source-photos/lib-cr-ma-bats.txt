@@ -1,3 +1,6 @@
+SERIES: FIELD
 PHOTO: Two small bats roosting on a mossy tree trunk in Manuel Antonio. Esteban's own photo, April 2024.
 PLACE: Manuel Antonio National Park, central Pacific.
-KNOWN FACTS: Bats are the most diverse group of mammals in Costa Rica. The species in the photo is not identified: do not name it.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- About half of Costa Rica's roughly 200 mammal species are bats, around 12% of the world's bat species. [source: https://ticotimes.net/?p=19795]
+- The species in the photo is not identified: do not name it.

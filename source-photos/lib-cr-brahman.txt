@@ -1,3 +1,8 @@
+SERIES: COUNTRY
 PHOTO: A white Brahman cow in a pasture at the edge of the forest, near Tilarán. Esteban's own photo, June 2025.
 PLACE: Pasture near Tilarán, Guanacaste.
-KNOWN FACTS: Brahman cattle, the humped, loose-skinned breed developed from Indian zebu, are the common breed of Costa Rica's warm lowlands and of the cattle ranches of Guanacaste, where ranching shaped the sabanero (cowboy) culture.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Brahman cattle, the humped, loose-skinned breed developed from Indian zebu, are the common breed of Costa Rica's warm lowlands and of the cattle ranches of Guanacaste. [source: earlier library note]
+- Ranching made Guanacaste's cowboy, the sabanero. The province's celebrations still have topes (parades of horses through town) and bull riding. [source: https://ticotimes.net/2014/07/24/5-things-you-should-know-before-fridays-annexation-of-the-partido-de-nicoya-festival ; https://ticotimes.net/2026/07/24/annexation-partido-de-nicoya-july-25]
+- On 25 July 1824 an open council in Nicoya voted to join Costa Rica. The Partido de Nicoya was most of today's Guanacaste. Its motto: 'De la Patria por nuestra voluntad' (of the homeland by our own will). The date is a national holiday. [source: https://en.wikipedia.org/wiki/Annexation_of_Nicoya ; https://www.nacion.com/el-pais/25-de-julio-lea-la-transcripcion-exacta-de-la/JTXFFSYYQVHSJBDAPGFJMJEM7E/story/]
+- Only 40 people took part in that council. 25 signed the act, and 11 of the 25 were from one family, the Viales Briceño. [source: https://www.teletica.com/amp/nacional/las-11-personas-a-las-que-les-debemos-la-incorporacion-del-partido-de-nicoya_316276]

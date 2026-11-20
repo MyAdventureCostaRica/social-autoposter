@@ -1,5 +1,9 @@
 SET: uvita-coast
+SERIES: FIELD
 PHOTO: A wide beach on the south Pacific coast, rocks in the foreground and a forested headland, blue sky. Esteban's own photo, April 2024.
 PLACE: The south Pacific coast at Uvita and nearby.
-KNOWN FACTS: Marino Ballena National Park at Uvita protects a sandbar shaped like a whale's tail that appears at low tide, and humpback whales come to this coast to breed.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Marino Ballena National Park at Uvita protects a sandbar shaped like a whale's tail that appears at low tide. [source: earlier library note]
+- Created in 1989, it was Costa Rica's first marine national park. [source: https://www.visitcostarica.com/sites/default/files/legacy/pdf/11_PN%20Marino%20Ballena.pdf]
+- Humpback whales from both hemispheres come here to breed: the southern ones roughly from July to November, the northern ones from December to April. [source: https://ticotimes.net/l/whale-economics ; https://www.visitcentroamerica.com/en/?p=4883]
 PHOTO LOCATION NOT CONFIRMED: the first photo's beach; do not name it.

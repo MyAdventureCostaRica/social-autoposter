@@ -1,5 +1,16 @@
 # Social Voice Guide — My Adventure Costa Rica
 
+*v6, November 19 2026 — "a guide's field notebook". The owner: "It feels too selly, you are just decribing days, no value content seems to come up, there is no real strategy, lets do a research of how companies like our sound and follow that line." Research and decisions: `CONTENT-STRATEGY.md` here and `claude/SOCIAL_VOICE_RESEARCH_2026-11-19.md` in the website project. He chose all three recommendations: the five-kind plan, 4 photo posts + 2 reels a week, and researched facts per post that he checks.*
+
+- **Five kinds of post, in every 8:** 2 FIELD (field notes), 2 SPORT (the sport here, his journal in first person only when it tells the story, once), 2 COUNTRY (food, history, culture), 1 PEOPLE, 1 EXPEDITION (the only sell). Old names map: ROUTE and FOUNDER → SPORT, KNOWLEDGE → FIELD, EXPERIENCE → EXPEDITION.
+- **The register stays** (plain declaratives, names and the one number that matters, honest and dry, warmth from people and specifics, ends on what the fact means). What changed is the subject: Costa Rica and its people, not the tour's days.
+- **Openers:** a person, a little-known fact, a date, a question or a moment. "Day N" and distance openers are rejected by `caption_violations()`, and so is a caption with more than 2 distances or altitudes (3 on an EXPEDITION post) and any link.
+- **Facts live in the notes:** `SERIES:` line + 1–3 checked facts with their sources in brackets. The site's tour pages go only to EXPEDITION captions; SPORT and PEOPLE get only the journal.
+- **Cadence:** `post_days` in config.json (Sun, Tue, Thu, Sat, Costa Rica time) for photo posts; reels keep Fri/Sat.
+
+The v5.2 notes below stay as history; where they conflict, v6 wins.
+
+---
 *v5.2, October 16 2026. The owner, after a week of v5 posts: "I like the voice we are having, but you are only trying to sell the tours, only talk about the tours, and we had already decided how we would post … we were meant to change the way the voice feels, not the plan … Are you really just going to describe a tour day every day?" He was right again. v5 had made every post "a day of an expedition" ending on departures and "Details in the bio.", so the plan settled in August (3 ROUTE, 2 EXPERIENCE, 1 KNOWLEDGE, 1 FOUNDER in every 7; selling only on EXPERIENCE) was held in name only. v5.2 keeps v5's inputs and register and gives the plan its teeth back:*
 
 - **The main characters are the sports, Costa Rica, its places, its food, its history and its wildlife.** The expeditions are how a guest meets them, not the subject of every post.

@@ -199,59 +199,60 @@ if os.path.exists(_tagfile):
     except Exception:
         TAGS = {}
 
-BRAND_PROMPT = r"""You write the Instagram feed of My Adventure Costa Rica, in the founder's voice. Esteban Umaña writes the website and the journal himself; your job is to sound like him writing a caption: not a brand, not a guidebook, not a safety manual. The feed is not a catalogue. It teaches the country the expeditions cross, tells its routes and the founder's own stories, and sells only on the EXPERIENCE posts, the way the website sells: with facts. A reader who never books should still learn something real from every post.
+BRAND_PROMPT = r"""You write the Instagram feed of My Adventure Costa Rica, in the founder's voice. Esteban Umaña is a Costa Rican endurance guide who has guided these routes for 17 years and writes the website and the journal himself. The feed is his field notebook: Costa Rica's wildlife and land, its sports, its people, its food, history and culture, told by someone who knows them first-hand. It is not a catalogue and it never describes tour days. The expeditions appear only in EXPEDITION posts, 1 in 8. Every post must give a reader who will never book something true they did not know and would send to a friend.
 
-== HOW ESTEBAN WRITES (learn it from his journal in the KNOWLEDGE FILE; it is the only register allowed) ==
-- Plain declarative sentences, often short, with one long one when a place needs it. ("Costa Rica is not supposed to be cold. That is the first thing this day takes from you, and the first thing it gives back.")
-- Numbers, names and times instead of adjectives: 17 kilometres, 3,491 metres, the alarm at 4:30, Xinia's kitchen, Don Hernán's crossing, Lauráceas Lodge, agua dulce.
-- Honest and dry. He says what a day costs and what it gives back, and he refuses to promise what he cannot. ("Kingfishers are always possible along this water. I cannot promise them, and I would not trust anyone who did.")
+== HOW ESTEBAN WRITES (the only register allowed) ==
+- Plain declarative sentences, mostly short, one long one when a fact needs it.
+- Names, dates and the one number that matters, instead of adjectives: 1955, No. 3438, 98.6%, 25 July 1824. Never a list of kilometres and metres.
+- Honest and dry. He says what he knows and refuses to promise what he cannot. ("Kingfishers are always possible along this water. I cannot promise them, and I would not trust anyone who did.")
 - Warmth comes from specifics and from people, never from praise words.
-- He ends on why: the plain reason the day, the route or the fact matters.
-- "I" for his own experience (from the journal only); "we" for what the expedition does ("we leave San José as early as the drive allows", "we sleep at Lauráceas"); "you" for the guest's day. A natural mix, the way a person talks.
+- He ends on what the fact means: why it matters, what it changed, what it says about the country.
+- "I" only for his own experience, from the JOURNAL or the note. "You" for the reader. "We" only on EXPEDITION posts.
 - "Slowly, and only what is true." Nothing invented, nothing inflated.
 
-== THE FOUR KINDS OF POST (the plan: 3 ROUTE, 2 EXPERIENCE, 1 KNOWLEDGE, 1 FOUNDER in every 7) ==
-The main characters of this feed are the sports (trail running, gravel cycling, hiking), Costa Rica, its places, its food, its history and its wildlife. The expeditions are how a guest meets them, not the subject of every post. The user message names TODAY'S KIND. Write that kind when the photo and the sources support it; when they do not (a FOUNDER post with no journal story for this place), write the kind they do support and say which in "pillar". Only EXPERIENCE posts sell. The other three never carry departures, "Details in the bio", a booking line or the company's name: they are the reason someone follows the account. Across the feed the subjects rotate (a species, a dish, a road's history, a town, a season, a sport's particular demands here); the RECENT CAPTIONS list in the user message shows what was just said, and the next post says something else.
-1. ROUTE: the ground itself. A climb, a descent, a coast road, a ridge, a river crossing: where it starts and where it ends, its numbers (kilometres, metres, hours, altitude), what the surface is made of, the one hard part and what it gives back, with the reader on it ("you"). The expedition day may be named once, in passing ("Day 4 of the trail running week", "the Queen Stage"), never as the closing line and never with departures or the bio.
-2. KNOWLEDGE: teach one true thing a curious reader would want to know: a species or an ecosystem (páramo exists here only above 3,000 m; the quetzal feeds on wild avocados; the Sierpe-Térraba mangroves are the largest in Central America; Ostional's arribadas; the Guanacaste tree is the national tree), a season and what it does to the ground, a dish and where it comes from (gallo pinto, agua dulce, the coffee of Dota), why a road or a trail exists (coffee, cattle, the oxcart), a town or a valley and who lives there, a piece of history, or what makes trail running, gravel cycling or hiking different in Costa Rica (the altitude, the heat, the rain, the surfaces). From the KNOWLEDGE FILE or from well-established facts about Costa Rica that any field guide or history book confirms. Not the common things everyone has read (volcanoes, "pura vida", sloths): the peculiarities of this country, the fact a well-travelled reader did not know and will repeat at dinner. The subject is the thing itself. The expedition is not mentioned unless the fact needs it for context, and then only in passing.
-3. FOUNDER: Esteban in first person, paraphrasing his PUBLISHED journal in the KNOWLEDGE FILE when the photo's place is one the journal tells (the nine summits, the Queen Stage, the long way back): the specific result or moment first, then what it cost, then why it stayed with him. Never copy a sentence; never invent a story, a result or a date.
-4. EXPERIENCE: the only kind that sells, and it sells the way the site does. The expedition in one breath (region, 9 days, 6 to 8 athletes, the shape of the week), or its lodges, its kitchens and the long table, or a day told as the guest lives it; the published facts, then the pointer line: the expedition's name, the next departures when the note gives them, and "Details in the bio." No prices, no urgency, no "join us".
+== THE FIVE KINDS OF POST (the plan, in every 8: 2 FIELD, 2 SPORT, 2 COUNTRY, 1 PEOPLE, 1 EXPEDITION) ==
+The user message names TODAY'S KIND. Write that kind when the photo and its facts support it; when they do not, write the kind they do support and say which in "pillar". Only EXPEDITION posts sell. The other four never name an expedition, a tour, a departure, the bio, a booking or the company: they are the reason someone follows the account. The RECENT CAPTIONS list shows what was just said: the next post says something else and opens differently.
+1. FIELD (field notes): one little-known true thing about the living thing or the land in the photo: a habit of a species, a plant, the cloud, the wind, a season, the rock, how the place came to be. The peculiar fact a well-travelled reader did not know and will repeat at dinner, not the common thing everyone has read (volcanoes erupt, sloths are slow, "pura vida"). The thing is the subject.
+2. SPORT (the sport here): what trail running, gravel cycling and hiking are like in Costa Rica: the altitude, the heat, the rain, the surfaces, why a road or a trail exists, the races and the people who made the sport here. Or Esteban's own story in first person, ONLY when the JOURNAL tells it for this place: the result or the moment first, what it cost, why it stayed. A journal story is told once: if the RECENT CAPTIONS already told it, write about the sport instead. Never a tour day.
+3. COUNTRY (the country): food, drink, history and culture: a dish and where it comes from, a festival, a craft, a date or a law that shaped Costa Rica, how a town lives and why.
+4. PEOPLE: a person or a family on these routes or in this place's story, only as the note or the JOURNAL names them: who they are, what they did or do and since when, and why it matters. Nothing beyond the sources: no invented quotes, no private life.
+5. EXPEDITION: the only kind that sells. Open with a fact, a person or a moment from the expedition's ground, never with "Day N". Then the expedition in one or two sentences with the published facts from the note and the KNOWLEDGE FILE, and one reason to go (the season it runs in, what this ground has that others do not). Last line: the expedition's name, the departures from the note, and "Details in the bio." No prices, no urgency, no "join us".
 
 == TRUTH ==
-Use only: the KNOWN FACTS note for this photo, the KNOWLEDGE FILE (the website's own text and the founder's published journal), and well-established natural history of Costa Rica (species, ecosystems, geography that any field guide confirms). Never invent a distance, time, altitude, price, date, name or event. Never state a price. Every number you write must come from the KNOWN FACTS note or the KNOWLEDGE FILE. Numbers are ALWAYS numerals, never words: 9 summits, 6 to 8 athletes, 15 years, 4 attempts, 2 °C, 100 km, 1,500 m. No sensory claims the sources do not make (what you hear, smell or feel at a spot), no vague "a different forest" lines: a fact, a name or a number instead. The photo illustrates the day: write about the day and the place, and never claim the photo shows a specific spot unless the note says so. If the note says LOCATION NOT CONFIRMED, do not name the beach, bridge or trail in the photo. Respect species ranges (a keel-billed toucan is not on the Osa).
+Use only: the KNOWN FACTS in the note for this photo (checked facts; the sources in brackets are for checking, never put a link in the caption), the JOURNAL and the KNOWLEDGE FILE when they are given below, and well-established natural history that any field guide confirms. Never invent a distance, time, altitude, price, date, name, quote or event. Never state a price. Every number must come from the note, the JOURNAL or the KNOWLEDGE FILE. Numbers are ALWAYS numerals, never words: 9 summits, 26 times, 1,500 m, 98.6%. No sensory claims the sources do not make (what you hear, smell or feel at a spot), no vague lines: a fact, a name or a number instead. The photo illustrates the fact: never claim the photo shows a specific spot unless the note says so. If the note says LOCATION NOT CONFIRMED, do not name the beach, bridge or trail in the photo. If the note says a species is not identified, do not name it. Respect species ranges (a keel-billed toucan is not on the Osa).
 
 == STRUCTURE ==
-First line, under 125 characters: the day, the place, the number or the moment, in Esteban's plain register. No definition openers ("X means", "X is about"), no "Out here" or "Up here", no scene-setting cliché.
-Then the body: one beat per paragraph, a line break between paragraphs, in the order the ground or the day happens.
-Then the close. ROUTE, FOUNDER and EXPERIENCE end on the plain why, in one or two sentences; KNOWLEDGE ends on the fact that matters most. About 1 post in 4 may end instead on one real question to the reader about their own choice or experience.
-The pointer line (the expedition's name, the departures when the note gives them, "Details in the bio.") exists ONLY on EXPERIENCE posts, as the last line. On every other kind the last line is a concrete thing, never a pitch.
-Length: ROUTE 50 to 130 words; KNOWLEDGE 60 to 140 words (substantive when it teaches); FOUNDER 70 to 160 words; EXPERIENCE 60 to 130 words. Never padding. Never a sentence that could sit under anyone else's photo.
+First line, under 125 characters, carries the idea on its own: a person, a little-known fact, a date, a question or a moment. NEVER open with "Day N", a distance, an altitude or a number with a unit. No definition openers ("X means", "X is about"), no "Out here", "Up here", "Nestled", no scene-setting cliché.
+Then the body: one beat per paragraph, a line break between paragraphs.
+Then the close: what the fact means, in one or two sentences. About 1 post in 4 may end instead on one real question to the reader about their own experience. EXPEDITION ends on the pointer line.
+Length: FIELD, COUNTRY and PEOPLE 60 to 130 words; SPORT 70 to 150 words; EXPEDITION 70 to 140 words. Never padding. Never a sentence that could sit under anyone else's photo.
 
 == CAROUSELS ==
-When the note has a SET line, the photos of that set are the slides and the caption carries the day: "format": "carousel". Otherwise "single". "slides" is always an empty array (no text slides) and "cta" is always "".
+When the note has a SET line, the photos of that set are the slides and the caption carries the subject: "format": "carousel". Otherwise "single". "slides" is always an empty array (no text slides) and "cta" is always "".
 
 == BANNED (the patterns of machine writing; if any appears, rewrite before returning) ==
+- Opening with "Day N", a distance or an altitude; a list of kilometres and metres anywhere.
 - Instructions and safety tips: "check your", "make sure", "ensure", "keep your breathing", "remember to", "pack a", "bring a". The feed never tells the reader what to do with their body or their gear.
-- Describing what is visible instead of telling the day: "framed by", "a horizon of", "lush", "vibrant", lists of colours and textures.
+- Describing what is visible instead of telling the fact: "framed by", "a horizon of", "lush", "vibrant", lists of colours and textures.
 - Morals, lessons and sayings: "the mountain sets the pace", "reminds you", "reveals itself", "the real measure", "is earned", "it's about", "teaches you".
 - "Not X but Y" in any wording; three adjectives in a row; tone words used as content (quiet, stillness, silence, serene, unhurried, peaceful).
 - Praise words: breathtaking, stunning, magical, iconic, hidden gem, paradise, pristine, epic, unforgettable, tapestry, symphony, testament, "journey" as a metaphor.
-- "Send this to…" lines, more than one question, exclamation marks, emoji, semicolons, Spanish.
-- Self-praise in the caption's own voice ("years of experience", "personally tested"): the site says it once, the feed shows it by being specific.
-- Copying sentences from the KNOWLEDGE FILE. Use its facts; write the sentences yourself.
+- "Send this to…" lines, more than one question, exclamation marks, emoji, semicolons, links, Spanish sentences (a Spanish name or word for a thing, in context, is fine: tope, sabanero, andarivel).
+- Self-praise in the caption's own voice ("years of experience", "personally tested").
+- Copying sentences from the KNOWLEDGE FILE or the JOURNAL. Use their facts; write the sentences yourself.
 
 == EVENTS, BIBS, LOGOS, PRIVATE PHOTOS ==
-A race bib, a podium, a sponsor arch or board, a finish arch, course flagging, a medal: not post-worthy for this feed (post_worthy false, reason "race-issued items or event apparatus") unless the note explicitly makes it a FOUNDER story. Hospital or medical settings, documents, screenshots, artworks in galleries, cars, signage, trash, blurry or cluttered frames: not post-worthy. People's own gear and gear brands are fine.
+A race bib, a podium, a sponsor arch or board, a finish arch, course flagging, a medal: not post-worthy for this feed (post_worthy false, reason "race-issued items or event apparatus") unless the note explicitly makes it a story. Hospital or medical settings, documents, screenshots, artworks in galleries, cars, signage, trash, blurry or cluttered frames: not post-worthy. People's own gear and gear brands are fine.
 
 Return STRICT JSON (only the object, no prose, no code fences) with:
 - "post_worthy": boolean, per the rules above and the bar of a premium travel feed.
 - "reason": one short sentence.
-- "pillar": the kind you actually wrote: "ROUTE", "KNOWLEDGE", "FOUNDER" or "EXPERIENCE" (today's kind unless the photo and the sources could not support it).
-- "category": one of "RUNNING","CYCLING","WATER SPORTS","MULTI-SPORT","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA" (hiking counts as "COSTA RICA" unless the note says otherwise).
-- "eyebrow": the activity + " · COSTA RICA", e.g. "TRAIL RUNNING · COSTA RICA", "GRAVEL · COSTA RICA", "HIKING · COSTA RICA"; for a landscape with no activity, "COSTA RICA · SLOWLY".
-- "headline": 3 to 7 words: the day or the place, plainly (used only for the dashboard card).
+- "pillar": the kind you actually wrote: "FIELD", "SPORT", "COUNTRY", "PEOPLE" or "EXPEDITION" (today's kind unless the photo and its facts could not support it).
+- "category": one of "RUNNING","CYCLING","WATER SPORTS","MULTI-SPORT","BESPOKE JOURNEYS","SCHOOL PROGRAMS","COSTA RICA" (hiking counts as "COSTA RICA" unless the note says otherwise; FIELD, COUNTRY and PEOPLE posts are "COSTA RICA").
+- "eyebrow": FIELD "FIELD NOTES · COSTA RICA"; COUNTRY "THE COUNTRY · COSTA RICA"; PEOPLE "PEOPLE · COSTA RICA"; SPORT and EXPEDITION the activity + " · COSTA RICA" ("TRAIL RUNNING · COSTA RICA", "GRAVEL · COSTA RICA", "HIKING · COSTA RICA").
+- "headline": 3 to 7 words: the subject, plainly (used only for the dashboard card).
 - "caption_en": the caption, English only, per every rule above, with line breaks between paragraphs.
-- "hashtags": 4 or 5 lowercase tags (no #): always "myadventurecostarica", then the discipline (trailrunning, gravelcycling or hiking), "costarica", and one or two of costaricatravel, adventuretravel, luxurytravel, cloudforest, osapeninsula, nicoyapeninsula, talamanca.
+- "hashtags": 4 or 5 lowercase tags (no #): always "myadventurecostarica" and "costarica", then 2 or 3 that fit the subject: a discipline (trailrunning, gravelcycling, hiking) only when the post is about the sport; otherwise from wildlife, birds, cloudforest, naturalhistory, costaricatravel, adventuretravel, guanacaste, caribbean, osapeninsula, nicoyapeninsula, talamanca.
 - "crop_bias": 0.0 to 1.0 vertical crop focus (0.3 if the subject or horizon sits high, 0.6 to keep people or foreground at the bottom, 0.5 default).
 - "format": "carousel" when the note has a SET line, otherwise "single".
 - "slides": [] (always empty).
@@ -276,6 +277,13 @@ def load_knowledge():
     except Exception:
         return ""
 KNOWLEDGE = load_knowledge()
+# v6 (Nov 19 2026): the tour pages go only to EXPEDITION posts. SPORT and PEOPLE posts get
+# only the journal (his own stories); FIELD and COUNTRY posts get neither: their facts are
+# in the photo's note. Feeding every call the whole site is what made every post a tour day.
+def _journal_part(k):
+    i = k.find("## The founder's journal")
+    return k[i:].strip() if i >= 0 else ""
+JOURNAL = _journal_part(KNOWLEDGE)
 
 def _shingles(text, n=12):
     """Runs of n consecutive words. Windows made mostly of names and numbers (a list of
@@ -381,16 +389,29 @@ def caption_violations(meta, note=""):
     if re.search(r"[¿¡]|\b(?:usted|también|aquí|porque|siempre|hasta|desde|están|somos|nuestro|nuestra|"
                  r"gracias|bienvenidos)\b", cap, flags=re.I):
         found.append("Spanish")
-    # The plan (settled Aug 2026, restored Oct 16 2026): only EXPERIENCE posts sell. A ROUTE,
-    # KNOWLEDGE or FOUNDER post that ends on departures or "Details in the bio" is a sales
-    # post wearing a costume; an EXPERIENCE post without the pointer is a sale with no door.
+    # The plan (v6, Nov 19 2026): only EXPEDITION posts sell. A FIELD, SPORT, COUNTRY or
+    # PEOPLE post that names an expedition, departures or the bio is a sales post wearing a
+    # costume; an EXPEDITION post without the pointer is a sale with no door.
     pillar = (meta.get("pillar") or "").upper()
-    if cap and pillar == "EXPERIENCE" and not re.search(r"\bbio\b", cap, flags=re.I):
-        found.append("an EXPERIENCE post with no pointer line (name the expedition, then 'Details in the bio.')")
-    if cap and pillar in ("ROUTE", "KNOWLEDGE", "FOUNDER") and re.search(
-            r"\bbio\b|\bdepartures?\b|\bbook(?:ing|ed)?\b|\breserve\b|\bjoin us\b|\bspots?\b|"
-            r"\bMy Adventure Costa Rica\b|\bbespoke\b", cap, flags=re.I):
-        found.append(f"selling on a {pillar} post (no departures, no bio, no booking line: only EXPERIENCE posts sell)")
+    pillar = LEGACY_PILLARS.get(pillar, pillar)
+    if cap and pillar == "EXPEDITION" and not re.search(r"\bbio\b", cap, flags=re.I):
+        found.append("an EXPEDITION post with no pointer line (name the expedition, then 'Details in the bio.')")
+    if cap and pillar in ("FIELD", "SPORT", "COUNTRY", "PEOPLE") and (re.search(
+            r"\bbio\b|\bdepartures?\b|\bbook(?:ing|ed)?\b|\breserve\b|\bjoin us\b|\bspots? (?:left|remain)|"
+            r"\bMy Adventure Costa Rica\b|\bbespoke\b|\bour (?:trips?|tours?|guests|expeditions?)\b", cap, flags=re.I)
+            or re.search(r"\b(?:Trail Running|Gravel|Hiking|Wildlife|Watersports) Expedition\b|\bthe expedition\b", cap)):
+        found.append(f"selling on a {pillar} post (no expedition, departures, bio or booking line: only EXPEDITION posts sell)")
+    # "Just describing days" (Nov 19 2026): 9 of 28 posts opened on "Day N" or a distance.
+    first_line = cap.strip().split("\n", 1)[0] if cap else ""
+    if cap and (re.search(r"^\W*(?:on\s+)?day\s+\d", first_line, flags=re.I) or re.search(
+            r"^\W*(?:(?:a|an|the)\s+)?\d[\d,.]*\s*-?\s*(?:km|kilomet(?:re|er)s?|met(?:re|er)s?|m|miles?)\b",
+            first_line, flags=re.I)):
+        found.append("an itinerary opener ('Day N' or a distance first: open with a person, a fact, a date or a moment)")
+    units = re.findall(r"\b\d[\d,.]*\s*(?:km|kilomet(?:re|er)s?|met(?:re|er)s?|m\b)", cap, flags=re.I)
+    if len(units) > (3 if pillar == "EXPEDITION" else 2):
+        found.append(f"a list of distances and altitudes ({len(units)} of them: one number that matters, not a spec sheet)")
+    if re.search(r"https?://|www\.", cap, flags=re.I):
+        found.append("a link in the caption")
     if copied_from_knowledge(cap):
         found.append("a sentence copied from the website or the journal (use the facts, write your own sentence)")
     return found
@@ -468,38 +489,49 @@ def _caption_call(system, user_text, b64):
 # What each kind of post is FOR, in one line, repeated in the user message next to today's
 # kind so the model writes the plan's post and not "a day of the expedition" every time.
 PILLAR_JOBS = {
-    "ROUTE": "the ground itself (where it starts, where it ends, its numbers, its surface, the hard part and "
-             "what it gives back), the reader on it. No departures, no bio, no pitch.",
-    "KNOWLEDGE": "teach one true thing: a species, a season, a dish, a road's history, a town, a sport's "
-                 "particular demands here. The thing is the subject. No departures, no bio, no pitch.",
-    "FOUNDER": "Esteban in first person, paraphrasing his published journal for this place: the result or the "
-               "moment first, then what it cost, then why it stayed. If the journal has no story for this photo, "
-               "write ROUTE or KNOWLEDGE instead. No departures, no bio, no pitch.",
-    "EXPERIENCE": "the only kind that sells: the expedition in one breath, or its lodges, kitchens and table, or "
-                  "a day as the guest lives it, with the published facts; last line = the expedition's name, the "
-                  "departures from the note, and 'Details in the bio.'",
+    "FIELD": "one little-known true thing about the living thing or the land in the photo (a habit, a plant, "
+             "the cloud, the wind, a season, the rock, how the place came to be), from the note's facts. The "
+             "thing is the subject. No expedition, no bio, no pitch.",
+    "SPORT": "what running, riding or hiking is like here (altitude, heat, rain, surfaces, why the road or the "
+             "trail exists, the races and the people of the sport), or Esteban's own JOURNAL story for this "
+             "place in first person, told once. Never a tour day. No expedition, no bio, no pitch.",
+    "COUNTRY": "food, drink, history or culture: a dish and where it comes from, a festival, a craft, a date or "
+               "a law that shaped Costa Rica, how a town lives. From the note's facts. No expedition, no bio, "
+               "no pitch.",
+    "PEOPLE": "a person or a family on these routes or in this place's story, only as the note or the JOURNAL "
+              "names them: who, what they did or do and since when, and why it matters. No expedition, no "
+              "bio, no pitch.",
+    "EXPEDITION": "the only sell: open with a fact, a person or a moment from the expedition's ground (never "
+                  "'Day N'), then the expedition in one or two sentences with its published facts and one "
+                  "reason to go; last line = the expedition's name, the departures from the note, and "
+                  "'Details in the bio.'",
 }
 
 
 def caption_for(jpeg_bytes, note="", tags_known=None, learn="", hint="", pillar=""):
     b64 = base64.b64encode(jpeg_bytes).decode()
     system = BRAND_PROMPT
-    if KNOWLEDGE:
-        system += "\n\n=== KNOWLEDGE FILE (the website's own text; the only product source) ===\n" + KNOWLEDGE
+    pillar = (pillar or "").upper()
+    pillar = LEGACY_PILLARS.get(pillar, pillar)
+    if KNOWLEDGE and pillar in ("EXPEDITION", ""):
+        system += ("\n\n=== KNOWLEDGE FILE (the website's own text: the expeditions, the company and the "
+                   "journal; the only product source) ===\n" + KNOWLEDGE)
+    elif JOURNAL and pillar in ("SPORT", "PEOPLE"):
+        system += ("\n\n=== JOURNAL (the founder's published posts, his own words: paraphrase, never "
+                   "copy) ===\n" + JOURNAL)
     if learn and learn.strip():
         system += ("\n\n--- WHAT'S RESONATING ON OUR OWN ACCOUNT, BY TODAY'S STANDARDS "
                    "(real but small analytics — a gentle steer, never a formula) ---\n"
                    + learn.strip())
     user_text = "Caption this photo as JSON."
-    pillar = (pillar or "").upper()
     if pillar in PILLAR_JOBS:
         user_text += f"\n\nTODAY'S KIND OF POST: {pillar}: " + PILLAR_JOBS[pillar]
     if note.strip():
         user_text += "\n\nKNOWN FACTS about this photo (true — build the caption around these): " + note.strip()
     else:
         user_text += ("\n\nKNOWN FACTS: none for this photo. So: no first person, no place name "
-                      "for the photo itself, no event; a ROUTE or KNOWLEDGE post about the kind of "
-                      "ground or the kind of place this is, from the KNOWLEDGE FILE or well-established facts.")
+                      "for the photo itself, no event; a FIELD post about the kind of place or the living "
+                      "thing this is, from well-established natural history.")
     recent = recent_captions()
     if recent:
         user_text += ("\n\nRECENT CAPTIONS on this account (do not repeat their angle, opening "
@@ -858,8 +890,8 @@ def performance_brief():
     if fmt_rank:
         lines.append("Formats by engagement (recency-weighted): "
                      + ", ".join(f"{f} {rate*100:.1f}%" for f, rate in fmt_rank[:4]) + ".")
-    if themes:
-        lines.append("Angles that have travelled recently: " + ", ".join(themes) + ".")
+    # v6 (Nov 19 2026): the "angles that travelled" line is gone. It fed back the words of
+    # the tour-day posts (kilometres, Day N), which earned 0 shares in 28 posts.
     lines.append("So: aim for a share-worthy, reach-friendly caption — one line a "
                  "reader wants to send a friend. Apply the above only where it fits "
                  "the actual photo; never force a formula.")
@@ -945,8 +977,12 @@ def same_moment(sig_a, sig_b):
     return ta is not None and tb is not None and abs(ta - tb) <= BURST_SECONDS
 
 
-# ---------- content plan: hold the four pillars in their planned proportions ----------
-PILLAR_PLAN = CFG.get("pillar_plan", {"KNOWLEDGE": 2, "ROUTE": 2, "FOUNDER": 2, "EXPERIENCE": 1})
+# ---------- content plan (v6, Nov 19 2026): five kinds of post in planned proportions ----------
+# Esteban, Nov 19 2026: "too selly, you are just describing days, no value content, no real
+# strategy". The plan became a guide's field notebook (claude/SOCIAL_VOICE_RESEARCH_2026-11-19.md).
+SERIES = ("FIELD", "SPORT", "COUNTRY", "PEOPLE", "EXPEDITION")
+LEGACY_PILLARS = {"ROUTE": "SPORT", "KNOWLEDGE": "FIELD", "FOUNDER": "SPORT", "EXPERIENCE": "EXPEDITION"}
+PILLAR_PLAN = CFG.get("pillar_plan", {"FIELD": 2, "SPORT": 2, "COUNTRY": 2, "PEOPLE": 1, "EXPEDITION": 1})
 PLAN_WINDOW = int(CFG.get("plan_window", 14))   # how many recent posts define "the mix"
 PLAN_SCAN = int(CFG.get("plan_scan", 8))        # how many candidates to weigh per day
 
@@ -959,6 +995,7 @@ def _recent_pillars():
     out = []
     for p in reversed(log):                      # newest first
         pil = (p.get("pillar") or "").upper()
+        pil = LEGACY_PILLARS.get(pil, pil)       # posts before v6 count as their nearest new kind
         if pil:
             out.append(pil)
         if len(out) >= PLAN_WINDOW:
@@ -975,39 +1012,55 @@ def read_note(photo_path):
         return ""
 
 
+def note_series(note):
+    """The kinds of post a photo suits, from the SERIES line of its note (v6), first =
+    preferred ("SERIES: FIELD, COUNTRY"). Old pillar names are mapped. [] when no line."""
+    m = re.search(r"^SERIES:\s*(.+)$", note or "", flags=re.I | re.M)
+    if not m:
+        return []
+    out = []
+    for w in re.split(r"[,/ ]+", m.group(1).upper()):
+        w = LEGACY_PILLARS.get(w, w)
+        if w in SERIES and w not in out:
+            out.append(w)
+    return out
+
+
 def likely_pillar(note):
-    """Guess the kind of post a photo supports, from the PHOTO line and the first lines
-    of its note (the site text below them mentions lodges and breakfasts on every day, so
-    it is ignored). Explicit FOUNDER/EXPERIENCE markers win; a lodge, a plate or a table
-    is EXPERIENCE; wildlife, plants and the like KNOWLEDGE; the journal's places (the nine
-    summits, the Queen Stage) FOUNDER; the rest of the library (a day's ground) ROUTE.
-    Used only to ORDER the candidates, so the first caption call is usually the keeper:
-    Gemini's free tier allows 20 requests a day per model (found Oct 15 2026), and a scan
-    that captions 8 photos to find today's kind spends most of it."""
+    """The kind of post a photo suits best: its note's SERIES line, else a guess from the
+    PHOTO line (a lodge or the expedition text = EXPEDITION; a rider, runner, bike or road =
+    SPORT; a dish, festival, flag or cattle = COUNTRY; the rest FIELD). Used only to ORDER the
+    candidates, so the first caption call is usually the keeper: Gemini's free tier allows
+    20 requests a day per model (found Oct 15 2026)."""
+    s_ = note_series(note)
+    if s_:
+        return s_[0]
     n = note or ""
     m = re.search(r"^PHOTO:(.*)$", n, flags=re.I | re.M)
     photo = m.group(1) if m else ""
-    head = "\n".join(n.strip().split("\n")[:4])
-    if re.search(r"\bFOUNDER\b", n):
-        return "FOUNDER"
-    if (re.search(r"EXPERIENCE photo|\bTABLE\b|^Lodge on\b", head, flags=re.I | re.M)
-            or re.search(r"breakfast|gallo pinto|\bkitchen\b|\bdinner\b|long table|\blodge\b|\bhotel\b|"
-                         r"\bbespoke\b|\bcarreta\b|\boxcart\b", photo, flags=re.I)):
-        return "EXPERIENCE"
-    if re.search(r"quetzal|macaw|toucan|monkey|capuchin|hummingbird|sparrow|\bbirds?\b|sloth|turtle|"
-                 r"mangrove|\btrees?\b|flower|orchid|canopy|close up|vegetation|lichen|bamboo|\bcoffee\b|"
-                 r"\bdelta\b|\bsunset\b|\bdawn\b|first light|sea of cloud", photo, flags=re.I):
-        return "KNOWLEDGE"
-    if re.search(r"Queen Stage|Nueve Cumbres|nine summits", head, flags=re.I):
-        return "FOUNDER"
-    return "ROUTE"
+    if re.search(r"EXPERIENCE photo|Bookable departures", n, flags=re.I):
+        return "EXPEDITION"
+    if re.search(r"Queen Stage|Nueve Cumbres|nine summits|\brider\b|\brunner\b|\bbike\b|\bcyclist\b",
+                 photo + "\n" + n[:300], flags=re.I):
+        return "SPORT"
+    if re.search(r"gallo pinto|\bkitchen\b|\bdish\b|\bfestival\b|\boxcart\b|\bcarreta\b|\bflag\b|"
+                 r"\btemplo\b|\bcattle\b|\bcow\b", photo, flags=re.I):
+        return "COUNTRY"
+    return "FIELD"
+
+
+def fits(note, target):
+    """Does this photo suit `target`? Any kind on its SERIES line counts."""
+    s_ = note_series(note)
+    return target in s_ if s_ else likely_pillar(note) == target
 
 
 def order_for(candidates, target):
-    """Candidates whose note suggests `target` first (library order kept inside each group)."""
-    want = [c for c in candidates if likely_pillar(read_note(c)) == target]
-    rest = [c for c in candidates if c not in want]
-    return want + rest
+    """Photos whose preferred kind is `target` first, then those that also suit it, then the
+    rest (library order kept inside each group)."""
+    first = [c for c in candidates if likely_pillar(read_note(c)) == target]
+    also = [c for c in candidates if c not in first and fits(read_note(c), target)]
+    return first + also + [c for c in candidates if c not in first and c not in also]
 
 
 def target_pillar():
@@ -1016,7 +1069,7 @@ def target_pillar():
     caps the EXPERIENCE soft-sell so it never runs hot. Returns an uppercase pillar."""
     plan = {k.upper(): float(v) for k, v in PILLAR_PLAN.items() if v}
     if not plan:
-        return "KNOWLEDGE"
+        return "FIELD"
     tot = sum(plan.values())
     target_share = {k: v / tot for k, v in plan.items()}
     recent = _recent_pillars()
@@ -1024,7 +1077,7 @@ def target_pillar():
     actual = {k: recent.count(k) / n for k in plan}
 
     def deficit(k):
-        if k == "EXPERIENCE" and actual.get(k, 0) >= target_share[k]:
+        if k == "EXPEDITION" and actual.get(k, 0) >= target_share[k]:
             return -9                            # never exceed the sell cap
         return target_share[k] - actual.get(k, 0)
 
@@ -1153,7 +1206,8 @@ def prepare():
                     "a different angle, a different first line, no shared phrases with: \""
                     + old[:400] + "\"")
             try:
-                meta = caption_for(buf.getvalue(), note, TAGS, learn, hint=hint)
+                meta = caption_for(buf.getvalue(), note, TAGS, learn, hint=hint,
+                                   pillar=st.get("pillar") or "")
                 hashtags = " ".join("#" + t.lstrip("#") for t in meta.get("hashtags", []))
                 mentions = " ".join(m if m.startswith("@") else "@" + m for m in meta.get("tags", []))
                 st["caption"] = "\n\n".join(
@@ -1183,6 +1237,18 @@ def prepare():
         # no commit here: backup slots run several times a day and this is the normal no-op
         summary("### Already posted today\nA post already went out today — skipping.")
         print("Already posted today; skipping."); return
+    # Cadence (Esteban, Nov 19 2026): 4 photo posts a week, on config "post_days" (Costa Rica
+    # time). Reels keep their own Fri/Sat slots; dashboard uploads and "New caption" are
+    # handled above and run any day. A forced run ignores the days.
+    post_days = [str(d).strip()[:3].title() for d in (CFG.get("post_days") or [])]
+    if post_days and not forced:
+        import datetime as _dt
+        wd = (_dt.datetime.utcnow() - _dt.timedelta(hours=6)).strftime("%a")
+        if wd not in post_days:
+            json.dump({"skip": True, "why": "not a posting day"}, open(STATE, "w"))
+            summary(f"### Not a posting day\nPhoto posts go out on {', '.join(post_days)} "
+                    f"(Costa Rica time). Today is {wd}.")
+            print("Not a posting day (" + wd + "); skipping."); return
     learn = performance_brief()          # what our own analytics say is working now
     if learn:
         print("Performance brief:\n" + learn)
@@ -1718,7 +1784,8 @@ def caption_preview(n=3):
     for i in range(min(n, len(reps))):
         want = cycle[i % len(cycle)] if cycle else ""
         pool = [r for r in reps if r not in picked]
-        fit = [r for r in pool if likely_pillar(read_note(r)) == want]
+        fit = ([r for r in pool if likely_pillar(read_note(r)) == want]
+               or [r for r in pool if fits(read_note(r), want)])
         src = (fit or pool)[0]
         picked.append(src); wants.append(want)
     for src, want in zip(picked, wants):

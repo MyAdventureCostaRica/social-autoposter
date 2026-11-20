@@ -1,5 +1,9 @@
 SET: monteverde-waterfall
+SERIES: FIELD
 PHOTO: A stream tumbling over rocks between broad leaves. Esteban's own photo, October 2025.
 PLACE: A forest trail in the Monteverde region, Cordillera de Tilarán.
-KNOWN FACTS: The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest, which is why the ridges are so often in fog.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- The golden toad lived only in about 4 km2 of cloud forest north of Monteverde; the herpetologist Jay Savage described it in the 1960s. [source: https://www.ifaw.org/uk/animals/golden-toads ; https://news.mongabay.com/2005/10/golden-toad-elegy/]
+- In 1987 more than 1,000 adults were seen mating. The last one, a single male, was seen on 15 May 1989, and the species was declared extinct in 2004. [source: https://www.ifaw.org/uk/animals/golden-toads]
+- The northeast trade winds cross the continental divide at Monteverde; the cloud they carry feeds the cloud forest. [source: earlier library note]
 PHOTO LOCATION NOT CONFIRMED: do not name the waterfall, the bridge or the reserve.

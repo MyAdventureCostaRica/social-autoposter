@@ -1,3 +1,6 @@
+SERIES: SPORT
 PHOTO: A mountain bike resting on a grassy hill above a green valley, scattered trees and cloud. Esteban's own photo, March 2025.
 PLACE: The Cordillera de Tilarán, Guanacaste.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- About 77% of Costa Rica's 44,525 km of roads is unpaved, gravel (lastre) or dirt; the network is one of the densest in the world. [source: https://cfia.or.cr/site/wp-content/uploads/2024/pdf/descargas/informes/grupo-consenso-para-la-red-vial-nacional-lineamientos-para-definir-el-plan-vial-nacional-de-costa-rica-informe-resumen-ejecutivo.pdf]
+- Only about 20% of the cantonal (municipal) roads are paved (MOPT, 2026). [source: https://publications.iadb.org/publications/spanish/document/Que-como-cuando-y-cuanto-mejorando-la-resiliencia-en-la-infraestructura-vial-en-Costa-Rica.pdf]

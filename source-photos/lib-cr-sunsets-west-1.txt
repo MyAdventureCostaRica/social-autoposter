@@ -1,4 +1,7 @@
 SET: sunsets-west
+SERIES: FIELD, SPORT
 PHOTO: Sunset over the hills of the Cordillera de Tilarán, layered cloud lit orange. Esteban's own photo, August 2026.
 PLACE: The Cordillera de Tilarán near Monteverde, looking west.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- So close to the equator, the sun sets between about 5:11 and 6:01 p.m. all year in Costa Rica: earliest in mid-November, latest around late June and July (2026 times for San José). [source: https://crie.cr/?p=295772 ; https://alpenglowapp.com/forecasts/sunset/san-jos-08-cr]
+- Twilight is short: civil twilight ends about 22 minutes after sunset. [source: https://alpenglowapp.com/forecasts/sunset/san-jos-08-cr]

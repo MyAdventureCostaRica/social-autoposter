@@ -1,3 +1,7 @@
+SERIES: SPORT
 PHOTO: A mountain biker riding a gravel road near Monteverde, another rider far behind. Esteban's own photo, May 2024.
 PLACE: A gravel road near Monteverde, Cordillera de Tilarán.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- La Ruta de los Conquistadores, a 3-day mountain bike race across Costa Rica from the Pacific to the Caribbean, began in 1993: its founder Román Urbina and friends retraced the route of the Spanish explorers. [source: https://en.wikipedia.org/wiki/La_Ruta_de_los_Conquistadores ; https://ticotimes.net/2016/08/04/costa-ricas-roman-urbina-inducted-mountain-biking-hall-fame]
+- It is often called the toughest mountain bike race in the world. In 2016 Urbina became the first Latin American in the Mountain Bike Hall of Fame. [source: https://ticotimes.net/2016/08/04/costa-ricas-roman-urbina-inducted-mountain-biking-hall-fame]
+- The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest. [source: earlier library note]

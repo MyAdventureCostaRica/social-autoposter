@@ -1,5 +1,8 @@
 SET: river-crossing
+SERIES: SPORT
 PHOTO: A gravel road winding toward forested mountains under a blue sky, on the same ride. Esteban's own photo, June 2024.
 PLACE: A ride south of Monteverde, toward the Gulf of Nicoya.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- In the rainy season a river here can rise suddenly from rain far upstream: a cabeza de agua. The Costa Rican Red Cross says it can come within 1 or 2 minutes, and the water does not always turn brown first. [source: https://crhoy.com/nacionales/tenga-cuidado-con-este-mito-si-visita-rios-en-epoca-lluviosa-tome-en-cuenta-estas-recomendaciones/]
+- The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest; this ride runs from it toward the Gulf of Nicoya. [source: earlier library note]
 PHOTO LOCATION NOT CONFIRMED: do not name the river.

@@ -1,4 +1,7 @@
 SET: tilaran-hills
+SERIES: FIELD
 PHOTO: Arenal Volcano on the horizon beyond the green ridges of the Cordillera de Tilarán. Esteban's own photo, April 2026.
 PLACE: The Cordillera de Tilarán above Tilarán, Guanacaste.
-KNOWN FACTS: The Cordillera de Tilarán is the mountain range that carries Monteverde's cloud forest. Lake Arenal is the largest lake in Costa Rica, a reservoir formed by the Arenal dam that feeds hydroelectric plants. Arenal Volcano erupted violently in 1968 and stayed active until 2010.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- The Cordillera de Tilarán is the continental divide here: rain on its east side runs to the Caribbean, rain on its west side to the Pacific. The Caribbean slope is far wetter, with more than 7,000 mm a year in places. [source: https://www.redalyc.org/pdf/449/44918952032.pdf]
+- Lake Arenal, on the horizon here, is the largest lake in Costa Rica, a reservoir that feeds hydroelectric plants. [source: earlier library note]

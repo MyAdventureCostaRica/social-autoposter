@@ -1,3 +1,6 @@
+SERIES: COUNTRY
 PHOTO: The Templo de la Música, the domed music pavilion of Parque Morazán in downtown San José, a ring of red flowers in front, early morning. Esteban's own photo, September 2023.
 PLACE: Parque Morazán, downtown San José.
-KNOWN FACTS: The Templo de la Música, a domed music pavilion, is the landmark of Parque Morazán in central San José. Every expedition starts and ends in San José, with a welcome dinner the first night and a farewell dinner on the last.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- The Templo de la Música, the music pavilion of Parque Morazán, was inaugurated in December 1920. Its architect modelled it on the Temple of Love at Versailles. [source: https://www.nacion.com/el-pais/educacion/quiosco-del-parque-morazan-o-templo-de-la-musica/6W6YSFTJE5GGRHZJAJMGQTAUCM/story/ ; https://www.msj.go.cr/servciud/cult/ChepeAndo/Templo%20de%20la%20Musica%20un%20%20centenario%20albergue%20de%20historias.pdf]
+- On 9 August 1884 San José switched on electric street lighting, one of the first cities in the world to do so. The first line ran to La Laguna, the lagoon where Parque Morazán stands today. [source: https://www.nacion.com/archivo/del-canfin-a-la-corriente/CDGWEUUWNVCC3OCK6F5BXJHA2U/story/ ; https://ticotimes.net/2021/09/30/san-jose-costa-rica-one-of-the-first-cities-with-electricity]

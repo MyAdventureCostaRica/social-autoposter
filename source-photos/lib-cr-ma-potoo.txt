@@ -1,3 +1,7 @@
+SERIES: FIELD
 PHOTO: A potoo perched upright on top of a broken branch in Manuel Antonio, motionless and the colour of the bark, against a blue sky. Esteban's own photo, April 2024.
 PLACE: Manuel Antonio National Park, central Pacific.
-KNOWN FACTS: Potoos are night birds: by day they sit upright and still on a broken branch, so well camouflaged that they look like part of it, and at night they hunt flying insects.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Potoos are night birds: by day they sit upright and still on a broken branch, so well camouflaged that they look like part of it, and at night they hunt flying insects. [source: earlier library note]
+- Slits in the potoo's eyelids let it see with its eyes closed. [source: https://Www.Wikipedia.org/wiki/Common_potoo]
+- When disturbed it points its bill straight up and freezes. It lays its single egg on a broken branch stump, with no nest at all. [source: https://Www.Wikipedia.org/wiki/Common_potoo ; https://sta.uwi.edu/fst/lifesciences/sites/default/files/lifesciences/documents/ogatt/Nyctibius_griseus%20-%20Common%20Potoo.pdf]

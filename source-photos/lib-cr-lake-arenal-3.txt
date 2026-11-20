@@ -1,4 +1,8 @@
 SET: lake-arenal
+SERIES: COUNTRY, FIELD
 PHOTO: Storm clouds over Lake Arenal, the cone of Arenal Volcano on the horizon. Esteban's own photo, September 2025.
 PLACE: Lake Arenal and Arenal Volcano, northern Costa Rica, between Tilarán and La Fortuna.
-KNOWN FACTS: Lake Arenal is the largest lake in Costa Rica, a reservoir formed by the Arenal dam that feeds hydroelectric plants. Arenal Volcano erupted violently in 1968 and stayed active until 2010. The lake is known for its steady strong winds.
+KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
+- Lake Arenal, about 85 km2, is the largest lake in Costa Rica, and it is a reservoir. [source: https://ticotimes.net/?p=153620]
+- By 1979 the Arenal dam had made the lake 3 times bigger by flooding the valley. The towns of Arenal and Tronadora had to be moved, and 2 new towns were built for their people. [source: https://ticotimes.net/?p=153620]
+- Its water feeds hydroelectric plants. [source: earlier library note]
