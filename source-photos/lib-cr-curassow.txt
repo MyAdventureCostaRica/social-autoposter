@@ -6,3 +6,5 @@ KNOWN FACTS (checked; the source of each is in brackets, for checking only, neve
 - The IUCN lists it as Vulnerable, from habitat loss and hunting. It lives mostly on the ground but roosts and nests in trees. [source: https://en.wikipedia.org/wiki/Great_curassow ; https://eol.org/pages/45508958/articles]
 - In Costa Rica the male's low booming is heard from February to June. A bout usually lasts about 35 minutes and can go on for 5 hours. [source: https://www.hbw.com/node/53311]
 - Its best populations in Costa Rica survive in national parks such as Santa Rosa, Rincón de la Vieja and Corcovado. [source: https://www.hbw.com/node/53311]
+- Both sexes have a curly crest (the female's is black and white); only the male has the yellow knob on the bill. [source: https://ebird.org/species/grecur1 ; https://birdfact.com/birds/great-curassow]
+- A booming bout can last up to 5 hours: do not say the bird calls without stopping.

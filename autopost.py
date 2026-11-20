@@ -216,10 +216,10 @@ The user message names TODAY'S KIND. Write that kind when the photo and its fact
 2. SPORT (the sport here): what trail running, gravel cycling and hiking are like in Costa Rica: the altitude, the heat, the rain, the surfaces, why a road or a trail exists, the races and the people who made the sport here. Or Esteban's own story in first person, ONLY when the JOURNAL tells it for this place: the result or the moment first, what it cost, why it stayed. A journal story is told once: if the RECENT CAPTIONS already told it, write about the sport instead. Never a tour day.
 3. COUNTRY (the country): food, drink, history and culture: a dish and where it comes from, a festival, a craft, a date or a law that shaped Costa Rica, how a town lives and why.
 4. PEOPLE: a person or a family on these routes or in this place's story, only as the note or the JOURNAL names them: who they are, what they did or do and since when, and why it matters. Nothing beyond the sources: no invented quotes, no private life.
-5. EXPEDITION: the only kind that sells. Open with a fact, a person or a moment from the expedition's ground, never with "Day N". Then the expedition in one or two sentences with the published facts from the note and the KNOWLEDGE FILE, and one reason to go (the season it runs in, what this ground has that others do not). Last line: the expedition's name, the departures from the note, and "Details in the bio." No prices, no urgency, no "join us".
+5. EXPEDITION: the only kind that sells. Open with a fact, a person or a moment from the expedition's ground, never with "Day N". Then the expedition in one or two sentences with the published facts from the note and the KNOWLEDGE FILE, and one reason to go (the season it runs in, what this ground has that others do not). Last line: the expedition's name, the departures from the note joined with "and" (never a semicolon), and "Details in the bio." No prices, no urgency, no "join us".
 
 == TRUTH ==
-Use only: the KNOWN FACTS in the note for this photo (checked facts; the sources in brackets are for checking, never put a link in the caption), the JOURNAL and the KNOWLEDGE FILE when they are given below, and well-established natural history that any field guide confirms. Never invent a distance, time, altitude, price, date, name, quote or event. Never state a price. Every number must come from the note, the JOURNAL or the KNOWLEDGE FILE. Numbers are ALWAYS numerals, never words: 9 summits, 26 times, 1,500 m, 98.6%. No sensory claims the sources do not make (what you hear, smell or feel at a spot), no vague lines: a fact, a name or a number instead. The photo illustrates the fact: never claim the photo shows a specific spot unless the note says so. If the note says LOCATION NOT CONFIRMED, do not name the beach, bridge or trail in the photo. If the note says a species is not identified, do not name it. Respect species ranges (a keel-billed toucan is not on the Osa).
+Use only: the KNOWN FACTS in the note for this photo (checked facts; the sources in brackets are for checking, never put a link in the caption), the JOURNAL and the KNOWLEDGE FILE when they are given below, and well-established natural history that any field guide confirms. Never invent a distance, time, altitude, price, date, name, quote or event. Never state a price. Every number must come from the note, the JOURNAL or the KNOWLEDGE FILE. Numbers are ALWAYS numerals, never words: 9 summits, 26 times, 1,500 m, 98.6%. No sensory claims the sources do not make (what you hear, smell or feel at a spot), no vague lines: a fact, a name or a number instead. The photo illustrates the fact: never claim the photo shows a specific spot unless the note says so. If the note says LOCATION NOT CONFIRMED, do not name the beach, bridge or trail in the photo. If the note says a species is not identified, do not name it. Respect species ranges (a keel-billed toucan is not on the Osa). Natural history may describe the living thing or the land in the photo; it never supplies history, a cause, an origin, a comparison, a record, a first or a superlative. Each claim of that kind must stand in one KNOWN FACT (or in the JOURNAL or the KNOWLEDGE FILE when they are given). Never join two facts into a new one ('built', 'made', 'began', 'that is why', 'explains why', 'because') unless one fact says it. Never widen a fact: 'mostly X families' does not make 'all of them X'; 'can last 5 hours' is not 'without stopping'; a breed common today did not create a tradition older than the breed. The headline and the closing line follow the same rule: the close says what the facts mean and adds no new fact, number or cause.
 
 == STRUCTURE ==
 First line, under 125 characters, carries the idea on its own: a person, a little-known fact, a date, a question or a moment. NEVER open with "Day N", a distance, an altitude or a number with a unit. No definition openers ("X means", "X is about"), no "Out here", "Up here", "Nestled", no scene-setting cliché.
@@ -363,6 +363,36 @@ _BANNED = [
 ]
 
 
+# Claim words (caption preview #8, Nov 19 2026): the model joined true facts into causes, firsts
+# and absolutes no note made ("Brahman cattle built the culture of the sabanero", "a living post
+# outlasts treated timber", "the roads explain why the sport took root here"). A cause, a first,
+# a record or an absolute must stand in one of the facts, so the word must appear in the note
+# (the KNOWLEDGE FILE counts for EXPEDITION posts, the JOURNAL when the caption tells his story).
+_CLAIM_WORDS = [r"first", r"only", r"oldest", r"largest", r"biggest", r"longest", r"highest", r"toughest",
+                r"hardest", r"strongest", r"greatest", r"smallest", r"earliest", r"best",
+                r"began", r"begin", r"begun", r"origins?", r"birthplace", r"invented", r"founded", r"built",
+                r"explain(?:s|ed)?", r"why", r"because", r"thanks\s+to", r"led\s+to", r"gave\s+rise",
+                r"define[sd]?", r"outlast(?:s|ed)?", r"never", r"always", r"without\s+stopping",
+                r"without\s+interruption"]
+
+
+def unsupported_claims(text, note="", pillar=""):
+    """Claim words in the caption that no source for this post uses (lower case, in order).
+    A note's caveat lines ("do not say…") are instructions, not sources: they are left out."""
+    src = "\n".join(l for l in (note or "").split("\n")
+                    if not re.search(r"\b(?:do not|don't|never say|say neither|say nothing)\b", l, flags=re.I))
+    if pillar in ("EXPEDITION", ""):
+        src += "\n" + (KNOWLEDGE or "")
+    if pillar in ("SPORT", "PEOPLE") and re.search(r"\b(?:I|I'?m|I'?ve|my|me)\b", text):
+        src += "\n" + (JOURNAL or "")
+    out = []
+    for w in _CLAIM_WORDS:
+        m = re.search(r"\b" + w + r"\b", text, flags=re.I)
+        if m and not re.search(r"\b" + w + r"\b", src, flags=re.I):
+            out.append(" ".join(m.group(0).lower().split()))
+    return out
+
+
 def caption_violations(meta, note=""):
     """Names of the banned patterns present in a caption (and its headline, slides and
     cta). Empty list = clean. `note` empty + first person = a made-up founder story."""
@@ -414,6 +444,10 @@ def caption_violations(meta, note=""):
         found.append("a link in the caption")
     if copied_from_knowledge(cap):
         found.append("a sentence copied from the website or the journal (use the facts, write your own sentence)")
+    claims = unsupported_claims(text, note, pillar)
+    if claims:
+        found.append("claim words no fact supports (" + ", ".join(claims) + "): a cause, a first, a record "
+                     "or an absolute must stand in one of the KNOWN FACTS; say only what they say")
     return found
 
 
@@ -503,8 +537,8 @@ PILLAR_JOBS = {
               "bio, no pitch.",
     "EXPEDITION": "the only sell: open with a fact, a person or a moment from the expedition's ground (never "
                   "'Day N'), then the expedition in one or two sentences with its published facts and one "
-                  "reason to go; last line = the expedition's name, the departures from the note, and "
-                  "'Details in the bio.'",
+                  "reason to go; last line = the expedition's name, the departures from the note joined "
+                  "with 'and', and 'Details in the bio.'",
 }
 
 

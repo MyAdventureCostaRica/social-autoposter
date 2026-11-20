@@ -6,6 +6,7 @@
 - **The register stays** (plain declaratives, names and the one number that matters, honest and dry, warmth from people and specifics, ends on what the fact means). What changed is the subject: Costa Rica and its people, not the tour's days.
 - **Openers:** a person, a little-known fact, a date, a question or a moment. "Day N" and distance openers are rejected by `caption_violations()`, and so is a caption with more than 2 distances or altitudes (3 on an EXPEDITION post) and any link.
 - **Facts live in the notes:** `SERIES:` line + 1–3 checked facts with their sources in brackets. The site's tour pages go only to EXPEDITION captions; SPORT and PEOPLE get only the journal.
+- **Only what the facts say** (after preview #8): a cause, a first, a record or an absolute must stand in one of the note's facts; a claim word the note doesn't use (first, only, because, built, began, explains, outlasts, never…) sends the caption back for one rewrite.
 - **Cadence:** `post_days` in config.json (Sun, Tue, Thu, Sat, Costa Rica time) for photo posts; reels keep Fri/Sat.
 
 The v5.2 notes below stay as history; where they conflict, v6 wins.

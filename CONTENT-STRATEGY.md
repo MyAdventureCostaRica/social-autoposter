@@ -65,6 +65,12 @@ Reels follow the same plan (mostly field notes): one true thing about a place in
 - The expedition-day text and the departures are only in the notes of EXPEDITION photos.
 - `brand/knowledge.md` (the site's tour pages, company text and journal) goes only to EXPEDITION
   posts; SPORT and PEOPLE posts get only the journal; FIELD and COUNTRY get neither.
+- Only what the facts say (added after caption preview #8, 19 Nov 2026, where 5 of 8 captions joined
+  true facts into claims no source made): natural history may describe what is in the photo, but a
+  cause, an origin, a first, a record, a comparison or an absolute must stand in one of the facts.
+  `caption_violations()` sends a caption back for one rewrite when it uses a claim word (first, only,
+  because, built, began, explains, outlasts, never, without stopping…) that the note does not use.
+  When a photo invites a wrong link, the note carries a caveat line ("do not say…").
 
 ## Cadence
 
