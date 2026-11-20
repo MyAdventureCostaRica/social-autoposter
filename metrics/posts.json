@@ -9044,5 +9044,25 @@
   "category": "COSTA RICA",
   "pillar": "KNOWLEDGE",
   "caption": "Along the dry Pacific coast, ground plants survive months without rain by holding water in thick, fleshy leaves.\n\nWhen t"
+ },
+ {
+  "id": "18205691365333481",
+  "date": "2026-11-19",
+  "ts": "2026-11-20T00:54:21",
+  "base": "lib-tr-breakfast",
+  "format": "single",
+  "category": "MULTI-SPORT",
+  "pillar": "EXPEDITION",
+  "caption": "Black beans and day-old rice form the quiet fuel of mountain mornings across Costa Rica.\n\nCooking gallo pinto requires c"
+ },
+ {
+  "id": "18033479171912324",
+  "date": "2026-11-19",
+  "ts": "2026-11-20T00:54:21",
+  "base": "lib-tr-breakfast-story",
+  "format": "story",
+  "category": "MULTI-SPORT",
+  "pillar": "EXPEDITION",
+  "caption": "Black beans and day-old rice form the quiet fuel of mountain mornings across Costa Rica.\n\nCooking gallo pinto requires c"
  }
 ]
