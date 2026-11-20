@@ -12532,5 +12532,42 @@
   "navigation": 91,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "18033479171912324",
+  "date": "2026-11-19",
+  "base": "lib-tr-breakfast-story",
+  "format": "story",
+  "category": "MULTI-SPORT",
+  "pillar": "EXPEDITION",
+  "reach": 68,
+  "replies": 0,
+  "shares": 0,
+  "total_interactions": 3,
+  "views": 76,
+  "profile_visits": 0,
+  "follows": 0,
+  "navigation": 73,
+  "interactions": 3,
+  "eng_rate": 0.0441
+ },
+ {
+  "id": "18205691365333481",
+  "date": "2026-11-20",
+  "base": "lib-tr-breakfast",
+  "format": "single",
+  "category": "MULTI-SPORT",
+  "pillar": "EXPEDITION",
+  "reach": 9,
+  "likes": 2,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 2,
+  "views": 26,
+  "profile_visits": 0,
+  "follows": 0,
+  "interactions": 2,
+  "eng_rate": 0.2222
  }
 ]
