@@ -1,8 +1,0 @@
-SET: arenal-volcano
-SERIES: COUNTRY, FIELD
-PHOTO: Arenal Volcano above open pasture, a dirt track running toward it. Esteban's own photo, April 2025.
-PLACE: The pastures on the north side of Arenal Volcano, near La Fortuna.
-KNOWN FACTS (checked; the source of each is in brackets, for checking only, never for the caption):
-- Before 1968 the people around it called it Cerro Arenal, a forested hill. It had never been studied by scientists, and a documented expedition first reached its summit only in 1937. [source: https://observador.cr/del-fuego-al-turismo-el-volcan-arenal-y-la-transformacion-de-la-zona-norte-de-costa-rica/ ; https://en.wikipedia.org/wiki/Arenal_Volcano]
-- At about 7:30 a.m. on 29 July 1968 it exploded. A pyroclastic flow, a nube ardiente ('burning cloud'), destroyed the villages of Tabacón and Pueblo Nuevo and killed at least 87 people. [source: https://www.arenalobservatorylodge.com/?p=578 ; https://ticotimes.net/?p=109247]
-- Its ash was carried by the wind as far as Tilarán, Liberia and Santa Cruz. [source: https://observador.cr/del-fuego-al-turismo-el-volcan-arenal-y-la-transformacion-de-la-zona-norte-de-costa-rica/]
