@@ -9107,5 +9107,25 @@
   "category": "COSTA RICA",
   "pillar": "COUNTRY",
   "caption": "Before 1968, the mountain near La Fortuna was called Cerro Arenal, a forested hill. A documented expedition first reache"
+ },
+ {
+  "id": "18019590953751358",
+  "date": "2026-11-24",
+  "ts": "2026-11-24T17:21:57",
+  "base": "lib-cr-tilaran-ridge-1",
+  "format": "carousel",
+  "category": "COSTA RICA",
+  "pillar": "SPORT",
+  "caption": "Seasons in Costa Rica are named by rain rather than temperature.\n\nThe months from May to November are called invierno, o"
+ },
+ {
+  "id": "18107621069040003",
+  "date": "2026-11-24",
+  "ts": "2026-11-24T17:21:57",
+  "base": "lib-cr-tilaran-ridge-1-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "SPORT",
+  "caption": "Seasons in Costa Rica are named by rain rather than temperature.\n\nThe months from May to November are called invierno, o"
  }
 ]
