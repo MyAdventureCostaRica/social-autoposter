@@ -9149,5 +9149,25 @@
   "category": "COSTA RICA",
   "pillar": "FIELD",
   "caption": "Rivers appearing opaque blue are the result of colloidal silica suspended in the water. These tiny mineral particles sca"
+ },
+ {
+  "id": "18408031879203304",
+  "date": "2026-11-26",
+  "ts": "2026-11-26T15:23:44",
+  "base": "lib-cr-monteverde-gravel",
+  "format": "single",
+  "category": "CYCLING",
+  "pillar": "SPORT",
+  "caption": "The Cordillera de Tilar\u00e1n holds the cloud forest canopy above Monteverde. These gravel roads wind through the range, cro"
+ },
+ {
+  "id": "18115925888062220",
+  "date": "2026-11-26",
+  "ts": "2026-11-26T15:23:44",
+  "base": "lib-cr-monteverde-gravel-story",
+  "format": "story",
+  "category": "CYCLING",
+  "pillar": "SPORT",
+  "caption": "The Cordillera de Tilar\u00e1n holds the cloud forest canopy above Monteverde. These gravel roads wind through the range, cro"
  }
 ]
