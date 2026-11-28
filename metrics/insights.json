@@ -12558,17 +12558,17 @@
   "format": "single",
   "category": "MULTI-SPORT",
   "pillar": "EXPEDITION",
-  "reach": 22,
+  "reach": 23,
   "likes": 2,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 2,
-  "views": 56,
+  "views": 58,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 2,
-  "eng_rate": 0.0909
+  "eng_rate": 0.087
  },
  {
   "id": "18173024011481440",
@@ -12614,17 +12614,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "COUNTRY",
-  "reach": 23,
+  "reach": 24,
   "likes": 3,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 3,
-  "views": 59,
+  "views": 60,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 3,
-  "eng_rate": 0.1304
+  "eng_rate": 0.125
  },
  {
   "id": "18121931386960587",
@@ -12651,17 +12651,17 @@
   "format": "carousel",
   "category": "COSTA RICA",
   "pillar": "SPORT",
-  "reach": 19,
+  "reach": 20,
   "likes": 4,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 4,
-  "views": 58,
+  "views": 59,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 4,
-  "eng_rate": 0.2105
+  "eng_rate": 0.2
  },
  {
   "id": "18107621069040003",
@@ -12725,17 +12725,17 @@
   "format": "single",
   "category": "CYCLING",
   "pillar": "SPORT",
-  "reach": 26,
+  "reach": 32,
   "likes": 5,
   "comments": 0,
   "saved": 0,
   "shares": 0,
   "total_interactions": 5,
-  "views": 47,
+  "views": 54,
   "profile_visits": 0,
   "follows": 0,
   "interactions": 5,
-  "eng_rate": 0.1923
+  "eng_rate": 0.1562
  },
  {
   "id": "18115925888062220",
@@ -12754,5 +12754,35 @@
   "navigation": 10,
   "interactions": 0,
   "eng_rate": 0.0
+ },
+ {
+  "id": "17958299850037062",
+  "date": "2026-11-28",
+  "base": "lib-cr-brahman",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "COUNTRY",
+  "reach": 3,
+  "likes": 1,
+  "comments": 0,
+  "saved": 0,
+  "shares": 0,
+  "total_interactions": 1,
+  "views": 11,
+  "profile_visits": 0,
+  "follows": 0,
+  "interactions": 1,
+  "eng_rate": 0.3333
+ },
+ {
+  "id": "18122856764084318",
+  "date": "2026-11-28",
+  "base": "lib-cr-brahman-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "COUNTRY",
+  "error": "(#10) Not enough viewers for the media to show insights",
+  "interactions": 0,
+  "eng_rate": null
  }
 ]
