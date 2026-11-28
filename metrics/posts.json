@@ -9170,5 +9170,25 @@
   "category": "CYCLING",
   "pillar": "SPORT",
   "caption": "The Cordillera de Tilar\u00e1n holds the cloud forest canopy above Monteverde. These gravel roads wind through the range, cro"
+ },
+ {
+  "id": "17958299850037062",
+  "date": "2026-11-28",
+  "ts": "2026-11-28T15:21:44",
+  "base": "lib-cr-brahman",
+  "format": "single",
+  "category": "COSTA RICA",
+  "pillar": "COUNTRY",
+  "caption": "On 25 July 1824, an open council in Nicoya voted to join Costa Rica. Only 40 people attended the meeting to decide the f"
+ },
+ {
+  "id": "18122856764084318",
+  "date": "2026-11-28",
+  "ts": "2026-11-28T15:21:44",
+  "base": "lib-cr-brahman-story",
+  "format": "story",
+  "category": "COSTA RICA",
+  "pillar": "COUNTRY",
+  "caption": "On 25 July 1824, an open council in Nicoya voted to join Costa Rica. Only 40 people attended the meeting to decide the f"
  }
 ]
